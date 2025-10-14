@@ -311,7 +311,7 @@ def generate_league_metrics(
         row = {
             "Team": display,
             "RY(O)": "" if stats["ry"] is None else f"{stats['ry']:.1f}",
-            "R(O)": "" if stats["gp"] == 0 else str(off_ry_rank.get(key, "")),
+            "R(O)_RY": "" if stats["gp"] == 0 else str(off_ry_rank.get(key, "")),
             "PY(O)": "" if stats["py"] is None else f"{stats['py']:.1f}",
             "R(O)_PY": "" if stats["gp"] == 0 else str(off_py_rank.get(key, "")),
             "TY(O)": "" if stats["ty"] is None else f"{stats['ty']:.1f}",
@@ -335,7 +335,7 @@ def generate_league_metrics(
         [
             "Team",
             "RY(O)",
-            "R(O)",
+            "R(O)_RY",
             "PY(O)",
             "R(O)_PY",
             "TY(O)",
@@ -352,26 +352,6 @@ def generate_league_metrics(
             "SU",
             "ATS",
         ]
-    ]
-    df_out.columns = [
-        "Team",
-        "RY(O)",
-        "R(O)",
-        "PY(O)",
-        "R(O)",
-        "TY(O)",
-        "R(O)",
-        "RY(D)",
-        "R(D)",
-        "PY(D)",
-        "R(D)",
-        "TY(D)",
-        "R(D)",
-        "TO",
-        "PF",
-        "PA",
-        "SU",
-        "ATS",
     ]
     return df_out
 

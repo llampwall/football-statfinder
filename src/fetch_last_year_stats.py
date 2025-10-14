@@ -213,17 +213,17 @@ def build_final_league_metrics(season: int) -> pd.DataFrame:
         [
             "Team",
             "RY(O)",
-            "R_RY(O)",
+            "R(O)_RY",
             "PY(O)",
-            "R_PY(O)",
+            "R(O)_PY",
             "TY(O)",
-            "R_TY(O)",
+            "R(O)_TY",
             "RY(D)",
-            "R_RY(D)",
+            "R(D)_RY",
             "PY(D)",
-            "R_PY(D)",
+            "R(D)_PY",
             "TY(D)",
-            "R_TY(D)",
+            "R(D)_TY",
             "TO",
             "PF",
             "PA",
@@ -232,26 +232,6 @@ def build_final_league_metrics(season: int) -> pd.DataFrame:
         ]
     ].copy()
 
-    final.columns = [
-        "Team",
-        "RY(O)",
-        "R(O)",
-        "PY(O)",
-        "R(O)",
-        "TY(O)",
-        "R(O)",
-        "RY(D)",
-        "R(D)",
-        "PY(D)",
-        "R(D)",
-        "TY(D)",
-        "R(D)",
-        "TO",
-        "PF",
-        "PA",
-        "SU",
-        "ATS",
-    ]
     return final.sort_values("Team").reset_index(drop=True)
 
 

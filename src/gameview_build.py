@@ -18,6 +18,7 @@ from __future__ import annotations
 import argparse
 from dataclasses import dataclass
 from datetime import datetime, timezone
+from pathlib import Path
 from typing import Dict, Iterable, List, Optional
 
 import pandas as pd
@@ -214,6 +215,98 @@ def load_sagarin_df(path: Optional[str]) -> Optional[pd.DataFrame]:
     return out
 
 
+def getv(rowdict: Optional[dict], *cands: str, cast=float, default=None):
+    if not rowdict:
+        return default
+    for cand in cands:
+        if not cand or cand not in rowdict:
+            continue
+        value = rowdict[cand]
+        if pd.isna(value):
+            continue
+        try:
+            if cast is str:
+                sval = str(value)
+                if sval.lower() == "nan":
+                    continue
+                return sval
+            return cast(value)
+        except Exception:
+            try:
+                if cast is int:
+                    return int(float(value))
+            except Exception:
+                pass
+            try:
+                if cast is float:
+                    return float(value)
+            except Exception:
+                pass
+            if cast is str:
+                sval = str(value)
+                if sval.lower() == "nan":
+                    continue
+                return sval
+    return default
+
+
+def load_league_metrics(season: int, week: int, out_dir: Path) -> pd.DataFrame:
+    path = out_dir / f"league_metrics_{season}_{week}.csv"
+    if not path.exists():
+        print(f"[league_metrics] not found at {path}, S2D fields will be blank")
+        return pd.DataFrame()
+    df = pd.read_csv(path)
+    if "Team" not in df.columns:
+        print(f"[league_metrics] missing 'Team' column at {path}")
+        return pd.DataFrame()
+    df["_key"] = df["Team"].map(team_merge_key)
+    df = df.dropna(subset=["_key"])
+    df = df.drop_duplicates("_key", keep="last")
+    return df
+
+
+FIELD_MAPPINGS = {
+    "ry_pg": (["ry_off_pg", "ry_pg", "RY(O)"], float),
+    "py_pg": (["py_off_pg", "py_pg", "PY(O)"], float),
+    "ty_pg": (["ty_off_pg", "ty_pg", "TY(O)"], float),
+    "rush_rank":   (["R(O)_RY"], int),
+    "pass_rank":   (["R(O)_PY"], int),
+    "tot_off_rank":(["R(O)_TY"], int),
+    "ry_allowed_pg": (["ry_def_pg", "ry_allowed_pg", "RY(D)"], float),
+    "py_allowed_pg": (["py_def_pg", "py_allowed_pg", "PY(D)"], float),
+    "ty_allowed_pg": (["ty_def_pg", "ty_allowed_pg", "TY(D)"], float),
+    "rush_def_rank": (["R(D)_RY"], int),
+    "pass_def_rank": (["R(D)_PY"], int),
+    "tot_def_rank":  (["R(D)_TY"], int),
+    "pf_pg": (["pf_pg", "PF"], float),
+    "pa_pg": (["pa_pg", "PA"], float),
+    "to_margin_pg": (["to_margin_pg", "TO"], float),
+    "su": (["SU"], str),
+    "ats": (["ATS"], str),
+}
+
+RANK_FIELDS = {"rush_rank", "pass_rank", "tot_off_rank", "rush_def_rank", "pass_def_rank", "tot_def_rank"}
+PER_GAME_FIELDS = {"ry_pg", "py_pg", "ty_pg", "ry_allowed_pg", "py_allowed_pg", "ty_allowed_pg", "pf_pg", "pa_pg", "to_margin_pg"}
+
+
+def apply_league_metrics(record: dict, rowdict: Optional[dict], prefix: str) -> None:
+    if rowdict is None:
+        return
+    gp = getv(rowdict, "games", "gp", "Games", cast=float)
+    zero_gp = gp == 0 if gp is not None else False
+    for metric, (candidates, caster) in FIELD_MAPPINGS.items():
+        field_name = f"{prefix}_{metric}"
+        if zero_gp and metric in PER_GAME_FIELDS:
+            record[field_name] = 0.0
+            continue
+        if zero_gp and metric in RANK_FIELDS:
+            record[field_name] = None
+            continue
+        value = getv(rowdict, *candidates, cast=caster)
+        if value is not None:
+            record[field_name] = value
+
+
 def _team_stats_rows_before(
     stats_df: pd.DataFrame,
     season: int,
@@ -307,6 +400,11 @@ def build_gameview(season: int, week: int, hfa: float = 0.0, sagarin_path: Optio
             }
 
     hfa_used = sagarin_hfa_from_csv if sagarin_hfa_from_csv is not None else hfa
+
+    league_metrics_df = load_league_metrics(season, week, out_dir)
+    lm_by_key = {}
+    if not league_metrics_df.empty:
+        lm_by_key = league_metrics_df.set_index("_key").to_dict(orient="index")
 
     records: List[dict] = []
 
@@ -406,6 +504,9 @@ def build_gameview(season: int, week: int, hfa: float = 0.0, sagarin_path: Optio
 
         home_sag = sag_map.get(home_key, {})
         away_sag = sag_map.get(away_key, {})
+
+        home_lm_row = lm_by_key.get(home_key) if lm_by_key else None
+        away_lm_row = lm_by_key.get(away_key) if lm_by_key else None
 
         home_pr = home_sag.get("pr")
         away_pr = away_sag.get("pr")
@@ -550,6 +651,8 @@ def build_gameview(season: int, week: int, hfa: float = 0.0, sagarin_path: Optio
                 "sagarin_row_away": away_sag or None,
             },
         }
+        apply_league_metrics(record, home_lm_row, "home")
+        apply_league_metrics(record, away_lm_row, "away")
         records.append(_round_record(record))
 
     write_jsonl(records, jsonl_path)
@@ -584,6 +687,38 @@ def build_gameview(season: int, week: int, hfa: float = 0.0, sagarin_path: Optio
 
     favored_count = sum(1 for rec in records if rec.get("favored_side") is not None)
     print(f"Favored metrics coverage: {favored_count}/{len(records)}")
+
+    def count_non_null(field: str) -> int:
+        return sum(1 for rec in records if rec.get(field) not in (None, ""))
+
+    total_records = len(records)
+    print(f"S2D coverage (home_ry_pg): {count_non_null('home_ry_pg')}/{total_records}")
+    print(f"S2D coverage (home_ry_allowed_pg): {count_non_null('home_ry_allowed_pg')}/{total_records}")
+    print(f"S2D coverage (home_rush_def_rank): {count_non_null('home_rush_def_rank')}/{total_records}")
+    print(f"S2D coverage (away_pa_pg): {count_non_null('away_pa_pg')}/{total_records}")
+
+    bad_ranks = []
+    rank_fields = (
+        "home_rush_def_rank",
+        "home_pass_def_rank",
+        "home_tot_def_rank",
+        "away_rush_def_rank",
+        "away_pass_def_rank",
+        "away_tot_def_rank",
+    )
+    for rec in records:
+        for field in rank_fields:
+            value = rec.get(field)
+            if value is None:
+                continue
+            try:
+                intval = int(value)
+            except Exception:
+                bad_ranks.append((rec.get("game_key"), field, value))
+                continue
+            if not (1 <= intval <= 32):
+                bad_ranks.append((rec.get("game_key"), field, value))
+    print(f"Rank out-of-range: {0 if not bad_ranks else len(bad_ranks)}")
 
     def _parse_record(rec: str) -> tuple[int, int, int]:
         parts = [int(x) for x in rec.split("-") if x]
