@@ -317,8 +317,8 @@ def fetch_sagarin_week(
 
     stripped = strip_html(text)
     season_from_page, page_week, header_line = extract_table_week(stripped)
-    effective_week = page_week or week
-    effective_season = season_from_page or season
+    effective_week = week
+    effective_season = season
     if season_from_page and season_from_page != season:
         warnings.warn(
             f"Requested season {season} but Sagarin page reports season {season_from_page}. Using page season.",
@@ -343,19 +343,18 @@ def fetch_sagarin_week(
 
     validate_records(df)
     output_base = base
-    if page_week and page_week != week:
-        prefix = base.stem.split('_wk')[0]
-        output_base = base.with_name(f"{prefix}_wk{page_week}_[wk{week}_requested]")
     write_outputs(df, output_base)
     acceptance_summary(df)
-    print(f"Sagarin page season/week: {effective_season} Week {effective_week}")
+    page_season_str = season_from_page if season_from_page is not None else "unknown"
+    page_week_str = page_week if page_week is not None else "unknown"
+    print(f"Sagarin page season/week: {page_season_str} Week {page_week_str} (requested Week {week})")
 
     return {
         "csv_path": _ensure_suffix(output_base, ".csv"),
         "jsonl_path": _ensure_suffix(output_base, ".jsonl"),
         "hfa": hfa,
         "count": len(df),
-        "page_week": effective_week,
+        "page_week": page_week,
     }
 
 

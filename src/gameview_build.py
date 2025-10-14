@@ -412,10 +412,25 @@ def build_gameview(season: int, week: int, hfa: float = 0.0, sagarin_path: Optio
 
         rdiff = None
         rvo = None
+        favored_side = None
+        spread_favored_team = None
+        rating_diff_favored_team = None
+        rating_vs_odds_favored_team = None
         if home_pr is not None and away_pr is not None:
             rdiff = rating_diff(home_pr, away_pr, hfa_used)
             if spread_hr is not None:
-                rvo = rating_vs_odds(rdiff, team_centric_spread(spread_hr, "HOME"))
+                s_home = team_centric_spread(spread_hr, "HOME")
+                rvo = rating_vs_odds(rdiff, s_home)
+                if s_home < 0:
+                    favored_side = "HOME"
+                elif s_home > 0:
+                    favored_side = "AWAY"
+                else:
+                    favored_side = "HOME"
+                if favored_side and spread_hr is not None:
+                    spread_favored_team = team_centric_spread(spread_hr, favored_side)
+                    rating_diff_favored_team = rdiff if favored_side == "HOME" else -rdiff
+                    rating_vs_odds_favored_team = rating_vs_odds(rating_diff_favored_team, spread_favored_team)
 
         this_week = int(row["week"])
         home_s2d = season_to_date_per_game(
@@ -482,6 +497,10 @@ def build_gameview(season: int, week: int, hfa: float = 0.0, sagarin_path: Optio
             "hfa": hfa_used,
             "rating_diff": rdiff,
             "rating_vs_odds": rvo,
+            "favored_side": favored_side,
+            "spread_favored_team": spread_favored_team,
+            "rating_diff_favored_team": rating_diff_favored_team,
+            "rating_vs_odds_favored_team": rating_vs_odds_favored_team,
             "home_pf_pg": home_s2d.pf_pg,
             "home_pa_pg": home_s2d.pa_pg,
             "home_ry_pg": home_s2d.ry_pg,
@@ -563,6 +582,9 @@ def build_gameview(season: int, week: int, hfa: float = 0.0, sagarin_path: Optio
     completeness = all(_s2d_ok(rec, "home") and _s2d_ok(rec, "away") for rec in records)
     print(f"Derived S2D completeness: {'PASS' if completeness else 'FAIL'}")
 
+    favored_count = sum(1 for rec in records if rec.get("favored_side") is not None)
+    print(f"Favored metrics coverage: {favored_count}/{len(records)}")
+
     def _parse_record(rec: str) -> tuple[int, int, int]:
         parts = [int(x) for x in rec.split("-") if x]
         if len(parts) == 2:
@@ -630,6 +652,14 @@ def build_gameview(season: int, week: int, hfa: float = 0.0, sagarin_path: Optio
             spot["rating_diff"],
             "rating_vs_odds=",
             spot["rating_vs_odds"],
+            "favored_side=",
+            spot.get("favored_side"),
+            "spread_favored_team=",
+            spot.get("spread_favored_team"),
+            "rating_diff_favored_team=",
+            spot.get("rating_diff_favored_team"),
+            "rating_vs_odds_favored_team=",
+            spot.get("rating_vs_odds_favored_team"),
         )
     print(f"Wrote: {jsonl_path}")
     print(f"Wrote: {csv_path}")
