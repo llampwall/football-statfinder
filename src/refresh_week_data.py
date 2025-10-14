@@ -23,6 +23,7 @@ from typing import Optional
 from src.common.io_utils import ensure_out_dir, read_env, write_jsonl, write_csv
 from src.fetch_games import filter_week_reg, load_games
 from src.fetch_week_odds_nfl import fetch_odds_theoddsapi
+from src.fetch_sagarin_week_nfl import fetch_sagarin_week
 from src.gameview_build import build_gameview
 from src.fetch_year_to_date_stats import generate_league_metrics
 
@@ -37,7 +38,13 @@ def refresh_week(season: int, week: int, bookmaker: str = "Pinnacle") -> dict:
     league_path = out_dir / f"league_metrics_{season}_{week}.csv"
     write_csv(league_df, league_path)
 
-    gameview_result = build_gameview(season=season, week=week)
+    sagarin_result = fetch_sagarin_week(season, week)
+
+    gameview_result = build_gameview(
+        season=season,
+        week=week,
+        sagarin_path=str(sagarin_result["csv_path"]),
+    )
 
     env = read_env(["THE_ODDS_API_KEY"])
     odds_records = []
@@ -54,6 +61,8 @@ def refresh_week(season: int, week: int, bookmaker: str = "Pinnacle") -> dict:
         "schedule_count": expected,
         "gameview_count": gameview_result["count"],
         "league_rows": len(league_df),
+        "sagarin_count": sagarin_result["count"],
+        "sagarin_csv": sagarin_result["csv_path"],
         "odds_count": len(odds_records),
         "league_path": league_path,
         "gameview_jsonl": gameview_result["jsonl"],
@@ -66,6 +75,7 @@ def refresh_week(season: int, week: int, bookmaker: str = "Pinnacle") -> dict:
     print(f"Schedule games (REG): {expected}")
     print(f"Game View records:     {gameview_result['count']} ({gameview_result['jsonl']})")
     print(f"League metrics rows:   {len(league_df)} ({league_path})")
+    print(f"Sagarin records:       {sagarin_result['count']} ({sagarin_result['csv_path']})")
     if odds_path:
         print(f"Odds records:          {len(odds_records)} ({odds_path})")
     else:
