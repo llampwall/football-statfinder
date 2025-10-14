@@ -1,76 +1,60 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-One-shot NFL full-game odds pack (standalone; no DB).
+"""Fetch weekly NFL odds from external feeds and emit JSONL files.
 
-Sources:
-  - theoddsapi  (JSON, free-tier friendly)  -> requires THE_ODDS_API_KEY or --key
-  - donbest     (XML v2 current/open/close) -> requires DONBEST_TOKEN   or --key
-
-Output: one JSON object per game with home-relative spread, total, MLs, snapshot time.
-
-Usage examples:
-  # The Odds API (recommended today)
-  python odds_pack_nfl.py --source theoddsapi --season 2025 --week 6 --out odds_2025_wk6.jsonl --book Pinnacle
-
-  # Don Best XML (when you have a token)
-  python odds_pack_nfl.py --source donbest --season 2025 --week 6 --scope odds --key <DONBEST_TOKEN>
+Purpose:
+    Normalize The Odds API or Don Best responses into the house odds schema.
+Inputs:
+    Source provider (--source), season/week, optional bookmaker scope.
+Outputs:
+    /out/odds_{season}_wk{week}.jsonl
+Source(s) of truth:
+    the-odds-api.com v4 endpoints, Don Best XML v2 feed.
+Example:
+    python -m src.fetch_week_odds_nfl --source theoddsapi --season 2025 --week 6 --book Pinnacle
 """
 
 from __future__ import annotations
-import argparse, json, os, sys
-from datetime import datetime, timezone
-from typing import Any, Dict, List, Optional
 
-# 100% stdlib (requests is nice but not required); using urllib for portability
-import urllib.request
-import urllib.parse
+import argparse
+import json
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Any, Dict, List, Optional
 import ssl
+import urllib.parse
+import urllib.request
 import xml.etree.ElementTree as ET
 
-# ---------- constants ----------
+from src.common.io_utils import ensure_out_dir, read_env, write_jsonl
+from src.common.team_names import normalize_team_display
+
 THE_ODDS_API_BASE = "https://api.the-odds-api.com/v4"
 DONBEST_BASE = "https://xml.donbest.com/v2"
+SPORT_KEY_ODDSAPI = "americanfootball_nfl"
 
-SPORT_KEY_ODDSAPI = "americanfootball_nfl"  # The Odds API sport key
-
-# ---------- small helpers (pure) ----------
 
 def now_utc_iso() -> str:
     return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
 
-def first_non_none(*vals):
-    for v in vals:
-        if v is not None:
-            return v
+
+def to_int_or_none(value) -> Optional[int]:
+    try:
+        return int(value)
+    except Exception:
+        return None
+
+
+def to_float_or_none(value) -> Optional[float]:
+    try:
+        return float(value)
+    except Exception:
+        return None
+
+
+def first_non_none(*values):
+    for value in values:
+        if value not in (None, ""):
+            return value
     return None
-
-def to_int_or_none(v) -> Optional[int]:
-    try:
-        return int(v)
-    except Exception:
-        return None
-
-def to_float_or_none(v) -> Optional[float]:
-    try:
-        return float(v)
-    except Exception:
-        return None
-
-def normalize_team_name(s: str) -> str:
-    # conservative pass-through with a couple light normalizations
-    if not s:
-        return s
-    s2 = " ".join(s.replace(".", "").replace(",", "").split())
-    # a tiny synonyms map can live here if you want, but keep conservative
-    syn = {
-        "la rams": "Los Angeles Rams",
-        "la chargers": "Los Angeles Chargers",
-        "ny jets": "New York Jets",
-        "ny giants": "New York Giants",
-        "sf 49ers": "San Francisco 49ers",
-    }
-    return syn.get(s2.lower(), s.strip())
 
 # ---------- HTTP helpers ----------
 
@@ -161,8 +145,8 @@ def fetch_odds_theoddsapi(season: int, week: int, api_key: str, book_pref: Optio
             "kickoff_iso": kickoff_iso,
             "home_team_raw": home,
             "away_team_raw": away,
-            "home_team_norm": normalize_team_name(home or ""),
-            "away_team_norm": normalize_team_name(away or ""),
+            "home_team_norm": normalize_team_display(home or ""),
+            "away_team_norm": normalize_team_display(away or ""),
             "rotation_home": None,
             "rotation_away": None,
             "spread_home_relative": spread_hr,
@@ -250,8 +234,8 @@ def fetch_odds_donbest(season: int, week: int, token: str, scope: str = "odds") 
             "kickoff_iso": kickoff_iso,
             "home_team_raw": home,
             "away_team_raw": away,
-            "home_team_norm": normalize_team_name(home or ""),
-            "away_team_norm": normalize_team_name(away or ""),
+            "home_team_norm": normalize_team_display(home or ""),
+            "away_team_norm": normalize_team_display(away or ""),
             "rotation_home": rot_home,
             "rotation_away": rot_away,
             "spread_home_relative": spread_hr,
@@ -271,48 +255,50 @@ def fetch_odds_donbest(season: int, week: int, token: str, scope: str = "odds") 
 
 # ---------- CLI ----------
 
-def main():
-    ap = argparse.ArgumentParser(description="NFL Game Odds Pack (The Odds API or Don Best XML)")
-    ap.add_argument("--source", choices=["theoddsapi", "donbest"], required=True)
-    ap.add_argument("--season", type=int, required=True)
-    ap.add_argument("--week", type=int, required=True)
-    ap.add_argument("--out", type=str, default=None, help="Write JSONL to this path")
-    ap.add_argument("--key", type=str, help="API key (The Odds API) or token (Don Best). If omitted, env is used.")
-    ap.add_argument("--book", type=str, default=None, help="(theoddsapi) prefer a bookmaker title (e.g., 'Pinnacle')")
-    ap.add_argument("--scope", type=str, default="odds", help="(donbest) odds|open|close")
-    args = ap.parse_args()
 
-    try:
-        if args.source == "theoddsapi":
-            key = args.key or os.getenv("THE_ODDS_API_KEY")
-            if not key:
-                raise RuntimeError("Missing The Odds API key. Set THE_ODDS_API_KEY or pass --key.")
-            recs = fetch_odds_theoddsapi(args.season, args.week, key, book_pref=args.book)
-        else:
-            key = args.key or os.getenv("DONBEST_TOKEN")
-            if not key:
-                raise RuntimeError("Missing Don Best token. Set DONBEST_TOKEN or pass --key.")
-            recs = fetch_odds_donbest(args.season, args.week, key, scope=args.scope)
+def main() -> int:
+    parser = argparse.ArgumentParser(description="Fetch weekly NFL odds into JSONL.")
+    parser.add_argument("--source", choices=["theoddsapi", "donbest"], required=True)
+    parser.add_argument("--season", type=int, required=True)
+    parser.add_argument("--week", type=int, required=True)
+    parser.add_argument("--book", type=str, default=None, help="Preferred bookmaker title for The Odds API.")
+    parser.add_argument("--scope", type=str, default="odds", help="Don Best scope: odds|open|close.")
+    parser.add_argument("--key", type=str, help="Override API key/token.")
+    parser.add_argument("--out", type=str, help="Optional output path; defaults to /out/odds_{season}_wk{week}.jsonl")
+    args = parser.parse_args()
 
-        # write
-        if args.out:
-            with open(args.out, "w", encoding="utf-8") as f:
-                for r in recs:
-                    f.write(json.dumps(r, ensure_ascii=False) + "\n")
+    env = read_env(["THE_ODDS_API_KEY", "DONBEST_TOKEN"])
+    if args.source == "theoddsapi":
+        key = args.key or env.get("THE_ODDS_API_KEY")
+        if not key:
+            raise SystemExit("Missing The Odds API key. Provide --key or set THE_ODDS_API_KEY.")
+        records = fetch_odds_theoddsapi(args.season, args.week, key, book_pref=args.book)
+    else:
+        key = args.key or env.get("DONBEST_TOKEN")
+        if not key:
+            raise SystemExit("Missing Don Best token. Provide --key or set DONBEST_TOKEN.")
+        records = fetch_odds_donbest(args.season, args.week, key, scope=args.scope)
 
-        # summary
-        total = len(recs)
-        have_spread = sum(1 for r in recs if r.get("spread_home_relative") is not None)
-        have_total  = sum(1 for r in recs if r.get("total") is not None)
-        have_ml     = sum(1 for r in recs if (r.get("moneyline_home") is not None or r.get("moneyline_away") is not None))
-        print(f"Games scraped: {total}")
-        print(f"Fields present -> spread:{have_spread} total:{have_total} moneyline:{have_ml}")
-        if recs[:2]:
-            print("\nSample:", json.dumps(recs[:2], indent=2, ensure_ascii=False))
+    out_path = Path(args.out) if args.out else ensure_out_dir() / f"odds_{args.season}_wk{args.week}.jsonl"
+    write_jsonl(records, out_path)
 
-    except Exception as e:
-        print(f"[error] {e}", file=sys.stderr)
-        sys.exit(1)
+    total = len(records)
+    have_spread = sum(1 for r in records if r.get("spread_home_relative") is not None)
+    have_total = sum(1 for r in records if r.get("total") is not None)
+    have_ml = sum(
+        1
+        for r in records
+        if r.get("moneyline_home") is not None or r.get("moneyline_away") is not None
+    )
+
+    print(f"Wrote: {out_path}")
+    print(f"Games scraped: {total}")
+    print(f"Fields present -> spread:{have_spread} total:{have_total} moneyline:{have_ml}")
+    if records:
+        sample = json.dumps(records[:2], indent=2, ensure_ascii=False)
+        print("Sample:", sample)
+    return 0
+
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())
