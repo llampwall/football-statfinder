@@ -16,11 +16,12 @@ Example:
 from __future__ import annotations
 
 import argparse
+import warnings
 import re
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Iterable, List, Optional
+from typing import Iterable, List, Optional, Tuple
 
 import pandas as pd
 import requests
@@ -121,76 +122,78 @@ def _clean_team_raw(team_raw: str) -> str:
     return re.sub(r"[\*\+]+$", "", team_raw.strip())
 
 
-def parse_line_regex(line: str) -> Optional[SagarinRecord]:
-    pattern = re.compile(
-        r"^\s*(\d+)\s+([A-Za-z0-9\.\&\'\-\/ ]+?)\s+([0-9]+\.\d+)\s+(\d+)(?:\s+([0-9]+\.\d+)\s+(\d+))?"
-    )
-    m = pattern.match(line)
-    if not m:
+def extract_table_week(text: str) -> Tuple[Optional[int], Optional[int], Optional[str]]:
+    pattern = re.compile(r"NFL\s+(\d{4})\s+through games of\s+.*?Week\s+(\d+)", re.IGNORECASE)
+    for line in text.splitlines():
+        match = pattern.search(line)
+        if match:
+            season = int(match.group(1))
+            week = int(match.group(2))
+            return season, week, line.strip()
+    return None, None, None
+
+
+
+
+def _parse_rank_line(line: str) -> Optional[SagarinRecord]:
+    sanitized = line.replace('=', ' ').replace("\u00a0", " ")
+    stripped = sanitized.strip()
+    if not stripped or not stripped[0].isdigit():
         return None
-    rank = int(m.group(1))
-    team_raw = _clean_team_raw(m.group(2))
-    pr = float(m.group(3))
-    pr_rank = int(m.group(4))
-    sos = float(m.group(5)) if m.group(5) else None
-    sos_rank = int(m.group(6)) if m.group(6) else None
-    return SagarinRecord(rank=rank, team_raw=team_raw, pr=pr, pr_rank=pr_rank, sos=sos, sos_rank=sos_rank)
+    upper = sanitized.upper()
+    if '(NFC' not in upper and '(AFC' not in upper:
+        return None
+    tokens = stripped.split()
+    if len(tokens) < 2:
+        return None
+    rank = int(tokens[0])
+    team_tokens: List[str] = []
+    pr: Optional[float] = None
+    for token in tokens[1:]:
+        if re.fullmatch(r'-?\d+\.\d+', token):
+            pr = float(token)
+            break
+        team_tokens.append(token)
+    if pr is None:
+        return None
+    team_raw = _clean_team_raw(' '.join(team_tokens))
+    sos = sos_rank = None
+    sos_match = re.search(r'(-?\d+\.\d+)\(\s*(\d+)\s*\)', sanitized)
+    if sos_match:
+        sos = float(sos_match.group(1))
+        sos_rank = int(sos_match.group(2))
+    return SagarinRecord(rank=rank, team_raw=team_raw, pr=pr, pr_rank=rank, sos=sos, sos_rank=sos_rank)
+
+
+def parse_line_regex(line: str) -> Optional[SagarinRecord]:
+    return _parse_rank_line(line)
 
 
 def parse_line_split(line: str) -> Optional[SagarinRecord]:
-    stripped = line.strip()
-    if not stripped or not stripped[0].isdigit():
-        return None
-    tokens = stripped.split()
-    if len(tokens) < 3 or not tokens[0].isdigit():
-        return None
-    rank = int(tokens[0])
-    numeric_tokens: List[str] = []
-    idx = len(tokens) - 1
-    number_re = re.compile(r"-?\d+(?:\.\d+)?$")
-    while idx >= 1:
-        token = tokens[idx]
-        if number_re.fullmatch(token):
-            numeric_tokens.insert(0, token)
-            idx -= 1
-            continue
-        break
-    team_tokens = tokens[1 : idx + 1]
-    team_raw = _clean_team_raw(" ".join(team_tokens))
-    if not numeric_tokens:
-        return None
-    pr = None
-    pr_rank: Optional[int] = None
-    sos = None
-    sos_rank = None
-    for token in numeric_tokens:
-        if pr is None and "." in token:
-            pr = float(token)
-            continue
-        if pr is not None and pr_rank is None and token.isdigit():
-            pr_rank = int(token)
-            continue
-        if pr is not None and sos is None and "." in token:
-            sos = float(token)
-            continue
-        if sos is not None and sos_rank is None and token.isdigit():
-            sos_rank = int(token)
-            continue
-    if pr is None:
-        return None
-    if pr_rank is None:
-        pr_rank = rank
-    return SagarinRecord(rank=rank, team_raw=team_raw, pr=pr, pr_rank=pr_rank, sos=sos, sos_rank=sos_rank)
+    return _parse_rank_line(line)
 
 
 def parse_table_lines(text: str) -> List[SagarinRecord]:
     records: List[SagarinRecord] = []
+    seen_ranks: set[int] = set()
+    seen_teams: set[str] = set()
     for line in text.splitlines():
         parsed = parse_line_regex(line)
         if parsed is None:
             parsed = parse_line_split(line)
-        if parsed:
-            records.append(parsed)
+        if not parsed:
+            continue
+        pr_rank = int(parsed.pr_rank)
+        raw_rank = int(parsed.rank)
+        if not (1 <= pr_rank <= 32):
+            continue
+        if pr_rank in seen_ranks or parsed.team_raw in seen_teams:
+            continue
+        records.append(parsed)
+        seen_ranks.add(pr_rank)
+        seen_teams.add(parsed.team_raw)
+        if len(records) == 32:
+            break
     return records
 
 
@@ -313,6 +316,19 @@ def fetch_sagarin_week(
         raise RuntimeError(f"Failed to fetch Sagarin page: {exc}") from exc
 
     stripped = strip_html(text)
+    season_from_page, page_week, header_line = extract_table_week(stripped)
+    effective_week = page_week or week
+    effective_season = season_from_page or season
+    if season_from_page and season_from_page != season:
+        warnings.warn(
+            f"Requested season {season} but Sagarin page reports season {season_from_page}. Using page season.",
+            RuntimeWarning,
+        )
+    if page_week and page_week != week:
+        warnings.warn(
+            f"Requested week {week} but Sagarin page reports week {page_week}. Using page week in outputs.",
+            RuntimeWarning,
+        )
     records = parse_table_lines(stripped)
 
     if len(records) != 32:
@@ -322,18 +338,24 @@ def fetch_sagarin_week(
         raise RuntimeError(f"Parsed {len(records)} records; wrote debug text to {debug_path}")
 
     hfa = parse_hfa(stripped)
-    page_stamp = parse_page_stamp(stripped.splitlines())
-    df = records_to_dataframe(records, season, week, hfa, source_url, page_stamp)
+    page_stamp = header_line or parse_page_stamp(stripped.splitlines())
+    df = records_to_dataframe(records, effective_season, effective_week, hfa, source_url, page_stamp)
 
     validate_records(df)
-    write_outputs(df, base)
+    output_base = base
+    if page_week and page_week != week:
+        prefix = base.stem.split('_wk')[0]
+        output_base = base.with_name(f"{prefix}_wk{page_week}_[wk{week}_requested]")
+    write_outputs(df, output_base)
     acceptance_summary(df)
+    print(f"Sagarin page season/week: {effective_season} Week {effective_week}")
 
     return {
-        "csv_path": _ensure_suffix(base, ".csv"),
-        "jsonl_path": _ensure_suffix(base, ".jsonl"),
+        "csv_path": _ensure_suffix(output_base, ".csv"),
+        "jsonl_path": _ensure_suffix(output_base, ".jsonl"),
         "hfa": hfa,
         "count": len(df),
+        "page_week": effective_week,
     }
 
 

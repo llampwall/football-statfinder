@@ -76,6 +76,10 @@ def refresh_week(season: int, week: int, bookmaker: str = "Pinnacle") -> dict:
     print(f"Game View records:     {gameview_result['count']} ({gameview_result['jsonl']})")
     print(f"League metrics rows:   {len(league_df)} ({league_path})")
     print(f"Sagarin records:       {sagarin_result['count']} ({sagarin_result['csv_path']})")
+    if sagarin_result.get("page_week") and sagarin_result["page_week"] != week:
+        print(
+            f"Sagarin page reports week {sagarin_result['page_week']} while request was week {week}."
+        )
     if odds_path:
         print(f"Odds records:          {len(odds_records)} ({odds_path})")
     else:

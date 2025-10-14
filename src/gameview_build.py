@@ -146,6 +146,13 @@ def _collect_team_game_row_from_schedule(row: pd.Series, team_side: str) -> dict
     }
 
 
+def _round_record(record: dict) -> dict:
+    for key, value in record.items():
+        if isinstance(value, float):
+            record[key] = round(value, 2)
+    return record
+
+
 def season_to_date_per_game(team_games: Iterable[dict]) -> S2D:
     games = list(team_games)
     if not games:
@@ -187,12 +194,23 @@ def load_sagarin_df(path: Optional[str]) -> Optional[pd.DataFrame]:
         "sos": column("sos", "strength_of_schedule"),
         "sos_rank": column("sos_rank", "sosr"),
     }
+    pr_rank_col = column("pr_rank", "rank", "rating_rank")
+    hfa_col = column("hfa", "home_field_advantage", "home_field", "homeadvantage", "home advantage")
     for key, col in required.items():
         if col is None:
             raise ValueError(f"Sagarin CSV missing required column for '{key}'")
 
-    out = df[[required["team"], required["pr"], required["sos"], required["sos_rank"]]].copy()
-    out.columns = ["team", "pr", "sos", "sos_rank"]
+    selected = [required["team"], required["pr"], required["sos"], required["sos_rank"]]
+    column_names = ["team", "pr", "sos", "sos_rank"]
+    if pr_rank_col:
+        selected.insert(2, pr_rank_col)
+        column_names.insert(2, "pr_rank")
+    if hfa_col:
+        selected.append(hfa_col)
+        column_names.append("hfa")
+
+    out = df[selected].copy()
+    out.columns = column_names
     return out
 
 
@@ -269,15 +287,26 @@ def build_gameview(season: int, week: int, hfa: float = 0.0, sagarin_path: Optio
 
     sag_df = load_sagarin_df(sagarin_path)
     sag_map = {}
+    sagarin_hfa_from_csv: Optional[float] = None
     if sag_df is not None:
+        if "hfa" in sag_df.columns:
+            hfa_values = sag_df["hfa"].dropna()
+            if not hfa_values.empty:
+                sagarin_hfa_from_csv = float(hfa_values.iloc[0])
         for _, row in sag_df.iterrows():
             key = team_merge_key(row["team"])
+            pr_rank_val = row.get("pr_rank")
+            hfa_val = row.get("hfa")
             sag_map[key] = {
                 "team": row["team"],
                 "pr": None if pd.isna(row["pr"]) else float(row["pr"]),
+                "pr_rank": None if pd.isna(pr_rank_val) else int(pr_rank_val),
                 "sos": None if pd.isna(row["sos"]) else float(row["sos"]),
                 "sos_rank": None if pd.isna(row["sos_rank"]) else int(row["sos_rank"]),
+                "hfa": None if pd.isna(hfa_val) else float(hfa_val),
             }
+
+    hfa_used = sagarin_hfa_from_csv if sagarin_hfa_from_csv is not None else hfa
 
     records: List[dict] = []
 
@@ -384,7 +413,7 @@ def build_gameview(season: int, week: int, hfa: float = 0.0, sagarin_path: Optio
         rdiff = None
         rvo = None
         if home_pr is not None and away_pr is not None:
-            rdiff = rating_diff(home_pr, away_pr, hfa)
+            rdiff = rating_diff(home_pr, away_pr, hfa_used)
             if spread_hr is not None:
                 rvo = rating_vs_odds(rdiff, team_centric_spread(spread_hr, "HOME"))
 
@@ -443,12 +472,14 @@ def build_gameview(season: int, week: int, hfa: float = 0.0, sagarin_path: Optio
             "is_closing": bool(is_closing),
             "snapshot_at": snapshot_at,
             "home_pr": home_pr,
+            "home_pr_rank": home_sag.get("pr_rank") if home_sag else None,
             "away_pr": away_pr,
+            "away_pr_rank": away_sag.get("pr_rank") if away_sag else None,
             "home_sos": home_sag.get("sos"),
             "away_sos": away_sag.get("sos"),
             "home_sos_rank": home_sag.get("sos_rank"),
             "away_sos_rank": away_sag.get("sos_rank"),
-            "hfa": hfa,
+            "hfa": hfa_used,
             "rating_diff": rdiff,
             "rating_vs_odds": rvo,
             "home_pf_pg": home_s2d.pf_pg,
@@ -500,10 +531,11 @@ def build_gameview(season: int, week: int, hfa: float = 0.0, sagarin_path: Optio
                 "sagarin_row_away": away_sag or None,
             },
         }
-        records.append(record)
+        records.append(_round_record(record))
 
     write_jsonl(records, jsonl_path)
     write_csv(pd.DataFrame(records), csv_path)
+    print(f"HFA used: {hfa_used:.2f}")
 
     print("=== ACCEPTANCE SUMMARY ===")
     print(f"Schedule count (nflverse, filtered): {nflverse_count}")
