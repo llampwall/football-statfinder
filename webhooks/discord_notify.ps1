@@ -1,5 +1,5 @@
 param(
-  [string]$Message = "✅ Codex task completed."
+  [string]$Message = "Yo... Codex did that shit."
 )
 
 # Force TLS 1.2 for older PowerShells
