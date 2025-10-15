@@ -23,7 +23,7 @@ from typing import Dict, Iterable, List, Optional
 
 import pandas as pd
 
-from src.common.io_utils import download_csv, ensure_out_dir, write_csv, write_jsonl
+from src.common.io_utils import download_csv, week_out_dir, write_csv, write_jsonl
 from src.common.metrics import (
     compute_ats,
     compute_su,
@@ -363,7 +363,7 @@ def _team_stats_rows_before(
 
 
 def build_gameview(season: int, week: int, hfa: float = 0.0, sagarin_path: Optional[str] = None, odds_source: str = "schedule") -> dict:
-    out_dir = ensure_out_dir()
+    out_dir = week_out_dir(season, week)
     out_base = out_dir / f"games_week_{season}_{week}"
     jsonl_path = out_base.with_suffix(".jsonl")
     csv_path = out_dir / f"games_week_{season}_{week}.csv"

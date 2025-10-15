@@ -23,13 +23,14 @@ from typing import Optional
 import numpy as np
 import pandas as pd
 
-from src.common.io_utils import ensure_out_dir, read_env, write_jsonl, write_csv
+from src.common.io_utils import read_env, week_out_dir, write_jsonl, write_csv
 from src.common.team_names import team_merge_key
 from src.fetch_games import filter_week_reg, load_games
 from src.fetch_week_odds_nfl import fetch_odds_theoddsapi
 from src.fetch_sagarin_week_nfl import fetch_sagarin_week
 from src.gameview_build import build_gameview
 from src.fetch_year_to_date_stats import generate_league_metrics
+from src.sagarin_master import append_week
 
 
 def _is_int_in_range(value, lo: int = 1, hi: int = 32) -> bool:
@@ -57,7 +58,7 @@ def _nan_inf_count(df: pd.DataFrame) -> int:
 
 
 def refresh_week(season: int, week: int, bookmaker: str = "Pinnacle") -> dict:
-    out_dir = ensure_out_dir()
+    out_dir = week_out_dir(season, week)
     schedule = load_games(season)
     week_games = filter_week_reg(schedule, season, week)
     expected = int(week_games.shape[0])
@@ -67,6 +68,7 @@ def refresh_week(season: int, week: int, bookmaker: str = "Pinnacle") -> dict:
     write_csv(league_df, league_path)
 
     sagarin_result = fetch_sagarin_week(season, week)
+    before_master, after_master = append_week(sagarin_result["csv_path"], league="NFL")
 
     gameview_result = build_gameview(
         season=season,
@@ -100,10 +102,12 @@ def refresh_week(season: int, week: int, bookmaker: str = "Pinnacle") -> dict:
 
     print("=== WEEKLY REFRESH ===")
     print(f"Season {season} Week {week}")
+    print(f"Outputs directory: {out_dir}")
     print(f"Schedule games (REG): {expected}")
     print(f"Game View records:     {gameview_result['count']} ({gameview_result['jsonl']})")
     print(f"League metrics rows:   {len(league_df)} ({league_path})")
     print(f"Sagarin records:       {sagarin_result['count']} ({sagarin_result['csv_path']})")
+    print(f"Sagarin master upsert: {after_master - before_master:+d} (rows now {after_master})")
     if sagarin_result.get("page_week") and sagarin_result["page_week"] != week:
         print(
             f"Sagarin page reports week {sagarin_result['page_week']} while request was week {week}."

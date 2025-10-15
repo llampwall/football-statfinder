@@ -30,6 +30,7 @@ except ImportError:  # pragma: no cover - fallback path
     load_dotenv = None  # type: ignore
 
 RepositoryPath = Path(__file__).resolve().parents[2]
+OUT = RepositoryPath / "out"
 
 
 def download_csv(url: str) -> pd.DataFrame:
@@ -41,9 +42,15 @@ def download_csv(url: str) -> pd.DataFrame:
 
 def ensure_out_dir() -> Path:
     """Ensure the repository /out directory exists and return its Path."""
-    out_dir = RepositoryPath / "out"
-    out_dir.mkdir(parents=True, exist_ok=True)
-    return out_dir
+    OUT.mkdir(parents=True, exist_ok=True)
+    return OUT
+
+
+def week_out_dir(season: int, week: int) -> Path:
+    """Return the per-week output directory, creating it if necessary."""
+    directory = OUT / f"{season}_week{week}"
+    directory.mkdir(parents=True, exist_ok=True)
+    return directory
 
 
 def write_jsonl(rows: Iterable[Mapping], path: Union[str, Path]) -> None:
@@ -80,6 +87,7 @@ def read_env(keys: Sequence[str]) -> dict:
 __all__ = [
     "download_csv",
     "ensure_out_dir",
+    "week_out_dir",
     "write_jsonl",
     "write_csv",
     "read_env",

@@ -27,7 +27,7 @@ import pandas as pd
 import requests
 from pandas import DataFrame
 
-from src.common.io_utils import ensure_out_dir, write_csv, write_jsonl
+from src.common.io_utils import week_out_dir, write_csv, write_jsonl
 from src.common.team_names import normalize_team_display
 
 SAGARIN_URL = "http://sagarin.com/sports/nflsend.htm"
@@ -303,7 +303,7 @@ def fetch_sagarin_week(
     out_base: Optional[Path] = None,
     local_html: Optional[Path] = None,
 ) -> dict:
-    out_dir = ensure_out_dir()
+    out_dir = week_out_dir(season, week)
     base = out_base or out_dir / f"sagarin_nfl_{season}_wk{week}"
     source_url = SAGARIN_URL
     try:
@@ -366,7 +366,7 @@ def main() -> int:
         "--out",
         type=str,
         default=None,
-        help="Output basename (default /out/sagarin_nfl_<season>_wk<week>)",
+        help="Output basename (default out/<season>_week<week>/sagarin_nfl_<season>_wk<week>)",
     )
     parser.add_argument(
         "--local-html",

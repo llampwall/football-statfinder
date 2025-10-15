@@ -24,7 +24,7 @@ import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
 
-from src.common.io_utils import ensure_out_dir, read_env, write_jsonl
+from src.common.io_utils import read_env, week_out_dir, write_jsonl
 from src.common.team_names import normalize_team_display
 
 THE_ODDS_API_BASE = "https://api.the-odds-api.com/v4"
@@ -264,7 +264,11 @@ def main() -> int:
     parser.add_argument("--book", type=str, default=None, help="Preferred bookmaker title for The Odds API.")
     parser.add_argument("--scope", type=str, default="odds", help="Don Best scope: odds|open|close.")
     parser.add_argument("--key", type=str, help="Override API key/token.")
-    parser.add_argument("--out", type=str, help="Optional output path; defaults to /out/odds_{season}_wk{week}.jsonl")
+    parser.add_argument(
+        "--out",
+        type=str,
+        help="Optional output path; defaults to out/{season}_week{week}/odds_{season}_wk{week}.jsonl",
+    )
     args = parser.parse_args()
 
     env = read_env(["THE_ODDS_API_KEY", "DONBEST_TOKEN"])
@@ -279,7 +283,7 @@ def main() -> int:
             raise SystemExit("Missing Don Best token. Provide --key or set DONBEST_TOKEN.")
         records = fetch_odds_donbest(args.season, args.week, key, scope=args.scope)
 
-    out_path = Path(args.out) if args.out else ensure_out_dir() / f"odds_{args.season}_wk{args.week}.jsonl"
+    out_path = Path(args.out) if args.out else week_out_dir(args.season, args.week) / f"odds_{args.season}_wk{args.week}.jsonl"
     write_jsonl(records, out_path)
 
     total = len(records)

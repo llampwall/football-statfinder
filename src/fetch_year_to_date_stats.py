@@ -22,7 +22,7 @@ from typing import Dict, Iterable, Optional
 import numpy as np
 import pandas as pd
 
-from src.common.io_utils import download_csv, ensure_out_dir, write_csv
+from src.common.io_utils import download_csv, week_out_dir, write_csv
 from src.common.metrics import compute_ats, compute_su, dense_rank
 from src.common.team_names import normalize_team_display, team_merge_key
 from src.fetch_games import filter_week_reg, load_games, parse_kickoff_utc
@@ -363,7 +363,7 @@ def main():
     parser.add_argument("--teamrankings-csv", type=str, default=None)
     args = parser.parse_args()
     df = generate_league_metrics(args.season, args.week, args.teamrankings_csv)
-    out_dir = ensure_out_dir()
+    out_dir = week_out_dir(args.season, args.week)
     output_path = out_dir / f"league_metrics_{args.season}_{args.week}.csv"
     write_csv(df, output_path)
     print(f"Wrote: {output_path}")
