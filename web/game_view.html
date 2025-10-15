@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<!--
+Run locally:
+python -m http.server 8000
+# open http://localhost:8000/web/game_view.html
+# try: ?season=2025&week=7&game_key=20251019_2005_lac_ind
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>NFL Game View</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: "Segoe UI", Arial, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: #ffffff;
+      color: #1a1a1a;
+      min-height: 100vh;
+    }
+
+    a {
+      color: #0a5ea8;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .page {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 1.25rem 1.5rem 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.35rem;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 1.45rem;
+      letter-spacing: 0.015rem;
+      font-weight: 600;
+    }
+
+    h2,
+    h3 {
+      font-weight: 600;
+      letter-spacing: 0.01rem;
+      margin: 0;
+    }
+
+    h2 {
+      font-size: 1.1rem;
+    }
+
+    h3 {
+      font-size: 0.98rem;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .top-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem 1.2rem;
+      align-items: flex-end;
+      border-bottom: 1px solid #d5d8dd;
+      padding-bottom: 0.7rem;
+    }
+
+    .controls-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem 1rem;
+      align-items: flex-end;
+    }
+
+    .controls-group label {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      color: #424856;
+    }
+
+    .controls-group input,
+    .controls-group select {
+      min-width: 90px;
+      padding: 0.33rem 0.5rem;
+      border-radius: 3px;
+      border: 1px solid #b7bdc9;
+      background: #ffffff;
+      color: inherit;
+      font-size: 0.9rem;
+    }
+
+    .controls-group button {
+      padding: 0.4rem 0.85rem;
+      border-radius: 3px;
+      border: 1px solid #0a5ea8;
+      background: #0a5ea8;
+      color: #ffffff;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .controls-group button:hover {
+      background: #0c6fc7;
+    }
+
+    .status {
+      font-size: 0.82rem;
+      color: #0a5ea8;
+      min-height: 1rem;
+    }
+
+    .back-link {
+      font-size: 0.88rem;
+      margin-left: auto;
+    }
+
+    .info-header {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 0.9rem 1.2rem;
+      border-bottom: 1px solid #d5d8dd;
+      padding-bottom: 0.8rem;
+    }
+
+    .info-block {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .meta-line {
+      font-size: 0.88rem;
+      color: #444a58;
+    }
+
+    .team-stats {
+      border-bottom: 1px solid #d5d8dd;
+      padding-bottom: 0.8rem;
+    }
+
+    .team-stats table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+    }
+
+    .team-stats th,
+    .team-stats td {
+      border: 1px solid #b9c0cd;
+      padding: 0.3rem 0.4rem;
+      text-align: center;
+    }
+
+    .team-stats th {
+      background: #f1f3f8;
+      font-size: 0.74rem;
+      text-transform: uppercase;
+      letter-spacing: 0.02rem;
+    }
+
+    .team-stats td:first-child,
+    .team-stats th:first-child {
+      text-align: left;
+      padding-left: 0.5rem;
+    }
+
+    .schedule-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+    }
+
+    .schedule-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 1rem;
+    }
+
+    .schedule-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+      gap: 1.1rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      font-size: 0.8rem;
+    }
+
+    th,
+    td {
+      border: 1px solid #b9c0cd;
+      padding: 0.28rem 0.38rem;
+      text-align: center;
+    }
+
+    th {
+      background: #f5f6fa;
+      font-size: 0.72rem;
+      letter-spacing: 0.02rem;
+      text-transform: uppercase;
+    }
+
+    td {
+      color: #272b34;
+    }
+
+    tbody tr:nth-child(even) {
+      background: #fafbff;
+    }
+
+    tbody tr.win {
+      background: rgba(51, 146, 73, 0.18);
+    }
+
+    tbody tr.loss {
+      background: rgba(190, 54, 54, 0.18);
+    }
+
+    td.opponent {
+      text-align: left;
+      padding-left: 0.55rem;
+    }
+
+    th.opponent {
+      width: 230px;
+    }
+
+    td.score {
+      font-weight: 600;
+    }
+
+    td.result {
+      font-weight: 600;
+    }
+
+    .foot-notes {
+      font-size: 0.76rem;
+      color: #555d6a;
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      border-top: 1px solid #d5d8dd;
+      padding-top: 0.7rem;
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="top-bar">
+      <div class="title-block">
+        <h1>NFL Game View</h1>
+        <div class="status" id="status"></div>
+      </div>
+      <div class="controls-group">
+        <label>
+          Season
+          <input type="number" id="season-input" min="2000" />
+        </label>
+        <label>
+          Week
+          <input type="number" id="week-input" min="1" max="23" />
+        </label>
+        <button id="load-games-btn" type="button">Load Games</button>
+        <label>
+          Game
+          <select id="game-select">
+            <option value="">Select a game</option>
+          </select>
+        </label>
+        <button id="load-game-btn" type="button">Load Game</button>
+      </div>
+      <a class="back-link" id="week-view-link" href="week_view.html">Week view</a>
+    </header>
+
+    <section id="game-header" class="info-header hidden">
+      <div class="info-block" id="teams-block"></div>
+      <div class="info-block" id="favorite-block"></div>
+      <div class="info-block" id="market-block"></div>
+    </section>
+
+    <section id="team-stats-section" class="team-stats hidden">
+      <h2>Team Snapshot</h2>
+      <table id="team-stats-table">
+        <thead>
+          <tr>
+            <th>Team</th>
+            <th>PF</th>
+            <th>PA</th>
+            <th>SU</th>
+            <th>ATS</th>
+            <th>TO Margin</th>
+            <th>Rush Off</th>
+            <th>Rush Rank</th>
+            <th>Pass Off</th>
+            <th>Pass Rank</th>
+            <th>Total Off</th>
+            <th>Total Off Rank</th>
+            <th>Rush Def</th>
+            <th>Rush Def Rank</th>
+            <th>Pass Def</th>
+            <th>Pass Def Rank</th>
+            <th>Total Def</th>
+            <th>Total Def Rank</th>
+          </tr>
+        </thead>
+        <tbody id="team-stats-body"></tbody>
+      </table>
+    </section>
+
+    <section id="schedule-current" class="schedule-group hidden">
+      <div class="schedule-header">
+        <h2 id="schedule-current-title">Schedule / Scores</h2>
+      </div>
+      <div class="schedule-grid">
+        <div>
+          <h3 id="home-ytd-title"></h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Wk</th>
+                <th class="opponent">Opponent</th>
+                <th>Score</th>
+                <th>Result</th>
+                <th>PR (wk)</th>
+                <th>Rank</th>
+                <th>Opp PR (wk)</th>
+                <th>Opp Rank</th>
+                <th>SoS (wk)</th>
+                <th>SoS Rk</th>
+                <th>Opp SoS (wk)</th>
+                <th>Opp SoS Rk</th>
+              </tr>
+            </thead>
+            <tbody id="home-ytd-body"></tbody>
+          </table>
+        </div>
+        <div>
+          <h3 id="away-ytd-title"></h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Wk</th>
+                <th class="opponent">Opponent</th>
+                <th>Score</th>
+                <th>Result</th>
+                <th>PR (wk)</th>
+                <th>Rank</th>
+                <th>Opp PR (wk)</th>
+                <th>Opp Rank</th>
+                <th>SoS (wk)</th>
+                <th>SoS Rk</th>
+                <th>Opp SoS (wk)</th>
+                <th>Opp SoS Rk</th>
+              </tr>
+            </thead>
+            <tbody id="away-ytd-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="schedule-previous" class="schedule-group hidden">
+      <div class="schedule-header">
+        <h2 id="schedule-previous-title">Schedule / Scores</h2>
+      </div>
+      <div class="schedule-grid">
+        <div>
+          <h3 id="home-prev-title"></h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Wk</th>
+                <th class="opponent">Opponent</th>
+                <th>Score</th>
+                <th>Result</th>
+                <th>PR (wk)</th>
+                <th>Rank</th>
+                <th>Opp PR (wk)</th>
+                <th>Opp Rank</th>
+                <th>SoS (wk)</th>
+                <th>SoS Rk</th>
+                <th>Opp SoS (wk)</th>
+                <th>Opp SoS Rk</th>
+              </tr>
+            </thead>
+            <tbody id="home-prev-body"></tbody>
+          </table>
+        </div>
+        <div>
+          <h3 id="away-prev-title"></h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Wk</th>
+                <th class="opponent">Opponent</th>
+                <th>Score</th>
+                <th>Result</th>
+                <th>PR (wk)</th>
+                <th>Rank</th>
+                <th>Opp PR (wk)</th>
+                <th>Opp Rank</th>
+                <th>SoS (wk)</th>
+                <th>SoS Rk</th>
+                <th>Opp SoS (wk)</th>
+                <th>Opp SoS Rk</th>
+              </tr>
+            </thead>
+            <tbody id="away-prev-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <footer id="footer" class="foot-notes hidden">
+      <span id="diagnostics-note"></span>
+      <span id="data-stamp"></span>
+    </footer>
+  </main>
+
+  <script type="module" src="game_view.js"></script>
+</body>
+</html>

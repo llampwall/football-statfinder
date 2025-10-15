@@ -1,173 +1,224 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<title>Week View (NFL)</title>
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<style>
-  :root{
-    --bg:#0b0e14; --card:#11151f; --muted:#9aa4b2; --fg:#e6edf3;
-    --grid:#202635; --hi:#2ea043; --warn:#f85149;
-  }
-  html,body{background:var(--bg);color:var(--fg)}
-  body{font-family: ui-sans-serif,system-ui,Segoe UI,Roboto,Arial,sans-serif; margin:24px}
-  h1{margin:0 0 12px}
-  .controls{margin:0 0 16px; display:flex; gap:8px; align-items:center}
-  input{background:#0f1320;color:var(--fg);border:1px solid var(--grid); padding:6px 8px;border-radius:6px}
-  button{background:#1f6feb;color:#fff;border:0;padding:6px 10px;border-radius:6px;cursor:pointer}
-  button:hover{filter:brightness(1.05)}
-  .muted{color:var(--muted)}
+  <meta charset="utf-8" />
+  <title>NFL Week View</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: "Segoe UI", Arial, sans-serif;
+      font-size: 15px;
+    }
 
-  .card{background:var(--card); border:1px solid var(--grid); border-radius:12px; padding:10px 12px; margin:10px 0}
-  .grid{display:grid; grid-template-columns: 90px 70px 1fr 1fr 72px 80px 90px 110px 70px 90px 90px 72px; gap:8px; align-items:center}
-  .head{position:sticky; top:0; z-index:2; background:linear-gradient(#121826,#101522); border-radius:12px; border:1px solid var(--grid)}
-  .th,.td{font-size:13px}
-  .th{color:var(--muted); text-transform:uppercase; letter-spacing:.04em}
-  .num{text-align:right; font-variant-numeric:tabular-nums}
-  .fav{font-weight:700}
-  .tag{font-size:11px; color:#c9d1d9; background:#2b3346; padding:2px 6px; border-radius:999px}
-  .pos{color:var(--hi)} .neg{color:var(--warn)}
-  .sep{height:8px}
-</style>
+    body {
+      margin: 0;
+      background: #ffffff;
+      color: #1a1a1a;
+      display: flex;
+      justify-content: center;
+    }
 
+    main {
+      width: min(1600px, 100%);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    header {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem 1.5rem;
+      align-items: flex-end;
+      border-bottom: 1px solid #d4d8df;
+      padding-bottom: 1rem;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: 600;
+      letter-spacing: 0.01rem;
+    }
+
+    .status {
+      font-size: 0.9rem;
+      color: #0a5ea8;
+      min-height: 1rem;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem 1rem;
+      align-items: flex-end;
+    }
+
+    .controls label {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      color: #434957;
+    }
+
+    .controls input {
+      width: 6rem;
+      padding: 0.4rem 0.55rem;
+      border: 1px solid #b9bec8;
+      border-radius: 3px;
+      background: #ffffff;
+      font-size: 0.95rem;
+    }
+
+    .controls button {
+      padding: 0.42rem 0.95rem;
+      border-radius: 3px;
+      border: 1px solid #0a5ea8;
+      background: #0a5ea8;
+      color: #ffffff;
+      font-size: 0.95rem;
+      cursor: pointer;
+    }
+
+    .controls button:hover {
+      background: #0c70c6;
+    }
+
+    .table-wrapper {
+      border: 1px solid #c8ccd6;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      font-size: 0.9rem;
+    }
+
+    thead th {
+      background: #f3f5f8;
+      text-transform: uppercase;
+      letter-spacing: 0.03rem;
+      font-size: 0.75rem;
+      color: #4f5665;
+      padding: 0.6rem 0.5rem;
+      border-bottom: 1px solid #c8ccd6;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    tbody td {
+      padding: 0.6rem 0.5rem;
+      border-bottom: 1px solid #e6e8ee;
+      color: #1f2330;
+    }
+
+    tbody tr:nth-child(even) td {
+      background: #fafbff;
+    }
+
+    tbody tr:hover td {
+      background: #eceff7;
+    }
+
+    tbody tr {
+      cursor: pointer;
+    }
+
+    td.numeric {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .matchup {
+      font-weight: 600;
+    }
+
+    .badge {
+      display: inline-block;
+      margin-left: 0.45rem;
+      padding: 0.05rem 0.35rem;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: #0a5ea8;
+      border: 1px solid #0a5ea8;
+      vertical-align: middle;
+    }
+
+    .footer-links {
+      font-size: 0.85rem;
+      color: #525a68;
+      display: flex;
+      gap: 1rem;
+      border-top: 1px solid #d4d8df;
+      padding-top: 0.9rem;
+    }
+
+    a {
+      color: #0a5ea8;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
 <body>
-  <h1>Week View</h1>
-  <div class="controls">
-    <label>JSONL file:
-      <input id="filePath" size="40" value="../out/games_week_2025_7.jsonl" />
-    </label>
-    <button id="loadBtn">Load</button>
-    <span id="status" class="muted"></span>
-  </div>
+  <main>
+    <header>
+      <div>
+        <h1>Week View</h1>
+        <div class="status" id="status"></div>
+      </div>
+      <div class="controls">
+        <label>
+          Season
+          <input type="number" id="season-input" min="2000" />
+        </label>
+        <label>
+          Week
+          <input type="number" id="week-input" min="1" max="22" />
+        </label>
+        <button type="button" id="load-btn">Load</button>
+      </div>
+      <div class="controls">
+        <span id="loaded-label"></span>
+      </div>
+    </header>
 
-  <div class="card head">
-    <div class="grid th">
-      <div>Date</div><div>UTC</div><div>Home</div><div>Away</div><div>Fav</div>
-      <div class="num">Spread</div><div class="num">PR Diff</div><div class="num">Rating vs Odds</div>
-      <div class="num">Total</div><div class="num">ML (Home)</div><div class="num">ML (Away)</div><div>Source</div>
-    </div>
-  </div>
-  <div id="list"></div>
+    <section class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Kickoff (UTC)</th>
+            <th>Matchup</th>
+            <th>Fav / Spread</th>
+            <th>Total</th>
+            <th>PR Diff (fav)</th>
+            <th>RvO</th>
+            <th>Odds Src</th>
+          </tr>
+        </thead>
+        <tbody id="games-body"></tbody>
+      </table>
+    </section>
 
+    <footer class="footer-links">
+      <span id="week-summary"></span>
+      <a href="week_view.html" id="latest-link">Reload latest week</a>
+      <a href="game_view.html" id="game-view-link">Open Game View</a>
+    </footer>
+  </main>
 
-<script>
-async function loadJSONL(path) {
-  const res = await fetch(path, { cache: "no-store" });
-  if (!res.ok) throw new Error(`fetch failed ${res.status} ${res.statusText}`);
-  const txt = await res.text();
-  const lines = txt.split(/\r?\n/).filter(Boolean);
-  const rows = [];
-  for (let i = 0; i < lines.length; i++) {
-    let line = lines[i].trim();
-    if (!line) continue;
-    // sanitize Python/NumPy tokens so JSON.parse accepts the line
-    line = line
-      .replace(/\bNaN\b/g, "null")
-      .replace(/\b-?Infinity\b/g, "null");
-    try {
-      rows.push(JSON.parse(line));
-    } catch (e) {
-      console.error(`JSONL parse error on line ${i + 1}:`, e, lines[i]);
-      throw new Error(`JSONL parse error on line ${i + 1}`);
-    }
-  }
-  return rows;
-}
-
-function fmtISO(iso) {
-  if(!iso) return ["",""];
-  const d = new Date(iso);
-  const yyyy = d.getUTCFullYear();
-  const mm = String(d.getUTCMonth()+1).padStart(2,'0');
-  const dd = String(d.getUTCDate()).padStart(2,'0');
-  const hh = String(d.getUTCHours()).padStart(2,'0');
-  const mi = String(d.getUTCMinutes()).padStart(2,'0');
-  return [`${yyyy}-${mm}-${dd}`, `${hh}:${mi}`];
-}
-
-function num(v) {
-  if (v === null || v === undefined || v === "" || Number.isNaN(v)) return "";
-  const n = Number(v);
-  if (!Number.isFinite(n)) return "";
-  return n % 1 === 0 ? n.toString() : n.toFixed(1);
-}
-
-function signClass(v){ if(v===""||v==null) return ""; const n=Number(v); return n>0?"pos":(n<0?"neg":""); }
-function cell(v, cls=""){ return `<div class="td ${cls}">${v??""}</div>`; }
-function num(v){ if(v===null||v===undefined||v==="") return ""; const n=Number(v); if(!Number.isFinite(n)) return ""; return (Math.abs(n)%1<1e-9)? n.toFixed(0): n.toFixed(1); }
-
-function buildCard(g){
-  const fav = g.favored_side; // "HOME"|"AWAY"|null
-  const favHome = fav==="HOME";
-  const [date,time] = (()=>{
-    if(!g.kickoff_iso_utc) return ["",""];
-    const d=new Date(g.kickoff_iso_utc);
-    const mm=String(d.getUTCMonth()+1).padStart(2,'0'), dd=String(d.getUTCDate()).padStart(2,'0');
-    const hh=String(d.getUTCHours()).padStart(2,'0'), mi=String(d.getUTCMinutes()).padStart(2,'0');
-    return [`${d.getUTCFullYear()}-${mm}-${dd}`, `${hh}:${mi}`];
-  })();
-
-  const favSpread = num(g.spread_favored_team);
-  const favDiff   = num(g.rating_diff_favored_team);
-  const favRvo    = num(g.rating_vs_odds_favored_team);
-
-  // helper to blank on underdog row
-  const hSpread = favHome ? favSpread : "";
-  const hDiff   = favHome ? favDiff   : "";
-  const hRvo    = favHome ? favRvo    : "";
-  const aSpread = !favHome ? favSpread : "";
-  const aDiff   = !favHome ? favDiff   : "";
-  const aRvo    = !favHome ? favRvo    : "";
-
-  const home = (g.home_team_norm||g.home_team_raw||"").toLowerCase();
-  const away = (g.away_team_norm||g.away_team_raw||"").toLowerCase();
-
-  return `
-  <div class="card">
-    <div class="grid">
-      ${cell(date)}${cell(time)}
-      ${cell(`<span class="${favHome?'fav':''}">${home}</span>`)}
-      ${cell(away)}
-      ${cell(favHome?'HOME':'')}
-      ${cell(hSpread,'num '+signClass(hSpread))}
-      ${cell(hDiff,'num '+signClass(hDiff))}
-      ${cell(hRvo,'num '+signClass(hRvo))}
-      ${cell(num(g.total),'num')}
-      ${cell(num(g.moneyline_home),'num')}
-      ${cell(num(g.moneyline_away),'num')}
-      ${cell(g.odds_source||'')}
-    </div>
-    <div class="grid">
-      ${cell("")}${cell("")}
-      ${cell(home)}${cell(`<span class="${!favHome?'fav':''}">${away}</span>`)}
-      ${cell(!favHome?'AWAY':'')}
-      ${cell(aSpread,'num '+signClass(aSpread))}
-      ${cell(aDiff,'num '+signClass(aDiff))}
-      ${cell(aRvo,'num '+signClass(aRvo))}
-      ${cell("")}${cell("")}${cell("")}${cell("")}
-    </div>
-  </div>`;
-}
-
-async function render(){
-  const file = document.getElementById('filePath').value.trim();
-  const status = document.getElementById('status');
-  status.textContent = 'loading…';
-  try{
-    const rows = await loadJSONL(file);
-    rows.sort((a,b)=>(a.kickoff_iso_utc||"").localeCompare(b.kickoff_iso_utc||""));
-    const list = document.getElementById('list');
-    list.innerHTML = rows.map(buildCard).join("");
-    status.textContent = `loaded ${rows.length} games`;
-  }catch(e){
-    console.error(e);
-    status.textContent = 'error — see console';
-  }
-}
-
-document.getElementById('loadBtn').addEventListener('click', render);
-window.addEventListener('DOMContentLoaded', render);
-</script>
+  <script type="module" src="week_view.js"></script>
 </body>
 </html>
