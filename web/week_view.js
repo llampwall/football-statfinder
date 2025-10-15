@@ -163,7 +163,7 @@ function applyLoadedRows(rows, season, week, { updateHistory = false } = {}) {
 }
 
 async function loadGames(season, week) {
-  const path = `../football-statfinder/out/${season}_week${week}/games_week_${season}_${week}.jsonl`;
+  const path = `../out/${season}_week${week}/games_week_${season}_${week}.jsonl`;
   const url = new URL(path, window.location.href);
   try {
     const res = await fetch(url.toString(), { cache: "no-store" });
