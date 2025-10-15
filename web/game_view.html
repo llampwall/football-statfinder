@@ -260,6 +260,91 @@ python -m http.server 8000
       border-top: 1px solid #d5d8dd;
       padding-top: 0.7rem;
     }
+
+    .status-line {
+      font-size: 0.75rem;
+      color: #5a6374;
+    }
+
+
+    .nav-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.9rem;
+    }
+
+    .nav-row button {
+      padding: 0.35rem 0.75rem;
+      border: 1px solid #0a5ea8;
+      border-radius: 3px;
+      background: #0a5ea8;
+      color: #ffffff;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .nav-row button:disabled {
+      background: #c5cbd5;
+      border-color: #c5cbd5;
+      color: #586070;
+      cursor: not-allowed;
+    }
+
+    .nav-row span {
+      color: #3c4352;
+    }
+
+    @media print {
+      body {
+        background: #ffffff;
+        color: #000000;
+      }
+
+      main {
+        width: 100%;
+        padding: 0.5in;
+      }
+
+      .top-bar,
+      .controls-group,
+      .status,
+      .back-link,
+      .nav-row,
+      .footer-links,
+      #footer {
+        display: none !important;
+      }
+
+      table,
+      th,
+      td {
+        border-color: #c3c6ce !important;
+        background: transparent !important;
+        color: #000000 !important;
+      }
+
+      tbody tr:nth-child(even) td {
+        background: transparent !important;
+      }
+
+      tbody tr.win {
+        background: rgba(60, 158, 94, 0.15) !important;
+      }
+
+      tbody tr.loss {
+        background: rgba(209, 82, 82, 0.15) !important;
+      }
+
+      h2,
+      h3 {
+        page-break-after: avoid;
+      }
+
+      section {
+        page-break-inside: avoid;
+      }
+    }
   </style>
 </head>
 <body>
@@ -289,6 +374,12 @@ python -m http.server 8000
       </div>
       <a class="back-link" id="week-view-link" href="week_view.html">Week view</a>
     </header>
+
+    <section class="nav-row hidden" id="nav-row">
+      <button type="button" id="prev-game-btn">« Prev</button>
+      <span id="nav-summary"></span>
+      <button type="button" id="next-game-btn">Next »</button>
+    </section>
 
     <section id="game-header" class="info-header hidden">
       <div class="info-block" id="teams-block"></div>
@@ -433,8 +524,11 @@ python -m http.server 8000
       <span id="diagnostics-note"></span>
       <span id="data-stamp"></span>
     </footer>
+    <div class="status-line" id="status-line"></div>
   </main>
 
   <script type="module" src="game_view.js"></script>
 </body>
 </html>
+
+

@@ -88,6 +88,72 @@
       background: #0c70c6;
     }
 
+    .filters {
+      border: 1px solid #d4d8df;
+      border-radius: 3px;
+      padding: 0.75rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .filters.hidden {
+      display: none !important;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem 1rem;
+      align-items: flex-end;
+    }
+
+    .filter-group label {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      color: #3e4554;
+    }
+
+    #team-filter {
+      min-width: 12rem;
+      padding: 0.4rem 0.55rem;
+      border: 1px solid #b9bec8;
+      border-radius: 3px;
+      background: #ffffff;
+      font-size: 0.95rem;
+    }
+
+    #favorite-filter {
+      min-width: 11rem;
+      padding: 0.38rem 0.5rem;
+      border: 1px solid #b9bec8;
+      border-radius: 3px;
+      background: #ffffff;
+      font-size: 0.95rem;
+    }
+
+    #export-btn {
+      padding: 0.4rem 0.95rem;
+      border-radius: 3px;
+      border: 1px solid #0a5ea8;
+      background: #0a5ea8;
+      color: #ffffff;
+      font-size: 0.95rem;
+      cursor: pointer;
+    }
+
+    #export-btn:hover {
+      background: #0c70c6;
+    }
+
+    .filter-meta {
+      font-size: 0.82rem;
+      color: #4a5162;
+    }
+
     .table-wrapper {
       border: 1px solid #c8ccd6;
       border-radius: 3px;
@@ -118,6 +184,7 @@
       padding: 0.6rem 0.5rem;
       border-bottom: 1px solid #e6e8ee;
       color: #1f2330;
+      position: relative;
     }
 
     tbody tr:nth-child(even) td {
@@ -128,8 +195,35 @@
       background: #eceff7;
     }
 
-    tbody tr {
+    tbody tr {\n      cursor: pointer;\n    }\n\n    tbody tr.active-row td {\n      background: #e8f1ff;\n      box-shadow: inset 0 0 0 1px #0a5ea8;\n    }
+
+    .row-actions {
+      position: absolute;
+      right: 0.45rem;
+      top: 50%;
+      transform: translateY(-50%);
+      opacity: 0;
+      transition: opacity 0.15s ease;
+      font-size: 0.8rem;
+      color: #0a5ea8;
+    }
+
+    tbody tr:hover .row-actions,
+    tbody tr:focus-within .row-actions {
+      opacity: 1;
+    }
+
+    .row-actions button {
+      background: none;
+      border: none;
+      color: inherit;
       cursor: pointer;
+      font-size: 0.85rem;
+      padding: 0.15rem;
+    }
+
+    .row-actions button:hover {
+      text-decoration: underline;
     }
 
     td.numeric {
@@ -160,6 +254,12 @@
       gap: 1rem;
       border-top: 1px solid #d4d8df;
       padding-top: 0.9rem;
+    }
+
+    .source-line {
+      font-size: 0.75rem;
+      color: #5a6374;
+      margin-top: 0.25rem;
     }
 
     a {
@@ -195,6 +295,25 @@
       </div>
     </header>
 
+    <section class="filters hidden" id="filters">
+      <div class="filter-group">
+        <label>
+          Team filter
+          <input type="text" id="team-filter" placeholder="e.g. chiefs" />
+        </label>
+        <label>
+          Favorites
+          <select id="favorite-filter">
+            <option value="all">All</option>
+            <option value="favorites">Favorites only</option>
+            <option value="dogs">Dogs only</option>
+          </select>
+        </label>
+        <button type="button" id="export-btn">Export visible rows (CSV)</button>
+      </div>
+      <div class="filter-meta" id="filter-meta"></div>
+    </section>
+
     <section class="table-wrapper">
       <table>
         <thead>
@@ -217,8 +336,10 @@
       <a href="week_view.html" id="latest-link">Reload latest week</a>
       <a href="game_view.html" id="game-view-link">Open Game View</a>
     </footer>
+    <div class="source-line" id="status-line"></div>
   </main>
 
   <script type="module" src="week_view.js"></script>
 </body>
 </html>
+

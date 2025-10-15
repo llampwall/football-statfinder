@@ -16,6 +16,10 @@ const els = {
   schedulePrevious: document.getElementById("schedule-previous"),
   scheduleCurrentTitle: document.getElementById("schedule-current-title"),
   schedulePreviousTitle: document.getElementById("schedule-previous-title"),
+  navRow: document.getElementById("nav-row"),
+  prevGameBtn: document.getElementById("prev-game-btn"),
+  nextGameBtn: document.getElementById("next-game-btn"),
+  navSummary: document.getElementById("nav-summary"),
   tableBodies: {
     home_ytd: document.getElementById("home-ytd-body"),
     away_ytd: document.getElementById("away-ytd-body"),
@@ -31,9 +35,11 @@ const els = {
   footer: document.getElementById("footer"),
   diagnosticsNote: document.getElementById("diagnostics-note"),
   dataStamp: document.getElementById("data-stamp"),
+  statusLine: document.getElementById("status-line"),
 };
 
 const STORAGE_KEY = "game-view:last-selection";
+const WEEK_CACHE_PREFIX = "week-view:games:";
 const NUMERIC_KEYS = {
   home: [
     "home_ry_pg",
@@ -77,6 +83,10 @@ const STATE = {
   week: null,
   deepLinkUsed: false,
   autoFromStorage: false,
+  sortedKeys: [],
+  currentGameKey: null,
+  weekSourcePath: null,
+  lastLoadedAt: null,
 };
 
 const REQUIRED_FAVORITE_KEYS = [
@@ -159,6 +169,28 @@ function attachListeners() {
     els.season.addEventListener(evt, syncWeekLink);
     els.week.addEventListener(evt, syncWeekLink);
   });
+
+  els.prevGameBtn.addEventListener("click", () => {
+    navigateRelative(-1);
+  });
+
+  els.nextGameBtn.addEventListener("click", () => {
+    navigateRelative(1);
+  });
+
+  els.weekLink.addEventListener("click", () => {
+    rememberWeekRow(STATE.currentGameKey);
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (["INPUT", "TEXTAREA", "SELECT"].includes(document.activeElement.tagName)) return;
+    if (event.defaultPrevented) return;
+    if (event.key === "ArrowLeft") {
+      navigateRelative(-1);
+    } else if (event.key === "ArrowRight") {
+      navigateRelative(1);
+    }
+  });
 }
 
 function bootstrap() {
@@ -191,25 +223,42 @@ async function loadGames(autoGameKey) {
     return;
   }
 
-  const relPath = `football-statfinder/out/${season}_week${week}/games_week_${season}_${week}.jsonl`;
-  const url = new URL(relPath, window.location.origin);
-  setStatus("Loading games…");
-  let text;
-  try {
-    const res = await fetch(url.toString());
-    if (!res.ok) {
-      throw new Error(`HTTP ${res.status}`);
+  STATE.currentGameKey = null;
+
+  const cached = readWeekCache(season, week);
+  let records = Array.isArray(cached) ? cached : null;
+  let fromCache = false;
+
+  if (!records || records.length === 0) {
+    const relPath = `../out/${season}_week${week}/games_week_${season}_${week}.jsonl`;
+    const url = new URL(relPath, window.location.href);
+    setStatus("Loading games…");
+    try {
+      const res = await fetch(url.toString());
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}`);
+      }
+      const text = await res.text();
+      const parsed = parseJsonLines(text);
+      records = parsed.records;
+      console.log(`${parsed.count >= 1 ? "PASS" : "FAIL"}: Games loaded (count=${parsed.count})`);
+      if (parsed.count === 0) {
+        setStatus("No games found.");
+        return;
+      }
+      writeWeekCache(season, week, records);
+    } catch (err) {
+      console.log(`FAIL: Games loaded (${season} week ${week})`, err);
+      setStatus(`Failed to load games (${err.message})`);
+      return;
     }
-    text = await res.text();
-  } catch (err) {
-    setStatus(`Failed to load games (${err.message})`);
-    console.log(`FAIL: Games loaded (${relPath})`);
-    return;
+  } else {
+    fromCache = true;
+    console.log(`INFO: Loaded ${records.length} cached games for season=${season} week=${week}`);
+    setStatus("Loaded games from cache.");
   }
 
-  const { records, count } = parseJsonLines(text);
-  console.log(`${count >= 1 ? "PASS" : "FAIL"}: Games loaded (count=${count})`);
-  if (count === 0) {
+  if (!Array.isArray(records) || records.length === 0) {
     setStatus("No games found.");
     return;
   }
@@ -218,7 +267,9 @@ async function loadGames(autoGameKey) {
   STATE.season = season;
   STATE.week = week;
   populateGameSelect(records, autoGameKey);
-  setStatus(`Loaded ${count} games.`);
+  if (!fromCache) {
+    setStatus(`Loaded ${records.length} games.`);
+  }
 
   if ((STATE.deepLinkUsed || STATE.autoFromStorage) && autoGameKey) {
     console.log(
@@ -238,20 +289,25 @@ function populateGameSelect(records, autoSelectKey) {
   defaultOption.textContent = "Select a game";
   els.gameSelect.appendChild(defaultOption);
 
-  records
+  const sorted = records
     .slice()
-    .sort((a, b) => a.kickoff_iso_utc.localeCompare(b.kickoff_iso_utc))
-    .forEach((game) => {
-      const option = document.createElement("option");
-      option.value = game.game_key;
-      const home = getTeamDisplayName(game, "home");
-      const away = getTeamDisplayName(game, "away");
-      option.textContent = `${home} vs ${away} (${game.game_key})`;
-      if (autoSelectKey && autoSelectKey === game.game_key) {
-        option.selected = true;
-      }
-      els.gameSelect.append(option);
-    });
+    .sort((a, b) => (a.kickoff_iso_utc ?? "").localeCompare(b.kickoff_iso_utc ?? ""));
+
+  STATE.sortedKeys = sorted.map((game) => game.game_key);
+
+  sorted.forEach((game) => {
+    const option = document.createElement("option");
+    option.value = game.game_key;
+    const home = getTeamDisplayName(game, "home");
+    const away = getTeamDisplayName(game, "away");
+    option.textContent = `${home} vs ${away} (${game.game_key})`;
+    if (autoSelectKey && autoSelectKey === game.game_key) {
+      option.selected = true;
+    }
+    els.gameSelect.append(option);
+  });
+
+  updateNavigationControls();
 }
 
 async function loadSingleGame(gameKey) {
@@ -261,9 +317,9 @@ async function loadSingleGame(gameKey) {
     setStatus("Game not in loaded set.");
     return;
   }
-
-  const sidecarPath = `football-statfinder/out/${STATE.season}_week${STATE.week}/game_schedules/${gameKey}.json`;
-  const url = new URL(sidecarPath, window.location.origin);
+  const sidecarRel = `out/${STATE.season}_week${STATE.week}/game_schedules/${gameKey}.json`;
+  const sidecarPath = `../${sidecarRel}`;
+  const url = new URL(sidecarPath, window.location.href);
   let sidecar;
   try {
     const res = await fetch(url.toString());
@@ -288,6 +344,13 @@ async function loadSingleGame(gameKey) {
     home: getTeamDisplayName(game, "home"),
     away: getTeamDisplayName(game, "away"),
   };
+
+  STATE.currentGameKey = gameKey;
+  if (els.gameSelect.value !== gameKey) {
+    els.gameSelect.value = gameKey;
+  }
+
+  STATE.lastLoadedAt = new Date();
 
   renderHeader(game, teamNames);
   renderTeamStats(game, teamNames);
@@ -316,13 +379,16 @@ async function loadSingleGame(gameKey) {
 
   setStatus("Game loaded.");
   els.diagnosticsNote.textContent = `Diagnostics: favorite fields ${hasAllFavoriteKeys ? "OK" : "missing"}, coverage home ${coverCounts.home}, away ${coverCounts.away}`;
-  els.dataStamp.textContent = `Source: ${sidecarPath}`;
+  els.dataStamp.textContent = `Sidecar: ${sidecarRel}`;
 
   persistSelection({
     season: STATE.season,
     week: STATE.week,
     game_key: gameKey,
   });
+  rememberWeekRow(gameKey, sidecarRel);
+  updateUrlWithSelection(gameKey);
+  updateNavigationControls();
 }
 
 function renderHeader(game, teamNames) {
@@ -490,7 +556,88 @@ function fillScheduleTable(tbody, rows) {
   return rows.length;
 }
 
-function coverageCounts(game) {
+function updateNavigationControls() {
+  const keys = Array.isArray(STATE.sortedKeys) ? STATE.sortedKeys : [];
+  const total = keys.length;
+  if (!STATE.currentGameKey || total === 0 || !STATE.games.has(STATE.currentGameKey)) {
+    els.navRow.classList.add("hidden");
+    els.navSummary.textContent = "";
+    els.prevGameBtn.disabled = true;
+    els.nextGameBtn.disabled = true;
+    return;
+  }
+
+  const index = keys.indexOf(STATE.currentGameKey);
+  if (index === -1) {
+    els.navRow.classList.add("hidden");
+    return;
+  }
+
+  const prevEnabled = index > 0;
+  const nextEnabled = index < total - 1;
+  els.prevGameBtn.disabled = !prevEnabled;
+  els.nextGameBtn.disabled = !nextEnabled;
+  els.navSummary.textContent = `Game ${index + 1} of ${total}`;
+  els.navRow.classList.remove("hidden");
+}
+
+function navigateRelative(offset) {
+  const keys = Array.isArray(STATE.sortedKeys) ? STATE.sortedKeys : [];
+  if (!STATE.currentGameKey || keys.length === 0) return;
+  const currentIndex = keys.indexOf(STATE.currentGameKey);
+  if (currentIndex === -1) return;
+  const nextIndex = currentIndex + offset;
+  if (nextIndex < 0 || nextIndex >= keys.length) return;
+  const nextKey = keys[nextIndex];
+  if (!STATE.games.has(nextKey)) {
+    setStatus("Game not available in list.");
+    return;
+  }
+  loadSingleGame(nextKey);
+}
+
+function rememberWeekRow(gameKey, sidecarRel) {
+  if (!gameKey || !STATE.season || !STATE.week) return;
+  try {
+    localStorage.setItem(
+      "week-view:last-game",
+      JSON.stringify({ season: STATE.season, week: STATE.week, game_key: gameKey })
+    );
+  } catch {
+    // ignore storage failures
+  }
+  updateStatusLineGame(sidecarRel);
+}
+
+function updateStatusLineGame(sidecarRel) {
+  if (!els.statusLine) return;
+  if (!STATE.weekSourcePath) {
+    els.statusLine.textContent = "";
+    return;
+  }
+  const parts = [`Source: ${STATE.weekSourcePath}`];
+  if (sidecarRel) {
+    parts.push(sidecarRel);
+  }
+  const timestamp = (STATE.lastLoadedAt || new Date()).toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  });
+  parts.push(`Loaded ${timestamp}`);
+  els.statusLine.textContent = parts.join(" · ");
+}
+
+function updateUrlWithSelection(gameKey) {
+  if (!STATE.season || !STATE.week) return;
+  const url = new URL(window.location.href);
+  url.searchParams.set("season", STATE.season);
+  url.searchParams.set("week", STATE.week);
+  if (gameKey) {
+    url.searchParams.set("game_key", gameKey);
+  }
+  window.history.replaceState({ season: STATE.season, week: STATE.week, game_key: gameKey }, "", url.toString());
+}\n\nfunction coverageCounts(game) {
   return {
     home: NUMERIC_KEYS.home.reduce((acc, key) => acc + (hasNumeric(game[key]) ? 1 : 0), 0),
     away: NUMERIC_KEYS.away.reduce((acc, key) => acc + (hasNumeric(game[key]) ? 1 : 0), 0),
@@ -677,6 +824,58 @@ function persistSelection(payload) {
   }
 }
 
-function setStatus(message) {
+function weekCacheKey(season, week) {
+  return `${WEEK_CACHE_PREFIX}${season}:${week}`;
+}
+
+function readWeekCache(season, week) {
+  try {
+    const raw = window.localStorage.getItem(weekCacheKey(season, week));
+    if (!raw) return null;
+    try {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) return parsed;
+      if (typeof parsed === "string") {
+        const fromText = parseJsonLines(parsed).records;
+        return fromText.length ? fromText : null;
+      }
+    } catch {
+      const fallback = parseJsonLines(raw).records;
+      return fallback.length ? fallback : null;
+    }
+  } catch {
+    return null;
+  }
+  return null;
+}
+
+function writeWeekCache(season, week, records) {
+  try {
+    window.localStorage.setItem(weekCacheKey(season, week), JSON.stringify(records));
+  } catch {
+    // ignore cache write failures
+  }
+}\n\nfunction setStatus(message) {
   els.status.textContent = message ?? "";
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
