@@ -25,12 +25,14 @@ import pandas as pd
 
 from src.common.io_utils import read_env, week_out_dir, write_jsonl, write_csv
 from src.common.team_names import team_merge_key
-from src.fetch_games import filter_week_reg, load_games
+from src.fetch_games import filter_week_reg, load_games, get_schedule_df
 from src.fetch_week_odds_nfl import fetch_odds_theoddsapi
 from src.fetch_sagarin_week_nfl import fetch_sagarin_week
 from src.gameview_build import build_gameview
 from src.fetch_year_to_date_stats import generate_league_metrics
-from src.sagarin_master import append_week
+from src.sagarin_master import append_week, load_master as load_sagarin_master
+from src.schedule_master import ensure_weeks_present, load_master as load_schedule_master
+from src.build_team_timelines import build_timelines
 
 
 def _is_int_in_range(value, lo: int = 1, hi: int = 32) -> bool:
@@ -57,7 +59,7 @@ def _nan_inf_count(df: pd.DataFrame) -> int:
     return int(np.isinf(arr).sum() + np.isnan(arr).sum())
 
 
-def refresh_week(season: int, week: int, bookmaker: str = "Pinnacle") -> dict:
+def refresh_week(season: int, week: int, bookmaker: str = "Pinnacle", build_timelines_flag: bool = True) -> dict:
     out_dir = week_out_dir(season, week)
     schedule = load_games(season)
     week_games = filter_week_reg(schedule, season, week)
@@ -116,6 +118,52 @@ def refresh_week(season: int, week: int, bookmaker: str = "Pinnacle") -> dict:
         print(f"Odds records:          {len(odds_records)} ({odds_path})")
     else:
         print("Odds records:          skipped (no API key)")
+
+    if build_timelines_flag:
+        pr_master = load_sagarin_master()
+        if pr_master.empty:
+            print("Game schedules sidecars: skipped (Sagarin master empty)")
+        else:
+            ensure_weeks_present([season, season - 1])
+            sched_master = load_schedule_master()
+            mask = (
+                (sched_master["league"].astype(str).str.upper() == "NFL")
+                & (sched_master["game_type"] == "REG")
+                & (sched_master["season"].isin([season, season - 1]))
+            )
+            schedule_rows = int(mask.sum())
+            print(
+                f"Schedule master rows (NFL REG) for seasons {season-1},{season}: {schedule_rows}"
+            )
+            games_df = pd.read_json(gameview_result["jsonl"], lines=True)
+            side_map, side_stats = build_timelines(season, week, pr_master, out_dir, games_df)
+            print(
+                f"Sidecars written: {len(side_map)}/{len(games_df)} → {out_dir / 'game_schedules'}"
+            )
+            first_two = list(side_stats.items())[:2]
+            for game_key, info in first_two:
+                if game_key == "_missing":
+                    continue
+                print(
+                    f"game={game_key} home_ytd={info['home_ytd_len']} away_ytd={info['away_ytd_len']} "
+                    f"home_prev={info['home_prev_len']} away_prev={info['away_prev_len']}"
+                )
+            missing_schedule_games = side_stats.get("_missing", [])
+            if missing_schedule_games:
+                raise RuntimeError(f"Schedule master missing rows for games: {missing_schedule_games}")
+            filtered_stats = {k: v for k, v in side_stats.items() if k != "_missing"}
+            team_expected = sum(info["team_expected_pr"] for info in filtered_stats.values())
+            team_present = sum(info["team_present_pr"] for info in filtered_stats.values())
+            opp_expected = sum(info["opp_expected_pr"] for info in filtered_stats.values())
+            opp_present = sum(info["opp_present_pr"] for info in filtered_stats.values())
+            print(f"team PR join missing: {team_expected - team_present}")
+            print(f"opp PR join missing: {opp_expected - opp_present}")
+            if team_expected > 0 and (team_present / team_expected) < 0.8:
+                raise RuntimeError("Team PR coverage below 80% for Sagarin joins")
+            if opp_expected > 0 and (opp_present / opp_expected) < 0.8:
+                raise RuntimeError("Opponent PR coverage below 80% for Sagarin joins")
+    else:
+        print("Game schedules sidecars: skipped (--nogames)")
 
     try:
         games_df = pd.read_json(gameview_result["jsonl"], lines=True)
@@ -212,8 +260,9 @@ def main() -> int:
     parser.add_argument("--season", type=int, required=True)
     parser.add_argument("--week", type=int, required=True)
     parser.add_argument("--book", type=str, default="Pinnacle", help="Preferred bookmaker for odds.")
+    parser.add_argument("--nogames", action="store_true", help="Skip building per-game timelines")
     args = parser.parse_args()
-    refresh_week(args.season, args.week, bookmaker=args.book)
+    refresh_week(args.season, args.week, bookmaker=args.book, build_timelines_flag=not args.nogames)
     return 0
 
 

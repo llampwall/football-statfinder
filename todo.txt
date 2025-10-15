@@ -1,0 +1,7 @@
+todo: 
+
+1. fix up the SAGARIN_WEEKLY_HISTORICAL_CFB.csv file to match the NFL one, and then copy it to sagarin_cfb_master.csv
+
+2. find api sources that match the nfl ones for cfb data coverage
+
+3. mirror nfl functionality to cfb

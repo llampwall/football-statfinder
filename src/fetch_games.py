@@ -21,6 +21,7 @@ from typing import Optional
 import pandas as pd
 
 from src.common.io_utils import download_csv
+from src.common.team_names import normalize_team_display
 
 try:
     from zoneinfo import ZoneInfo  # type: ignore[attr-defined]
@@ -129,4 +130,18 @@ __all__ = [
     "parse_kickoff_utc",
     "home_relative_spread",
     "total_from_schedule",
+    "get_schedule_df",
 ]
+
+
+def get_schedule_df(season: int) -> pd.DataFrame:
+    """Return full schedule for a season with normalized team names and kickoff ISO timestamps."""
+    df = load_games(season)
+    if "kickoff_dt_utc" not in df.columns:
+        df["kickoff_dt_utc"] = df.apply(parse_kickoff_utc, axis=1)
+    df["kickoff_iso_utc"] = df["kickoff_dt_utc"].apply(
+        lambda dt: dt.replace(microsecond=0).isoformat() if isinstance(dt, datetime) else None
+    )
+    df["home_team_norm"] = df["home_team"].astype(str).map(normalize_team_display)
+    df["away_team_norm"] = df["away_team"].astype(str).map(normalize_team_display)
+    return df
