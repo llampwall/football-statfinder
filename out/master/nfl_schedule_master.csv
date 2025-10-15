@@ -1,0 +1,558 @@
+league,season,week,game_type,kickoff_iso_utc,home_team_norm,away_team_norm,home_team_key,away_team_key,home_score,away_score,spread_line,total_line,source
+NFL,2024,1,REG,2024-09-08T17:00:00+00:00,Atlanta Falcons,Pittsburgh Steelers,atlantafalcons,pittsburghsteelers,10.0,18.0,4.0,43.0,seed
+NFL,2024,1,REG,2024-09-08T17:00:00+00:00,Buffalo Bills,Arizona Cardinals,buffalobills,arizonacardinals,34.0,28.0,6.5,46.0,seed
+NFL,2024,1,REG,2024-09-08T17:00:00+00:00,Chicago Bears,Tennessee Titans,chicagobears,tennesseetitans,24.0,17.0,4.0,43.0,seed
+NFL,2024,1,REG,2024-09-08T17:00:00+00:00,Cincinnati Bengals,New England Patriots,cincinnatibengals,newenglandpatriots,10.0,16.0,8.0,40.5,seed
+NFL,2024,1,REG,2024-09-08T20:25:00+00:00,Cleveland Browns,Dallas Cowboys,clevelandbrowns,dallascowboys,17.0,33.0,2.5,42.0,seed
+NFL,2024,1,REG,2024-09-09T00:20:00+00:00,Detroit Lions,Los Angeles Rams,detroitlions,losangelesrams,26.0,20.0,5.0,54.0,seed
+NFL,2024,1,REG,2024-09-08T17:00:00+00:00,Indianapolis Colts,Houston Texans,indianapoliscolts,houstontexans,27.0,29.0,-3.0,49.0,seed
+NFL,2024,1,REG,2024-09-06T00:20:00+00:00,Kansas City Chiefs,Baltimore Ravens,kansascitychiefs,baltimoreravens,27.0,20.0,3.0,46.0,seed
+NFL,2024,1,REG,2024-09-08T20:05:00+00:00,Los Angeles Chargers,Las Vegas Raiders,losangeleschargers,lasvegasraiders,22.0,10.0,3.0,41.0,seed
+NFL,2024,1,REG,2024-09-08T17:00:00+00:00,Miami Dolphins,Jacksonville Jaguars,miamidolphins,jacksonvillejaguars,20.0,17.0,3.5,49.5,seed
+NFL,2024,1,REG,2024-09-08T17:00:00+00:00,New Orleans Saints,Carolina Panthers,neworleanssaints,carolinapanthers,47.0,10.0,3.5,41.5,seed
+NFL,2024,1,REG,2024-09-08T17:00:00+00:00,New York Giants,Minnesota Vikings,newyorkgiants,minnesotavikings,6.0,28.0,-1.0,42.5,seed
+NFL,2024,1,REG,2024-09-07T00:15:00+00:00,Philadelphia Eagles,Green Bay Packers,philadelphiaeagles,greenbaypackers,34.0,29.0,2.0,49.5,seed
+NFL,2024,1,REG,2024-09-10T00:15:00+00:00,San Francisco 49ers,New York Jets,sanfrancisco49ers,newyorkjets,32.0,19.0,3.5,43.0,seed
+NFL,2024,1,REG,2024-09-08T20:05:00+00:00,Seattle Seahawks,Denver Broncos,seattleseahawks,denverbroncos,26.0,20.0,6.5,42.0,seed
+NFL,2024,1,REG,2024-09-08T20:25:00+00:00,Tampa Bay Buccaneers,Washington Commanders,tampabaybuccaneers,washingtoncommanders,37.0,20.0,4.0,42.0,seed
+NFL,2024,2,REG,2024-09-15T20:05:00+00:00,Arizona Cardinals,Los Angeles Rams,arizonacardinals,losangelesrams,41.0,10.0,-1.0,47.5,seed
+NFL,2024,2,REG,2024-09-15T17:00:00+00:00,Baltimore Ravens,Las Vegas Raiders,baltimoreravens,lasvegasraiders,23.0,26.0,9.0,41.0,seed
+NFL,2024,2,REG,2024-09-15T17:00:00+00:00,Carolina Panthers,Los Angeles Chargers,carolinapanthers,losangeleschargers,3.0,26.0,-5.0,39.0,seed
+NFL,2024,2,REG,2024-09-15T17:00:00+00:00,Dallas Cowboys,New Orleans Saints,dallascowboys,neworleanssaints,19.0,44.0,6.5,47.0,seed
+NFL,2024,2,REG,2024-09-15T20:25:00+00:00,Denver Broncos,Pittsburgh Steelers,denverbroncos,pittsburghsteelers,6.0,13.0,-3.0,36.5,seed
+NFL,2024,2,REG,2024-09-15T17:00:00+00:00,Detroit Lions,Tampa Bay Buccaneers,detroitlions,tampabaybuccaneers,16.0,20.0,7.5,51.5,seed
+NFL,2024,2,REG,2024-09-15T17:00:00+00:00,Green Bay Packers,Indianapolis Colts,greenbaypackers,indianapoliscolts,16.0,10.0,-3.0,41.5,seed
+NFL,2024,2,REG,2024-09-16T00:20:00+00:00,Houston Texans,Chicago Bears,houstontexans,chicagobears,19.0,13.0,6.0,45.5,seed
+NFL,2024,2,REG,2024-09-15T17:00:00+00:00,Jacksonville Jaguars,Cleveland Browns,jacksonvillejaguars,clevelandbrowns,13.0,18.0,3.0,41.5,seed
+NFL,2024,2,REG,2024-09-15T20:25:00+00:00,Kansas City Chiefs,Cincinnati Bengals,kansascitychiefs,cincinnatibengals,26.0,25.0,6.5,47.5,seed
+NFL,2024,2,REG,2024-09-13T00:15:00+00:00,Miami Dolphins,Buffalo Bills,miamidolphins,buffalobills,10.0,31.0,2.5,48.5,seed
+NFL,2024,2,REG,2024-09-15T17:00:00+00:00,Minnesota Vikings,San Francisco 49ers,minnesotavikings,sanfrancisco49ers,23.0,17.0,-4.5,46.5,seed
+NFL,2024,2,REG,2024-09-15T17:00:00+00:00,New England Patriots,Seattle Seahawks,newenglandpatriots,seattleseahawks,20.0,23.0,-3.5,39.0,seed
+NFL,2024,2,REG,2024-09-17T00:15:00+00:00,Philadelphia Eagles,Atlanta Falcons,philadelphiaeagles,atlantafalcons,21.0,22.0,5.5,46.5,seed
+NFL,2024,2,REG,2024-09-15T17:00:00+00:00,Tennessee Titans,New York Jets,tennesseetitans,newyorkjets,17.0,24.0,-3.5,41.5,seed
+NFL,2024,2,REG,2024-09-15T17:00:00+00:00,Washington Commanders,New York Giants,washingtoncommanders,newyorkgiants,21.0,18.0,1.5,42.5,seed
+NFL,2024,3,REG,2024-09-22T20:25:00+00:00,Arizona Cardinals,Detroit Lions,arizonacardinals,detroitlions,13.0,20.0,-3.0,51.5,seed
+NFL,2024,3,REG,2024-09-23T00:20:00+00:00,Atlanta Falcons,Kansas City Chiefs,atlantafalcons,kansascitychiefs,17.0,22.0,-3.0,46.0,seed
+NFL,2024,3,REG,2024-09-23T23:30:00+00:00,Buffalo Bills,Jacksonville Jaguars,buffalobills,jacksonvillejaguars,47.0,10.0,4.0,46.5,seed
+NFL,2024,3,REG,2024-09-24T00:15:00+00:00,Cincinnati Bengals,Washington Commanders,cincinnatibengals,washingtoncommanders,33.0,38.0,7.5,46.0,seed
+NFL,2024,3,REG,2024-09-22T17:00:00+00:00,Cleveland Browns,New York Giants,clevelandbrowns,newyorkgiants,15.0,21.0,6.5,38.0,seed
+NFL,2024,3,REG,2024-09-22T20:25:00+00:00,Dallas Cowboys,Baltimore Ravens,dallascowboys,baltimoreravens,25.0,28.0,-1.5,47.5,seed
+NFL,2024,3,REG,2024-09-22T17:00:00+00:00,Indianapolis Colts,Chicago Bears,indianapoliscolts,chicagobears,21.0,16.0,1.5,43.0,seed
+NFL,2024,3,REG,2024-09-22T20:05:00+00:00,Las Vegas Raiders,Carolina Panthers,lasvegasraiders,carolinapanthers,22.0,36.0,5.5,40.0,seed
+NFL,2024,3,REG,2024-09-22T20:25:00+00:00,Los Angeles Rams,San Francisco 49ers,losangelesrams,sanfrancisco49ers,27.0,24.0,-6.0,44.5,seed
+NFL,2024,3,REG,2024-09-22T17:00:00+00:00,Minnesota Vikings,Houston Texans,minnesotavikings,houstontexans,34.0,7.0,-2.0,46.0,seed
+NFL,2024,3,REG,2024-09-22T17:00:00+00:00,New Orleans Saints,Philadelphia Eagles,neworleanssaints,philadelphiaeagles,12.0,15.0,2.5,49.0,seed
+NFL,2024,3,REG,2024-09-20T00:15:00+00:00,New York Jets,New England Patriots,newyorkjets,newenglandpatriots,24.0,3.0,6.5,39.0,seed
+NFL,2024,3,REG,2024-09-22T17:00:00+00:00,Pittsburgh Steelers,Los Angeles Chargers,pittsburghsteelers,losangeleschargers,20.0,10.0,3.0,36.0,seed
+NFL,2024,3,REG,2024-09-22T20:05:00+00:00,Seattle Seahawks,Miami Dolphins,seattleseahawks,miamidolphins,24.0,3.0,4.0,41.5,seed
+NFL,2024,3,REG,2024-09-22T17:00:00+00:00,Tampa Bay Buccaneers,Denver Broncos,tampabaybuccaneers,denverbroncos,7.0,26.0,6.0,40.5,seed
+NFL,2024,3,REG,2024-09-22T17:00:00+00:00,Tennessee Titans,Green Bay Packers,tennesseetitans,greenbaypackers,14.0,30.0,3.0,37.0,seed
+NFL,2024,4,REG,2024-09-29T20:05:00+00:00,Arizona Cardinals,Washington Commanders,arizonacardinals,washingtoncommanders,14.0,42.0,3.5,49.0,seed
+NFL,2024,4,REG,2024-09-29T17:00:00+00:00,Atlanta Falcons,New Orleans Saints,atlantafalcons,neworleanssaints,26.0,24.0,2.5,41.5,seed
+NFL,2024,4,REG,2024-09-30T00:20:00+00:00,Baltimore Ravens,Buffalo Bills,baltimoreravens,buffalobills,35.0,10.0,2.5,46.5,seed
+NFL,2024,4,REG,2024-09-29T17:00:00+00:00,Carolina Panthers,Cincinnati Bengals,carolinapanthers,cincinnatibengals,24.0,34.0,-4.5,47.0,seed
+NFL,2024,4,REG,2024-09-29T17:00:00+00:00,Chicago Bears,Los Angeles Rams,chicagobears,losangelesrams,24.0,18.0,3.0,40.0,seed
+NFL,2024,4,REG,2024-10-01T00:15:00+00:00,Detroit Lions,Seattle Seahawks,detroitlions,seattleseahawks,42.0,29.0,3.5,46.5,seed
+NFL,2024,4,REG,2024-09-29T17:00:00+00:00,Green Bay Packers,Minnesota Vikings,greenbaypackers,minnesotavikings,29.0,31.0,2.5,44.0,seed
+NFL,2024,4,REG,2024-09-29T17:00:00+00:00,Houston Texans,Jacksonville Jaguars,houstontexans,jacksonvillejaguars,24.0,20.0,5.5,44.5,seed
+NFL,2024,4,REG,2024-09-29T17:00:00+00:00,Indianapolis Colts,Pittsburgh Steelers,indianapoliscolts,pittsburghsteelers,27.0,24.0,-2.5,40.0,seed
+NFL,2024,4,REG,2024-09-29T20:25:00+00:00,Las Vegas Raiders,Cleveland Browns,lasvegasraiders,clevelandbrowns,20.0,16.0,-2.5,36.5,seed
+NFL,2024,4,REG,2024-09-29T20:25:00+00:00,Los Angeles Chargers,Kansas City Chiefs,losangeleschargers,kansascitychiefs,10.0,17.0,-7.5,41.5,seed
+NFL,2024,4,REG,2024-09-30T23:30:00+00:00,Miami Dolphins,Tennessee Titans,miamidolphins,tennesseetitans,12.0,31.0,2.5,37.0,seed
+NFL,2024,4,REG,2024-09-27T00:15:00+00:00,New York Giants,Dallas Cowboys,newyorkgiants,dallascowboys,15.0,20.0,-5.5,45.0,seed
+NFL,2024,4,REG,2024-09-29T17:00:00+00:00,New York Jets,Denver Broncos,newyorkjets,denverbroncos,9.0,10.0,7.5,39.5,seed
+NFL,2024,4,REG,2024-09-29T20:05:00+00:00,San Francisco 49ers,New England Patriots,sanfrancisco49ers,newenglandpatriots,30.0,13.0,10.5,41.5,seed
+NFL,2024,4,REG,2024-09-29T17:00:00+00:00,Tampa Bay Buccaneers,Philadelphia Eagles,tampabaybuccaneers,philadelphiaeagles,33.0,16.0,-1.0,42.0,seed
+NFL,2024,5,REG,2024-10-04T00:15:00+00:00,Atlanta Falcons,Tampa Bay Buccaneers,atlantafalcons,tampabaybuccaneers,36.0,30.0,2.5,44.0,seed
+NFL,2024,5,REG,2024-10-06T17:00:00+00:00,Chicago Bears,Carolina Panthers,chicagobears,carolinapanthers,36.0,10.0,4.0,40.0,seed
+NFL,2024,5,REG,2024-10-06T17:00:00+00:00,Cincinnati Bengals,Baltimore Ravens,cincinnatibengals,baltimoreravens,38.0,41.0,-2.5,48.5,seed
+NFL,2024,5,REG,2024-10-06T20:05:00+00:00,Denver Broncos,Las Vegas Raiders,denverbroncos,lasvegasraiders,34.0,18.0,3.0,36.0,seed
+NFL,2024,5,REG,2024-10-06T17:00:00+00:00,Houston Texans,Buffalo Bills,houstontexans,buffalobills,23.0,20.0,1.0,48.0,seed
+NFL,2024,5,REG,2024-10-06T17:00:00+00:00,Jacksonville Jaguars,Indianapolis Colts,jacksonvillejaguars,indianapoliscolts,37.0,34.0,3.5,45.0,seed
+NFL,2024,5,REG,2024-10-08T00:15:00+00:00,Kansas City Chiefs,New Orleans Saints,kansascitychiefs,neworleanssaints,26.0,13.0,5.5,43.0,seed
+NFL,2024,5,REG,2024-10-06T20:25:00+00:00,Los Angeles Rams,Green Bay Packers,losangelesrams,greenbaypackers,19.0,24.0,-3.0,49.5,seed
+NFL,2024,5,REG,2024-10-06T13:30:00+00:00,Minnesota Vikings,New York Jets,minnesotavikings,newyorkjets,23.0,17.0,2.5,42.0,seed
+NFL,2024,5,REG,2024-10-06T17:00:00+00:00,New England Patriots,Miami Dolphins,newenglandpatriots,miamidolphins,10.0,15.0,-2.0,37.0,seed
+NFL,2024,5,REG,2024-10-07T00:20:00+00:00,Pittsburgh Steelers,Dallas Cowboys,pittsburghsteelers,dallascowboys,17.0,20.0,2.5,43.5,seed
+NFL,2024,5,REG,2024-10-06T20:05:00+00:00,San Francisco 49ers,Arizona Cardinals,sanfrancisco49ers,arizonacardinals,23.0,24.0,7.0,48.5,seed
+NFL,2024,5,REG,2024-10-06T20:25:00+00:00,Seattle Seahawks,New York Giants,seattleseahawks,newyorkgiants,20.0,29.0,7.0,42.5,seed
+NFL,2024,5,REG,2024-10-06T17:00:00+00:00,Washington Commanders,Cleveland Browns,washingtoncommanders,clevelandbrowns,34.0,13.0,3.0,44.0,seed
+NFL,2024,6,REG,2024-10-13T17:00:00+00:00,Baltimore Ravens,Washington Commanders,baltimoreravens,washingtoncommanders,30.0,23.0,6.5,51.5,seed
+NFL,2024,6,REG,2024-10-13T20:25:00+00:00,Carolina Panthers,Atlanta Falcons,carolinapanthers,atlantafalcons,20.0,38.0,-6.0,45.5,seed
+NFL,2024,6,REG,2024-10-13T13:30:00+00:00,Chicago Bears,Jacksonville Jaguars,chicagobears,jacksonvillejaguars,35.0,16.0,-1.5,44.5,seed
+NFL,2024,6,REG,2024-10-13T20:25:00+00:00,Dallas Cowboys,Detroit Lions,dallascowboys,detroitlions,9.0,47.0,-3.5,52.5,seed
+NFL,2024,6,REG,2024-10-13T20:05:00+00:00,Denver Broncos,Los Angeles Chargers,denverbroncos,losangeleschargers,16.0,23.0,-3.0,37.0,seed
+NFL,2024,6,REG,2024-10-13T17:00:00+00:00,Green Bay Packers,Arizona Cardinals,greenbaypackers,arizonacardinals,34.0,13.0,5.5,47.0,seed
+NFL,2024,6,REG,2024-10-13T20:05:00+00:00,Las Vegas Raiders,Pittsburgh Steelers,lasvegasraiders,pittsburghsteelers,13.0,32.0,-3.5,36.5,seed
+NFL,2024,6,REG,2024-10-13T17:00:00+00:00,New England Patriots,Houston Texans,newenglandpatriots,houstontexans,21.0,41.0,-6.5,38.5,seed
+NFL,2024,6,REG,2024-10-13T17:00:00+00:00,New Orleans Saints,Tampa Bay Buccaneers,neworleanssaints,tampabaybuccaneers,27.0,51.0,-3.5,42.5,seed
+NFL,2024,6,REG,2024-10-14T00:20:00+00:00,New York Giants,Cincinnati Bengals,newyorkgiants,cincinnatibengals,7.0,17.0,-4.5,46.0,seed
+NFL,2024,6,REG,2024-10-15T00:15:00+00:00,New York Jets,Buffalo Bills,newyorkjets,buffalobills,20.0,23.0,-1.0,42.0,seed
+NFL,2024,6,REG,2024-10-13T17:00:00+00:00,Philadelphia Eagles,Cleveland Browns,philadelphiaeagles,clevelandbrowns,20.0,16.0,8.0,42.0,seed
+NFL,2024,6,REG,2024-10-11T00:15:00+00:00,Seattle Seahawks,San Francisco 49ers,seattleseahawks,sanfrancisco49ers,24.0,36.0,-3.5,49.0,seed
+NFL,2024,6,REG,2024-10-13T17:00:00+00:00,Tennessee Titans,Indianapolis Colts,tennesseetitans,indianapoliscolts,17.0,20.0,2.5,42.0,seed
+NFL,2024,7,REG,2024-10-22T01:00:00+00:00,Arizona Cardinals,Los Angeles Chargers,arizonacardinals,losangeleschargers,17.0,15.0,-1.0,44.0,seed
+NFL,2024,7,REG,2024-10-20T17:00:00+00:00,Atlanta Falcons,Seattle Seahawks,atlantafalcons,seattleseahawks,14.0,34.0,3.0,51.5,seed
+NFL,2024,7,REG,2024-10-20T17:00:00+00:00,Buffalo Bills,Tennessee Titans,buffalobills,tennesseetitans,34.0,10.0,9.5,41.0,seed
+NFL,2024,7,REG,2024-10-20T17:00:00+00:00,Cleveland Browns,Cincinnati Bengals,clevelandbrowns,cincinnatibengals,14.0,21.0,-5.5,42.0,seed
+NFL,2024,7,REG,2024-10-20T17:00:00+00:00,Green Bay Packers,Houston Texans,greenbaypackers,houstontexans,24.0,22.0,3.0,48.0,seed
+NFL,2024,7,REG,2024-10-20T17:00:00+00:00,Indianapolis Colts,Miami Dolphins,indianapoliscolts,miamidolphins,16.0,10.0,3.0,44.0,seed
+NFL,2024,7,REG,2024-10-20T13:30:00+00:00,Jacksonville Jaguars,New England Patriots,jacksonvillejaguars,newenglandpatriots,32.0,16.0,6.5,42.0,seed
+NFL,2024,7,REG,2024-10-20T20:05:00+00:00,Los Angeles Rams,Las Vegas Raiders,losangelesrams,lasvegasraiders,20.0,15.0,7.0,43.0,seed
+NFL,2024,7,REG,2024-10-20T17:00:00+00:00,Minnesota Vikings,Detroit Lions,minnesotavikings,detroitlions,29.0,31.0,1.0,50.5,seed
+NFL,2024,7,REG,2024-10-18T00:15:00+00:00,New Orleans Saints,Denver Broncos,neworleanssaints,denverbroncos,10.0,33.0,-2.5,37.0,seed
+NFL,2024,7,REG,2024-10-20T17:00:00+00:00,New York Giants,Philadelphia Eagles,newyorkgiants,philadelphiaeagles,3.0,28.0,-3.0,42.0,seed
+NFL,2024,7,REG,2024-10-21T00:20:00+00:00,Pittsburgh Steelers,New York Jets,pittsburghsteelers,newyorkjets,37.0,15.0,-3.0,40.0,seed
+NFL,2024,7,REG,2024-10-20T20:25:00+00:00,San Francisco 49ers,Kansas City Chiefs,sanfrancisco49ers,kansascitychiefs,18.0,28.0,2.5,47.5,seed
+NFL,2024,7,REG,2024-10-22T00:15:00+00:00,Tampa Bay Buccaneers,Baltimore Ravens,tampabaybuccaneers,baltimoreravens,31.0,41.0,-4.5,51.0,seed
+NFL,2024,7,REG,2024-10-20T20:05:00+00:00,Washington Commanders,Carolina Panthers,washingtoncommanders,carolinapanthers,40.0,7.0,10.0,51.0,seed
+NFL,2024,8,REG,2024-10-27T17:00:00+00:00,Cincinnati Bengals,Philadelphia Eagles,cincinnatibengals,philadelphiaeagles,17.0,37.0,2.5,47.5,seed
+NFL,2024,8,REG,2024-10-27T17:00:00+00:00,Cleveland Browns,Baltimore Ravens,clevelandbrowns,baltimoreravens,29.0,24.0,-7.5,44.5,seed
+NFL,2024,8,REG,2024-10-27T20:25:00+00:00,Denver Broncos,Carolina Panthers,denverbroncos,carolinapanthers,28.0,14.0,13.0,40.5,seed
+NFL,2024,8,REG,2024-10-27T17:00:00+00:00,Detroit Lions,Tennessee Titans,detroitlions,tennesseetitans,52.0,14.0,12.5,45.0,seed
+NFL,2024,8,REG,2024-10-27T17:00:00+00:00,Houston Texans,Indianapolis Colts,houstontexans,indianapoliscolts,23.0,20.0,5.0,45.0,seed
+NFL,2024,8,REG,2024-10-27T17:00:00+00:00,Jacksonville Jaguars,Green Bay Packers,jacksonvillejaguars,greenbaypackers,27.0,30.0,-3.5,49.0,seed
+NFL,2024,8,REG,2024-10-27T20:25:00+00:00,Las Vegas Raiders,Kansas City Chiefs,lasvegasraiders,kansascitychiefs,20.0,27.0,-9.0,42.0,seed
+NFL,2024,8,REG,2024-10-27T20:05:00+00:00,Los Angeles Chargers,New Orleans Saints,losangeleschargers,neworleanssaints,26.0,8.0,7.0,41.5,seed
+NFL,2024,8,REG,2024-10-25T00:15:00+00:00,Los Angeles Rams,Minnesota Vikings,losangelesrams,minnesotavikings,30.0,20.0,-3.0,47.5,seed
+NFL,2024,8,REG,2024-10-27T17:00:00+00:00,Miami Dolphins,Arizona Cardinals,miamidolphins,arizonacardinals,27.0,28.0,4.0,46.5,seed
+NFL,2024,8,REG,2024-10-27T17:00:00+00:00,New England Patriots,New York Jets,newenglandpatriots,newyorkjets,25.0,22.0,-7.0,41.0,seed
+NFL,2024,8,REG,2024-10-29T00:15:00+00:00,Pittsburgh Steelers,New York Giants,pittsburghsteelers,newyorkgiants,26.0,18.0,6.0,37.5,seed
+NFL,2024,8,REG,2024-10-28T00:20:00+00:00,San Francisco 49ers,Dallas Cowboys,sanfrancisco49ers,dallascowboys,30.0,24.0,5.5,48.0,seed
+NFL,2024,8,REG,2024-10-27T20:05:00+00:00,Seattle Seahawks,Buffalo Bills,seattleseahawks,buffalobills,10.0,31.0,-3.0,45.5,seed
+NFL,2024,8,REG,2024-10-27T17:00:00+00:00,Tampa Bay Buccaneers,Atlanta Falcons,tampabaybuccaneers,atlantafalcons,26.0,31.0,-1.5,47.0,seed
+NFL,2024,8,REG,2024-10-27T20:25:00+00:00,Washington Commanders,Chicago Bears,washingtoncommanders,chicagobears,18.0,15.0,1.5,46.5,seed
+NFL,2024,9,REG,2024-11-03T21:05:00+00:00,Arizona Cardinals,Chicago Bears,arizonacardinals,chicagobears,29.0,9.0,1.5,44.5,seed
+NFL,2024,9,REG,2024-11-03T18:00:00+00:00,Atlanta Falcons,Dallas Cowboys,atlantafalcons,dallascowboys,27.0,21.0,3.0,52.0,seed
+NFL,2024,9,REG,2024-11-03T18:00:00+00:00,Baltimore Ravens,Denver Broncos,baltimoreravens,denverbroncos,41.0,10.0,9.0,46.5,seed
+NFL,2024,9,REG,2024-11-03T18:00:00+00:00,Buffalo Bills,Miami Dolphins,buffalobills,miamidolphins,30.0,27.0,6.5,49.0,seed
+NFL,2024,9,REG,2024-11-03T18:00:00+00:00,Carolina Panthers,New Orleans Saints,carolinapanthers,neworleanssaints,23.0,22.0,-7.0,43.5,seed
+NFL,2024,9,REG,2024-11-03T18:00:00+00:00,Cincinnati Bengals,Las Vegas Raiders,cincinnatibengals,lasvegasraiders,41.0,24.0,8.0,45.0,seed
+NFL,2024,9,REG,2024-11-03T18:00:00+00:00,Cleveland Browns,Los Angeles Chargers,clevelandbrowns,losangeleschargers,10.0,27.0,-2.0,42.5,seed
+NFL,2024,9,REG,2024-11-03T21:25:00+00:00,Green Bay Packers,Detroit Lions,greenbaypackers,detroitlions,14.0,24.0,-2.5,47.5,seed
+NFL,2024,9,REG,2024-11-05T01:15:00+00:00,Kansas City Chiefs,Tampa Bay Buccaneers,kansascitychiefs,tampabaybuccaneers,30.0,24.0,9.0,45.5,seed
+NFL,2024,9,REG,2024-11-04T01:20:00+00:00,Minnesota Vikings,Indianapolis Colts,minnesotavikings,indianapoliscolts,21.0,13.0,6.5,47.0,seed
+NFL,2024,9,REG,2024-11-03T18:00:00+00:00,New York Giants,Washington Commanders,newyorkgiants,washingtoncommanders,22.0,27.0,-4.5,44.5,seed
+NFL,2024,9,REG,2024-11-01T00:15:00+00:00,New York Jets,Houston Texans,newyorkjets,houstontexans,21.0,13.0,2.5,43.5,seed
+NFL,2024,9,REG,2024-11-03T21:05:00+00:00,Philadelphia Eagles,Jacksonville Jaguars,philadelphiaeagles,jacksonvillejaguars,28.0,23.0,7.5,46.0,seed
+NFL,2024,9,REG,2024-11-03T21:25:00+00:00,Seattle Seahawks,Los Angeles Rams,seattleseahawks,losangelesrams,20.0,26.0,-1.5,48.5,seed
+NFL,2024,9,REG,2024-11-03T18:00:00+00:00,Tennessee Titans,New England Patriots,tennesseetitans,newenglandpatriots,20.0,17.0,3.0,38.5,seed
+NFL,2024,10,REG,2024-11-10T21:25:00+00:00,Arizona Cardinals,New York Jets,arizonacardinals,newyorkjets,31.0,6.0,-2.0,45.5,seed
+NFL,2024,10,REG,2024-11-08T01:15:00+00:00,Baltimore Ravens,Cincinnati Bengals,baltimoreravens,cincinnatibengals,35.0,34.0,6.0,53.0,seed
+NFL,2024,10,REG,2024-11-10T14:30:00+00:00,Carolina Panthers,New York Giants,carolinapanthers,newyorkgiants,20.0,17.0,-6.5,40.5,seed
+NFL,2024,10,REG,2024-11-10T18:00:00+00:00,Chicago Bears,New England Patriots,chicagobears,newenglandpatriots,3.0,19.0,6.5,37.5,seed
+NFL,2024,10,REG,2024-11-10T21:25:00+00:00,Dallas Cowboys,Philadelphia Eagles,dallascowboys,philadelphiaeagles,6.0,34.0,-7.5,44.5,seed
+NFL,2024,10,REG,2024-11-11T01:20:00+00:00,Houston Texans,Detroit Lions,houstontexans,detroitlions,23.0,26.0,-4.5,49.0,seed
+NFL,2024,10,REG,2024-11-10T18:00:00+00:00,Indianapolis Colts,Buffalo Bills,indianapoliscolts,buffalobills,20.0,30.0,-4.5,46.5,seed
+NFL,2024,10,REG,2024-11-10T18:00:00+00:00,Jacksonville Jaguars,Minnesota Vikings,jacksonvillejaguars,minnesotavikings,7.0,12.0,-7.0,42.5,seed
+NFL,2024,10,REG,2024-11-10T18:00:00+00:00,Kansas City Chiefs,Denver Broncos,kansascitychiefs,denverbroncos,16.0,14.0,7.5,42.5,seed
+NFL,2024,10,REG,2024-11-10T21:05:00+00:00,Los Angeles Chargers,Tennessee Titans,losangeleschargers,tennesseetitans,27.0,17.0,8.0,40.0,seed
+NFL,2024,10,REG,2024-11-12T01:15:00+00:00,Los Angeles Rams,Miami Dolphins,losangelesrams,miamidolphins,15.0,23.0,2.5,49.5,seed
+NFL,2024,10,REG,2024-11-10T18:00:00+00:00,New Orleans Saints,Atlanta Falcons,neworleanssaints,atlantafalcons,20.0,17.0,-3.5,46.5,seed
+NFL,2024,10,REG,2024-11-10T18:00:00+00:00,Tampa Bay Buccaneers,San Francisco 49ers,tampabaybuccaneers,sanfrancisco49ers,20.0,23.0,-6.5,50.5,seed
+NFL,2024,10,REG,2024-11-10T18:00:00+00:00,Washington Commanders,Pittsburgh Steelers,washingtoncommanders,pittsburghsteelers,27.0,28.0,1.5,45.0,seed
+NFL,2024,11,REG,2024-11-17T21:25:00+00:00,Buffalo Bills,Kansas City Chiefs,buffalobills,kansascitychiefs,30.0,21.0,2.5,46.5,seed
+NFL,2024,11,REG,2024-11-17T18:00:00+00:00,Chicago Bears,Green Bay Packers,chicagobears,greenbaypackers,19.0,20.0,-6.0,41.0,seed
+NFL,2024,11,REG,2024-11-19T01:15:00+00:00,Dallas Cowboys,Houston Texans,dallascowboys,houstontexans,10.0,34.0,-7.5,41.5,seed
+NFL,2024,11,REG,2024-11-17T21:05:00+00:00,Denver Broncos,Atlanta Falcons,denverbroncos,atlantafalcons,38.0,6.0,2.0,44.5,seed
+NFL,2024,11,REG,2024-11-17T18:00:00+00:00,Detroit Lions,Jacksonville Jaguars,detroitlions,jacksonvillejaguars,52.0,6.0,14.0,47.5,seed
+NFL,2024,11,REG,2024-11-18T01:20:00+00:00,Los Angeles Chargers,Cincinnati Bengals,losangeleschargers,cincinnatibengals,34.0,27.0,1.0,48.0,seed
+NFL,2024,11,REG,2024-11-17T18:00:00+00:00,Miami Dolphins,Las Vegas Raiders,miamidolphins,lasvegasraiders,34.0,19.0,8.0,43.5,seed
+NFL,2024,11,REG,2024-11-17T18:00:00+00:00,New England Patriots,Los Angeles Rams,newenglandpatriots,losangelesrams,22.0,28.0,-4.0,42.5,seed
+NFL,2024,11,REG,2024-11-17T18:00:00+00:00,New Orleans Saints,Cleveland Browns,neworleanssaints,clevelandbrowns,35.0,14.0,-1.0,44.0,seed
+NFL,2024,11,REG,2024-11-17T18:00:00+00:00,New York Jets,Indianapolis Colts,newyorkjets,indianapoliscolts,27.0,28.0,4.0,43.0,seed
+NFL,2024,11,REG,2024-11-15T01:15:00+00:00,Philadelphia Eagles,Washington Commanders,philadelphiaeagles,washingtoncommanders,26.0,18.0,4.5,49.5,seed
+NFL,2024,11,REG,2024-11-17T18:00:00+00:00,Pittsburgh Steelers,Baltimore Ravens,pittsburghsteelers,baltimoreravens,18.0,16.0,-3.0,48.0,seed
+NFL,2024,11,REG,2024-11-17T21:05:00+00:00,San Francisco 49ers,Seattle Seahawks,sanfrancisco49ers,seattleseahawks,17.0,20.0,6.0,49.0,seed
+NFL,2024,11,REG,2024-11-17T18:00:00+00:00,Tennessee Titans,Minnesota Vikings,tennesseetitans,minnesotavikings,13.0,23.0,-6.0,40.0,seed
+NFL,2024,12,REG,2024-11-24T18:00:00+00:00,Carolina Panthers,Kansas City Chiefs,carolinapanthers,kansascitychiefs,27.0,30.0,-11.0,43.0,seed
+NFL,2024,12,REG,2024-11-24T18:00:00+00:00,Chicago Bears,Minnesota Vikings,chicagobears,minnesotavikings,27.0,30.0,-3.0,39.5,seed
+NFL,2024,12,REG,2024-11-22T01:15:00+00:00,Cleveland Browns,Pittsburgh Steelers,clevelandbrowns,pittsburghsteelers,24.0,19.0,-3.5,36.5,seed
+NFL,2024,12,REG,2024-11-24T21:25:00+00:00,Green Bay Packers,San Francisco 49ers,greenbaypackers,sanfrancisco49ers,38.0,10.0,6.5,44.5,seed
+NFL,2024,12,REG,2024-11-24T18:00:00+00:00,Houston Texans,Tennessee Titans,houstontexans,tennesseetitans,27.0,32.0,8.0,40.5,seed
+NFL,2024,12,REG,2024-11-24T18:00:00+00:00,Indianapolis Colts,Detroit Lions,indianapoliscolts,detroitlions,6.0,24.0,-7.0,50.5,seed
+NFL,2024,12,REG,2024-11-24T21:05:00+00:00,Las Vegas Raiders,Denver Broncos,lasvegasraiders,denverbroncos,19.0,29.0,-6.5,41.5,seed
+NFL,2024,12,REG,2024-11-26T01:15:00+00:00,Los Angeles Chargers,Baltimore Ravens,losangeleschargers,baltimoreravens,23.0,30.0,-3.0,51.0,seed
+NFL,2024,12,REG,2024-11-25T01:20:00+00:00,Los Angeles Rams,Philadelphia Eagles,losangelesrams,philadelphiaeagles,20.0,37.0,-3.0,49.0,seed
+NFL,2024,12,REG,2024-11-24T18:00:00+00:00,Miami Dolphins,New England Patriots,miamidolphins,newenglandpatriots,34.0,15.0,7.5,46.0,seed
+NFL,2024,12,REG,2024-11-24T18:00:00+00:00,New York Giants,Tampa Bay Buccaneers,newyorkgiants,tampabaybuccaneers,7.0,30.0,-6.5,40.5,seed
+NFL,2024,12,REG,2024-11-24T21:25:00+00:00,Seattle Seahawks,Arizona Cardinals,seattleseahawks,arizonacardinals,16.0,6.0,-1.0,46.5,seed
+NFL,2024,12,REG,2024-11-24T18:00:00+00:00,Washington Commanders,Dallas Cowboys,washingtoncommanders,dallascowboys,26.0,34.0,10.5,45.0,seed
+NFL,2024,13,REG,2024-12-01T18:00:00+00:00,Atlanta Falcons,Los Angeles Chargers,atlantafalcons,losangeleschargers,13.0,17.0,-1.0,47.0,seed
+NFL,2024,13,REG,2024-12-01T21:25:00+00:00,Baltimore Ravens,Philadelphia Eagles,baltimoreravens,philadelphiaeagles,19.0,24.0,3.0,50.0,seed
+NFL,2024,13,REG,2024-12-02T01:20:00+00:00,Buffalo Bills,San Francisco 49ers,buffalobills,sanfrancisco49ers,35.0,10.0,6.5,45.0,seed
+NFL,2024,13,REG,2024-12-01T21:05:00+00:00,Carolina Panthers,Tampa Bay Buccaneers,carolinapanthers,tampabaybuccaneers,23.0,26.0,-6.5,46.0,seed
+NFL,2024,13,REG,2024-12-01T18:00:00+00:00,Cincinnati Bengals,Pittsburgh Steelers,cincinnatibengals,pittsburghsteelers,38.0,44.0,3.0,46.0,seed
+NFL,2024,13,REG,2024-11-28T21:30:00+00:00,Dallas Cowboys,New York Giants,dallascowboys,newyorkgiants,27.0,20.0,4.5,39.0,seed
+NFL,2024,13,REG,2024-12-03T01:15:00+00:00,Denver Broncos,Cleveland Browns,denverbroncos,clevelandbrowns,41.0,32.0,6.5,41.5,seed
+NFL,2024,13,REG,2024-11-28T17:30:00+00:00,Detroit Lions,Chicago Bears,detroitlions,chicagobears,23.0,20.0,9.5,47.5,seed
+NFL,2024,13,REG,2024-11-29T01:20:00+00:00,Green Bay Packers,Miami Dolphins,greenbaypackers,miamidolphins,30.0,17.0,3.5,47.5,seed
+NFL,2024,13,REG,2024-12-01T18:00:00+00:00,Jacksonville Jaguars,Houston Texans,jacksonvillejaguars,houstontexans,20.0,23.0,-3.5,44.5,seed
+NFL,2024,13,REG,2024-11-29T20:00:00+00:00,Kansas City Chiefs,Las Vegas Raiders,kansascitychiefs,lasvegasraiders,19.0,17.0,13.5,42.0,seed
+NFL,2024,13,REG,2024-12-01T18:00:00+00:00,Minnesota Vikings,Arizona Cardinals,minnesotavikings,arizonacardinals,23.0,22.0,3.5,45.5,seed
+NFL,2024,13,REG,2024-12-01T18:00:00+00:00,New England Patriots,Indianapolis Colts,newenglandpatriots,indianapoliscolts,24.0,25.0,-2.5,41.5,seed
+NFL,2024,13,REG,2024-12-01T21:05:00+00:00,New Orleans Saints,Los Angeles Rams,neworleanssaints,losangelesrams,14.0,21.0,-2.5,48.5,seed
+NFL,2024,13,REG,2024-12-01T18:00:00+00:00,New York Jets,Seattle Seahawks,newyorkjets,seattleseahawks,21.0,26.0,1.0,41.5,seed
+NFL,2024,13,REG,2024-12-01T18:00:00+00:00,Washington Commanders,Tennessee Titans,washingtoncommanders,tennesseetitans,42.0,19.0,6.0,45.0,seed
+NFL,2024,14,REG,2024-12-08T21:05:00+00:00,Arizona Cardinals,Seattle Seahawks,arizonacardinals,seattleseahawks,18.0,30.0,3.0,45.5,seed
+NFL,2024,14,REG,2024-12-10T01:15:00+00:00,Dallas Cowboys,Cincinnati Bengals,dallascowboys,cincinnatibengals,20.0,27.0,-5.0,51.0,seed
+NFL,2024,14,REG,2024-12-06T01:15:00+00:00,Detroit Lions,Green Bay Packers,detroitlions,greenbaypackers,34.0,31.0,3.0,53.0,seed
+NFL,2024,14,REG,2024-12-09T01:20:00+00:00,Kansas City Chiefs,Los Angeles Chargers,kansascitychiefs,losangeleschargers,19.0,17.0,5.0,43.5,seed
+NFL,2024,14,REG,2024-12-08T21:25:00+00:00,Los Angeles Rams,Buffalo Bills,losangelesrams,buffalobills,44.0,42.0,-3.5,49.5,seed
+NFL,2024,14,REG,2024-12-08T18:00:00+00:00,Miami Dolphins,New York Jets,miamidolphins,newyorkjets,32.0,26.0,6.5,45.0,seed
+NFL,2024,14,REG,2024-12-08T18:00:00+00:00,Minnesota Vikings,Atlanta Falcons,minnesotavikings,atlantafalcons,42.0,21.0,6.0,46.5,seed
+NFL,2024,14,REG,2024-12-08T18:00:00+00:00,New York Giants,New Orleans Saints,newyorkgiants,neworleanssaints,11.0,14.0,-5.5,41.0,seed
+NFL,2024,14,REG,2024-12-08T18:00:00+00:00,Philadelphia Eagles,Carolina Panthers,philadelphiaeagles,carolinapanthers,22.0,16.0,14.0,44.5,seed
+NFL,2024,14,REG,2024-12-08T18:00:00+00:00,Pittsburgh Steelers,Cleveland Browns,pittsburghsteelers,clevelandbrowns,27.0,14.0,6.0,43.0,seed
+NFL,2024,14,REG,2024-12-08T21:25:00+00:00,San Francisco 49ers,Chicago Bears,sanfrancisco49ers,chicagobears,38.0,13.0,3.0,43.5,seed
+NFL,2024,14,REG,2024-12-08T18:00:00+00:00,Tampa Bay Buccaneers,Las Vegas Raiders,tampabaybuccaneers,lasvegasraiders,28.0,13.0,7.0,47.0,seed
+NFL,2024,14,REG,2024-12-08T18:00:00+00:00,Tennessee Titans,Jacksonville Jaguars,tennesseetitans,jacksonvillejaguars,6.0,10.0,3.0,40.0,seed
+NFL,2024,15,REG,2024-12-15T21:25:00+00:00,Arizona Cardinals,New England Patriots,arizonacardinals,newenglandpatriots,30.0,17.0,6.0,46.5,seed
+NFL,2024,15,REG,2024-12-15T18:00:00+00:00,Carolina Panthers,Dallas Cowboys,carolinapanthers,dallascowboys,14.0,30.0,2.5,42.0,seed
+NFL,2024,15,REG,2024-12-15T18:00:00+00:00,Cleveland Browns,Kansas City Chiefs,clevelandbrowns,kansascitychiefs,7.0,21.0,-4.5,41.5,seed
+NFL,2024,15,REG,2024-12-15T21:25:00+00:00,Denver Broncos,Indianapolis Colts,denverbroncos,indianapoliscolts,31.0,13.0,4.5,43.5,seed
+NFL,2024,15,REG,2024-12-15T21:25:00+00:00,Detroit Lions,Buffalo Bills,detroitlions,buffalobills,42.0,48.0,2.5,55.5,seed
+NFL,2024,15,REG,2024-12-15T18:00:00+00:00,Houston Texans,Miami Dolphins,houstontexans,miamidolphins,20.0,12.0,2.5,46.5,seed
+NFL,2024,15,REG,2024-12-15T18:00:00+00:00,Jacksonville Jaguars,New York Jets,jacksonvillejaguars,newyorkjets,25.0,32.0,-3.5,41.5,seed
+NFL,2024,15,REG,2024-12-17T01:30:00+00:00,Las Vegas Raiders,Atlanta Falcons,lasvegasraiders,atlantafalcons,9.0,15.0,-6.5,44.5,seed
+NFL,2024,15,REG,2024-12-15T21:25:00+00:00,Los Angeles Chargers,Tampa Bay Buccaneers,losangeleschargers,tampabaybuccaneers,17.0,40.0,3.0,46.0,seed
+NFL,2024,15,REG,2024-12-17T01:00:00+00:00,Minnesota Vikings,Chicago Bears,minnesotavikings,chicagobears,30.0,12.0,7.0,43.5,seed
+NFL,2024,15,REG,2024-12-15T18:00:00+00:00,New Orleans Saints,Washington Commanders,neworleanssaints,washingtoncommanders,19.0,20.0,-7.5,44.5,seed
+NFL,2024,15,REG,2024-12-15T18:00:00+00:00,New York Giants,Baltimore Ravens,newyorkgiants,baltimoreravens,14.0,35.0,-16.5,43.5,seed
+NFL,2024,15,REG,2024-12-15T21:25:00+00:00,Philadelphia Eagles,Pittsburgh Steelers,philadelphiaeagles,pittsburghsteelers,27.0,13.0,5.5,43.0,seed
+NFL,2024,15,REG,2024-12-13T01:15:00+00:00,San Francisco 49ers,Los Angeles Rams,sanfrancisco49ers,losangelesrams,6.0,12.0,3.0,48.5,seed
+NFL,2024,15,REG,2024-12-16T01:20:00+00:00,Seattle Seahawks,Green Bay Packers,seattleseahawks,greenbaypackers,13.0,30.0,-3.0,48.0,seed
+NFL,2024,15,REG,2024-12-15T18:00:00+00:00,Tennessee Titans,Cincinnati Bengals,tennesseetitans,cincinnatibengals,27.0,37.0,-6.0,46.5,seed
+NFL,2024,16,REG,2024-12-22T18:00:00+00:00,Atlanta Falcons,New York Giants,atlantafalcons,newyorkgiants,34.0,7.0,9.5,42.5,seed
+NFL,2024,16,REG,2024-12-21T21:30:00+00:00,Baltimore Ravens,Pittsburgh Steelers,baltimoreravens,pittsburghsteelers,34.0,17.0,7.0,44.5,seed
+NFL,2024,16,REG,2024-12-22T21:25:00+00:00,Buffalo Bills,New England Patriots,buffalobills,newenglandpatriots,24.0,21.0,14.0,48.0,seed
+NFL,2024,16,REG,2024-12-22T18:00:00+00:00,Carolina Panthers,Arizona Cardinals,carolinapanthers,arizonacardinals,36.0,30.0,-5.5,47.0,seed
+NFL,2024,16,REG,2024-12-22T18:00:00+00:00,Chicago Bears,Detroit Lions,chicagobears,detroitlions,17.0,34.0,-7.0,47.5,seed
+NFL,2024,16,REG,2024-12-22T18:00:00+00:00,Cincinnati Bengals,Cleveland Browns,cincinnatibengals,clevelandbrowns,24.0,6.0,10.0,46.5,seed
+NFL,2024,16,REG,2024-12-23T01:20:00+00:00,Dallas Cowboys,Tampa Bay Buccaneers,dallascowboys,tampabaybuccaneers,26.0,24.0,-4.5,47.5,seed
+NFL,2024,16,REG,2024-12-24T01:15:00+00:00,Green Bay Packers,New Orleans Saints,greenbaypackers,neworleanssaints,34.0,0.0,14.0,44.0,seed
+NFL,2024,16,REG,2024-12-22T18:00:00+00:00,Indianapolis Colts,Tennessee Titans,indianapoliscolts,tennesseetitans,38.0,30.0,4.0,42.5,seed
+NFL,2024,16,REG,2024-12-21T18:00:00+00:00,Kansas City Chiefs,Houston Texans,kansascitychiefs,houstontexans,27.0,19.0,3.5,42.5,seed
+NFL,2024,16,REG,2024-12-22T21:25:00+00:00,Las Vegas Raiders,Jacksonville Jaguars,lasvegasraiders,jacksonvillejaguars,19.0,14.0,2.5,41.5,seed
+NFL,2024,16,REG,2024-12-20T01:15:00+00:00,Los Angeles Chargers,Denver Broncos,losangeleschargers,denverbroncos,34.0,27.0,3.0,41.5,seed
+NFL,2024,16,REG,2024-12-22T21:25:00+00:00,Miami Dolphins,San Francisco 49ers,miamidolphins,sanfrancisco49ers,29.0,17.0,-2.0,44.0,seed
+NFL,2024,16,REG,2024-12-22T18:00:00+00:00,New York Jets,Los Angeles Rams,newyorkjets,losangelesrams,9.0,19.0,-3.0,47.0,seed
+NFL,2024,16,REG,2024-12-22T21:05:00+00:00,Seattle Seahawks,Minnesota Vikings,seattleseahawks,minnesotavikings,24.0,27.0,-2.5,43.0,seed
+NFL,2024,16,REG,2024-12-22T18:00:00+00:00,Washington Commanders,Philadelphia Eagles,washingtoncommanders,philadelphiaeagles,36.0,33.0,-4.0,47.0,seed
+NFL,2024,17,REG,2024-12-29T18:00:00+00:00,Buffalo Bills,New York Jets,buffalobills,newyorkjets,40.0,14.0,10.0,44.5,seed
+NFL,2024,17,REG,2024-12-27T01:15:00+00:00,Chicago Bears,Seattle Seahawks,chicagobears,seattleseahawks,3.0,6.0,-3.5,43.5,seed
+NFL,2024,17,REG,2024-12-28T21:30:00+00:00,Cincinnati Bengals,Denver Broncos,cincinnatibengals,denverbroncos,30.0,24.0,3.5,50.5,seed
+NFL,2024,17,REG,2024-12-29T21:05:00+00:00,Cleveland Browns,Miami Dolphins,clevelandbrowns,miamidolphins,3.0,20.0,-3.0,32.5,seed
+NFL,2024,17,REG,2024-12-25T21:30:00+00:00,Houston Texans,Baltimore Ravens,houstontexans,baltimoreravens,2.0,31.0,-5.5,46.5,seed
+NFL,2024,17,REG,2024-12-29T18:00:00+00:00,Jacksonville Jaguars,Tennessee Titans,jacksonvillejaguars,tennesseetitans,20.0,13.0,-1.0,38.0,seed
+NFL,2024,17,REG,2024-12-29T01:15:00+00:00,Los Angeles Rams,Arizona Cardinals,losangelesrams,arizonacardinals,13.0,9.0,6.5,48.0,seed
+NFL,2024,17,REG,2024-12-29T21:25:00+00:00,Minnesota Vikings,Green Bay Packers,minnesotavikings,greenbaypackers,27.0,25.0,-1.0,49.0,seed
+NFL,2024,17,REG,2024-12-28T18:00:00+00:00,New England Patriots,Los Angeles Chargers,newenglandpatriots,losangeleschargers,7.0,40.0,-6.0,42.0,seed
+NFL,2024,17,REG,2024-12-29T18:00:00+00:00,New Orleans Saints,Las Vegas Raiders,neworleanssaints,lasvegasraiders,10.0,25.0,-2.0,37.5,seed
+NFL,2024,17,REG,2024-12-29T18:00:00+00:00,New York Giants,Indianapolis Colts,newyorkgiants,indianapoliscolts,45.0,33.0,-7.5,40.5,seed
+NFL,2024,17,REG,2024-12-29T18:00:00+00:00,Philadelphia Eagles,Dallas Cowboys,philadelphiaeagles,dallascowboys,41.0,7.0,7.5,37.5,seed
+NFL,2024,17,REG,2024-12-25T18:00:00+00:00,Pittsburgh Steelers,Kansas City Chiefs,pittsburghsteelers,kansascitychiefs,10.0,29.0,-3.0,43.5,seed
+NFL,2024,17,REG,2024-12-31T01:15:00+00:00,San Francisco 49ers,Detroit Lions,sanfrancisco49ers,detroitlions,34.0,40.0,-4.0,50.5,seed
+NFL,2024,17,REG,2024-12-29T18:00:00+00:00,Tampa Bay Buccaneers,Carolina Panthers,tampabaybuccaneers,carolinapanthers,48.0,14.0,9.5,47.5,seed
+NFL,2024,17,REG,2024-12-30T01:20:00+00:00,Washington Commanders,Atlanta Falcons,washingtoncommanders,atlantafalcons,30.0,24.0,3.5,46.5,seed
+NFL,2024,18,REG,2025-01-05T21:25:00+00:00,Arizona Cardinals,San Francisco 49ers,arizonacardinals,sanfrancisco49ers,47.0,24.0,4.5,42.5,seed
+NFL,2024,18,REG,2025-01-05T18:00:00+00:00,Atlanta Falcons,Carolina Panthers,atlantafalcons,carolinapanthers,38.0,44.0,7.5,48.5,seed
+NFL,2024,18,REG,2025-01-04T21:30:00+00:00,Baltimore Ravens,Cleveland Browns,baltimoreravens,clevelandbrowns,35.0,10.0,19.5,42.5,seed
+NFL,2024,18,REG,2025-01-05T18:00:00+00:00,Dallas Cowboys,Washington Commanders,dallascowboys,washingtoncommanders,19.0,23.0,-7.0,43.5,seed
+NFL,2024,18,REG,2025-01-05T21:25:00+00:00,Denver Broncos,Kansas City Chiefs,denverbroncos,kansascitychiefs,38.0,0.0,10.5,40.5,seed
+NFL,2024,18,REG,2025-01-06T01:20:00+00:00,Detroit Lions,Minnesota Vikings,detroitlions,minnesotavikings,31.0,9.0,3.0,56.5,seed
+NFL,2024,18,REG,2025-01-05T18:00:00+00:00,Green Bay Packers,Chicago Bears,greenbaypackers,chicagobears,22.0,24.0,10.0,41.5,seed
+NFL,2024,18,REG,2025-01-05T18:00:00+00:00,Indianapolis Colts,Jacksonville Jaguars,indianapoliscolts,jacksonvillejaguars,26.0,23.0,3.5,45.5,seed
+NFL,2024,18,REG,2025-01-05T21:25:00+00:00,Las Vegas Raiders,Los Angeles Chargers,lasvegasraiders,losangeleschargers,20.0,34.0,-7.0,42.5,seed
+NFL,2024,18,REG,2025-01-05T21:25:00+00:00,Los Angeles Rams,Seattle Seahawks,losangelesrams,seattleseahawks,25.0,30.0,-7.5,38.5,seed
+NFL,2024,18,REG,2025-01-05T18:00:00+00:00,New England Patriots,Buffalo Bills,newenglandpatriots,buffalobills,23.0,16.0,-3.0,36.5,seed
+NFL,2024,18,REG,2025-01-05T21:25:00+00:00,New York Jets,Miami Dolphins,newyorkjets,miamidolphins,32.0,20.0,1.5,39.5,seed
+NFL,2024,18,REG,2025-01-05T18:00:00+00:00,Philadelphia Eagles,New York Giants,philadelphiaeagles,newyorkgiants,20.0,13.0,3.0,36.5,seed
+NFL,2024,18,REG,2025-01-05T01:00:00+00:00,Pittsburgh Steelers,Cincinnati Bengals,pittsburghsteelers,cincinnatibengals,17.0,19.0,-2.5,48.5,seed
+NFL,2024,18,REG,2025-01-05T18:00:00+00:00,Tampa Bay Buccaneers,New Orleans Saints,tampabaybuccaneers,neworleanssaints,27.0,19.0,14.5,44.5,seed
+NFL,2024,18,REG,2025-01-05T18:00:00+00:00,Tennessee Titans,Houston Texans,tennesseetitans,houstontexans,14.0,23.0,2.5,36.5,seed
+NFL,2024,19,REG,2025-01-12T01:00:00+00:00,Baltimore Ravens,Pittsburgh Steelers,baltimoreravens,pittsburghsteelers,28.0,14.0,9.5,44.5,seed
+NFL,2024,19,REG,2025-01-12T18:00:00+00:00,Buffalo Bills,Denver Broncos,buffalobills,denverbroncos,31.0,7.0,7.5,48.5,seed
+NFL,2024,19,REG,2025-01-11T21:30:00+00:00,Houston Texans,Los Angeles Chargers,houstontexans,losangeleschargers,32.0,12.0,-3.0,41.5,seed
+NFL,2024,19,REG,2025-01-14T01:00:00+00:00,Los Angeles Rams,Minnesota Vikings,losangelesrams,minnesotavikings,27.0,9.0,-2.5,47.5,seed
+NFL,2024,19,REG,2025-01-12T21:30:00+00:00,Philadelphia Eagles,Green Bay Packers,philadelphiaeagles,greenbaypackers,22.0,10.0,5.5,45.5,seed
+NFL,2024,19,REG,2025-01-13T01:00:00+00:00,Tampa Bay Buccaneers,Washington Commanders,tampabaybuccaneers,washingtoncommanders,20.0,23.0,3.0,51.5,seed
+NFL,2024,20,REG,2025-01-19T23:30:00+00:00,Buffalo Bills,Baltimore Ravens,buffalobills,baltimoreravens,27.0,25.0,-1.5,51.5,seed
+NFL,2024,20,REG,2025-01-19T01:00:00+00:00,Detroit Lions,Washington Commanders,detroitlions,washingtoncommanders,31.0,45.0,8.5,55.5,seed
+NFL,2024,20,REG,2025-01-18T21:30:00+00:00,Kansas City Chiefs,Houston Texans,kansascitychiefs,houstontexans,23.0,14.0,9.5,41.5,seed
+NFL,2024,20,REG,2025-01-19T20:00:00+00:00,Philadelphia Eagles,Los Angeles Rams,philadelphiaeagles,losangelesrams,28.0,22.0,7.0,43.5,seed
+NFL,2024,21,REG,2025-01-26T23:30:00+00:00,Kansas City Chiefs,Buffalo Bills,kansascitychiefs,buffalobills,32.0,29.0,1.5,49.5,seed
+NFL,2024,21,REG,2025-01-26T20:00:00+00:00,Philadelphia Eagles,Washington Commanders,philadelphiaeagles,washingtoncommanders,55.0,23.0,6.0,46.5,seed
+NFL,2024,22,REG,2025-02-09T23:30:00+00:00,Philadelphia Eagles,Kansas City Chiefs,philadelphiaeagles,kansascitychiefs,40.0,22.0,-1.5,48.5,seed
+NFL,2025,1,REG,2025-09-07T17:00:00+00:00,Atlanta Falcons,Tampa Bay Buccaneers,atlantafalcons,tampabaybuccaneers,20.0,23.0,-1.5,47.5,seed
+NFL,2025,1,REG,2025-09-08T00:20:00+00:00,Buffalo Bills,Baltimore Ravens,buffalobills,baltimoreravens,41.0,40.0,-1.5,50.5,seed
+NFL,2025,1,REG,2025-09-09T00:15:00+00:00,Chicago Bears,Minnesota Vikings,chicagobears,minnesotavikings,24.0,27.0,-1.5,43.5,seed
+NFL,2025,1,REG,2025-09-07T17:00:00+00:00,Cleveland Browns,Cincinnati Bengals,clevelandbrowns,cincinnatibengals,16.0,17.0,-5.5,47.5,seed
+NFL,2025,1,REG,2025-09-07T20:05:00+00:00,Denver Broncos,Tennessee Titans,denverbroncos,tennesseetitans,20.0,12.0,8.5,42.5,seed
+NFL,2025,1,REG,2025-09-07T20:25:00+00:00,Green Bay Packers,Detroit Lions,greenbaypackers,detroitlions,27.0,13.0,1.5,48.5,seed
+NFL,2025,1,REG,2025-09-07T17:00:00+00:00,Indianapolis Colts,Miami Dolphins,indianapoliscolts,miamidolphins,33.0,8.0,1.5,47.5,seed
+NFL,2025,1,REG,2025-09-07T17:00:00+00:00,Jacksonville Jaguars,Carolina Panthers,jacksonvillejaguars,carolinapanthers,26.0,10.0,4.5,45.5,seed
+NFL,2025,1,REG,2025-09-06T00:00:00+00:00,Los Angeles Chargers,Kansas City Chiefs,losangeleschargers,kansascitychiefs,27.0,21.0,-3.0,47.5,seed
+NFL,2025,1,REG,2025-09-07T20:25:00+00:00,Los Angeles Rams,Houston Texans,losangelesrams,houstontexans,14.0,9.0,3.5,43.5,seed
+NFL,2025,1,REG,2025-09-07T17:00:00+00:00,New England Patriots,Las Vegas Raiders,newenglandpatriots,lasvegasraiders,13.0,20.0,2.5,44.5,seed
+NFL,2025,1,REG,2025-09-07T17:00:00+00:00,New Orleans Saints,Arizona Cardinals,neworleanssaints,arizonacardinals,13.0,20.0,-6.0,44.5,seed
+NFL,2025,1,REG,2025-09-07T17:00:00+00:00,New York Jets,Pittsburgh Steelers,newyorkjets,pittsburghsteelers,32.0,34.0,-3.0,37.5,seed
+NFL,2025,1,REG,2025-09-05T00:20:00+00:00,Philadelphia Eagles,Dallas Cowboys,philadelphiaeagles,dallascowboys,24.0,20.0,8.5,47.5,seed
+NFL,2025,1,REG,2025-09-07T20:05:00+00:00,Seattle Seahawks,San Francisco 49ers,seattleseahawks,sanfrancisco49ers,13.0,17.0,-2.5,43.5,seed
+NFL,2025,1,REG,2025-09-07T17:00:00+00:00,Washington Commanders,New York Giants,washingtoncommanders,newyorkgiants,21.0,6.0,6.0,45.5,seed
+NFL,2025,2,REG,2025-09-14T20:05:00+00:00,Arizona Cardinals,Carolina Panthers,arizonacardinals,carolinapanthers,27.0,22.0,7.0,45.5,seed
+NFL,2025,2,REG,2025-09-14T17:00:00+00:00,Baltimore Ravens,Cleveland Browns,baltimoreravens,clevelandbrowns,41.0,17.0,12.5,46.5,seed
+NFL,2025,2,REG,2025-09-14T17:00:00+00:00,Cincinnati Bengals,Jacksonville Jaguars,cincinnatibengals,jacksonvillejaguars,31.0,27.0,3.5,49.5,seed
+NFL,2025,2,REG,2025-09-14T17:00:00+00:00,Dallas Cowboys,New York Giants,dallascowboys,newyorkgiants,40.0,37.0,4.5,44.5,seed
+NFL,2025,2,REG,2025-09-14T17:00:00+00:00,Detroit Lions,Chicago Bears,detroitlions,chicagobears,52.0,21.0,6.0,46.5,seed
+NFL,2025,2,REG,2025-09-12T00:15:00+00:00,Green Bay Packers,Washington Commanders,greenbaypackers,washingtoncommanders,27.0,18.0,3.5,48.5,seed
+NFL,2025,2,REG,2025-09-15T23:00:00+00:00,Houston Texans,Tampa Bay Buccaneers,houstontexans,tampabaybuccaneers,19.0,20.0,2.5,42.5,seed
+NFL,2025,2,REG,2025-09-14T20:05:00+00:00,Indianapolis Colts,Denver Broncos,indianapoliscolts,denverbroncos,29.0,28.0,-2.5,43.5,seed
+NFL,2025,2,REG,2025-09-14T20:25:00+00:00,Kansas City Chiefs,Philadelphia Eagles,kansascitychiefs,philadelphiaeagles,17.0,20.0,-1.5,46.5,seed
+NFL,2025,2,REG,2025-09-16T02:00:00+00:00,Las Vegas Raiders,Los Angeles Chargers,lasvegasraiders,losangeleschargers,9.0,20.0,-3.5,46.5,seed
+NFL,2025,2,REG,2025-09-14T17:00:00+00:00,Miami Dolphins,New England Patriots,miamidolphins,newenglandpatriots,27.0,33.0,1.5,43.5,seed
+NFL,2025,2,REG,2025-09-15T00:20:00+00:00,Minnesota Vikings,Atlanta Falcons,minnesotavikings,atlantafalcons,6.0,22.0,3.5,44.5,seed
+NFL,2025,2,REG,2025-09-14T17:00:00+00:00,New Orleans Saints,San Francisco 49ers,neworleanssaints,sanfrancisco49ers,21.0,26.0,-3.0,40.5,seed
+NFL,2025,2,REG,2025-09-14T17:00:00+00:00,New York Jets,Buffalo Bills,newyorkjets,buffalobills,10.0,30.0,-6.0,47.5,seed
+NFL,2025,2,REG,2025-09-14T17:00:00+00:00,Pittsburgh Steelers,Seattle Seahawks,pittsburghsteelers,seattleseahawks,17.0,31.0,3.5,40.5,seed
+NFL,2025,2,REG,2025-09-14T17:00:00+00:00,Tennessee Titans,Los Angeles Rams,tennesseetitans,losangelesrams,19.0,33.0,-5.5,41.5,seed
+NFL,2025,3,REG,2025-09-23T00:15:00+00:00,Baltimore Ravens,Detroit Lions,baltimoreravens,detroitlions,30.0,38.0,4.5,53.5,seed
+NFL,2025,3,REG,2025-09-19T00:15:00+00:00,Buffalo Bills,Miami Dolphins,buffalobills,miamidolphins,31.0,21.0,12.5,50.5,seed
+NFL,2025,3,REG,2025-09-21T17:00:00+00:00,Carolina Panthers,Atlanta Falcons,carolinapanthers,atlantafalcons,30.0,0.0,-5.5,44.5,seed
+NFL,2025,3,REG,2025-09-21T20:25:00+00:00,Chicago Bears,Dallas Cowboys,chicagobears,dallascowboys,31.0,14.0,-1.5,49.5,seed
+NFL,2025,3,REG,2025-09-21T17:00:00+00:00,Cleveland Browns,Green Bay Packers,clevelandbrowns,greenbaypackers,13.0,10.0,-8.5,41.5,seed
+NFL,2025,3,REG,2025-09-21T17:00:00+00:00,Jacksonville Jaguars,Houston Texans,jacksonvillejaguars,houstontexans,17.0,10.0,1.5,43.5,seed
+NFL,2025,3,REG,2025-09-21T20:05:00+00:00,Los Angeles Chargers,Denver Broncos,losangeleschargers,denverbroncos,23.0,20.0,2.5,45.5,seed
+NFL,2025,3,REG,2025-09-21T17:00:00+00:00,Minnesota Vikings,Cincinnati Bengals,minnesotavikings,cincinnatibengals,48.0,10.0,3.0,41.5,seed
+NFL,2025,3,REG,2025-09-21T17:00:00+00:00,New England Patriots,Pittsburgh Steelers,newenglandpatriots,pittsburghsteelers,14.0,21.0,-1.5,44.5,seed
+NFL,2025,3,REG,2025-09-22T00:20:00+00:00,New York Giants,Kansas City Chiefs,newyorkgiants,kansascitychiefs,9.0,22.0,-6.0,44.5,seed
+NFL,2025,3,REG,2025-09-21T17:00:00+00:00,Philadelphia Eagles,Los Angeles Rams,philadelphiaeagles,losangelesrams,33.0,26.0,3.5,45.5,seed
+NFL,2025,3,REG,2025-09-21T20:25:00+00:00,San Francisco 49ers,Arizona Cardinals,sanfrancisco49ers,arizonacardinals,16.0,15.0,1.5,44.5,seed
+NFL,2025,3,REG,2025-09-21T20:05:00+00:00,Seattle Seahawks,New Orleans Saints,seattleseahawks,neworleanssaints,44.0,13.0,7.5,41.5,seed
+NFL,2025,3,REG,2025-09-21T17:00:00+00:00,Tampa Bay Buccaneers,New York Jets,tampabaybuccaneers,newyorkjets,29.0,27.0,6.5,43.5,seed
+NFL,2025,3,REG,2025-09-21T17:00:00+00:00,Tennessee Titans,Indianapolis Colts,tennesseetitans,indianapoliscolts,20.0,41.0,-6.0,43.5,seed
+NFL,2025,3,REG,2025-09-21T17:00:00+00:00,Washington Commanders,Las Vegas Raiders,washingtoncommanders,lasvegasraiders,41.0,24.0,2.5,43.5,seed
+NFL,2025,4,REG,2025-09-26T00:15:00+00:00,Arizona Cardinals,Seattle Seahawks,arizonacardinals,seattleseahawks,20.0,23.0,-1.5,43.5,seed
+NFL,2025,4,REG,2025-09-28T17:00:00+00:00,Atlanta Falcons,Washington Commanders,atlantafalcons,washingtoncommanders,34.0,27.0,2.5,43.5,seed
+NFL,2025,4,REG,2025-09-28T17:00:00+00:00,Buffalo Bills,New Orleans Saints,buffalobills,neworleanssaints,31.0,19.0,15.5,48.5,seed
+NFL,2025,4,REG,2025-09-29T00:20:00+00:00,Dallas Cowboys,Green Bay Packers,dallascowboys,greenbaypackers,40.0,40.0,-7.0,47.5,seed
+NFL,2025,4,REG,2025-09-30T00:15:00+00:00,Denver Broncos,Cincinnati Bengals,denverbroncos,cincinnatibengals,28.0,3.0,7.5,44.5,seed
+NFL,2025,4,REG,2025-09-28T17:00:00+00:00,Detroit Lions,Cleveland Browns,detroitlions,clevelandbrowns,34.0,10.0,10.0,44.5,seed
+NFL,2025,4,REG,2025-09-28T17:00:00+00:00,Houston Texans,Tennessee Titans,houstontexans,tennesseetitans,26.0,0.0,7.5,39.5,seed
+NFL,2025,4,REG,2025-09-28T20:25:00+00:00,Kansas City Chiefs,Baltimore Ravens,kansascitychiefs,baltimoreravens,37.0,20.0,-2.5,48.5,seed
+NFL,2025,4,REG,2025-09-28T20:25:00+00:00,Las Vegas Raiders,Chicago Bears,lasvegasraiders,chicagobears,24.0,25.0,1.5,47.5,seed
+NFL,2025,4,REG,2025-09-28T20:05:00+00:00,Los Angeles Rams,Indianapolis Colts,losangelesrams,indianapoliscolts,27.0,20.0,3.5,49.5,seed
+NFL,2025,4,REG,2025-09-29T23:15:00+00:00,Miami Dolphins,New York Jets,miamidolphins,newyorkjets,27.0,21.0,2.5,44.5,seed
+NFL,2025,4,REG,2025-09-28T17:00:00+00:00,New England Patriots,Carolina Panthers,newenglandpatriots,carolinapanthers,42.0,13.0,5.5,42.5,seed
+NFL,2025,4,REG,2025-09-28T17:00:00+00:00,New York Giants,Los Angeles Chargers,newyorkgiants,losangeleschargers,21.0,18.0,-6.0,43.5,seed
+NFL,2025,4,REG,2025-09-28T13:30:00+00:00,Pittsburgh Steelers,Minnesota Vikings,pittsburghsteelers,minnesotavikings,24.0,21.0,-2.5,41.5,seed
+NFL,2025,4,REG,2025-09-28T20:05:00+00:00,San Francisco 49ers,Jacksonville Jaguars,sanfrancisco49ers,jacksonvillejaguars,21.0,26.0,3.5,45.5,seed
+NFL,2025,4,REG,2025-09-28T17:00:00+00:00,Tampa Bay Buccaneers,Philadelphia Eagles,tampabaybuccaneers,philadelphiaeagles,25.0,31.0,-3.5,44.5,seed
+NFL,2025,5,REG,2025-10-05T20:05:00+00:00,Arizona Cardinals,Tennessee Titans,arizonacardinals,tennesseetitans,21.0,22.0,7.5,41.5,seed
+NFL,2025,5,REG,2025-10-05T17:00:00+00:00,Baltimore Ravens,Houston Texans,baltimoreravens,houstontexans,10.0,44.0,-2.5,41.5,seed
+NFL,2025,5,REG,2025-10-06T00:20:00+00:00,Buffalo Bills,New England Patriots,buffalobills,newenglandpatriots,20.0,23.0,7.5,49.5,seed
+NFL,2025,5,REG,2025-10-05T17:00:00+00:00,Carolina Panthers,Miami Dolphins,carolinapanthers,miamidolphins,27.0,24.0,-1.5,44.5,seed
+NFL,2025,5,REG,2025-10-05T20:25:00+00:00,Cincinnati Bengals,Detroit Lions,cincinnatibengals,detroitlions,24.0,37.0,-10.5,49.5,seed
+NFL,2025,5,REG,2025-10-05T13:30:00+00:00,Cleveland Browns,Minnesota Vikings,clevelandbrowns,minnesotavikings,17.0,21.0,-3.5,35.5,seed
+NFL,2025,5,REG,2025-10-05T17:00:00+00:00,Indianapolis Colts,Las Vegas Raiders,indianapoliscolts,lasvegasraiders,40.0,6.0,7.0,46.5,seed
+NFL,2025,5,REG,2025-10-07T00:15:00+00:00,Jacksonville Jaguars,Kansas City Chiefs,jacksonvillejaguars,kansascitychiefs,31.0,28.0,-3.5,45.5,seed
+NFL,2025,5,REG,2025-10-05T20:25:00+00:00,Los Angeles Chargers,Washington Commanders,losangeleschargers,washingtoncommanders,10.0,27.0,2.5,47.5,seed
+NFL,2025,5,REG,2025-10-03T00:15:00+00:00,Los Angeles Rams,San Francisco 49ers,losangelesrams,sanfrancisco49ers,23.0,26.0,8.5,43.5,seed
+NFL,2025,5,REG,2025-10-05T17:00:00+00:00,New Orleans Saints,New York Giants,neworleanssaints,newyorkgiants,26.0,14.0,1.5,41.5,seed
+NFL,2025,5,REG,2025-10-05T17:00:00+00:00,New York Jets,Dallas Cowboys,newyorkjets,dallascowboys,22.0,37.0,1.5,48.5,seed
+NFL,2025,5,REG,2025-10-05T17:00:00+00:00,Philadelphia Eagles,Denver Broncos,philadelphiaeagles,denverbroncos,17.0,21.0,3.5,44.5,seed
+NFL,2025,5,REG,2025-10-05T20:05:00+00:00,Seattle Seahawks,Tampa Bay Buccaneers,seattleseahawks,tampabaybuccaneers,35.0,38.0,3.5,44.5,seed
+NFL,2025,6,REG,2025-10-13T23:15:00+00:00,Atlanta Falcons,Buffalo Bills,atlantafalcons,buffalobills,24.0,14.0,-3.5,49.5,seed
+NFL,2025,6,REG,2025-10-12T17:00:00+00:00,Baltimore Ravens,Los Angeles Rams,baltimoreravens,losangelesrams,3.0,17.0,-7.0,43.5,seed
+NFL,2025,6,REG,2025-10-12T17:00:00+00:00,Carolina Panthers,Dallas Cowboys,carolinapanthers,dallascowboys,30.0,27.0,-3.0,47.5,seed
+NFL,2025,6,REG,2025-10-12T20:25:00+00:00,Green Bay Packers,Cincinnati Bengals,greenbaypackers,cincinnatibengals,27.0,18.0,14.0,44.5,seed
+NFL,2025,6,REG,2025-10-12T17:00:00+00:00,Indianapolis Colts,Arizona Cardinals,indianapoliscolts,arizonacardinals,31.0,27.0,8.5,46.5,seed
+NFL,2025,6,REG,2025-10-12T17:00:00+00:00,Jacksonville Jaguars,Seattle Seahawks,jacksonvillejaguars,seattleseahawks,12.0,20.0,-1.5,47.5,seed
+NFL,2025,6,REG,2025-10-13T00:20:00+00:00,Kansas City Chiefs,Detroit Lions,kansascitychiefs,detroitlions,30.0,17.0,2.5,51.5,seed
+NFL,2025,6,REG,2025-10-12T20:05:00+00:00,Las Vegas Raiders,Tennessee Titans,lasvegasraiders,tennesseetitans,20.0,10.0,3.5,41.5,seed
+NFL,2025,6,REG,2025-10-12T17:00:00+00:00,Miami Dolphins,Los Angeles Chargers,miamidolphins,losangeleschargers,27.0,29.0,-3.5,45.5,seed
+NFL,2025,6,REG,2025-10-12T17:00:00+00:00,New Orleans Saints,New England Patriots,neworleanssaints,newenglandpatriots,19.0,25.0,-3.5,46.5,seed
+NFL,2025,6,REG,2025-10-10T00:15:00+00:00,New York Giants,Philadelphia Eagles,newyorkgiants,philadelphiaeagles,34.0,17.0,-7.0,40.5,seed
+NFL,2025,6,REG,2025-10-12T13:30:00+00:00,New York Jets,Denver Broncos,newyorkjets,denverbroncos,11.0,13.0,-7.5,43.5,seed
+NFL,2025,6,REG,2025-10-12T17:00:00+00:00,Pittsburgh Steelers,Cleveland Browns,pittsburghsteelers,clevelandbrowns,23.0,9.0,5.5,37.5,seed
+NFL,2025,6,REG,2025-10-12T20:25:00+00:00,Tampa Bay Buccaneers,San Francisco 49ers,tampabaybuccaneers,sanfrancisco49ers,30.0,19.0,3.5,46.5,seed
+NFL,2025,6,REG,2025-10-14T00:15:00+00:00,Washington Commanders,Chicago Bears,washingtoncommanders,chicagobears,24.0,25.0,5.5,49.5,seed
+NFL,2025,7,REG,2025-10-19T20:25:00+00:00,Arizona Cardinals,Green Bay Packers,arizonacardinals,greenbaypackers,,,-6.5,44.5,seed
+NFL,2025,7,REG,2025-10-19T17:00:00+00:00,Chicago Bears,New Orleans Saints,chicagobears,neworleanssaints,,,5.5,47.5,seed
+NFL,2025,7,REG,2025-10-17T00:15:00+00:00,Cincinnati Bengals,Pittsburgh Steelers,cincinnatibengals,pittsburghsteelers,,,-5.5,43.5,seed
+NFL,2025,7,REG,2025-10-19T17:00:00+00:00,Cleveland Browns,Miami Dolphins,clevelandbrowns,miamidolphins,,,2.5,40.5,seed
+NFL,2025,7,REG,2025-10-19T20:25:00+00:00,Dallas Cowboys,Washington Commanders,dallascowboys,washingtoncommanders,,,-2.5,54.5,seed
+NFL,2025,7,REG,2025-10-19T20:05:00+00:00,Denver Broncos,New York Giants,denverbroncos,newyorkgiants,,,7.0,39.5,seed
+NFL,2025,7,REG,2025-10-20T23:00:00+00:00,Detroit Lions,Tampa Bay Buccaneers,detroitlions,tampabaybuccaneers,,,5.5,52.5,seed
+NFL,2025,7,REG,2025-10-19T13:30:00+00:00,Jacksonville Jaguars,Los Angeles Rams,jacksonvillejaguars,losangelesrams,,,-3.0,45.5,seed
+NFL,2025,7,REG,2025-10-19T17:00:00+00:00,Kansas City Chiefs,Las Vegas Raiders,kansascitychiefs,lasvegasraiders,,,12.5,45.5,seed
+NFL,2025,7,REG,2025-10-19T20:05:00+00:00,Los Angeles Chargers,Indianapolis Colts,losangeleschargers,indianapoliscolts,,,1.5,48.5,seed
+NFL,2025,7,REG,2025-10-19T17:00:00+00:00,Minnesota Vikings,Philadelphia Eagles,minnesotavikings,philadelphiaeagles,,,-2.5,43.5,seed
+NFL,2025,7,REG,2025-10-19T17:00:00+00:00,New York Jets,Carolina Panthers,newyorkjets,carolinapanthers,,,-1.5,42.5,seed
+NFL,2025,7,REG,2025-10-20T00:20:00+00:00,San Francisco 49ers,Atlanta Falcons,sanfrancisco49ers,atlantafalcons,,,2.5,47.5,seed
+NFL,2025,7,REG,2025-10-21T02:00:00+00:00,Seattle Seahawks,Houston Texans,seattleseahawks,houstontexans,,,3.0,41.5,seed
+NFL,2025,7,REG,2025-10-19T17:00:00+00:00,Tennessee Titans,New England Patriots,tennesseetitans,newenglandpatriots,,,-7.0,42.5,seed
+NFL,2025,8,REG,2025-10-26T17:00:00+00:00,Atlanta Falcons,Miami Dolphins,atlantafalcons,miamidolphins,,,5.5,46.5,seed
+NFL,2025,8,REG,2025-10-26T17:00:00+00:00,Baltimore Ravens,Chicago Bears,baltimoreravens,chicagobears,,,6.5,49.5,seed
+NFL,2025,8,REG,2025-10-26T17:00:00+00:00,Carolina Panthers,Buffalo Bills,carolinapanthers,buffalobills,,,-7.0,48.5,seed
+NFL,2025,8,REG,2025-10-26T17:00:00+00:00,Cincinnati Bengals,New York Jets,cincinnatibengals,newyorkjets,,,2.5,42.5,seed
+NFL,2025,8,REG,2025-10-26T20:25:00+00:00,Denver Broncos,Dallas Cowboys,denverbroncos,dallascowboys,,,5.5,47.5,seed
+NFL,2025,8,REG,2025-10-26T17:00:00+00:00,Houston Texans,San Francisco 49ers,houstontexans,sanfrancisco49ers,,,2.5,43.5,seed
+NFL,2025,8,REG,2025-10-26T20:25:00+00:00,Indianapolis Colts,Tennessee Titans,indianapoliscolts,tennesseetitans,,,11.5,45.5,seed
+NFL,2025,8,REG,2025-10-28T00:15:00+00:00,Kansas City Chiefs,Washington Commanders,kansascitychiefs,washingtoncommanders,,,4.5,50.5,seed
+NFL,2025,8,REG,2025-10-24T00:15:00+00:00,Los Angeles Chargers,Minnesota Vikings,losangeleschargers,minnesotavikings,,,3.0,42.5,seed
+NFL,2025,8,REG,2025-10-26T17:00:00+00:00,New England Patriots,Cleveland Browns,newenglandpatriots,clevelandbrowns,,,6.5,40.5,seed
+NFL,2025,8,REG,2025-10-26T20:05:00+00:00,New Orleans Saints,Tampa Bay Buccaneers,neworleanssaints,tampabaybuccaneers,,,-6.0,47.5,seed
+NFL,2025,8,REG,2025-10-26T17:00:00+00:00,Philadelphia Eagles,New York Giants,philadelphiaeagles,newyorkgiants,,,7.5,42.5,seed
+NFL,2025,8,REG,2025-10-27T00:20:00+00:00,Pittsburgh Steelers,Green Bay Packers,pittsburghsteelers,greenbaypackers,,,-3.0,43.5,seed
+NFL,2025,9,REG,2025-11-02T21:25:00+00:00,Buffalo Bills,Kansas City Chiefs,buffalobills,kansascitychiefs,,,,,seed
+NFL,2025,9,REG,2025-11-02T18:00:00+00:00,Cincinnati Bengals,Chicago Bears,cincinnatibengals,chicagobears,,,,,seed
+NFL,2025,9,REG,2025-11-04T01:15:00+00:00,Dallas Cowboys,Arizona Cardinals,dallascowboys,arizonacardinals,,,,,seed
+NFL,2025,9,REG,2025-11-02T18:00:00+00:00,Detroit Lions,Minnesota Vikings,detroitlions,minnesotavikings,,,,,seed
+NFL,2025,9,REG,2025-11-02T18:00:00+00:00,Green Bay Packers,Carolina Panthers,greenbaypackers,carolinapanthers,,,,,seed
+NFL,2025,9,REG,2025-11-02T18:00:00+00:00,Houston Texans,Denver Broncos,houstontexans,denverbroncos,,,,,seed
+NFL,2025,9,REG,2025-11-02T21:05:00+00:00,Las Vegas Raiders,Jacksonville Jaguars,lasvegasraiders,jacksonvillejaguars,,,,,seed
+NFL,2025,9,REG,2025-11-02T21:05:00+00:00,Los Angeles Rams,New Orleans Saints,losangelesrams,neworleanssaints,,,,,seed
+NFL,2025,9,REG,2025-10-31T00:15:00+00:00,Miami Dolphins,Baltimore Ravens,miamidolphins,baltimoreravens,,,,,seed
+NFL,2025,9,REG,2025-11-02T18:00:00+00:00,New England Patriots,Atlanta Falcons,newenglandpatriots,atlantafalcons,,,,,seed
+NFL,2025,9,REG,2025-11-02T18:00:00+00:00,New York Giants,San Francisco 49ers,newyorkgiants,sanfrancisco49ers,,,,,seed
+NFL,2025,9,REG,2025-11-02T18:00:00+00:00,Pittsburgh Steelers,Indianapolis Colts,pittsburghsteelers,indianapoliscolts,,,,,seed
+NFL,2025,9,REG,2025-11-02T18:00:00+00:00,Tennessee Titans,Los Angeles Chargers,tennesseetitans,losangeleschargers,,,,,seed
+NFL,2025,9,REG,2025-11-03T01:20:00+00:00,Washington Commanders,Seattle Seahawks,washingtoncommanders,seattleseahawks,,,,,seed
+NFL,2025,10,REG,2025-11-09T18:00:00+00:00,Carolina Panthers,New Orleans Saints,carolinapanthers,neworleanssaints,,,,,seed
+NFL,2025,10,REG,2025-11-09T18:00:00+00:00,Chicago Bears,New York Giants,chicagobears,newyorkgiants,,,,,seed
+NFL,2025,10,REG,2025-11-07T01:15:00+00:00,Denver Broncos,Las Vegas Raiders,denverbroncos,lasvegasraiders,,,,,seed
+NFL,2025,10,REG,2025-11-11T01:15:00+00:00,Green Bay Packers,Philadelphia Eagles,greenbaypackers,philadelphiaeagles,,,,,seed
+NFL,2025,10,REG,2025-11-09T18:00:00+00:00,Houston Texans,Jacksonville Jaguars,houstontexans,jacksonvillejaguars,,,,,seed
+NFL,2025,10,REG,2025-11-09T14:30:00+00:00,Indianapolis Colts,Atlanta Falcons,indianapoliscolts,atlantafalcons,,,,,seed
+NFL,2025,10,REG,2025-11-10T01:20:00+00:00,Los Angeles Chargers,Pittsburgh Steelers,losangeleschargers,pittsburghsteelers,,,,,seed
+NFL,2025,10,REG,2025-11-09T18:00:00+00:00,Miami Dolphins,Buffalo Bills,miamidolphins,buffalobills,,,,,seed
+NFL,2025,10,REG,2025-11-09T18:00:00+00:00,Minnesota Vikings,Baltimore Ravens,minnesotavikings,baltimoreravens,,,,,seed
+NFL,2025,10,REG,2025-11-09T18:00:00+00:00,New York Jets,Cleveland Browns,newyorkjets,clevelandbrowns,,,,,seed
+NFL,2025,10,REG,2025-11-09T21:25:00+00:00,San Francisco 49ers,Los Angeles Rams,sanfrancisco49ers,losangelesrams,,,,,seed
+NFL,2025,10,REG,2025-11-09T21:05:00+00:00,Seattle Seahawks,Arizona Cardinals,seattleseahawks,arizonacardinals,,,,,seed
+NFL,2025,10,REG,2025-11-09T18:00:00+00:00,Tampa Bay Buccaneers,New England Patriots,tampabaybuccaneers,newenglandpatriots,,,,,seed
+NFL,2025,10,REG,2025-11-09T21:25:00+00:00,Washington Commanders,Detroit Lions,washingtoncommanders,detroitlions,,,,,seed
+NFL,2025,11,REG,2025-11-16T21:05:00+00:00,Arizona Cardinals,San Francisco 49ers,arizonacardinals,sanfrancisco49ers,,,,,seed
+NFL,2025,11,REG,2025-11-16T18:00:00+00:00,Atlanta Falcons,Carolina Panthers,atlantafalcons,carolinapanthers,,,,,seed
+NFL,2025,11,REG,2025-11-16T18:00:00+00:00,Buffalo Bills,Tampa Bay Buccaneers,buffalobills,tampabaybuccaneers,,,,,seed
+NFL,2025,11,REG,2025-11-16T21:25:00+00:00,Cleveland Browns,Baltimore Ravens,clevelandbrowns,baltimoreravens,,,,,seed
+NFL,2025,11,REG,2025-11-16T21:25:00+00:00,Denver Broncos,Kansas City Chiefs,denverbroncos,kansascitychiefs,,,,,seed
+NFL,2025,11,REG,2025-11-16T18:00:00+00:00,Jacksonville Jaguars,Los Angeles Chargers,jacksonvillejaguars,losangeleschargers,,,,,seed
+NFL,2025,11,REG,2025-11-18T01:15:00+00:00,Las Vegas Raiders,Dallas Cowboys,lasvegasraiders,dallascowboys,,,,,seed
+NFL,2025,11,REG,2025-11-16T21:05:00+00:00,Los Angeles Rams,Seattle Seahawks,losangelesrams,seattleseahawks,,,,,seed
+NFL,2025,11,REG,2025-11-16T14:30:00+00:00,Miami Dolphins,Washington Commanders,miamidolphins,washingtoncommanders,,,,,seed
+NFL,2025,11,REG,2025-11-16T18:00:00+00:00,Minnesota Vikings,Chicago Bears,minnesotavikings,chicagobears,,,,,seed
+NFL,2025,11,REG,2025-11-14T01:15:00+00:00,New England Patriots,New York Jets,newenglandpatriots,newyorkjets,,,,,seed
+NFL,2025,11,REG,2025-11-16T18:00:00+00:00,New York Giants,Green Bay Packers,newyorkgiants,greenbaypackers,,,,,seed
+NFL,2025,11,REG,2025-11-17T01:20:00+00:00,Philadelphia Eagles,Detroit Lions,philadelphiaeagles,detroitlions,,,,,seed
+NFL,2025,11,REG,2025-11-16T18:00:00+00:00,Pittsburgh Steelers,Cincinnati Bengals,pittsburghsteelers,cincinnatibengals,,,,,seed
+NFL,2025,11,REG,2025-11-16T18:00:00+00:00,Tennessee Titans,Houston Texans,tennesseetitans,houstontexans,,,,,seed
+NFL,2025,12,REG,2025-11-23T21:05:00+00:00,Arizona Cardinals,Jacksonville Jaguars,arizonacardinals,jacksonvillejaguars,,,,,seed
+NFL,2025,12,REG,2025-11-23T18:00:00+00:00,Baltimore Ravens,New York Jets,baltimoreravens,newyorkjets,,,,,seed
+NFL,2025,12,REG,2025-11-23T18:00:00+00:00,Chicago Bears,Pittsburgh Steelers,chicagobears,pittsburghsteelers,,,,,seed
+NFL,2025,12,REG,2025-11-23T18:00:00+00:00,Cincinnati Bengals,New England Patriots,cincinnatibengals,newenglandpatriots,,,,,seed
+NFL,2025,12,REG,2025-11-23T21:25:00+00:00,Dallas Cowboys,Philadelphia Eagles,dallascowboys,philadelphiaeagles,,,,,seed
+NFL,2025,12,REG,2025-11-23T18:00:00+00:00,Detroit Lions,New York Giants,detroitlions,newyorkgiants,,,,,seed
+NFL,2025,12,REG,2025-11-23T18:00:00+00:00,Green Bay Packers,Minnesota Vikings,greenbaypackers,minnesotavikings,,,,,seed
+NFL,2025,12,REG,2025-11-21T01:15:00+00:00,Houston Texans,Buffalo Bills,houstontexans,buffalobills,,,,,seed
+NFL,2025,12,REG,2025-11-23T18:00:00+00:00,Kansas City Chiefs,Indianapolis Colts,kansascitychiefs,indianapoliscolts,,,,,seed
+NFL,2025,12,REG,2025-11-23T21:05:00+00:00,Las Vegas Raiders,Cleveland Browns,lasvegasraiders,clevelandbrowns,,,,,seed
+NFL,2025,12,REG,2025-11-24T01:20:00+00:00,Los Angeles Rams,Tampa Bay Buccaneers,losangelesrams,tampabaybuccaneers,,,,,seed
+NFL,2025,12,REG,2025-11-23T21:25:00+00:00,New Orleans Saints,Atlanta Falcons,neworleanssaints,atlantafalcons,,,,,seed
+NFL,2025,12,REG,2025-11-25T01:15:00+00:00,San Francisco 49ers,Carolina Panthers,sanfrancisco49ers,carolinapanthers,,,,,seed
+NFL,2025,12,REG,2025-11-23T18:00:00+00:00,Tennessee Titans,Seattle Seahawks,tennesseetitans,seattleseahawks,,,,,seed
+NFL,2025,13,REG,2025-11-28T01:20:00+00:00,Baltimore Ravens,Cincinnati Bengals,baltimoreravens,cincinnatibengals,,,,,seed
+NFL,2025,13,REG,2025-11-30T18:00:00+00:00,Carolina Panthers,Los Angeles Rams,carolinapanthers,losangelesrams,,,,,seed
+NFL,2025,13,REG,2025-11-30T18:00:00+00:00,Cleveland Browns,San Francisco 49ers,clevelandbrowns,sanfrancisco49ers,,,,,seed
+NFL,2025,13,REG,2025-11-27T21:30:00+00:00,Dallas Cowboys,Kansas City Chiefs,dallascowboys,kansascitychiefs,,,,,seed
+NFL,2025,13,REG,2025-11-27T18:00:00+00:00,Detroit Lions,Green Bay Packers,detroitlions,greenbaypackers,,,,,seed
+NFL,2025,13,REG,2025-11-30T18:00:00+00:00,Indianapolis Colts,Houston Texans,indianapoliscolts,houstontexans,,,,,seed
+NFL,2025,13,REG,2025-11-30T21:25:00+00:00,Los Angeles Chargers,Las Vegas Raiders,losangeleschargers,lasvegasraiders,,,,,seed
+NFL,2025,13,REG,2025-11-30T18:00:00+00:00,Miami Dolphins,New Orleans Saints,miamidolphins,neworleanssaints,,,,,seed
+NFL,2025,13,REG,2025-12-02T01:15:00+00:00,New England Patriots,New York Giants,newenglandpatriots,newyorkgiants,,,,,seed
+NFL,2025,13,REG,2025-11-30T18:00:00+00:00,New York Jets,Atlanta Falcons,newyorkjets,atlantafalcons,,,,,seed
+NFL,2025,13,REG,2025-11-28T20:00:00+00:00,Philadelphia Eagles,Chicago Bears,philadelphiaeagles,chicagobears,,,,,seed
+NFL,2025,13,REG,2025-11-30T21:25:00+00:00,Pittsburgh Steelers,Buffalo Bills,pittsburghsteelers,buffalobills,,,,,seed
+NFL,2025,13,REG,2025-11-30T21:05:00+00:00,Seattle Seahawks,Minnesota Vikings,seattleseahawks,minnesotavikings,,,,,seed
+NFL,2025,13,REG,2025-11-30T18:00:00+00:00,Tampa Bay Buccaneers,Arizona Cardinals,tampabaybuccaneers,arizonacardinals,,,,,seed
+NFL,2025,13,REG,2025-11-30T18:00:00+00:00,Tennessee Titans,Jacksonville Jaguars,tennesseetitans,jacksonvillejaguars,,,,,seed
+NFL,2025,13,REG,2025-12-01T01:20:00+00:00,Washington Commanders,Denver Broncos,washingtoncommanders,denverbroncos,,,,,seed
+NFL,2025,14,REG,2025-12-07T21:25:00+00:00,Arizona Cardinals,Los Angeles Rams,arizonacardinals,losangelesrams,,,,,seed
+NFL,2025,14,REG,2025-12-07T18:00:00+00:00,Atlanta Falcons,Seattle Seahawks,atlantafalcons,seattleseahawks,,,,,seed
+NFL,2025,14,REG,2025-12-07T18:00:00+00:00,Baltimore Ravens,Pittsburgh Steelers,baltimoreravens,pittsburghsteelers,,,,,seed
+NFL,2025,14,REG,2025-12-07T21:25:00+00:00,Buffalo Bills,Cincinnati Bengals,buffalobills,cincinnatibengals,,,,,seed
+NFL,2025,14,REG,2025-12-07T18:00:00+00:00,Cleveland Browns,Tennessee Titans,clevelandbrowns,tennesseetitans,,,,,seed
+NFL,2025,14,REG,2025-12-05T01:15:00+00:00,Detroit Lions,Dallas Cowboys,detroitlions,dallascowboys,,,,,seed
+NFL,2025,14,REG,2025-12-07T18:00:00+00:00,Green Bay Packers,Chicago Bears,greenbaypackers,chicagobears,,,,,seed
+NFL,2025,14,REG,2025-12-07T18:00:00+00:00,Jacksonville Jaguars,Indianapolis Colts,jacksonvillejaguars,indianapoliscolts,,,,,seed
+NFL,2025,14,REG,2025-12-08T01:20:00+00:00,Kansas City Chiefs,Houston Texans,kansascitychiefs,houstontexans,,,,,seed
+NFL,2025,14,REG,2025-12-07T21:05:00+00:00,Las Vegas Raiders,Denver Broncos,lasvegasraiders,denverbroncos,,,,,seed
+NFL,2025,14,REG,2025-12-09T01:15:00+00:00,Los Angeles Chargers,Philadelphia Eagles,losangeleschargers,philadelphiaeagles,,,,,seed
+NFL,2025,14,REG,2025-12-07T18:00:00+00:00,Minnesota Vikings,Washington Commanders,minnesotavikings,washingtoncommanders,,,,,seed
+NFL,2025,14,REG,2025-12-07T18:00:00+00:00,New York Jets,Miami Dolphins,newyorkjets,miamidolphins,,,,,seed
+NFL,2025,14,REG,2025-12-07T18:00:00+00:00,Tampa Bay Buccaneers,New Orleans Saints,tampabaybuccaneers,neworleanssaints,,,,,seed
+NFL,2025,15,REG,2025-12-14T18:00:00+00:00,Chicago Bears,Cleveland Browns,chicagobears,clevelandbrowns,,,,,seed
+NFL,2025,15,REG,2025-12-14T18:00:00+00:00,Cincinnati Bengals,Baltimore Ravens,cincinnatibengals,baltimoreravens,,,,,seed
+NFL,2025,15,REG,2025-12-15T01:20:00+00:00,Dallas Cowboys,Minnesota Vikings,dallascowboys,minnesotavikings,,,,,seed
+NFL,2025,15,REG,2025-12-14T21:25:00+00:00,Denver Broncos,Green Bay Packers,denverbroncos,greenbaypackers,,,,,seed
+NFL,2025,15,REG,2025-12-14T18:00:00+00:00,Houston Texans,Arizona Cardinals,houstontexans,arizonacardinals,,,,,seed
+NFL,2025,15,REG,2025-12-14T18:00:00+00:00,Jacksonville Jaguars,New York Jets,jacksonvillejaguars,newyorkjets,,,,,seed
+NFL,2025,15,REG,2025-12-14T18:00:00+00:00,Kansas City Chiefs,Los Angeles Chargers,kansascitychiefs,losangeleschargers,,,,,seed
+NFL,2025,15,REG,2025-12-14T21:25:00+00:00,Los Angeles Rams,Detroit Lions,losangelesrams,detroitlions,,,,,seed
+NFL,2025,15,REG,2025-12-14T18:00:00+00:00,New England Patriots,Buffalo Bills,newenglandpatriots,buffalobills,,,,,seed
+NFL,2025,15,REG,2025-12-14T21:25:00+00:00,New Orleans Saints,Carolina Panthers,neworleanssaints,carolinapanthers,,,,,seed
+NFL,2025,15,REG,2025-12-14T18:00:00+00:00,New York Giants,Washington Commanders,newyorkgiants,washingtoncommanders,,,,,seed
+NFL,2025,15,REG,2025-12-14T18:00:00+00:00,Philadelphia Eagles,Las Vegas Raiders,philadelphiaeagles,lasvegasraiders,,,,,seed
+NFL,2025,15,REG,2025-12-16T01:15:00+00:00,Pittsburgh Steelers,Miami Dolphins,pittsburghsteelers,miamidolphins,,,,,seed
+NFL,2025,15,REG,2025-12-14T21:25:00+00:00,San Francisco 49ers,Tennessee Titans,sanfrancisco49ers,tennesseetitans,,,,,seed
+NFL,2025,15,REG,2025-12-14T21:25:00+00:00,Seattle Seahawks,Indianapolis Colts,seattleseahawks,indianapoliscolts,,,,,seed
+NFL,2025,15,REG,2025-12-12T01:15:00+00:00,Tampa Bay Buccaneers,Atlanta Falcons,tampabaybuccaneers,atlantafalcons,,,,,seed
+NFL,2025,16,REG,2025-12-21T21:05:00+00:00,Arizona Cardinals,Atlanta Falcons,arizonacardinals,atlantafalcons,,,,,seed
+NFL,2025,16,REG,2025-12-21T18:00:00+00:00,Baltimore Ravens,New England Patriots,baltimoreravens,newenglandpatriots,,,,,seed
+NFL,2025,16,REG,2025-12-21T18:00:00+00:00,Carolina Panthers,Tampa Bay Buccaneers,carolinapanthers,tampabaybuccaneers,,,,,seed
+NFL,2025,16,REG,2025-12-19T18:00:00+00:00,Chicago Bears,Green Bay Packers,chicagobears,greenbaypackers,,,,,seed
+NFL,2025,16,REG,2025-12-21T18:00:00+00:00,Cleveland Browns,Buffalo Bills,clevelandbrowns,buffalobills,,,,,seed
+NFL,2025,16,REG,2025-12-21T18:00:00+00:00,Dallas Cowboys,Los Angeles Chargers,dallascowboys,losangeleschargers,,,,,seed
+NFL,2025,16,REG,2025-12-21T21:05:00+00:00,Denver Broncos,Jacksonville Jaguars,denverbroncos,jacksonvillejaguars,,,,,seed
+NFL,2025,16,REG,2025-12-21T21:25:00+00:00,Detroit Lions,Pittsburgh Steelers,detroitlions,pittsburghsteelers,,,,,seed
+NFL,2025,16,REG,2025-12-21T21:25:00+00:00,Houston Texans,Las Vegas Raiders,houstontexans,lasvegasraiders,,,,,seed
+NFL,2025,16,REG,2025-12-23T01:15:00+00:00,Indianapolis Colts,San Francisco 49ers,indianapoliscolts,sanfrancisco49ers,,,,,seed
+NFL,2025,16,REG,2025-12-22T01:20:00+00:00,Miami Dolphins,Cincinnati Bengals,miamidolphins,cincinnatibengals,,,,,seed
+NFL,2025,16,REG,2025-12-21T18:00:00+00:00,New Orleans Saints,New York Jets,neworleanssaints,newyorkjets,,,,,seed
+NFL,2025,16,REG,2025-12-21T18:00:00+00:00,New York Giants,Minnesota Vikings,newyorkgiants,minnesotavikings,,,,,seed
+NFL,2025,16,REG,2025-12-19T01:15:00+00:00,Seattle Seahawks,Los Angeles Rams,seattleseahawks,losangelesrams,,,,,seed
+NFL,2025,16,REG,2025-12-21T18:00:00+00:00,Tennessee Titans,Kansas City Chiefs,tennesseetitans,kansascitychiefs,,,,,seed
+NFL,2025,16,REG,2025-12-19T18:00:00+00:00,Washington Commanders,Philadelphia Eagles,washingtoncommanders,philadelphiaeagles,,,,,seed
+NFL,2025,17,REG,2025-12-30T01:15:00+00:00,Atlanta Falcons,Los Angeles Rams,atlantafalcons,losangelesrams,,,,,seed
+NFL,2025,17,REG,2025-12-28T21:25:00+00:00,Buffalo Bills,Philadelphia Eagles,buffalobills,philadelphiaeagles,,,,,seed
+NFL,2025,17,REG,2025-12-28T18:00:00+00:00,Carolina Panthers,Seattle Seahawks,carolinapanthers,seattleseahawks,,,,,seed
+NFL,2025,17,REG,2025-12-28T18:00:00+00:00,Cincinnati Bengals,Arizona Cardinals,cincinnatibengals,arizonacardinals,,,,,seed
+NFL,2025,17,REG,2025-12-28T18:00:00+00:00,Cleveland Browns,Pittsburgh Steelers,clevelandbrowns,pittsburghsteelers,,,,,seed
+NFL,2025,17,REG,2025-12-28T18:00:00+00:00,Green Bay Packers,Baltimore Ravens,greenbaypackers,baltimoreravens,,,,,seed
+NFL,2025,17,REG,2025-12-28T18:00:00+00:00,Indianapolis Colts,Jacksonville Jaguars,indianapoliscolts,jacksonvillejaguars,,,,,seed
+NFL,2025,17,REG,2025-12-26T01:15:00+00:00,Kansas City Chiefs,Denver Broncos,kansascitychiefs,denverbroncos,,,,,seed
+NFL,2025,17,REG,2025-12-28T18:00:00+00:00,Las Vegas Raiders,New York Giants,lasvegasraiders,newyorkgiants,,,,,seed
+NFL,2025,17,REG,2025-12-28T18:00:00+00:00,Los Angeles Chargers,Houston Texans,losangeleschargers,houstontexans,,,,,seed
+NFL,2025,17,REG,2025-12-28T18:00:00+00:00,Miami Dolphins,Tampa Bay Buccaneers,miamidolphins,tampabaybuccaneers,,,,,seed
+NFL,2025,17,REG,2025-12-25T21:30:00+00:00,Minnesota Vikings,Detroit Lions,minnesotavikings,detroitlions,,,,,seed
+NFL,2025,17,REG,2025-12-28T18:00:00+00:00,New York Jets,New England Patriots,newyorkjets,newenglandpatriots,,,,,seed
+NFL,2025,17,REG,2025-12-29T01:20:00+00:00,San Francisco 49ers,Chicago Bears,sanfrancisco49ers,chicagobears,,,,,seed
+NFL,2025,17,REG,2025-12-28T18:00:00+00:00,Tennessee Titans,New Orleans Saints,tennesseetitans,neworleanssaints,,,,,seed
+NFL,2025,17,REG,2025-12-25T18:00:00+00:00,Washington Commanders,Dallas Cowboys,washingtoncommanders,dallascowboys,,,,,seed
+NFL,2025,18,REG,2026-01-04T18:00:00+00:00,Atlanta Falcons,New Orleans Saints,atlantafalcons,neworleanssaints,,,,,seed
+NFL,2025,18,REG,2026-01-04T18:00:00+00:00,Buffalo Bills,New York Jets,buffalobills,newyorkjets,,,,,seed
+NFL,2025,18,REG,2026-01-04T18:00:00+00:00,Chicago Bears,Detroit Lions,chicagobears,detroitlions,,,,,seed
+NFL,2025,18,REG,2026-01-04T18:00:00+00:00,Cincinnati Bengals,Cleveland Browns,cincinnatibengals,clevelandbrowns,,,,,seed
+NFL,2025,18,REG,2026-01-04T18:00:00+00:00,Denver Broncos,Los Angeles Chargers,denverbroncos,losangeleschargers,,,,,seed
+NFL,2025,18,REG,2026-01-04T18:00:00+00:00,Houston Texans,Indianapolis Colts,houstontexans,indianapoliscolts,,,,,seed
+NFL,2025,18,REG,2026-01-04T18:00:00+00:00,Jacksonville Jaguars,Tennessee Titans,jacksonvillejaguars,tennesseetitans,,,,,seed
+NFL,2025,18,REG,2026-01-04T18:00:00+00:00,Las Vegas Raiders,Kansas City Chiefs,lasvegasraiders,kansascitychiefs,,,,,seed
+NFL,2025,18,REG,2026-01-04T18:00:00+00:00,Los Angeles Rams,Arizona Cardinals,losangelesrams,arizonacardinals,,,,,seed
+NFL,2025,18,REG,2026-01-04T18:00:00+00:00,Minnesota Vikings,Green Bay Packers,minnesotavikings,greenbaypackers,,,,,seed
+NFL,2025,18,REG,2026-01-04T18:00:00+00:00,New England Patriots,Miami Dolphins,newenglandpatriots,miamidolphins,,,,,seed
+NFL,2025,18,REG,2026-01-04T18:00:00+00:00,New York Giants,Dallas Cowboys,newyorkgiants,dallascowboys,,,,,seed
+NFL,2025,18,REG,2026-01-04T18:00:00+00:00,Philadelphia Eagles,Washington Commanders,philadelphiaeagles,washingtoncommanders,,,,,seed
+NFL,2025,18,REG,2026-01-04T18:00:00+00:00,Pittsburgh Steelers,Baltimore Ravens,pittsburghsteelers,baltimoreravens,,,,,seed
+NFL,2025,18,REG,2026-01-04T18:00:00+00:00,San Francisco 49ers,Seattle Seahawks,sanfrancisco49ers,seattleseahawks,,,,,seed
+NFL,2025,18,REG,2026-01-04T18:00:00+00:00,Tampa Bay Buccaneers,Carolina Panthers,tampabaybuccaneers,carolinapanthers,,,,,seed
