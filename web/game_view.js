@@ -191,7 +191,7 @@ async function loadGames(autoGameKey) {
     return;
   }
 
-  const relPath = `out/${season}_week${week}/games_week_${season}_${week}.jsonl`;
+  const relPath = `football-statfinder/out/${season}_week${week}/games_week_${season}_${week}.jsonl`;
   const url = new URL(relPath, window.location.origin);
   setStatus("Loading games…");
   let text;
@@ -262,7 +262,7 @@ async function loadSingleGame(gameKey) {
     return;
   }
 
-  const sidecarPath = `out/${STATE.season}_week${STATE.week}/game_schedules/${gameKey}.json`;
+  const sidecarPath = `football-statfinder/out/${STATE.season}_week${STATE.week}/game_schedules/${gameKey}.json`;
   const url = new URL(sidecarPath, window.location.origin);
   let sidecar;
   try {
