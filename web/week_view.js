@@ -396,6 +396,45 @@ function renderTable(rows, { season, week }) {
   updateFilterMeta(rows.length, STATE.allRows.length);
 }
 
+let TEAM_NUM_MAP = null;
+
+
+// if you already have a "formatTeam" or similar resolver by norm, plug it in here.
+// this wrapper falls back to using the norm in ALLCAPS if nothing else exists.
+function labelFromNorm(norm) {
+  try {
+    if (typeof resolveTeamLabelFromNorm === "function") return resolveTeamLabelFromNorm(norm);
+    if (typeof formatTeam === "function") return formatTeam(norm); // many codebases already have this
+  } catch (e) {}
+  return (norm || "").toUpperCase();
+}
+
+function buildTeamNumberMap() {
+  if (TEAM_NUM_MAP) return TEAM_NUM_MAP;
+
+  // Use the normalized keys exactly as they appear in games JSONL.
+  // (Washington is "was" in your outputs; keep it that way.)
+  const NFL_TEAMS = [
+    "ari","atl","bal","buf","car","chi","cin","cle","dal","den","det","gb",
+    "hou","ind","jax","kc","lv","lac","lar","mia","min","ne","no","nyg","nyj",
+    "phi","pit","sf","sea","tb","ten","was"
+  ];
+
+  const pairs = NFL_TEAMS.map(n => [labelFromNorm(n), n]);
+  // sort by display label, case-insensitive
+  pairs.sort((a, b) => a[0].localeCompare(b[0], undefined, { sensitivity: "base" }));
+  TEAM_NUM_MAP = new Map(pairs.map(([, n], i) => [n, i + 1]));
+  return TEAM_NUM_MAP;
+}
+
+
+function formatTeamNumber(row, side) {
+  const norm = side === "home" ? row.home_team_norm : row.away_team_norm;
+  if (!norm) return MISSING_VALUE;
+  const map = buildTeamNumberMap();
+  return map.get(norm) ?? MISSING_VALUE;
+}
+
 function buildTeamRow(row, side, gameNumber) {
   const iso = row?.kickoff_iso_utc ?? null;
   const favored = isFavRow(row, side);
