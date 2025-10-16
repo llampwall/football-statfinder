@@ -511,9 +511,9 @@ function buildTeamRow(row, side, gameNumber) {
     rvo,
     formatNumber(sosValue),
     sosDiffForRow(row.home_sos, row.away_sos, side),
-    MISSING_VALUE,
-    MISSING_VALUE,
-    MISSING_VALUE,
+    // MISSING_VALUE,
+    // MISSING_VALUE,
+    // MISSING_VALUE,
   ];
 }
 
@@ -719,9 +719,9 @@ function exportVisibleCsv() {
     "Rating vs Odds",
     "Schedule Strength (SoS)",
     "SoS Diff",
-    "PR-1",
-    "PR-2",
-    "PR-3",
+    // "PR-1",
+    // "PR-2",
+    // "PR-3",
   ];
 
   const lines = [header.join(",")];
