@@ -308,7 +308,17 @@ function renderTable(rows, { season, week }) {
   const tbody = els.tableBody;
   tbody.innerHTML = "";
 
-  if (!rows || rows.length === 0) {    const tr = document.createElement("tr");\n    const td = document.createElement("td");\n    td.colSpan = 7;\n    td.textContent = "No games found.";\n    tr.appendChild(td);\n    tbody.appendChild(tr);\n    updateFilterMeta(0, STATE.allRows.length);\n    highlightRow(null);\n    return;\n  }
+  if (!rows || rows.length === 0) {    
+    const tr = document.createElement("tr");
+    const td = document.createElement("td");
+    td.colSpan = 7;
+    td.textContent = "No games found.";
+    tr.appendChild(td);
+    tbody.appendChild(tr);
+    updateFilterMeta(0, STATE.allRows.length);
+    highlightRow(null);
+    return;
+  }
 
   rows.forEach((row) => {
     const { kickoff_iso_utc, game_key } = row;
