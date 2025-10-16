@@ -396,8 +396,47 @@ function renderTable(rows, { season, week }) {
   updateFilterMeta(rows.length, STATE.allRows.length);
 }
 
-let TEAM_NUM_MAP = null;
+// ---- Canonicalization for weird team keys/labels (Rams/Jags/Commanders/49ers) ----
 
+// one-shot warning helper
+const warnOnce = (() => {
+  const seen = new Set();
+  return (k, msg) => { if (!seen.has(k)) { console.warn(msg); seen.add(k); } };
+})();
+
+// alias map for common non-canonical norms
+const TEAM_ALIAS = {
+  la: "lar", stl: "lar",
+  jac: "jax",
+  wsh: "was", wft: "was",
+  sfo: "sf",
+};
+
+// minimal label-based hints if norm is unknown/ambiguous
+function inferFromLabel(label) {
+  const t = (label || "").toLowerCase();
+  if (t.includes("rams")) return "lar";
+  if (t.includes("jaguars")) return "jax";
+  if (t.includes("commanders") || t === "washington") return "was";
+  if (t.includes("49ers")) return "sf";
+  return null;
+}
+
+// return a canonical norm we can map 1..32
+function coerceTeamNorm(norm, label) {
+  if (!norm) return null;
+  const k = norm.toLowerCase();
+  if (TEAM_ALIAS[k]) return TEAM_ALIAS[k];
+  const inferred = inferFromLabel(label);
+  if (inferred && inferred !== k) {
+    warnOnce(`coerce:${k}->${inferred}`, `Team norm alias: '${k}' → '${inferred}' based on label '${label}'`);
+    return inferred;
+  }
+  return k;
+}
+
+
+let TEAM_NUM_MAP = null;
 
 // if you already have a "formatTeam" or similar resolver by norm, plug it in here.
 // this wrapper falls back to using the norm in ALLCAPS if nothing else exists.
@@ -429,10 +468,17 @@ function buildTeamNumberMap() {
 
 
 function formatTeamNumber(row, side) {
-  const norm = side === "home" ? row.home_team_norm : row.away_team_norm;
+  const rawNorm = side === "home" ? row.home_team_norm : row.away_team_norm;
+  const label = resolveTeamName(row, side); // your existing resolver for the Team column
+  const norm = coerceTeamNorm(rawNorm, label);
   if (!norm) return MISSING_VALUE;
   const map = buildTeamNumberMap();
-  return map.get(norm) ?? MISSING_VALUE;
+  const num = map.get(norm);
+  if (!num) {
+    warnOnce(`no-teamnum:${norm}`, `No Team # for norm='${norm}' label='${label}'`);
+    return MISSING_VALUE;
+  }
+  return num;
 }
 
 function buildTeamRow(row, side, gameNumber) {
