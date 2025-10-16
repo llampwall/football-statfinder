@@ -43,6 +43,13 @@
       letter-spacing: 0.01rem;
     }
 
+    .inner-header {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem 1.5rem;
+      align-items: flex-end;
+    }
+
     .status {
       font-size: 0.9rem;
       color: #0a5ea8;
@@ -89,9 +96,9 @@
     }
 
     .filters {
-      border: 1px solid #d4d8df;
+      /* border: 1px solid #d4d8df; */
       border-radius: 3px;
-      padding: 0.75rem 1rem;
+      /* padding: 0.75rem 1rem; */
       display: flex;
       flex-direction: column;
       gap: 0.75rem;
@@ -282,44 +289,46 @@
 <body>
   <main>
     <header>
-      <div>
-        <h1>Week View</h1>
-        <div class="status" id="status"></div>
+      <div class="inner-header">
+        <div>
+          <h1>Week View</h1>
+          <div class="status" id="status"></div>
+        </div>
+        <div class="controls">
+          <label>
+            Season
+            <input type="number" id="season-input" min="2000" />
+          </label>
+          <label>
+            Week
+            <input type="number" id="week-input" min="1" max="22" />
+          </label>
+          <button type="button" id="load-btn">Load</button>
+        </div>
+        <div class="controls">
+          <span id="loaded-label"></span>
+        </div>
       </div>
-      <div class="controls">
-        <label>
-          Season
-          <input type="number" id="season-input" min="2000" />
-        </label>
-        <label>
-          Week
-          <input type="number" id="week-input" min="1" max="22" />
-        </label>
-        <button type="button" id="load-btn">Load</button>
-      </div>
-      <div class="controls">
-        <span id="loaded-label"></span>
-      </div>
+      <section class="filters hidden" id="filters">
+        <div class="filter-group">
+          <label>
+            Team filter
+            <input type="text" id="team-filter" placeholder="e.g. chiefs" />
+          </label>
+          <label>
+            Favorites
+            <select id="favorite-filter">
+              <option value="all">All</option>
+              <option value="favorites">Favorites only</option>
+              <option value="dogs">Dogs only</option>
+            </select>
+          </label>
+          <button type="button" id="export-btn">Export visible rows (CSV)</button>
+        </div>
+        <div class="filter-meta" id="filter-meta"></div>
+      </section>
     </header>
 
-    <section class="filters hidden" id="filters">
-      <div class="filter-group">
-        <label>
-          Team filter
-          <input type="text" id="team-filter" placeholder="e.g. chiefs" />
-        </label>
-        <label>
-          Favorites
-          <select id="favorite-filter">
-            <option value="all">All</option>
-            <option value="favorites">Favorites only</option>
-            <option value="dogs">Dogs only</option>
-          </select>
-        </label>
-        <button type="button" id="export-btn">Export visible rows (CSV)</button>
-      </div>
-      <div class="filter-meta" id="filter-meta"></div>
-    </section>
 
     <section class="table-wrapper">
       <table>
