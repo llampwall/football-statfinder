@@ -31,6 +31,7 @@ const STATE = {
   lastLoadedAt: null,
   pendingScrollKey: null,
   highlightedGameKey: null,
+  gameOrdinals: new Map(),
 };
 
 attachListeners();
@@ -275,9 +276,14 @@ function applyFilters() {
 
   const total = STATE.allRows.length;
   const query = (els.teamFilter.value || "").trim().toLowerCase();
+  const comparator = (a, b) =>
+    (a?.kickoff_iso_utc || "").localeCompare(b?.kickoff_iso_utc || "");
+  const sortedAll = STATE.allRows.slice().sort(comparator);
+  STATE.gameOrdinals = computeGameOrdinals(sortedAll);
+
   const filtered = STATE.allRows.filter((row) => matchesTeamFilter(row, query));
 
-  filtered.sort((a, b) => (a.kickoff_iso_utc || "").localeCompare(b.kickoff_iso_utc || ""));
+  filtered.sort(comparator);
 
   STATE.filteredRows = filtered;
   renderTable(filtered, { season: STATE.season, week: STATE.week });
@@ -301,6 +307,10 @@ function renderTable(rows, { season, week }) {
   }
 
   const numericColumns = new Set([6, 8, 9, 10, 11, 12]);
+  const ordinals =
+    STATE.gameOrdinals && typeof STATE.gameOrdinals.get === "function"
+      ? STATE.gameOrdinals
+      : new Map();
 
   rows.forEach((row) => {
     const { kickoff_iso_utc, game_key } = row;
@@ -308,8 +318,11 @@ function renderTable(rows, { season, week }) {
       console.warn("WARN: Missing key fields", { kickoff_iso_utc, game_key });
     }
 
+    const ordinal = ordinals.get(game_key) ?? null;
+    const gameNumber = formatGameNumber(week, ordinal);
+
     ["away", "home"].forEach((side) => {
-      const cells = buildTeamRow(row, side);
+      const cells = buildTeamRow(row, side, gameNumber);
       const tr = document.createElement("tr");
       tr.dataset.gameKey = game_key ?? "";
       tr.tabIndex = 0;
@@ -346,7 +359,7 @@ function renderTable(rows, { season, week }) {
   updateFilterMeta(rows.length, STATE.allRows.length);
 }
 
-function buildTeamRow(row, side) {
+function buildTeamRow(row, side, gameNumber) {
   const iso = row?.kickoff_iso_utc ?? null;
   const favored = isFavRow(row, side);
   const total = formatNumber(row.total);
@@ -359,12 +372,13 @@ function buildTeamRow(row, side) {
   const rvo = favored
     ? formatNumber(row.rating_vs_odds, { decimals: 1, signed: true })
     : MISSING_VALUE;
+  const gameValue = gameNumber ?? placeholderGameNumber();
 
   return [
     fmtDatePT(iso),
     fmtTimePT(iso),
     placeholderTeamNumber(),
-    placeholderGameNumber(),
+    gameValue,
     resolveTeamName(row, side),
     formatOddsCell(row, side),
     total,
@@ -441,6 +455,24 @@ function matchesTeamFilter(row, query) {
     if (!team) return false;
     return String(team).toLowerCase().includes(query);
   });
+}
+
+function computeGameOrdinals(rows) {
+  const map = new Map();
+  let ordinal = 1;
+  rows.forEach((row) => {
+    const key = row?.game_key;
+    if (!key || map.has(key)) return;
+    map.set(key, ordinal++);
+  });
+  return map;
+}
+
+function formatGameNumber(week, ordinal) {
+  if (!hasNumeric(week) || !hasNumeric(ordinal)) return null;
+  const weekPart = String(Number(week));
+  const ordinalPart = String(Number(ordinal)).padStart(2, "0");
+  return `${weekPart}${ordinalPart}`;
 }
 
 function isFavRow(row, side) {
@@ -570,9 +602,15 @@ function exportVisibleCsv() {
   ];
 
   const lines = [header.join(",")];
+  const ordinals =
+    STATE.gameOrdinals && typeof STATE.gameOrdinals.get === "function"
+      ? STATE.gameOrdinals
+      : new Map();
   STATE.filteredRows.forEach((row) => {
     ["away", "home"].forEach((side) => {
-      const cells = buildTeamRow(row, side).map(csvValue);
+      const ordinal = ordinals.get(row?.game_key) ?? null;
+      const gameNumber = formatGameNumber(STATE.week, ordinal);
+      const cells = buildTeamRow(row, side, gameNumber).map(csvValue);
       lines.push(cells.join(","));
     });
   });
