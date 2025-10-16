@@ -484,16 +484,18 @@ function formatTeamNumber(row, side) {
 function buildTeamRow(row, side, gameNumber) {
   const iso = row?.kickoff_iso_utc ?? null;
   const favored = isFavRow(row, side);
-  const total = formatNumber(row.total);
   const currentPrValue = side === "home" ? row.home_pr : row.away_pr;
   const sosValue = side === "home" ? row.home_sos : row.away_sos;
 
+  const total = favored
+    ? formatNumber(row.total, { decimals: 1, signed: true })
+    : "";
   const diff = favored
     ? formatNumber(row.rating_diff_favored_team, { decimals: 1, signed: true })
-    : MISSING_VALUE;
+    : "";
   const rvo = favored
     ? formatNumber(row.rating_vs_odds, { decimals: 1, signed: true })
-    : MISSING_VALUE;
+    : "";
   const gameValue = gameNumber ?? placeholderGameNumber();
   const teamNumber = formatTeamNumber(row, side);
 
@@ -511,9 +513,6 @@ function buildTeamRow(row, side, gameNumber) {
     rvo,
     formatNumber(sosValue),
     sosDiffForRow(row.home_sos, row.away_sos, side),
-    // MISSING_VALUE,
-    // MISSING_VALUE,
-    // MISSING_VALUE,
   ];
 }
 
@@ -535,11 +534,11 @@ function getTeamCode(row, side) {
 }
 
 function formatOddsCell(row, side) {
-  if (!isFavRow(row, side)) return MISSING_VALUE;
+  if (!isFavRow(row, side)) return "";
   if (!hasNumeric(row.spread_favored_team)) return MISSING_VALUE;
   const code = getTeamCode(row, side);
   const spread = formatNumber(row.spread_favored_team, { decimals: 1, signed: true });
-  return code ? `${code} ${spread}` : spread;
+  return spread;
 }
 
 function teamRecord(row, side) {
@@ -719,9 +718,6 @@ function exportVisibleCsv() {
     "Rating vs Odds",
     "Schedule Strength (SoS)",
     "SoS Diff",
-    // "PR-1",
-    // "PR-2",
-    // "PR-3",
   ];
 
   const lines = [header.join(",")];
