@@ -637,7 +637,9 @@ function updateUrlWithSelection(gameKey) {
     url.searchParams.set("game_key", gameKey);
   }
   window.history.replaceState({ season: STATE.season, week: STATE.week, game_key: gameKey }, "", url.toString());
-}\n\nfunction coverageCounts(game) {
+}
+
+function coverageCounts(game) {
   return {
     home: NUMERIC_KEYS.home.reduce((acc, key) => acc + (hasNumeric(game[key]) ? 1 : 0), 0),
     away: NUMERIC_KEYS.away.reduce((acc, key) => acc + (hasNumeric(game[key]) ? 1 : 0), 0),
@@ -855,7 +857,9 @@ function writeWeekCache(season, week, records) {
   } catch {
     // ignore cache write failures
   }
-}\n\nfunction setStatus(message) {
+}
+
+function setStatus(message) {
   els.status.textContent = message ?? "";
 }
 
