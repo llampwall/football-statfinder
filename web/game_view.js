@@ -20,6 +20,9 @@ const els = {
   prevGameBtn: document.getElementById("prev-game-btn"),
   nextGameBtn: document.getElementById("next-game-btn"),
   navSummary: document.getElementById("nav-summary"),
+  eoySection: document.getElementById("eoy-section"),
+  eoyTitle: document.getElementById("eoy-title"),
+  eoyBody: document.getElementById("eoy-body"),
   tableBodies: {
     home_ytd: document.getElementById("home-ytd-body"),
     away_ytd: document.getElementById("away-ytd-body"),
@@ -87,6 +90,7 @@ const STATE = {
   currentGameKey: null,
   weekSourcePath: null,
   lastLoadedAt: null,
+  eoyCache: new Map(),
 };
 
 const REQUIRED_FAVORITE_KEYS = [
@@ -182,6 +186,10 @@ function attachListeners() {
     rememberWeekRow(STATE.currentGameKey);
   });
 
+  els.weekLink.addEventListener("click", () => {
+    rememberWeekRow(STATE.currentGameKey, null);
+  });
+
   document.addEventListener("keydown", (event) => {
     if (["INPUT", "TEXTAREA", "SELECT"].includes(document.activeElement.tagName)) return;
     if (event.defaultPrevented) return;
@@ -230,8 +238,9 @@ async function loadGames(autoGameKey) {
   let fromCache = false;
 
   if (!records || records.length === 0) {
-    const relPath = `../out/${season}_week${week}/games_week_${season}_${week}.jsonl`;
-    const url = new URL(relPath, window.location.href);
+    const relPath = `out/${season}_week${week}/games_week_${season}_${week}.jsonl`;
+    const fetchPath = `../${relPath}`;
+    const url = new URL(fetchPath, window.location.href);
     setStatus("Loading games…");
     try {
       const res = await fetch(url.toString());
@@ -247,6 +256,7 @@ async function loadGames(autoGameKey) {
         return;
       }
       writeWeekCache(season, week, records);
+      STATE.weekSourcePath = relPath;
     } catch (err) {
       console.log(`FAIL: Games loaded (${season} week ${week})`, err);
       setStatus(`Failed to load games (${err.message})`);
@@ -256,6 +266,7 @@ async function loadGames(autoGameKey) {
     fromCache = true;
     console.log(`INFO: Loaded ${records.length} cached games for season=${season} week=${week}`);
     setStatus("Loaded games from cache.");
+    STATE.weekSourcePath = `out/${season}_week${week}/games_week_${season}_${week}.jsonl`;
   }
 
   if (!Array.isArray(records) || records.length === 0) {
@@ -355,6 +366,7 @@ async function loadSingleGame(gameKey) {
   renderHeader(game, teamNames);
   renderTeamStats(game, teamNames);
   renderTables(game, sidecar, teamNames);
+  await renderEndOfYearStats(game, teamNames);
 
   els.header.classList.remove("hidden");
   els.teamStatsSection.classList.remove("hidden");
@@ -381,6 +393,7 @@ async function loadSingleGame(gameKey) {
   els.diagnosticsNote.textContent = `Diagnostics: favorite fields ${hasAllFavoriteKeys ? "OK" : "missing"}, coverage home ${coverCounts.home}, away ${coverCounts.away}`;
   els.dataStamp.textContent = `Sidecar: ${sidecarRel}`;
 
+  rememberWeekRow(gameKey, sidecarRel);
   persistSelection({
     season: STATE.season,
     week: STATE.week,
