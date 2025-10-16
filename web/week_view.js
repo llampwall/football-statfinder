@@ -14,11 +14,13 @@ const els = {
   exportBtn: document.getElementById("export-btn"),
   filterMeta: document.getElementById("filter-meta"),
   statusLine: document.getElementById("status-line"),
+  kickoffHeader: document.querySelector(".table-wrapper thead th"),
 };
 
 const STORAGE_KEY = "week-view:last-selection";
 const LAST_GAME_KEY = "week-view:last-game";
 const MISSING_VALUE = "\u2014";
+let timezoneLogged = false;
 
 const STATE = {
   allRows: [],
@@ -30,6 +32,10 @@ const STATE = {
   pendingScrollKey: null,
   highlightedGameKey: null,
 };
+
+if (els.kickoffHeader) {
+  els.kickoffHeader.textContent = "Kickoff (PT)";
+}
 
 attachListeners();
 bootstrap();
@@ -326,7 +332,7 @@ function renderTable(rows, { season, week }) {
       console.warn("WARN: Missing key fields", { kickoff_iso_utc, game_key });
     }
 
-    const kickoff = formatKickoff(kickoff_iso_utc);
+    const kickoff = fmtKickoffPT(kickoff_iso_utc);
     const matchup = `${formatTeam(row.away_team_norm, row.away_team_raw)} @ ${formatTeam(
       row.home_team_norm,
       row.home_team_raw
@@ -579,6 +585,54 @@ function updateStatusLine() {
   els.statusLine.textContent = `Source: ${STATE.sourcePath} · Loaded ${time}`;
 }
 
+function logTimeZone(success) {
+  if (timezoneLogged) return;
+  console.log(success ? "Time zone: America/Los_Angeles (DST auto via Intl)" : "Time zone: UTC fallback");
+  timezoneLogged = true;
+}
+
+function fmtKickoffUTC(isoString) {
+  return formatKickoff(isoString);
+}
+
+function fmtKickoffPT(iso) {
+  if (!iso) {
+    logTimeZone(true);
+    return MISSING_VALUE;
+  }
+  try {
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) throw new Error("Invalid date");
+    const date = new Intl.DateTimeFormat("en-US", {
+      timeZone: "America/Los_Angeles",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).format(d);
+    const time = new Intl.DateTimeFormat("en-US", {
+      timeZone: "America/Los_Angeles",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    }).format(d);
+    const [mm, dd, yyyy] = date.split("/");
+    logTimeZone(true);
+    return `${yyyy}-${mm}-${dd} ${time} PT`;
+  } catch (e) {
+    console.warn("fmtKickoffPT fallback \u2192 UTC", e);
+    logTimeZone(false);
+    return fmtKickoffUTC(iso) ?? MISSING_VALUE;
+  }
+}
+
+try {
+  new Intl.DateTimeFormat("en-US", { timeZone: "America/Los_Angeles" }).format(new Date());
+  logTimeZone(true);
+} catch (err) {
+  logTimeZone(false);
+  console.warn("fmtKickoffPT fallback \u2192 UTC", err);
+}
+
 function formatKickoff(isoString) {
   if (!isoString) return MISSING_VALUE;
   const clean = isoString.replace("Z", "+00:00");
@@ -705,6 +759,3 @@ function loadStoredLastGame() {
     return null;
   }
 }
-
-
-

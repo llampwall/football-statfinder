@@ -17,5 +17,4 @@ Acceptance (must remain true):
 - No schema changes.
 
 Please return:
-1) Files to change / Risk assessment / Acceptance checks validated
-2) Diffs only (```diff)
+1) Files changed / Risk assessment / Acceptance checks validated

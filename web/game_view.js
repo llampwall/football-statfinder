@@ -99,6 +99,7 @@ const REQUIRED_FAVORITE_KEYS = [
 ];
 
 const MISSING_VALUE = "\u2014";
+let timezoneLogged = false;
 
 const TEAM_DATA = [
   { city: "Arizona", nickname: "Cardinals", aliases: ["ari", "arz", "arizona", "cardinals", "arizona cardinals"] },
@@ -405,11 +406,14 @@ async function loadSingleGame(gameKey) {
 function renderHeader(game, teamNames) {
   const homeName = teamNames.home;
   const awayName = teamNames.away;
-  const kickoff = formatKickoff(game.kickoff_iso_utc);
+  const kickoffPT = fmtKickoffPT(game.kickoff_iso_utc);
+  const kickoffUTC = formatKickoff(game.kickoff_iso_utc);
+  const kickoffTitle =
+    kickoffUTC && kickoffUTC !== MISSING_VALUE ? ` title="UTC: ${kickoffUTC}"` : "";
 
   els.teamsBlock.innerHTML = `
     <h2>${homeName} vs ${awayName}</h2>
-    <div class="meta-line">Kickoff: ${kickoff}</div>
+    <div class="meta-line">Kickoff (Pacific): <span${kickoffTitle}>${kickoffPT}</span></div>
     <div class="meta-line">Game key: ${fallback(game.game_key)}</div>
   `;
 
@@ -888,6 +892,34 @@ function fallback(value) {
     return MISSING_VALUE;
   }
   return value;
+}
+
+function logTimeZone(success) {
+  if (timezoneLogged) return;
+  console.log(success ? "Time zone: America/Los_Angeles (DST auto via Intl)" : "Time zone: UTC fallback");
+  timezoneLogged = true;
+}
+
+function fmtKickoffPT(iso) {
+  if (!iso) {
+    logTimeZone(true);
+    return MISSING_VALUE;
+  }
+  try {
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) throw new Error("Invalid date");
+    const tz = "America/Los_Angeles";
+    const dateFormatter = new Intl.DateTimeFormat("en-US", { timeZone: tz, year: "numeric", month: "2-digit", day: "2-digit" });
+    const timeFormatter = new Intl.DateTimeFormat("en-US", { timeZone: tz, hour: "2-digit", minute: "2-digit", hour12: true });
+    const [mm, dd, yyyy] = dateFormatter.format(d).split("/");
+    const time = timeFormatter.format(d);
+    logTimeZone(true);
+    return `${yyyy}-${mm}-${dd} ${time} PT`;
+  } catch (e) {
+    console.warn("fmtKickoffPT fallback \u2192 UTC", e);
+    logTimeZone(false);
+    return formatKickoff(iso);
+  }
 }
 
 function formatKickoff(isoString) {
