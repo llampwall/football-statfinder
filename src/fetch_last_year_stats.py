@@ -208,13 +208,12 @@ def build_final_league_metrics(season: int) -> pd.DataFrame:
         ("PY(D)", False),
         ("TY(D)", False),
     ]:
-        series = pd.Series(
-            merged[column].values,
-            index=merged["merge_key"],
-        )
+        series = pd.Series(merged[column].values, index=merged["merge_key"])
         rank = dense_rank(series, higher_is_better=higher)
         rank_col = _rank_column_name(column)
-        merged[rank_col] = rank.reindex(merged["merge_key"]).astype("Int64")
+        ordered = rank.reindex(merged["merge_key"]).astype("Int64")
+        ordered.index = merged.index
+        merged[rank_col] = ordered
 
     for col in ["RY(O)", "PY(O)", "TY(O)", "RY(D)", "PY(D)", "TY(D)", "TO"]:
         merged[col] = pd.to_numeric(merged[col], errors="coerce").round(1)
