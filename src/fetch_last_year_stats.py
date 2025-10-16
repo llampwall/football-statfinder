@@ -90,6 +90,15 @@ def fetch_tr_metric(name: str, season: int) -> pd.Series:
     return df.set_index("Team")["value"]
 
 
+
+def _rank_column_name(metric: str) -> str:
+    match = re.fullmatch(r"([A-Z]+)\(([OD])\)", metric)
+    if not match:
+        raise ValueError(f"Unexpected metric label: {metric}")
+    stat, side = match.groups()
+    return f"R({side})_{stat}"
+
+
 def fetch_pf_pa_su_ats_from_nflverse(season: int) -> pd.DataFrame:
     games = pd.read_csv(NFLVERSE_GAMES_CSV)
     subset = games[(games["season"] == season) & (games["game_type"] == "REG")].copy()
@@ -204,7 +213,8 @@ def build_final_league_metrics(season: int) -> pd.DataFrame:
             index=merged["merge_key"],
         )
         rank = dense_rank(series, higher_is_better=higher)
-        merged[f"R_{column}"] = rank.reindex(merged["merge_key"]).astype("Int64")
+        rank_col = _rank_column_name(column)
+        merged[rank_col] = rank.reindex(merged["merge_key"]).astype("Int64")
 
     for col in ["RY(O)", "PY(O)", "TY(O)", "RY(D)", "PY(D)", "TY(D)", "TO"]:
         merged[col] = pd.to_numeric(merged[col], errors="coerce").round(1)

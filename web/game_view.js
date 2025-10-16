@@ -20,9 +20,7 @@ const els = {
   prevGameBtn: document.getElementById("prev-game-btn"),
   nextGameBtn: document.getElementById("next-game-btn"),
   navSummary: document.getElementById("nav-summary"),
-  eoySection: document.getElementById("eoy-section"),
-  eoyTitle: document.getElementById("eoy-title"),
-  eoyBody: document.getElementById("eoy-body"),
+  eoySection: document.getElementById("eoy-stats"),
   tableBodies: {
     home_ytd: document.getElementById("home-ytd-body"),
     away_ytd: document.getElementById("away-ytd-body"),
@@ -366,7 +364,7 @@ async function loadSingleGame(gameKey) {
   renderHeader(game, teamNames);
   renderTeamStats(game, teamNames);
   renderTables(game, sidecar, teamNames);
-  await renderEndOfYearStats(game, teamNames);
+  await injectEOYIfAvailable();
 
   els.header.classList.remove("hidden");
   els.teamStatsSection.classList.remove("hidden");
@@ -521,6 +519,200 @@ function renderTables(game, sidecar, teamNames) {
   });
 
   console.log("Tables row counts", counts);
+}
+
+async function injectEOYIfAvailable() {
+  const container = document.getElementById("eoy-stats");
+  const currentKey = STATE.currentGameKey;
+  const game = currentKey ? STATE.games.get(currentKey) : null;
+  const season = hasNumeric(game?.season) ? Number(game.season) : null;
+  const prior = hasNumeric(season) ? season - 1 : null;
+  const homeKey = game?.home_team_norm ?? game?.raw_sources?.sagarin_row_home?.team ?? game?.home_team_raw ?? null;
+  const awayKey = game?.away_team_norm ?? game?.raw_sources?.sagarin_row_away?.team ?? game?.away_team_raw ?? null;
+  const data = await loadEOY(prior, homeKey, awayKey);
+  renderEOY(container, prior, data);
+}
+
+async function loadEOY(priorSeason, homeNorm, awayNorm) {
+  const seasonNum = hasNumeric(priorSeason) ? Number(priorSeason) : null;
+  const path = seasonNum !== null ? `out/final_league_metrics_${seasonNum}.csv` : `out/final_league_metrics_${priorSeason ?? "unknown"}.csv`;
+  if (seasonNum === null) {
+    console.log(`EOY: using ${path} — FAIL`, "invalid season");
+    return null;
+  }
+  let cache = STATE.eoyCache.get(seasonNum);
+  const toNum = (value) => {
+    const num = Number(String(value ?? "").trim());
+    return Number.isFinite(num) ? num : null;
+  };
+  const gamesFrom = (value) => {
+    if (!value) return null;
+    const parts = String(value)
+      .split("-")
+      .map((part) => Number(part));
+    const total = parts.reduce((acc, num) => (Number.isFinite(num) ? acc + num : acc), 0);
+    return total > 0 ? total : null;
+  };
+  const buildKeys = (value) => {
+    const keys = new Set();
+    const push = (val) => {
+      if (!val) return;
+      const str = String(val).trim();
+      if (!str) return;
+      keys.add(str.toLowerCase());
+      keys.add(str.replace(/\s+/g, "").toLowerCase());
+    };
+    push(value);
+    const display = toDisplayName(value);
+    if (display) {
+      push(display);
+      const entry = TEAM_DATA.find((team) => `${team.nickname}, ${team.city}` === display);
+      if (entry) {
+        push(`${entry.city} ${entry.nickname}`);
+        entry.aliases.forEach(push);
+      }
+    }
+    return keys;
+  };
+  if (!cache) {
+    try {
+      const url = new URL(`../${path}`, window.location.href);
+      const res = await fetch(url.toString());
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      let text = await res.text();
+      if (text.startsWith("\uFEFF")) text = text.slice(1);
+      const lines = text.split(/\r?\n/).filter((line) => line.trim());
+      if (lines.length === 0) throw new Error("empty csv");
+      const headers = lines[0].split(",").map((h) => h.trim());
+      const map = new Map();
+      lines.slice(1).forEach((line) => {
+        const cols = line.split(",");
+        if (cols.every((col) => col.trim() === "")) return;
+        const raw = {};
+        headers.forEach((header, idx) => {
+          raw[header] = (cols[idx] ?? "").trim();
+        });
+        const games = gamesFrom(raw.SU);
+        const pf = toNum(raw.PF);
+        const pa = toNum(raw.PA);
+        const record = {
+          team: raw.Team,
+          pf_pg: games && pf !== null ? pf / games : pf,
+          pa_pg: games && pa !== null ? pa / games : pa,
+          su: raw.SU || null,
+          ats: raw.ATS || null,
+          to_margin_pg: toNum(raw.TO),
+          ry_pg: toNum(raw["RY(O)"]),
+          rush_off_rank: toNum(raw["R(O)_RY"]),
+          py_pg: toNum(raw["PY(O)"]),
+          pass_off_rank: toNum(raw["R(O)_PY"]),
+          ty_pg: toNum(raw["TY(O)"]),
+          total_off_rank: toNum(raw["R(O)_TY"]),
+          ry_allowed_pg: toNum(raw["RY(D)"]),
+          rush_def_rank: toNum(raw["R(D)_RY"]),
+          py_allowed_pg: toNum(raw["PY(D)"]),
+          pass_def_rank: toNum(raw["R(D)_PY"]),
+          ty_allowed_pg: toNum(raw["TY(D)"]),
+          total_def_rank: toNum(raw["R(D)_TY"]),
+        };
+        buildKeys(raw.Team).forEach((key) => {
+          if (!map.has(key)) map.set(key, record);
+        });
+      });
+      cache = { map };
+      STATE.eoyCache.set(seasonNum, cache);
+    } catch (err) {
+      console.log(`EOY: using ${path} — FAIL`, err?.message ?? err);
+      return null;
+    }
+  }
+  console.log(`EOY: using ${path} — PASS`);
+  const pick = (value) => {
+    if (!value) return null;
+    const tries = [value];
+    const aliasDisplay = TEAM_ALIAS_DISPLAY[String(value).trim().toLowerCase()];
+    if (aliasDisplay) tries.push(aliasDisplay);
+    for (const candidate of tries) {
+      for (const key of buildKeys(candidate)) {
+        const row = cache.map.get(key);
+        if (row) return row;
+      }
+    }
+    return null;
+  };
+  return { home: pick(homeNorm), away: pick(awayNorm) };
+}
+
+function renderEOY(container, priorSeason, data) {
+  if (!container) return;
+  const heading = hasNumeric(priorSeason) ? `${priorSeason} End of Year Statistics` : "End of Year Statistics";
+  const game = STATE.currentGameKey ? STATE.games.get(STATE.currentGameKey) : null;
+  const labels = {
+    home: game ? getTeamDisplayName(game, "home") : "Home",
+    away: game ? getTeamDisplayName(game, "away") : "Away",
+  };
+  const headers = [
+    "Team",
+    "PF",
+    "PA",
+    "SU",
+    "ATS",
+    "TO Margin",
+    "Rush Off",
+    "Rush Rank",
+    "Pass Off",
+    "Pass Rank",
+    "Total Off",
+    "Total Off Rank",
+    "Rush Def",
+    "Rush Def Rank",
+    "Pass Def",
+    "Pass Def Rank",
+    "Total Def",
+    "Total Def Rank",
+  ];
+  const rows = data && typeof data === "object" ? data : null;
+  const matched = { home: Boolean(rows?.home), away: Boolean(rows?.away) };
+  let bodyHtml = "";
+  if (matched.home && matched.away) {
+    ["home", "away"].forEach((side) => {
+      const row = rows[side];
+      const values = [
+        labels[side],
+        formatNumber(row.pf_pg, { decimals: 1 }),
+        formatNumber(row.pa_pg, { decimals: 1 }),
+        fallback(row.su),
+        fallback(row.ats),
+        formatNumber(row.to_margin_pg, { decimals: 1, signed: true }),
+        formatNumber(row.ry_pg, { decimals: 1 }),
+        rankOrDash(row.rush_off_rank),
+        formatNumber(row.py_pg, { decimals: 1 }),
+        rankOrDash(row.pass_off_rank),
+        formatNumber(row.ty_pg, { decimals: 1 }),
+        rankOrDash(row.total_off_rank),
+        formatNumber(row.ry_allowed_pg, { decimals: 1 }),
+        rankOrDash(row.rush_def_rank),
+        formatNumber(row.py_allowed_pg, { decimals: 1 }),
+        rankOrDash(row.pass_def_rank),
+        formatNumber(row.ty_allowed_pg, { decimals: 1 }),
+        rankOrDash(row.total_def_rank),
+      ];
+      bodyHtml += `<tr>${values
+        .map((value, idx) => `<td${idx === 0 ? ' style="font-weight:600"' : ""}>${value}</td>`)
+        .join("")}</tr>`;
+    });
+  } else {
+    bodyHtml = '<tr><td colspan="18">No data</td></tr>';
+  }
+  container.innerHTML = `
+    <h3 class="section-title">${heading}</h3>
+    <table>
+      <thead><tr>${headers.map((label) => `<th>${label}</th>`).join("")}</tr></thead>
+      <tbody>${bodyHtml}</tbody>
+    </table>
+  `;
+  console.log(`EOY: matched rows — home:${matched.home} away:${matched.away}`);
+  console.log("EOY: rendered");
 }
 
 function fillScheduleTable(tbody, rows) {

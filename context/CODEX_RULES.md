@@ -34,6 +34,7 @@ Failure modes:
 - If the change would exceed the limits, STOP and ask for a split task.
 - If you’re unsure about an edge case, STOP and propose two minimal options.
 
-**After completing any task and related tests, execute:**
-`powershell -NoProfile -ExecutionPolicy Bypass -File .webhooks\discord_notify.ps1 -Message "<one sentence summary of the work done>"`
-Preserve and propagate the original process exit code.
+**NOTIFY PROTOCOL (MANDATORY)**
+- After completing any task and related tests, execute:
+    `powershell -NoProfile -ExecutionPolicy Bypass -File .webhooks\discord_notify.ps1 -Message "<one sentence summary of the work done>"`
+- Preserve and propagate the original process exit code.
