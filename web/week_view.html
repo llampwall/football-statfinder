@@ -318,14 +318,6 @@
             Team filter
             <input type="text" id="team-filter" placeholder="e.g. chiefs" />
           </label>
-          <label>
-            Favorites
-            <select id="favorite-filter">
-              <option value="all">All</option>
-              <option value="favorites">Favorites only</option>
-              <option value="dogs">Dogs only</option>
-            </select>
-          </label>
           <button type="button" id="export-btn">Export visible rows (CSV)</button>
         </div>
         <div class="filter-meta" id="filter-meta"></div>
@@ -337,13 +329,22 @@
       <table>
         <thead>
           <tr>
-            <th>Kickoff (UTC)</th>
-            <th>Matchup</th>
-            <th>Fav / Spread</th>
-            <th>Total</th>
-            <th>PR Diff (fav)</th>
-            <th>RvO</th>
-            <th>Odds Src</th>
+            <th>Date (PT)</th>
+            <th>Time (PT)</th>
+            <th>Team #</th>
+            <th>Game #</th>
+            <th>Team</th>
+            <th>Odds</th>
+            <th>O/U</th>
+            <th>W-L-T</th>
+            <th>Current PR</th>
+            <th>Diff</th>
+            <th>Rating vs Odds</th>
+            <th>Schedule Strength (SoS)</th>
+            <th>SoS Diff</th>
+            <th>PR-1</th>
+            <th>PR-2</th>
+            <th>PR-3</th>
           </tr>
         </thead>
         <tbody id="games-body"></tbody>

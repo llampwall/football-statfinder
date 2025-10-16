@@ -2,7 +2,7 @@
 
 Change limits:
 - DO NOT rewrite files top-to-bottom. Touch only the specific functions/blocks needed.
-- Max N lines changed per file: 200 (additions + deletions). Exceeding this is a failure.
+- Max N lines changed per file: 200 (additions + deletions). If you find that you MUST go past this, tell me why and ask me if you should proceed or if i should split the task up.
 - Max files changed per task: 3 unless explicitly allowed in the prompt.
 - Max scope: avoid refactors. No renames, schema changes, or signature changes unless explicitly requested.
 
