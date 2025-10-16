@@ -34,6 +34,43 @@ const STATE = {
   gameOrdinals: new Map(),
 };
 
+const NFL_TEAM_DEFINITIONS = [
+  ["Arizona Cardinals", "ari|arz|arizona cardinals|arizona|cardinals"],
+  ["Atlanta Falcons", "atl|atlanta|falcons"],
+  ["Baltimore Ravens", "bal|baltimore|ravens"],
+  ["Buffalo Bills", "buf|buffalo|bills"],
+  ["Carolina Panthers", "car|carolina|panthers"],
+  ["Chicago Bears", "chi|chicago|bears"],
+  ["Cincinnati Bengals", "cin|cincinnati|bengals"],
+  ["Cleveland Browns", "cle|cleveland|browns"],
+  ["Dallas Cowboys", "dal|dallas|cowboys"],
+  ["Denver Broncos", "den|denver|broncos"],
+  ["Detroit Lions", "det|detroit|lions"],
+  ["Green Bay Packers", "gb|gnb|green bay|packers"],
+  ["Houston Texans", "hou|houston|texans"],
+  ["Indianapolis Colts", "ind|indianapolis|colts"],
+  ["Jacksonville Jaguars", "jax|jaguars|jacksonville|jacksonville jaguars"],
+  ["Kansas City Chiefs", "kc|kan|kcc|kansas city|chiefs|kansas city chiefs"],
+  ["Las Vegas Raiders", "lv|lvr|las vegas|raiders|las vegas raiders|oakland raiders|oakland"],
+  ["Los Angeles Chargers", "lac|los angeles chargers|la chargers|chargers|san diego chargers|san diego|sdc|sd"],
+  ["Los Angeles Rams", "lar|la|los angeles rams|la rams|rams|st louis rams|stl"],
+  ["Miami Dolphins", "mia|miami|dolphins"],
+  ["Minnesota Vikings", "min|minn|minnesota|vikings|minnesota vikings"],
+  ["New England Patriots", "ne|nwe|new england|patriots|new england patriots"],
+  ["New Orleans Saints", "no|nor|new orleans|saints|new orleans saints"],
+  ["New York Giants", "nyg|new york giants|giants|ny giants"],
+  ["New York Jets", "nyj|new york jets|jets|ny jets"],
+  ["Philadelphia Eagles", "phi|philadelphia|eagles|philadelphia eagles"],
+  ["Pittsburgh Steelers", "pit|pittsburgh|steelers|pittsburgh steelers"],
+  ["San Francisco 49ers", "sf|sfo|san francisco|san francisco 49ers|49ers|niners"],
+  ["Seattle Seahawks", "sea|seattle|seahawks|seattle seahawks"],
+  ["Tampa Bay Buccaneers", "tb|tbb|tampa bay|buccaneers|bucs|tampa bay buccaneers"],
+  ["Tennessee Titans", "ten|tennessee|titans|tennessee titans"],
+  ["Washington Commanders", "was|wsh|washington|commanders|washington commanders|washington football team|wft"],
+];
+
+let TEAM_NUMBER_MAP_CACHE = null;
+
 attachListeners();
 bootstrap();
 
@@ -373,11 +410,12 @@ function buildTeamRow(row, side, gameNumber) {
     ? formatNumber(row.rating_vs_odds, { decimals: 1, signed: true })
     : MISSING_VALUE;
   const gameValue = gameNumber ?? placeholderGameNumber();
+  const teamNumber = formatTeamNumber(row, side);
 
   return [
     fmtDatePT(iso),
     fmtTimePT(iso),
-    placeholderTeamNumber(),
+    teamNumber,
     gameValue,
     resolveTeamName(row, side),
     formatOddsCell(row, side),
