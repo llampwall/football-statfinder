@@ -612,7 +612,7 @@ function sosDiffForRow(homeSos, awaySos, side) {
   if (diff > 0) {
     return formatNumber(diff, { decimals: 1, signed: true });
   }
-  return MISSING_VALUE;
+  return "";
 }
 
 
