@@ -1,0 +1,15 @@
+{
+  "season": 2025,
+  "week": 8,
+  "games_total": 295,
+  "sidecars_written": 295,
+  "teams_with_ytd": 590,
+  "teams_missing_ytd": [],
+  "teams_missing_prev": [
+    "New England College",
+    "Roanoke College",
+    "Texas Wesleyan",
+    "Ut Rio Grande Valley"
+  ],
+  "join_issues": []
+}

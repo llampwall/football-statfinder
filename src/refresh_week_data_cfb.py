@@ -1,14 +1,25 @@
-"""Weekly orchestrator for refreshing stubbed CFB outputs."""
+"""Weekly orchestrator for refreshing CFB outputs (mirrors NFL flow)."""
 
 from __future__ import annotations
 
 import argparse
+import json
+import math
 import subprocess
 import sys
 from pathlib import Path
 from typing import Dict, List, Optional
 
 OUT_ROOT = Path(__file__).resolve().parents[1] / "out"
+
+from src.fetch_games_cfb import load_games, filter_week_reg
+from src.schedule_master_cfb import (
+    ensure_weeks_present as ensure_cfb_schedule_master,
+    enrich_from_local_odds,
+)
+
+LEAGUE_MIN_TEAMS_ABS = 100
+LEAGUE_MIN_TEAMS_FRAC = 0.70
 
 
 def run_module(
@@ -47,6 +58,73 @@ def count_csv_rows(path: Path) -> int:
     return max(rows - 1, 0)
 
 
+def read_jsonl(path: Path) -> List[dict]:
+    records: List[dict] = []
+    if not path.exists():
+        return records
+    with path.open("r", encoding="utf-8") as handle:
+        for line in handle:
+            text = line.strip()
+            if not text:
+                continue
+            try:
+                records.append(json.loads(text))
+            except json.JSONDecodeError:
+                continue
+    return records
+
+
+def write_gaps_report(
+    season: int,
+    week: int,
+    base_dir: Path,
+    notes: List[str],
+    critical_fields: List[str],
+) -> None:
+    report_path = base_dir / "orchestrator_gaps.json"
+    cfb_path = base_dir / f"games_week_{season}_{week}.jsonl"
+    cfb_records = read_jsonl(cfb_path)
+    cfb_keys = {rec.get("game_key") for rec in cfb_records if isinstance(rec.get("game_key"), str)}
+
+    nfl_path = OUT_ROOT / f"{season}_week{week}" / f"games_week_{season}_{week}.jsonl"
+    nfl_records = read_jsonl(nfl_path)
+    nfl_keys = {rec.get("game_key") for rec in nfl_records if isinstance(rec.get("game_key"), str)}
+
+    report_notes = list(notes)
+    if not nfl_keys:
+        report_notes.append("NFL week baseline not found; skipping cross-league key comparison.")
+
+    missing_keys = sorted(str(key) for key in nfl_keys - cfb_keys if key)
+    missing_hits = {key: 1 for key in missing_keys}
+
+    blank_keys: List[str] = []
+    blank_hits: Dict[str, int] = {}
+    for record in cfb_records:
+        game_key = str(record.get("game_key") or "")
+        if not game_key:
+            continue
+        blanks = 0
+        for field in critical_fields:
+            value = record.get(field)
+            if value in (None, "", [], {}):
+                blanks += 1
+        if blanks > 0:
+            blank_keys.append(game_key)
+            blank_hits[game_key] = blanks
+
+    payload = {
+        "games_week_keys_missing": missing_keys,
+        "games_week_keys_present_blank": sorted(blank_keys),
+        "counts": {
+            "rows": len(cfb_records),
+            "missing_key_hits": missing_hits,
+            "blank_key_hits": blank_hits,
+        },
+        "notes": report_notes,
+    }
+    report_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+
+
 def build_summary(season: int, week: int) -> Dict[str, int]:
     base = OUT_ROOT / "cfb" / f"{season}_week{week}"
     summary = {
@@ -61,48 +139,207 @@ def build_summary(season: int, week: int) -> Dict[str, int]:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Refresh stubbed CFB weekly outputs.")
+    parser = argparse.ArgumentParser(description="Refresh CFB weekly outputs.")
     parser.add_argument("--season", type=int, required=True)
     parser.add_argument("--week", type=int, required=True)
     parser.add_argument("--include-eoy", action="store_true", help="Also build prior-season CFB EOY metrics")
     args = parser.parse_args()
 
-    print("=== CFB WEEKLY REFRESH (stub) ===")
-    print(f"Season {args.season} Week {args.week}")
+    season = args.season
+    week = args.week
+    base_dir = OUT_ROOT / "cfb" / f"{season}_week{week}"
+    base_dir.mkdir(parents=True, exist_ok=True)
 
+    print("=== CFB WEEKLY REFRESH ===")
+    print(f"Season {season} Week {week}")
 
-    print("\n>>> Running src.fetch_games_cfb .")
-    run_module("src.fetch_games_cfb", args.season, args.week)
+    notes: List[str] = []
 
-    print("\n>>> Running src.fetch_year_to_date_stats_cfb .")
-    lm_rc = run_module("src.fetch_year_to_date_stats_cfb", args.season, args.week, check=False)
-    league_dir = f"out/cfb/{args.season}_week{args.week}"
-    if lm_rc != 0:
-        print(f"FAIL: CFB league metrics; see {league_dir}/league_metrics_debug.json")
-        return lm_rc or 1
-    print(f"PASS: CFB league metrics written -> {league_dir}/league_metrics_{args.season}_{args.week}.csv")
-
-    if args.include_eoy:
-        print("\n>>> Running src.fetch_last_year_stats_cfb .")
-        prior = args.season - 1
-        eoy_rc = run_module("src.fetch_last_year_stats_cfb", args.season, args.week, include_week=False, check=False)
-        if eoy_rc != 0:
-            print("FAIL: CFB final league metrics; see out/cfb/final_league_metrics_debug.json")
-            return eoy_rc or 1
-        print(f"PASS: CFB final league metrics -> out/cfb/final_league_metrics_{prior}.csv")
-
-    remaining_steps = [
-        "src.fetch_week_odds_cfb",
-        "src.fetch_sagarin_week_cfb",
-        "src.build_team_timelines_cfb",
-        "src.gameview_build_cfb",
+    try:
+        ensure_cfb_schedule_master([season, season - 1])
+    except Exception as exc:
+        print(f"WARNING: schedule master update failed: {exc}")
+    critical_fields = [
+        "spread_home_relative",
+        "favored_side",
+        "spread_favored_team",
+        "rating_diff_favored_team",
+        "rating_vs_odds_favored_team",
+        "home_pf_pg",
+        "away_pf_pg",
+        "home_ry_pg",
+        "away_ry_pg",
+        "home_rush_rank",
+        "away_rush_rank",
     ]
 
-    for module in remaining_steps:
-        print(f"\n>>> Running {module} .")
-        run_module(module, args.season, args.week)
+    # Schedule ingest
+    print("\n>>> Running src.fetch_games_cfb .")
+    schedule_rc = run_module("src.fetch_games_cfb", season, week, check=False)
+    if schedule_rc != 0:
+        print("FAIL: CFB schedule ingest command failed.")
+        return schedule_rc or 1
+    schedule_df = filter_week_reg(load_games(season), season, week)
+    schedule_rows = int(schedule_df.shape[0])
+    if schedule_rows == 0:
+        print("FAIL: CFB schedule produced 0 normalized rows.")
+        return 1
+    print(f"PASS: CFB schedule rows={schedule_rows}")
+    notes.append(f"Schedule rows={schedule_rows}")
 
-    summary = build_summary(args.season, args.week)
+    # League metrics
+    print("\n>>> Running src.fetch_year_to_date_stats_cfb .")
+    lm_rc = run_module("src.fetch_year_to_date_stats_cfb", season, week, check=False)
+    league_path = base_dir / f"league_metrics_{season}_{week}.csv"
+    league_debug_path = base_dir / "league_metrics_debug.json"
+    if lm_rc != 0 or not league_path.exists():
+        print(f"FAIL: CFB league metrics; see {league_debug_path}")
+        return lm_rc or 1
+    league_rows = count_csv_rows(league_path)
+    league_stats = {}
+    if league_debug_path.exists():
+        try:
+            league_stats = json.loads(league_debug_path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            league_stats = {}
+    teams_total = int(league_stats.get("teams_total") or 0)
+    teams_meeting = int(league_stats.get("teams_meeting_threshold") or 0)
+    rank_fraction = float(league_stats.get("rank_columns_ok_fraction") or 0.0)
+    required = max(LEAGUE_MIN_TEAMS_ABS, math.ceil(LEAGUE_MIN_TEAMS_FRAC * teams_total)) if teams_total else 0
+    coverage_msg = (
+        f"{teams_meeting}/{teams_total} teams meeting threshold (required {required}); "
+        f"ranks_ok={rank_fraction:.2f}"
+        if teams_total
+        else f"rows={league_rows}"
+    )
+    print(f"PASS: CFB league metrics coverage -> {coverage_msg}")
+    notes.append(f"League metrics {coverage_msg}")
+
+    # Prior-season finals (optional)
+    if args.include_eoy:
+        print("\n>>> Running src.fetch_last_year_stats_cfb .")
+        prior = season - 1
+        eoy_rc = run_module(
+            "src.fetch_last_year_stats_cfb",
+            season,
+            week,
+            include_week=False,
+            check=False,
+        )
+        eoy_csv = OUT_ROOT / "cfb" / f"final_league_metrics_{prior}.csv"
+        eoy_debug = OUT_ROOT / "cfb" / "final_league_metrics_debug.json"
+        if eoy_rc != 0 or not eoy_csv.exists():
+            print(f"FAIL: CFB final league metrics; see {eoy_debug}")
+            return eoy_rc or 1
+        eoy_stats = {}
+        if eoy_debug.exists():
+            try:
+                eoy_stats = json.loads(eoy_debug.read_text(encoding="utf-8"))
+            except json.JSONDecodeError:
+                eoy_stats = {}
+        eoy_total = int(eoy_stats.get("teams_total") or 0)
+        eoy_meeting = int(eoy_stats.get("teams_meeting_threshold") or 0)
+        eoy_rank = float(eoy_stats.get("rank_columns_ok_fraction") or 0.0)
+        print(
+            f"PASS: CFB final league metrics -> {eoy_csv} "
+            f"(teams {eoy_meeting}/{eoy_total}, ranks_ok={eoy_rank:.2f})"
+        )
+        notes.append(f"EOY metrics {eoy_meeting}/{eoy_total} ranks_ok={eoy_rank:.2f}")
+
+    # Odds snapshot
+    print("\n>>> Running src.fetch_week_odds_cfb .")
+    odds_rc = run_module("src.fetch_week_odds_cfb", season, week, check=False)
+    odds_debug = base_dir / "odds_match_debug.json"
+    if odds_rc != 0 or not odds_debug.exists():
+        print(f"FAIL: CFB odds coverage; see {odds_debug}")
+        return odds_rc or 1
+    try:
+        odds_stats = json.loads(odds_debug.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        odds_stats = {}
+    stats = odds_stats.get("stats") or {}
+    events_after = int(stats.get("events_after_window_filter") or 0)
+    matched = int(stats.get("matched") or 0)
+    unmatched = int(stats.get("unmatched") or 0)
+    odds_path = base_dir / f"odds_{season}_wk{week}.jsonl"
+    print(
+        f"PASS: CFB odds matched {matched}/{events_after}; unmatched={unmatched} "
+        f"({odds_path})"
+    )
+    notes.append(f"Odds matched {matched}/{events_after}; unmatched={unmatched}")
+
+    try:
+        enrichment = enrich_from_local_odds(season, week)
+        print(
+            f"Master enrichment: updated {enrichment.get('rows_updated', 0)}/{enrichment.get('rows_considered', 0)} "
+            f"rows for season={season} week={week}"
+        )
+        notes.append(
+            f"Master enrichment {enrichment.get('rows_updated', 0)}/{enrichment.get('rows_considered', 0)}"
+        )
+    except Exception as exc:
+        print(f"WARNING: master enrichment failed: {exc}")
+        notes.append("Master enrichment failed")
+
+    # Sagarin snapshot (may be stubbed)
+    print("\n>>> Running src.fetch_sagarin_week_cfb .")
+    sag_rc = run_module("src.fetch_sagarin_week_cfb", season, week, check=False)
+    sag_csv = base_dir / f"sagarin_cfb_{season}_wk{week}.csv"
+    if sag_rc != 0:
+        print("FAIL: CFB Sagarin step failed.")
+        return sag_rc or 1
+    sag_rows = count_csv_rows(sag_csv)
+    if sag_rows == 0:
+        print("SKIP: CFB Sagarin not enabled (0 rows emitted).")
+        notes.append("Sagarin skipped (stub output)")
+    else:
+        print(f"PASS: CFB Sagarin rows={sag_rows}")
+        notes.append(f"Sagarin rows={sag_rows}")
+
+    # Sidecar timelines
+    print("\n>>> Running src.build_team_timelines_cfb .")
+    timelines_rc = run_module("src.build_team_timelines_cfb", season, week, check=False)
+    if timelines_rc != 0:
+        print("FAIL: CFB team timelines step failed.")
+        return timelines_rc or 1
+    sidecar_dir = base_dir / "game_schedules"
+    if not sidecar_dir.exists():
+        print("FAIL: CFB sidecar directory missing.")
+        return 1
+    sidecar_count = len(list(sidecar_dir.glob("*.json")))
+    print(f"PASS: CFB sidecars written -> {sidecar_count} files (schedule rows={schedule_rows})")
+    notes.append(f"Sidecars {sidecar_count}/{schedule_rows}")
+
+    # Game view builder
+    print("\n>>> Running src.gameview_build_cfb .")
+    gameview_rc = run_module("src.gameview_build_cfb", season, week, check=False)
+    gv_jsonl = base_dir / f"games_week_{season}_{week}.jsonl"
+    gv_csv = base_dir / f"games_week_{season}_{week}.csv"
+    if gameview_rc != 0 or not gv_jsonl.exists() or not gv_csv.exists():
+        print("FAIL: CFB Game View build failed.")
+        return gameview_rc or 1
+    gv_records = read_jsonl(gv_jsonl)
+    if not gv_records:
+        print("FAIL: CFB Game View JSONL is empty.")
+        return 1
+    favorite_fields = [
+        "spread_home_relative",
+        "favored_side",
+        "spread_favored_team",
+        "rating_diff_favored_team",
+        "rating_vs_odds_favored_team",
+    ]
+    missing_favorite_fields = [field for field in favorite_fields if field not in gv_records[0]]
+    if missing_favorite_fields:
+        print(f"FAIL: CFB Game View missing fields: {', '.join(missing_favorite_fields)}")
+        return 1
+    print(f"PASS: CFB Game View rows={len(gv_records)} ({gv_jsonl})")
+    notes.append(f"Game View rows={len(gv_records)}")
+
+    # Gaps report
+    write_gaps_report(season, week, base_dir, notes, critical_fields)
+
+    summary = build_summary(season, week)
     print("\n=== SUMMARY ===")
     print(f"Games JSONL records : {summary['games_jsonl']}")
     print(f"Games CSV rows      : {summary['games_csv_rows']}")
