@@ -358,31 +358,40 @@ function renderTable(rows, { season, week }) {
     const ordinal = ordinals.get(game_key) ?? null;
     const gameNumber = formatGameNumber(week, ordinal);
 
-    ["away", "home"].forEach((side) => {
-      const cells = buildTeamRow(row, side, gameNumber);
-      const tr = document.createElement("tr");
-      tr.dataset.gameKey = game_key ?? "";
-      tr.tabIndex = 0;
-      cells.forEach((value, idx) => {
-        const td = document.createElement("td");
-        td.textContent = value;
-        if (numericColumns.has(idx)) {
-          td.classList.add("numeric");
-        }
-        tr.appendChild(td);
-      });
-      tr.addEventListener("click", () => {
-        openGame(game_key);
-      });
-      tr.addEventListener("keydown", (event) => {
-        if (event.key === "Enter") {
-          openGame(game_key);
-        } else if (event.key === "ArrowRight" && event.ctrlKey) {
-          openGame(game_key, { newTab: true });
-        }
-      });
-      tbody.appendChild(tr);
+    let groupIndex = 0;
+    rows.forEach((row) => {
+      const ord = STATE.gameOrdinals?.get(row.game_key) ?? null;
+      const [top, bot] = buildGameGroup(row, ord, groupIndex++);
+      els.tableBody.appendChild(top);
+      els.tableBody.appendChild(bot);
     });
+
+
+    // ["away", "home"].forEach((side) => {
+    //   const cells = buildTeamRow(row, side, gameNumber);
+    //   const tr = document.createElement("tr");
+    //   tr.dataset.gameKey = game_key ?? "";
+    //   tr.tabIndex = 0;
+    //   cells.forEach((value, idx) => {
+    //     const td = document.createElement("td");
+    //     td.textContent = value;
+    //     if (numericColumns.has(idx)) {
+    //       td.classList.add("numeric");
+    //     }
+    //     tr.appendChild(td);
+    //   });
+    //   tr.addEventListener("click", () => {
+    //     openGame(game_key);
+    //   });
+    //   tr.addEventListener("keydown", (event) => {
+    //     if (event.key === "Enter") {
+    //       openGame(game_key);
+    //     } else if (event.key === "ArrowRight" && event.ctrlKey) {
+    //       openGame(game_key, { newTab: true });
+    //     }
+    //   });
+    //   tbody.appendChild(tr);
+    // });
   });
 
   const highlightKey = STATE.pendingScrollKey || STATE.highlightedGameKey;
@@ -480,6 +489,96 @@ function formatTeamNumber(row, side) {
   }
   return num;
 }
+
+function appendCell(tr, text, { numeric = false, rowspan = 1 } = {}) {
+  const td = document.createElement("td");
+  if (text !== null && text !== undefined) td.textContent = String(text);
+  if (numeric) td.classList.add("numeric");
+  if (rowspan > 1) td.rowSpan = rowspan;
+  tr.appendChild(td);
+  return td;
+}
+
+function buildGameGroup(row, ordinal, groupIndex) {
+  const iso = row?.kickoff_iso_utc ?? null;
+  const gameNumber = formatGameNumber(STATE.week, ordinal);
+
+  // zebra by game group
+  const stripe = (groupIndex % 2 === 0) ? "group-even" : "group-odd";
+
+  // create two rows: top = away, bottom = home
+  const trTop = document.createElement("tr");
+  const trBot = document.createElement("tr");
+  [trTop, trBot].forEach(tr => {
+    tr.dataset.gameKey = row.game_key ?? "";
+    tr.classList.add("group", stripe);
+    tr.tabIndex = 0;
+    tr.addEventListener("click", () => openGame(row.game_key));
+    tr.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") openGame(row.game_key);
+      else if (e.key === "ArrowRight" && e.ctrlKey) openGame(row.game_key, { newTab: true });
+    });
+  });
+
+  // --- shared cells (rowspan = 2): Date, Time, Game #
+  appendCell(trTop, fmtDatePT(iso), { rowspan: 2 });
+  appendCell(trTop, fmtTimePT(iso), { rowspan: 2 });
+
+  // Team # (away only here; home will be on trBot)
+  appendCell(trTop, formatTeamNumber(row, "away"));
+
+  // Game # (shared)
+  appendCell(trTop, gameNumber, { rowspan: 2 });
+
+  // Team (away)
+  appendCell(trTop, resolveTeamName(row, "away"));
+
+  // Odds (away)
+  appendCell(trTop, formatOddsCell(row, "away"));
+
+  // Total (your spec: only on favored row; else blank)
+  appendCell(trTop, isFavRow(row, "away") ? formatNumber(row.total, { decimals: 1, signed: true }) : "");
+
+  // W-L-T (away)
+  appendCell(trTop, teamRecord(row, "away"));
+
+  // Current PR (away)
+  appendCell(trTop, formatNumber(row.away_pr), { numeric: true });
+
+  // Diff (favored only per your buildTeamRow)
+  appendCell(trTop, isFavRow(row, "away")
+    ? formatNumber(row.rating_diff_favored_team, { decimals: 1, signed: true }) : "");
+
+  // Rating vs Odds (favored only)
+  appendCell(trTop, isFavRow(row, "away")
+    ? formatNumber(row.rating_vs_odds, { decimals: 1, signed: true }) : "");
+
+  // SoS (away)
+  appendCell(trTop, formatNumber(row.away_sos), { numeric: true });
+
+  // SoS diff (only on higher-SoS row; else blank)
+  appendCell(trTop, sosDiffForRow(row.home_sos, row.away_sos, "away"), { numeric: true });
+
+  // ===== bottom row (home) =====
+
+  appendCell(trBot, formatTeamNumber(row, "home"));                              // Team #
+  appendCell(trBot, resolveTeamName(row, "home"));                               // Team
+  appendCell(trBot, formatOddsCell(row, "home"));                                // Odds
+  appendCell(trBot, isFavRow(row, "home") ? formatNumber(row.total, {            // Total (fav only)
+    decimals: 1, signed: true }) : "");
+  appendCell(trBot, teamRecord(row, "home"));                                    // W-L-T
+  appendCell(trBot, formatNumber(row.home_pr), { numeric: true });               // Current PR
+  appendCell(trBot, isFavRow(row, "home") ?                                      // Diff (fav only)
+    formatNumber(row.rating_diff_favored_team, { decimals: 1, signed: true }) : "");
+  appendCell(trBot, isFavRow(row, "home") ?                                      // RvO (fav only)
+    formatNumber(row.rating_vs_odds, { decimals: 1, signed: true }) : "");
+  appendCell(trBot, formatNumber(row.home_sos), { numeric: true });              // SoS
+  appendCell(trBot, sosDiffForRow(row.home_sos, row.away_sos, "home"), {         // SoS diff (higher-SoS row only)
+    numeric: true });
+
+  return [trTop, trBot];
+}
+
 
 function buildTeamRow(row, side, gameNumber) {
   const iso = row?.kickoff_iso_utc ?? null;
