@@ -13,10 +13,10 @@ import pandas as pd
 
 from src.common.io_utils import ensure_out_dir, write_csv, write_jsonl
 
-SAGARIN_COLUMNS: List[str] = [
-    "league",
+DEFAULT_COLUMNS: List[str] = [
     "season",
     "week",
+    "team",
     "team_norm",
     "team_raw",
     "pr",
@@ -36,13 +36,24 @@ def cfb_week_dir(season: int, week: int) -> Path:
     return base
 
 
+def infer_columns(season: int, week: int) -> List[str]:
+    nfl_dir = ensure_out_dir() / f"{season}_week{week}"
+    nfl_csv = nfl_dir / f"sagarin_nfl_{season}_wk{week}.csv"
+    if nfl_csv.exists():
+        nfl_cols = pd.read_csv(nfl_csv, nrows=0).columns.tolist()
+        if nfl_cols:
+            return nfl_cols
+    return DEFAULT_COLUMNS.copy()
+
+
 def write_empty_sagarin(season: int, week: int) -> tuple[Path, Path]:
     out_dir = cfb_week_dir(season, week)
     base = out_dir / f"sagarin_cfb_{season}_wk{week}"
     csv_path = base.with_suffix(".csv")
     jsonl_path = base.with_suffix(".jsonl")
 
-    df = pd.DataFrame(columns=SAGARIN_COLUMNS)
+    columns = infer_columns(season, week)
+    df = pd.DataFrame(columns=columns)
     write_csv(df, csv_path)
     write_jsonl([], jsonl_path)
     return csv_path, jsonl_path

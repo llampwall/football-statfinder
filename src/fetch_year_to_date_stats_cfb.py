@@ -13,7 +13,7 @@ import pandas as pd
 
 from src.common.io_utils import ensure_out_dir, write_csv
 
-LEAGUE_COLUMNS: List[str] = [
+DEFAULT_COLUMNS: List[str] = [
     "Team",
     "RY(O)",
     "R(O)_RY",
@@ -44,7 +44,13 @@ def cfb_week_dir(season: int, week: int) -> Path:
 def write_empty_league_metrics(season: int, week: int) -> Path:
     out_dir = cfb_week_dir(season, week)
     csv_path = out_dir / f"league_metrics_{season}_{week}.csv"
-    df = pd.DataFrame(columns=LEAGUE_COLUMNS)
+    columns = DEFAULT_COLUMNS.copy()
+    nfl_csv = ensure_out_dir() / f"{season}_week{week}" / f"league_metrics_{season}_{week}.csv"
+    if nfl_csv.exists():
+        nfl_cols = pd.read_csv(nfl_csv, nrows=0).columns.tolist()
+        if nfl_cols:
+            columns = nfl_cols
+    df = pd.DataFrame(columns=columns)
     write_csv(df, csv_path)
     return csv_path
 

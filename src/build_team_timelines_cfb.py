@@ -35,13 +35,37 @@ def read_game_keys(games_path: Path) -> List[str]:
     return keys
 
 
-def write_sidecar(path: Path, game_key: str) -> None:
+TIMELINE_KEYS: List[str] = [
+    "season",
+    "week",
+    "date",
+    "opp",
+    "site",
+    "pf",
+    "pa",
+    "result",
+    "pr",
+    "pr_rank",
+    "sos",
+    "sos_rank",
+    "opp_pr",
+    "opp_pr_rank",
+    "opp_sos",
+    "opp_sos_rank",
+]
+
+
+def timeline_stub() -> dict:
+    return {key: None for key in TIMELINE_KEYS}
+
+
+def write_sidecar(path: Path, game_key: str, include_template: bool = False) -> None:
     payload = {
         "game_key": game_key,
-        "home_ytd": [],
-        "away_ytd": [],
-        "home_prev": [],
-        "away_prev": [],
+        "home_ytd": [timeline_stub()] if include_template else [],
+        "away_ytd": [timeline_stub()] if include_template else [],
+        "home_prev": [timeline_stub()] if include_template else [],
+        "away_prev": [timeline_stub()] if include_template else [],
     }
     path.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
 
@@ -62,6 +86,10 @@ def main() -> int:
     for key in keys:
         side_path = sidecar_dir / f"{key}.json"
         write_sidecar(side_path, key)
+
+    if not keys:
+        stub_path = sidecar_dir / "_schema_stub.json"
+        write_sidecar(stub_path, "_schema_stub", include_template=True)
 
     print(f"PASS: processed {len(keys)} game keys -> {sidecar_dir}")
     if not keys:

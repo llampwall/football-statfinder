@@ -10,16 +10,15 @@ import pandas as pd
 
 from src.common.io_utils import ensure_out_dir, write_csv, write_jsonl
 
-GAMEVIEW_COLUMNS: List[str] = [
+DEFAULT_COLUMNS: List[str] = [
     "season",
     "week",
     "kickoff_iso_utc",
     "game_key",
     "source_uid",
-    "league",
     "home_team_raw",
-    "home_team_norm",
     "away_team_raw",
+    "home_team_norm",
     "away_team_norm",
     "spread_home_relative",
     "total",
@@ -87,13 +86,24 @@ def cfb_week_dir(season: int, week: int) -> Path:
     return base
 
 
+def infer_columns(season: int, week: int) -> List[str]:
+    nfl_dir = ensure_out_dir() / f"{season}_week{week}"
+    nfl_csv = nfl_dir / f"games_week_{season}_{week}.csv"
+    if nfl_csv.exists():
+        cols = pd.read_csv(nfl_csv, nrows=0).columns.tolist()
+        if cols:
+            return cols
+    return DEFAULT_COLUMNS.copy()
+
+
 def write_empty_gameview(season: int, week: int) -> tuple[Path, Path]:
     out_dir = cfb_week_dir(season, week)
     jsonl_path = out_dir / f"games_week_{season}_{week}.jsonl"
     csv_path = out_dir / f"games_week_{season}_{week}.csv"
 
+    columns = infer_columns(season, week)
     write_jsonl([], jsonl_path)
-    df = pd.DataFrame(columns=GAMEVIEW_COLUMNS)
+    df = pd.DataFrame(columns=columns)
     write_csv(df, csv_path)
     return jsonl_path, csv_path
 
