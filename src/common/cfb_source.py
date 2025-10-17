@@ -9,15 +9,16 @@ import requests
 CFBD_BASE_URL = "https://api.collegefootballdata.com"
 
 
-def fetch_cfbd_week_games(season: int, week: int, api_key: str) -> Optional[List[dict]]:
-    """Return the raw CFBD games payload for the requested week."""
+def fetch_cfbd_games(season: int, week: Optional[int], api_key: str) -> Optional[List[dict]]:
+    """Return the raw CFBD games payload for the requested season/week."""
     url = f"{CFBD_BASE_URL}/games"
     headers = {"Authorization": f"Bearer {api_key}"}
     params = {
         "year": season,
-        "week": week,
         "seasonType": "regular",
     }
+    if week is not None:
+        params["week"] = week
     resp = requests.get(url, headers=headers, params=params, timeout=30)
     resp.raise_for_status()
     data = resp.json()
@@ -26,4 +27,4 @@ def fetch_cfbd_week_games(season: int, week: int, api_key: str) -> Optional[List
     return None
 
 
-__all__ = ["fetch_cfbd_week_games"]
+__all__ = ["fetch_cfbd_games"]
