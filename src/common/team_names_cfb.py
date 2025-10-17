@@ -1,9 +1,4 @@
-"""Minimal College Football team name normalization utilities.
-
-Purpose:
-    Provide placeholder normalization helpers so the CFB stubs can emit
-    consistent keys that mirror the NFL pipeline APIs.
-"""
+"""Minimal College Football team name normalization utilities."""
 
 from __future__ import annotations
 
@@ -49,4 +44,110 @@ def team_merge_key_cfb(name: str | None) -> str:
     return re.sub(r"[^a-z0-9]", "", basis)
 
 
-__all__ = ["normalize_team_name_cfb", "team_merge_key_cfb"]
+ODDS_TEXT_ALIASES = {
+    "miami (oh) redhawks": "miami (oh)",
+    "liberty flames": "liberty",
+    "brigham young cougars": "byu",
+    "byu cougars": "byu",
+    "central florida golden knights": "ucf",
+    "central florida knights": "ucf",
+    "utsa roadrunners": "utsa",
+    "texas san antonio roadrunners": "utsa",
+    "texas a&m aggies": "texas a&m",
+    "southern cal": "usc",
+    "usc trojans": "usc",
+    "unlv rebels": "unlv",
+    "ole miss rebels": "ole miss",
+    "southern miss golden eagles": "southern miss",
+    "louisiana lafayette": "louisiana",
+    "louisiana ragin cajuns": "louisiana",
+    "vanderbilt commodores": "vanderbilt",
+    "charlotte 49ers": "charlotte",
+    "south carolina gamecocks": "south carolina",
+    "south florida bulls": "south florida",
+    "kent state golden flashes": "kent state",
+    "texas tech red raiders": "texas tech",
+    "pittsburgh panthers": "pittsburgh",
+    "western kentucky hilltoppers": "western kentucky",
+    "boise state broncos": "boise state",
+    "louisiana monroe warhawks": "louisiana monroe",
+}
+
+MASCOT_WORDS = {
+    "aggies",
+    "hawks",
+    "devils",
+    "jackets",
+    "gophers",
+    "cornhuskers",
+    "wave",
+    "knights",
+    "frogs",
+    "rebels",
+    "trojans",
+    "bulldogs",
+    "tigers",
+    "gators",
+    "cougars",
+    "cardinals",
+    "hurricanes",
+    "eagles",
+    "falcons",
+    "warhawks",
+    "rockets",
+    "minutemen",
+    "mountaineers",
+    "cowboys",
+    "sooners",
+    "wolverines",
+    "huskies",
+    "panthers",
+    "wildcats",
+    "razorbacks",
+    "bearcats",
+    "lions",
+    "herd",
+    "bobcats",
+    "zips",
+    "seminoles",
+    "longhorns",
+    "blazers",
+    "gamecocks",
+    "cyclones",
+    "jayhawks",
+    "owls",
+    "warriors",
+}
+
+MULTI_WORD_MASCOTS = {
+    "blue devils",
+    "yellow jackets",
+    "horned frogs",
+    "green wave",
+    "black knights",
+    "golden gophers",
+    "golden eagles",
+    "thundering herd",
+}
+
+
+def normalize_team_name_cfb_odds(name: str) -> str:
+    base = normalize_team_name_cfb(name)
+    lowered = _clean(base)
+    lowered = ODDS_TEXT_ALIASES.get(lowered, lowered)
+    for mascot in MULTI_WORD_MASCOTS:
+        if lowered.endswith(mascot) and len(lowered) > len(mascot):
+            lowered = lowered[: -len(mascot)].strip()
+            break
+    words = lowered.split()
+    while len(words) > 1 and words[-1] in MASCOT_WORDS:
+        words.pop()
+    token = team_merge_key_cfb(" ".join(words))
+    return token
+
+
+__all__ = [
+    "normalize_team_name_cfb",
+    "team_merge_key_cfb",
+    "normalize_team_name_cfb_odds",
+]

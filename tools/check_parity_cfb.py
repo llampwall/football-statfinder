@@ -83,40 +83,40 @@ def main() -> int:
     parser.add_argument("--week", type=int, required=True)
     args = parser.parse_args()
 
-    base_nfl = out_dir() / f"{args.season}_week{args.week}"
+    base_nfl = out_dir() / f"{args.season}_week{args.week-1}"
     base_cfb = out_dir() / "cfb" / f"{args.season}_week{args.week}"
 
     all_pass = True
 
     # Games (CSV + JSONL)
-    nfl_games_csv = base_nfl / f"games_week_{args.season}_{args.week}.csv"
+    nfl_games_csv = base_nfl / f"games_week_{args.season}_{args.week-1}.csv"
     cfb_games_csv = base_cfb / f"games_week_{args.season}_{args.week}.csv"
     nfl_cols = csv_columns(nfl_games_csv)
     cfb_cols = csv_columns(cfb_games_csv)
     all_pass &= compare_sets("games_week CSV columns", nfl_cols, cfb_cols)
 
-    nfl_games_json = base_nfl / f"games_week_{args.season}_{args.week}.jsonl"
+    nfl_games_json = base_nfl / f"games_week_{args.season}_{args.week-1}.jsonl"
     cfb_games_json = base_cfb / f"games_week_{args.season}_{args.week}.jsonl"
     nfl_json_keys = json_keys(nfl_games_json) or set(nfl_cols or [])
     cfb_json_keys = json_keys(cfb_games_json) or set(cfb_cols or [])
     all_pass &= compare_sets("games_week JSON keys", nfl_json_keys, cfb_json_keys)
 
     # League metrics CSV
-    nfl_league = base_nfl / f"league_metrics_{args.season}_{args.week}.csv"
+    nfl_league = base_nfl / f"league_metrics_{args.season}_{args.week-1}.csv"
     cfb_league = base_cfb / f"league_metrics_{args.season}_{args.week}.csv"
     all_pass &= compare_sets("league_metrics CSV columns", csv_columns(nfl_league), csv_columns(cfb_league))
 
     # Odds JSONL
-    nfl_odds = base_nfl / f"odds_{args.season}_wk{args.week}.jsonl"
+    nfl_odds = base_nfl / f"odds_{args.season}_wk{args.week-1}.jsonl"
     cfb_odds = base_cfb / f"odds_{args.season}_wk{args.week}.jsonl"
     all_pass &= compare_sets("odds JSON keys", json_keys(nfl_odds), json_keys(cfb_odds))
 
     # Sagarin weekly CSV/JSON
-    nfl_sagarin_csv = base_nfl / f"sagarin_nfl_{args.season}_wk{args.week}.csv"
+    nfl_sagarin_csv = base_nfl / f"sagarin_nfl_{args.season}_wk{args.week-1}.csv"
     cfb_sagarin_csv = base_cfb / f"sagarin_cfb_{args.season}_wk{args.week}.csv"
     all_pass &= compare_sets("sagarin CSV columns", csv_columns(nfl_sagarin_csv), csv_columns(cfb_sagarin_csv))
 
-    nfl_sagarin_json = base_nfl / f"sagarin_nfl_{args.season}_wk{args.week}.jsonl"
+    nfl_sagarin_json = base_nfl / f"sagarin_nfl_{args.season}_wk{args.week-1}.jsonl"
     cfb_sagarin_json = base_cfb / f"sagarin_cfb_{args.season}_wk{args.week}.jsonl"
     nfl_sagarin_keys = json_keys(nfl_sagarin_json) or set(csv_columns(nfl_sagarin_csv) or [])
     cfb_sagarin_keys = json_keys(cfb_sagarin_json) or set(csv_columns(cfb_sagarin_csv) or [])
