@@ -44,6 +44,11 @@ def team_merge_key_cfb(name: str | None) -> str:
     return re.sub(r"[^a-z0-9]", "", basis)
 
 
+def normalize_team_name_cfb_stats(name: str | None) -> str:
+    """Normalize team labels from CFBD stats sources."""
+    return normalize_team_name_cfb(name)
+
+
 ODDS_TEXT_ALIASES = {
     "miami (oh) redhawks": "miami (oh)",
     "liberty flames": "liberty",
@@ -71,11 +76,29 @@ ODDS_TEXT_ALIASES = {
     "western kentucky hilltoppers": "western kentucky",
     "boise state broncos": "boise state",
     "louisiana monroe warhawks": "louisiana monroe",
+    "michigan state spartans": "michigan state",
+    "wisconsin badgers": "wisconsin",
+    "penn state nittany lions": "penn state",
+    "arizona state sun devils": "arizona state",
+    "north texas mean green": "north texas",
+    "rutgers scarlet knights": "rutgers",
+    "colorado state rams": "colorado state",
+    "hawaii rainbow warriors": "hawaii",
+    "southern mississippi": "southern miss",
 }
 
 MASCOT_WORDS = {
     "aggies",
+    "badgers",
+    "bears",
+    "boilermakers",
+    "buckeyes",
+    "bulls",
+    "chanticleers",
+    "chippewas",
+    "dukes",
     "hawks",
+    "hawkeyes",
     "devils",
     "jackets",
     "gophers",
@@ -99,6 +122,7 @@ MASCOT_WORDS = {
     "mountaineers",
     "cowboys",
     "sooners",
+    "spartans",
     "wolverines",
     "huskies",
     "panthers",
@@ -112,6 +136,9 @@ MASCOT_WORDS = {
     "seminoles",
     "longhorns",
     "blazers",
+    "mustangs",
+    "monarchs",
+    "rams",
     "gamecocks",
     "cyclones",
     "jayhawks",
@@ -128,6 +155,11 @@ MULTI_WORD_MASCOTS = {
     "golden gophers",
     "golden eagles",
     "thundering herd",
+    "sun devils",
+    "mean green",
+    "rainbow warriors",
+    "scarlet knights",
+    "nittany lions",
 }
 
 
@@ -150,4 +182,5 @@ __all__ = [
     "normalize_team_name_cfb",
     "team_merge_key_cfb",
     "normalize_team_name_cfb_odds",
+    "normalize_team_name_cfb_stats",
 ]

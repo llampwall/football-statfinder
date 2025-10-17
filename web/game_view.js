@@ -655,17 +655,21 @@ async function injectEOYIfAvailable() {
 }
 
 async function loadEOY(priorSeason, homeNorm, awayNorm) {
-  if (STATE.league === "cfb") {
-    console.log("EOY: league=CFB - skipping prior-season dataset.");
-    return { skipped: true };
-  }
+  const league = STATE.league ?? DEFAULT_LEAGUE;
   const seasonNum = hasNumeric(priorSeason) ? Number(priorSeason) : null;
-  const path = seasonNum !== null ? `out/final_league_metrics_${seasonNum}.csv` : `out/final_league_metrics_${priorSeason ?? "unknown"}.csv`;
+  const path = seasonNum !== null
+    ? (league === "cfb"
+      ? `out/cfb/final_league_metrics_${seasonNum}.csv`
+      : `out/final_league_metrics_${seasonNum}.csv`)
+    : (league === "cfb"
+      ? `out/cfb/final_league_metrics_${priorSeason ?? "unknown"}.csv`
+      : `out/final_league_metrics_${priorSeason ?? "unknown"}.csv`);
   if (seasonNum === null) {
-    console.log(`EOY: using ${path} - FAIL`, "invalid season");
+    console.log(`EOY: using ${path} (league=${league}) - FAIL`, "invalid season");
     return null;
   }
-  let cache = STATE.eoyCache.get(seasonNum);
+  const cacheKey = `${league}:${seasonNum}`;
+  let cache = STATE.eoyCache.get(cacheKey);
   const toNum = (value) => {
     const num = Number(String(value ?? "").trim());
     return Number.isFinite(num) ? num : null;
@@ -720,10 +724,12 @@ async function loadEOY(priorSeason, homeNorm, awayNorm) {
         const games = gamesFrom(raw.SU);
         const pf = toNum(raw.PF);
         const pa = toNum(raw.PA);
+        const pf_pg = league === "cfb" ? pf : (games && pf !== null ? pf / games : pf);
+        const pa_pg = league === "cfb" ? pa : (games && pa !== null ? pa / games : pa);
         const record = {
           team: raw.Team,
-          pf_pg: games && pf !== null ? pf / games : pf,
-          pa_pg: games && pa !== null ? pa / games : pa,
+          pf_pg,
+          pa_pg,
           su: raw.SU || null,
           ats: raw.ATS || null,
           to_margin_pg: toNum(raw.TO),
@@ -745,7 +751,7 @@ async function loadEOY(priorSeason, homeNorm, awayNorm) {
         });
       });
       cache = { map };
-      STATE.eoyCache.set(seasonNum, cache);
+      STATE.eoyCache.set(cacheKey, cache);
     } catch (err) {
       console.log(`EOY: using ${path} — FAIL`, err?.message ?? err);
       return null;

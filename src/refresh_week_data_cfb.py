@@ -6,14 +6,29 @@ import argparse
 import subprocess
 import sys
 from pathlib import Path
-from typing import Dict
+from typing import Dict, List, Optional
 
 OUT_ROOT = Path(__file__).resolve().parents[1] / "out"
 
 
-def run_module(module: str, season: int, week: int) -> None:
-    cmd = [sys.executable, "-m", module, "--season", str(season), "--week", str(week)]
-    subprocess.run(cmd, check=True)
+def run_module(
+    module: str,
+    season: int,
+    week: int,
+    *,
+    include_week: bool = True,
+    extra_args: Optional[List[str]] = None,
+    check: bool = True,
+) -> int:
+    cmd = [sys.executable, "-m", module, "--season", str(season)]
+    if include_week:
+        cmd.extend(["--week", str(week)])
+    if extra_args:
+        cmd.extend(extra_args)
+    result = subprocess.run(cmd, check=False)
+    if check and result.returncode != 0:
+        raise subprocess.CalledProcessError(result.returncode, cmd)
+    return result.returncode
 
 
 def count_jsonl(path: Path) -> int:
@@ -49,22 +64,42 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Refresh stubbed CFB weekly outputs.")
     parser.add_argument("--season", type=int, required=True)
     parser.add_argument("--week", type=int, required=True)
+    parser.add_argument("--include-eoy", action="store_true", help="Also build prior-season CFB EOY metrics")
     args = parser.parse_args()
 
     print("=== CFB WEEKLY REFRESH (stub) ===")
     print(f"Season {args.season} Week {args.week}")
 
-    steps = [
-        "src.fetch_games_cfb",
-        "src.fetch_year_to_date_stats_cfb",
+
+    print("\n>>> Running src.fetch_games_cfb .")
+    run_module("src.fetch_games_cfb", args.season, args.week)
+
+    print("\n>>> Running src.fetch_year_to_date_stats_cfb .")
+    lm_rc = run_module("src.fetch_year_to_date_stats_cfb", args.season, args.week, check=False)
+    league_dir = f"out/cfb/{args.season}_week{args.week}"
+    if lm_rc != 0:
+        print(f"FAIL: CFB league metrics; see {league_dir}/league_metrics_debug.json")
+        return lm_rc or 1
+    print(f"PASS: CFB league metrics written -> {league_dir}/league_metrics_{args.season}_{args.week}.csv")
+
+    if args.include_eoy:
+        print("\n>>> Running src.fetch_last_year_stats_cfb .")
+        prior = args.season - 1
+        eoy_rc = run_module("src.fetch_last_year_stats_cfb", args.season, args.week, include_week=False, check=False)
+        if eoy_rc != 0:
+            print("FAIL: CFB final league metrics; see out/cfb/final_league_metrics_debug.json")
+            return eoy_rc or 1
+        print(f"PASS: CFB final league metrics -> out/cfb/final_league_metrics_{prior}.csv")
+
+    remaining_steps = [
         "src.fetch_week_odds_cfb",
         "src.fetch_sagarin_week_cfb",
         "src.build_team_timelines_cfb",
         "src.gameview_build_cfb",
     ]
 
-    for module in steps:
-        print(f"\n>>> Running {module} …")
+    for module in remaining_steps:
+        print(f"\n>>> Running {module} .")
         run_module(module, args.season, args.week)
 
     summary = build_summary(args.season, args.week)

@@ -4,9 +4,12 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Tuple
+
+from collections import Counter
 
 import pandas as pd
 import requests
@@ -17,11 +20,13 @@ from src.fetch_games_cfb import get_schedule_df
 
 THE_ODDS_API_URL = "https://api.the-odds-api.com/v4/sports/americanfootball_ncaaf/odds"
 
-MIN_MATCHED = 25
-MAX_UNMATCHED = 40
+MIN_ABS_MATCHED = 10
+MIN_MATCH_FRAC = 0.50
+MAX_UNMATCH_FRAC = 0.60
 KICKOFF_TOLERANCE_MINUTES = 5
 NEAR_KICKOFF_TOLERANCE_MINUTES = 120
 MAX_DEBUG_SAMPLES = 30
+ALIAS_DEBT_LIMIT = 50
 
 
 def cfb_week_dir(season: int, week: int) -> Path:
@@ -362,6 +367,33 @@ def write_debug(path: Path, data: Dict[str, Any]) -> None:
     path.write_text(json.dumps(data, indent=2, default=str), encoding="utf-8")
 
 
+def write_alias_debt(
+    path: Path,
+    season: int,
+    week: int,
+    unmatched_samples: List[Dict[str, Any]],
+) -> None:
+    debt_counter: Counter[str] = Counter()
+    for sample in unmatched_samples:
+        reason = sample.get("why")
+        if reason not in {"no_schedule_candidate", "name_mismatch"}:
+            continue
+        for key in ("home_norm", "away_norm"):
+            token = str(sample.get(key) or "").strip()
+            if token:
+                debt_counter[token] += 1
+    top_tokens = [
+        {"token": token, "count": count}
+        for token, count in debt_counter.most_common(ALIAS_DEBT_LIMIT)
+    ]
+    payload = {
+        "season": season,
+        "week": week,
+        "top_unmatched_tokens": top_tokens,
+    }
+    path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Fetch CFB odds and write JSONL output.")
     parser.add_argument("--season", type=int, required=True)
@@ -373,6 +405,7 @@ def main() -> int:
 
     out_dir = cfb_week_dir(args.season, args.week)
     debug_path = out_dir / "odds_match_debug.json"
+    alias_debt_path = out_dir / "odds_alias_debt.json"
 
     if weekly.empty:
         write_odds(args.season, args.week, [])
@@ -391,8 +424,10 @@ def main() -> int:
                 "window": None,
             },
         )
+        write_alias_debt(alias_debt_path, args.season, args.week, [])
         print("CFB odds: schedule empty, writing empty output.")
         print(f"Debug: {debug_path}")
+        print(f"Alias debt: {alias_debt_path}")
         return 0
 
     window_start = min_dt - timedelta(days=1) if isinstance(min_dt, datetime) else None
@@ -404,8 +439,6 @@ def main() -> int:
 
     env = read_env(["THE_ODDS_API_KEY"])
     api_key = env.get("THE_ODDS_API_KEY")
-    min_matched = MIN_MATCHED
-    max_unmatched = MAX_UNMATCHED
 
     if not api_key:
         write_odds(args.season, args.week, [])
@@ -424,8 +457,10 @@ def main() -> int:
                 "window": window_label,
             },
         )
+        write_alias_debt(alias_debt_path, args.season, args.week, [])
         print("CFB odds: THE_ODDS_API_KEY missing, writing empty output.")
         print(f"Debug: {debug_path}")
+        print(f"Alias debt: {alias_debt_path}")
         return 0
 
     try:
@@ -447,8 +482,10 @@ def main() -> int:
                 "window": window_label,
             },
         )
+        write_alias_debt(alias_debt_path, args.season, args.week, [])
         print(f"CFB odds: API error ({exc}); writing empty output.")
         print(f"Debug: {debug_path}")
+        print(f"Alias debt: {alias_debt_path}")
         return 0
 
     total_events = len(events)
@@ -578,6 +615,7 @@ def main() -> int:
         },
     }
     write_debug(debug_path, debug_data)
+    write_alias_debt(alias_debt_path, args.season, args.week, unmatched_samples)
 
     has_output_lines = False
     if odds_path.exists():
@@ -588,7 +626,16 @@ def main() -> int:
     if not has_output_lines:
         print(f"FAIL: CFB odds output missing or empty at {odds_path}")
         print(f"See {debug_path}")
+        print(f"Alias debt: {alias_debt_path}")
         return 1
+
+    events_after_filter = len(filtered_events)
+    if events_after_filter <= 0:
+        required_matched = 0
+        max_unmatched_allowed = 0
+    else:
+        required_matched = max(MIN_ABS_MATCHED, math.ceil(MIN_MATCH_FRAC * events_after_filter))
+        max_unmatched_allowed = math.ceil(MAX_UNMATCH_FRAC * events_after_filter)
 
     matched_count = len(records)
     unmatched_count = unmatched_post_filter
@@ -597,14 +644,16 @@ def main() -> int:
         f"Window: {window_label} | events {len(filtered_events)} / matched {matched_count} / unmatched {unmatched_count}"
     )
 
-    if matched_count < min_matched or unmatched_count > max_unmatched:
+    if matched_count < required_matched or unmatched_count > max_unmatched_allowed:
         print(
-            f"FAIL: CFB odds coverage below threshold (matched {matched_count} < {min_matched} or unmatched {unmatched_count} > {max_unmatched}). See {debug_path}"
+            f"FAIL: CFB odds coverage below threshold (matched {matched_count} < {required_matched} or unmatched {unmatched_count} > {max_unmatched_allowed}). See {debug_path}"
         )
+        print(f"Alias debt: {alias_debt_path}")
         return 1
 
     print(f"PASS: CFB odds matched {matched_count}; unmatched {unmatched_count}; wrote {odds_path}")
     print(f"Debug: {debug_path}")
+    print(f"Alias debt: {alias_debt_path}")
     return 0
 
 
