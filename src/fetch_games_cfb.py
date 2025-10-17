@@ -59,22 +59,27 @@ def _sanitize(value: str) -> str:
     return re.sub(r"[^a-z0-9]", "", value.lower())
 
 
-def load_games(season: int) -> pd.DataFrame:
-    """Fetch raw CFB games for the given season (regular season only)."""
+def _team_token(name: Optional[str]) -> str:
+    token = (name or "").lower()
+    token = re.sub(r"[^a-z0-9]+", "_", token)
+    token = token.strip("_")
+    return token or "unknown"
+
+
+def load_games(season: int, week: Optional[int] = None) -> pd.DataFrame:
+    """Fetch CFB games and return a normalized schedule DataFrame."""
     env = read_env(["CFBD_API_KEY"])
     api_key = env.get("CFBD_API_KEY")
     if not api_key:
-        return _empty_raw_df()
+        return pd.DataFrame(columns=SCHEDULE_COLUMNS)
     try:
-        records = fetch_cfbd_games(season, None, api_key) or []
+        records = fetch_cfbd_games(season, week, api_key) or []
     except Exception:
-        return _empty_raw_df()
+        records = []
     if not records:
-        return _empty_raw_df()
-    df = pd.DataFrame(records)
-    df["season"] = season
-    if "week" not in df.columns:
-        df["week"] = pd.to_numeric(df.get("week"), errors="coerce")
+        return pd.DataFrame(columns=SCHEDULE_COLUMNS)
+    raw = pd.DataFrame(records)
+    raw["season"] = season
     for column, aliases in {
         "start_date": ["start_date", "startDate", "kickoff", "start_time"],
         "home_team": ["home_team", "homeTeam"],
@@ -82,9 +87,12 @@ def load_games(season: int) -> pd.DataFrame:
         "venue": ["venue", "venue_name"],
         "conference_game": ["conference_game", "conferenceGame"],
     }.items():
-        if column not in df.columns:
-            df[column] = _column(df, aliases)
-    return df
+        if column not in raw.columns:
+            raw[column] = _column(raw, aliases)
+    normalized = _normalize_schedule_df(raw, season)
+    if week is not None:
+        normalized = normalized[pd.to_numeric(normalized.get("week"), errors="coerce") == week]
+    return normalized.reset_index(drop=True)
 
 
 def filter_week_reg(games: pd.DataFrame, season: int, week: int) -> pd.DataFrame:
@@ -114,6 +122,43 @@ def parse_kickoff_utc(row: pd.Series) -> Optional[datetime]:
     return None
 
 
+def _build_game_key(row: pd.Series) -> str:
+    dt = row.get("kickoff_dt_utc")
+    if isinstance(dt, datetime):
+        dt = dt.astimezone(timezone.utc)
+        yyyymmdd = dt.strftime("%Y%m%d")
+        hhmm = dt.strftime("%H%M")
+    else:
+        yyyymmdd = "00000000"
+        hhmm = "0000"
+    away_token = _team_token(row.get("away_team_norm") or row.get("away_team"))
+    home_token = _team_token(row.get("home_team_norm") or row.get("home_team"))
+    return f"{yyyymmdd}_{hhmm}_{away_token}_{home_token}"
+
+
+def _normalize_schedule_df(df: pd.DataFrame, season: int) -> pd.DataFrame:
+    if df.empty:
+        return pd.DataFrame(columns=SCHEDULE_COLUMNS)
+    work = df.copy()
+    work["season"] = pd.to_numeric(work.get("season"), errors="coerce").fillna(season).astype(int)
+    work["week"] = pd.to_numeric(work.get("week"), errors="coerce")
+    if "kickoff_dt_utc" not in work.columns:
+        work["kickoff_dt_utc"] = work.apply(parse_kickoff_utc, axis=1)
+    work["kickoff_iso_utc"] = work["kickoff_dt_utc"].apply(
+        lambda dt: dt.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ") if isinstance(dt, datetime) else None
+    )
+    work["home_team"] = _column(work, ["home_team", "homeTeam"]).astype(str)
+    work["away_team"] = _column(work, ["away_team", "awayTeam"]).astype(str)
+    work["home_team_norm"] = work["home_team"].map(normalize_team_name_cfb)
+    work["away_team_norm"] = work["away_team"].map(normalize_team_name_cfb)
+    work["home_team_key"] = work["home_team_norm"].map(team_merge_key_cfb)
+    work["away_team_key"] = work["away_team_norm"].map(team_merge_key_cfb)
+    work["venue"] = _column(work, ["venue", "venue_name"]).astype(str)
+    work["conference_game"] = _column(work, ["conference_game", "conferenceGame"]).fillna(False).astype(bool)
+    work["game_key"] = work.apply(_build_game_key, axis=1)
+    return work[SCHEDULE_COLUMNS].copy()
+
+
 def home_relative_spread(_row: pd.Series) -> Optional[float]:
     """CFB stub currently has no odds lines."""
     return None
@@ -126,44 +171,7 @@ def total_from_schedule(_row: pd.Series) -> Optional[float]:
 
 def get_schedule_df(season: int) -> pd.DataFrame:
     """Return normalized schedule with kickoff and team display columns."""
-    raw = load_games(season)
-    if raw.empty:
-        return pd.DataFrame(columns=SCHEDULE_COLUMNS)
-
-    df = raw.copy()
-    if "kickoff_dt_utc" not in df.columns:
-        df["kickoff_dt_utc"] = df.apply(parse_kickoff_utc, axis=1)
-    df["kickoff_iso_utc"] = df["kickoff_dt_utc"].apply(
-        lambda dt: dt.replace(microsecond=0, tzinfo=timezone.utc).isoformat().replace("+00:00", "Z")
-        if isinstance(dt, datetime)
-        else None
-    )
-    df["home_team"] = _column(df, ["home_team", "homeTeam"]).astype(str)
-    df["away_team"] = _column(df, ["away_team", "awayTeam"]).astype(str)
-    df["home_team_norm"] = df["home_team"].map(normalize_team_name_cfb)
-    df["away_team_norm"] = df["away_team"].map(normalize_team_name_cfb)
-    df["home_team_key"] = df["home_team_norm"].map(team_merge_key_cfb)
-    df["away_team_key"] = df["away_team_norm"].map(team_merge_key_cfb)
-    venue_series = _column(df, ["venue", "venue_name"]).astype(str)
-    df["venue"] = venue_series
-    conf_series = _column(df, ["conference_game", "conferenceGame"]).fillna(False)
-    df["conference_game"] = conf_series.astype(bool)
-
-    def build_key(row: pd.Series) -> str:
-        kickoff = row.get("kickoff_iso_utc") or ""
-        home = row.get("home_team_norm") or row.get("home_team") or ""
-        away = row.get("away_team_norm") or row.get("away_team") or ""
-        seq = row.get("id") or ""
-        if kickoff:
-            key = f"{kickoff.replace(':', '').replace('-', '')}_{_sanitize(away)}_{_sanitize(home)}"
-        elif seq:
-            key = f"{seq}_{_sanitize(away)}_{_sanitize(home)}"
-        else:
-            key = f"{_sanitize(away)}_{_sanitize(home)}"
-        return key
-
-    df["game_key"] = df.apply(build_key, axis=1)
-    return df[SCHEDULE_COLUMNS].copy()
+    return load_games(season)
 
 
 def main() -> int:
