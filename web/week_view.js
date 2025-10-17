@@ -489,6 +489,17 @@ function formatTeamNumber(row, side) {
   return num;
 }
 
+function bindGroupHoverAndFocus(rows) {
+  const add = () => rows.forEach(r => r.classList.add('hover'));
+  const remove = () => rows.forEach(r => r.classList.remove('hover'));
+  rows.forEach(r => {
+    r.addEventListener('mouseenter', add);
+    r.addEventListener('mouseleave', remove);
+    r.addEventListener('focusin', add);
+    r.addEventListener('focusout', remove);
+  });
+}
+
 function appendCell(tr, text, { numeric = false, rowspan = 1 } = {}) {
   const td = document.createElement("td");
   if (text !== null && text !== undefined) td.textContent = String(text);
@@ -517,6 +528,7 @@ function buildGameGroup(row, ordinal, groupIndex) {
       if (e.key === "Enter") openGame(row.game_key);
       else if (e.key === "ArrowRight" && e.ctrlKey) openGame(row.game_key, { newTab: true });
     });
+    bindGroupHoverAndFocus([trTop, trBot]);
   });
 
   // --- shared cells (rowspan = 2): Date, Time, Game #
