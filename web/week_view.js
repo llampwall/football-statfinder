@@ -523,11 +523,11 @@ function buildGameGroup(row, ordinal, groupIndex) {
   appendCell(trTop, fmtDatePT(iso), { rowspan: 2 });
   appendCell(trTop, fmtTimePT(iso), { rowspan: 2 });
 
-  // Team # (away only here; home will be on trBot)
-  appendCell(trTop, formatTeamNumber(row, "away"));
-
   // Game # (shared)
   appendCell(trTop, gameNumber, { rowspan: 2 });
+
+  // Team # (away only here; home will be on trBot)
+  appendCell(trTop, formatTeamNumber(row, "away"));
 
   // Team (away)
   appendCell(trTop, resolveTeamName(row, "away"));
@@ -600,8 +600,8 @@ function buildTeamRow(row, side, gameNumber) {
   return [
     fmtDatePT(iso),
     fmtTimePT(iso),
-    teamNumber,
     gameValue,
+    teamNumber,
     resolveTeamName(row, side),
     formatOddsCell(row, side),
     total,
@@ -805,8 +805,8 @@ function exportVisibleCsv() {
   const header = [
     "Date (PT)",
     "Time (PT)",
-    "Team #",
     "Game #",
+    "Team #",
     "Team",
     "Odds",
     "O/U",
