@@ -351,10 +351,17 @@ python -m http.server 8000
   <main class="page">
     <header class="top-bar">
       <div class="title-block">
-        <h1>NFL Game View</h1>
+        <h1>Game View</h1>
         <div class="status" id="status"></div>
       </div>
       <div class="controls-group">
+        <label>
+          League
+          <select id="league-select">
+            <option value="nfl">NFL</option>
+            <option value="cfb">CFB</option>
+          </select>
+        </label>
         <label>
           Season
           <input type="number" id="season-input" min="2000" />
@@ -535,4 +542,3 @@ python -m http.server 8000
   <script type="module" src="game_view.js"></script>
 </body>
 </html>
-

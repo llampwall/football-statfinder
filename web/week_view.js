@@ -1,6 +1,7 @@
 const els = {
   seasonInput: document.getElementById("season-input"),
   weekInput: document.getElementById("week-input"),
+  leagueSelect: document.getElementById("league-select"),
   loadBtn: document.getElementById("load-btn"),
   status: document.getElementById("status"),
   loadedLabel: document.getElementById("loaded-label"),
@@ -17,6 +18,9 @@ const els = {
 
 const STORAGE_KEY = "week-view:last-selection";
 const LAST_GAME_KEY = "week-view:last-game";
+const LEAGUE_STORAGE_KEY = "week-view:league";
+const DEFAULT_LEAGUE = "nfl";
+const VALID_LEAGUES = new Set(["nfl", "cfb"]);
 const MISSING_VALUE = "\u2014";
 let timezoneLogged = false;
 let warnedTeamNumber = false;
@@ -27,11 +31,14 @@ const STATE = {
   filteredRows: [],
   season: null,
   week: null,
+  league: DEFAULT_LEAGUE,
   sourcePath: null,
   lastLoadedAt: null,
   pendingScrollKey: null,
   highlightedGameKey: null,
   gameOrdinals: new Map(),
+  weekPaths: null,
+  pathsLogged: false,
 };
 
 const NFL_TEAM_DEFINITIONS = [
@@ -74,6 +81,66 @@ let TEAM_NUMBER_MAP_CACHE = null;
 attachListeners();
 bootstrap();
 
+function normalizeLeague(raw) {
+  if (raw === null || raw === undefined) return DEFAULT_LEAGUE;
+  const value = String(raw).trim().toLowerCase();
+  return VALID_LEAGUES.has(value) ? value : DEFAULT_LEAGUE;
+}
+
+function loadStoredLeague() {
+  try {
+    const raw = localStorage.getItem(LEAGUE_STORAGE_KEY);
+    if (!raw) return null;
+    return normalizeLeague(raw);
+  } catch {
+    return null;
+  }
+}
+
+function persistLeaguePreference(league) {
+  try {
+    localStorage.setItem(LEAGUE_STORAGE_KEY, league);
+  } catch {
+    // ignore storage errors
+  }
+}
+
+function setActiveLeague(next, { updateSelect = true, persist = true, updateHistory = false } = {}) {
+  const league = normalizeLeague(next);
+  STATE.league = league;
+  if (updateSelect && els.leagueSelect && els.leagueSelect.value !== league) {
+    els.leagueSelect.value = league;
+  }
+  if (persist) {
+    persistLeaguePreference(league);
+  }
+  if (updateHistory) {
+    const url = new URL(window.location.href);
+    if (league === DEFAULT_LEAGUE) {
+      url.searchParams.delete("league");
+    } else {
+      url.searchParams.set("league", league);
+    }
+    window.history.replaceState(null, "", url.toString());
+  }
+}
+
+function buildWeekPaths(league, season, week) {
+  const normalized = normalizeLeague(league);
+  const baseDir =
+    normalized === "cfb"
+      ? `out/cfb/${season}_week${week}`
+      : `out/${season}_week${week}`;
+  return {
+    league: normalized,
+    season,
+    week,
+    baseDir,
+    gamesJsonl: `${baseDir}/games_week_${season}_${week}.jsonl`,
+    sidecarDir: `${baseDir}/game_schedules`,
+  };
+}
+
 function attachListeners() {
   els.loadBtn.addEventListener("click", () => {
     const season = coerceInt(els.seasonInput.value);
@@ -82,8 +149,21 @@ function attachListeners() {
       setStatus("Provide season and week.");
       return;
     }
-    loadAndRender(season, week, { fromControl: true });
+    const league = normalizeLeague(els.leagueSelect?.value ?? STATE.league);
+    setActiveLeague(league, { updateSelect: true, updateHistory: true });
+    loadAndRender(season, week, { fromControl: true, league });
   });
+
+  if (els.leagueSelect) {
+    els.leagueSelect.addEventListener("change", () => {
+      const next = normalizeLeague(els.leagueSelect.value);
+      if (next === STATE.league) return;
+      setActiveLeague(next, { updateSelect: false, updateHistory: true });
+      if (STATE.season && STATE.week) {
+        loadAndRender(STATE.season, STATE.week, { fromControl: true, league: next });
+      }
+    });
+  }
 
   els.teamFilter.addEventListener("input", () => {
     applyFilters();
@@ -99,14 +179,27 @@ async function bootstrap() {
   const paramSeason = coerceInt(params.get("season"));
   const paramWeek = coerceInt(params.get("week"));
   const paramGame = params.get("game_key");
+  const paramLeagueRaw = params.get("league");
+
+  const storedSelection = loadStoredSelection();
+  const storedLastGame = loadStoredLastGame();
+  const storedLeague = storedSelection ? storedSelection.league : null;
+  const fallbackLeague = storedLeague ?? loadStoredLeague();
+  const initialLeague = paramLeagueRaw
+    ? normalizeLeague(paramLeagueRaw)
+    : fallbackLeague ?? DEFAULT_LEAGUE;
+  setActiveLeague(initialLeague, {
+    updateSelect: true,
+    updateHistory: Boolean(paramLeagueRaw) || initialLeague !== DEFAULT_LEAGUE,
+  });
 
   if (paramSeason) els.seasonInput.value = paramSeason;
   if (paramWeek) els.weekInput.value = paramWeek;
 
-  const available = await listAvailableWeeks();
+  const available = await listAvailableWeeks(STATE.league);
   if (available.length) {
     console.log(
-      "Available weeks:",
+      `Available weeks (league=${STATE.league.toUpperCase()}):`,
       available.map((entry) => `${entry.season}w${entry.week}`).join(", ")
     );
   } else {
@@ -121,7 +214,7 @@ async function bootstrap() {
   } else if (paramSeason) {
     target = available.find((item) => item.season === paramSeason) ?? null;
     if (!target) {
-      console.warn(`WARN: No data found for season ${paramSeason} in /out listing.`);
+      console.warn(`WARN: No data found for season ${paramSeason} in directory listing.`);
     }
   } else if (paramWeek) {
     target = available.find((item) => item.week === paramWeek) ?? null;
@@ -135,12 +228,16 @@ async function bootstrap() {
     );
   }
 
-  const storedSelection = loadStoredSelection();
-  const storedLastGame = loadStoredLastGame();
+  const selectionMatchesLeague =
+    storedSelection &&
+    normalizeLeague(storedSelection.league ?? DEFAULT_LEAGUE) === STATE.league;
+  const lastMatchesLeague =
+    storedLastGame &&
+    normalizeLeague(storedLastGame.league ?? DEFAULT_LEAGUE) === STATE.league;
 
-  if (!target && storedSelection) {
+  if (!target && selectionMatchesLeague) {
     console.log("Fallback to stored selection", storedSelection);
-    target = storedSelection;
+    target = { season: storedSelection.season, week: storedSelection.week };
   }
 
   if (!target) {
@@ -151,11 +248,18 @@ async function bootstrap() {
   els.seasonInput.value = target.season;
   els.weekInput.value = target.week;
 
-  preparePendingScroll(target.season, target.week, paramGame, storedSelection, storedLastGame);
+  preparePendingScroll(
+    target.season,
+    target.week,
+    paramGame,
+    selectionMatchesLeague ? storedSelection : null,
+    lastMatchesLeague ? storedLastGame : null
+  );
 
   const loaded = await loadAndRender(target.season, target.week);
   if (!loaded) {
     if (
+      selectionMatchesLeague &&
       storedSelection &&
       (storedSelection.season !== target.season || storedSelection.week !== target.week)
     ) {
@@ -174,9 +278,11 @@ async function bootstrap() {
   }
 }
 
-async function listAvailableWeeks() {
+async function listAvailableWeeks(league) {
   try {
-    const url = new URL("../out/", window.location.href);
+    const normalized = normalizeLeague(league);
+    const basePath = normalized === "cfb" ? "../out/cfb/" : "../out/";
+    const url = new URL(basePath, window.location.href);
     const res = await fetch(url.toString(), { cache: "no-store" });
     if (!res.ok) {
       console.warn(`WARN: Directory listing fetch failed with status ${res.status}`);
@@ -202,18 +308,29 @@ async function listAvailableWeeks() {
       return b.week - a.week;
     });
   } catch (err) {
-    console.warn("WARN: Unable to parse /out directory listing.", err);
+    console.warn("WARN: Unable to parse directory listing.", err);
     return [];
   }
 }
 
 async function loadAndRender(season, week, options = {}) {
-  const { fromControl = false } = options;
+  const { fromControl = false, league: leagueOverride = null } = options;
+  const league = normalizeLeague(leagueOverride ?? STATE.league ?? DEFAULT_LEAGUE);
+  const shouldUpdateLeagueHistory = fromControl || league !== DEFAULT_LEAGUE;
+  setActiveLeague(league, {
+    updateSelect: true,
+    updateHistory: shouldUpdateLeagueHistory,
+  });
+  const paths = buildWeekPaths(league, season, week);
+  STATE.weekPaths = paths;
+  STATE.pathsLogged = false;
   setStatus("Loading games...");
-  const result = await loadGames(season, week);
+  const result = await loadGames(paths);
   if (!result.success) {
     setStatus(result.message);
-    console.log(`FAIL: Load season=${season} week=${week} (${result.message})`);
+    console.log(
+      `FAIL: Load season=${season} week=${week} league=${league.toUpperCase()} (${result.message})`
+    );
     return false;
   }
 
@@ -248,22 +365,38 @@ function applyLoadedRows(rows, season, week, { updateHistory = false } = {}) {
   }
 
   applyFilters();
-  persistSelection({ season, week, last_game_key: STATE.highlightedGameKey ?? null });
+  persistSelection({
+    league: STATE.league,
+    season,
+    week,
+    last_game_key: STATE.highlightedGameKey ?? null,
+  });
 
   if (updateHistory) {
     const url = new URL(window.location.href);
     url.searchParams.set("season", season);
     url.searchParams.set("week", week);
+    if (STATE.league === DEFAULT_LEAGUE) {
+      url.searchParams.delete("league");
+    } else {
+      url.searchParams.set("league", STATE.league);
+    }
     window.history.replaceState(null, "", url.toString());
   }
 
   return true;
 }
 
-async function loadGames(season, week) {
-  const relPath = `out/${season}_week${week}/games_week_${season}_${week}.jsonl`;
+async function loadGames(paths) {
+  const relPath = paths.gamesJsonl;
   const path = `../${relPath}`;
   const url = new URL(path, window.location.href);
+  if (!STATE.pathsLogged) {
+    console.log(
+      `[league] Week View -> ${paths.league.toUpperCase()} base=${paths.baseDir} games=${relPath}`
+    );
+    STATE.pathsLogged = true;
+  }
   try {
     const res = await fetch(url.toString(), { cache: "no-store" });
     if (!res.ok) {
@@ -279,7 +412,10 @@ async function loadGames(season, week) {
       sourcePath: relPath,
     };
   } catch (err) {
-    console.error(`FAIL: loadGames season=${season} week=${week}`, err);
+    console.error(
+      `FAIL: loadGames season=${paths.season} week=${paths.week} league=${paths.league}`,
+      err
+    );
     return { success: false, message: `Failed to load: ${err.message}`, sourcePath: relPath };
   }
 }
@@ -733,9 +869,14 @@ function openGame(gameKey, { newTab = false } = {}) {
   }
   storeLastViewedGame(gameKey);
   highlightRow(gameKey);
-  const url = `game_view.html?season=${STATE.season}&week=${STATE.week}&game_key=${encodeURIComponent(
-    gameKey
-  )}`;
+  const params = new URLSearchParams();
+  if (STATE.league && STATE.league !== DEFAULT_LEAGUE) {
+    params.set("league", STATE.league);
+  }
+  params.set("season", STATE.season);
+  params.set("week", STATE.week);
+  params.set("game_key", gameKey);
+  const url = `game_view.html?${params.toString()}`;
   if (newTab) {
     window.open(url, "_blank", "noopener");
   } else {
@@ -747,11 +888,21 @@ function storeLastViewedGame(gameKey) {
   if (!STATE.season || !STATE.week) return;
   STATE.highlightedGameKey = gameKey;
   STATE.pendingScrollKey = gameKey;
-  persistSelection({ season: STATE.season, week: STATE.week, last_game_key: gameKey });
+  persistSelection({
+    league: STATE.league,
+    season: STATE.season,
+    week: STATE.week,
+    last_game_key: gameKey,
+  });
   try {
     localStorage.setItem(
       LAST_GAME_KEY,
-      JSON.stringify({ season: STATE.season, week: STATE.week, game_key: gameKey })
+      JSON.stringify({
+        league: STATE.league,
+        season: STATE.season,
+        week: STATE.week,
+        game_key: gameKey,
+      })
     );
   } catch {
     // ignore storage failures
@@ -800,8 +951,18 @@ function updateFooter(totalCount, season, week) {
   }
   els.loadedLabel.textContent = `Season ${season}, Week ${week}`;
   els.weekSummary.textContent = `Currently viewing Season ${season}, Week ${week}`;
-  els.gameViewLink.href = `game_view.html?season=${season}&week=${week}`;
-  els.latestLink.href = "week_view.html";
+  const baseParams = new URLSearchParams();
+  if (STATE.league && STATE.league !== DEFAULT_LEAGUE) {
+    baseParams.set("league", STATE.league);
+  }
+  baseParams.set("season", season);
+  baseParams.set("week", week);
+  const gameHref = new URLSearchParams(baseParams);
+  els.gameViewLink.href = `game_view.html?${gameHref.toString()}`;
+  els.latestLink.href =
+    STATE.league && STATE.league !== DEFAULT_LEAGUE
+      ? `week_view.html?league=${STATE.league}`
+      : "week_view.html";
 }
 
 function exportVisibleCsv() {
@@ -1019,7 +1180,9 @@ function setStatus(message) {
 
 function persistSelection(selection) {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(selection));
+    const payload = { ...selection };
+    payload.league = normalizeLeague(payload.league ?? STATE.league ?? DEFAULT_LEAGUE);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
   } catch {
     // ignore storage issues
   }
@@ -1029,7 +1192,11 @@ function loadStoredSelection() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return null;
-    return JSON.parse(raw);
+    const parsed = JSON.parse(raw);
+    if (parsed && typeof parsed === "object") {
+      parsed.league = normalizeLeague(parsed.league ?? DEFAULT_LEAGUE);
+    }
+    return parsed;
   } catch {
     return null;
   }
@@ -1039,7 +1206,11 @@ function loadStoredLastGame() {
   try {
     const raw = localStorage.getItem(LAST_GAME_KEY);
     if (!raw) return null;
-    return JSON.parse(raw);
+    const parsed = JSON.parse(raw);
+    if (parsed && typeof parsed === "object") {
+      parsed.league = normalizeLeague(parsed.league ?? DEFAULT_LEAGUE);
+    }
+    return parsed;
   } catch {
     return null;
   }
