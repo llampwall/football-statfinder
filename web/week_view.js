@@ -349,50 +349,49 @@ function renderTable(rows, { season, week }) {
       ? STATE.gameOrdinals
       : new Map();
 
+  let groupIndex = 0;
   rows.forEach((row) => {
-    const { kickoff_iso_utc, game_key } = row;
-    if (!kickoff_iso_utc || !game_key) {
-      console.warn("WARN: Missing key fields", { kickoff_iso_utc, game_key });
-    }
-
-    const ordinal = ordinals.get(game_key) ?? null;
-    const gameNumber = formatGameNumber(week, ordinal);
-
-    let groupIndex = 0;
-    rows.forEach((row) => {
-      const ord = STATE.gameOrdinals?.get(row.game_key) ?? null;
-      const [top, bot] = buildGameGroup(row, ord, groupIndex++);
-      els.tableBody.appendChild(top);
-      els.tableBody.appendChild(bot);
-    });
-
-
-    // ["away", "home"].forEach((side) => {
-    //   const cells = buildTeamRow(row, side, gameNumber);
-    //   const tr = document.createElement("tr");
-    //   tr.dataset.gameKey = game_key ?? "";
-    //   tr.tabIndex = 0;
-    //   cells.forEach((value, idx) => {
-    //     const td = document.createElement("td");
-    //     td.textContent = value;
-    //     if (numericColumns.has(idx)) {
-    //       td.classList.add("numeric");
-    //     }
-    //     tr.appendChild(td);
-    //   });
-    //   tr.addEventListener("click", () => {
-    //     openGame(game_key);
-    //   });
-    //   tr.addEventListener("keydown", (event) => {
-    //     if (event.key === "Enter") {
-    //       openGame(game_key);
-    //     } else if (event.key === "ArrowRight" && event.ctrlKey) {
-    //       openGame(game_key, { newTab: true });
-    //     }
-    //   });
-    //   tbody.appendChild(tr);
-    // });
+    const ord = STATE.gameOrdinals?.get(row.game_key) ?? null;
+    const [top, bot] = buildGameGroup(row, ord, groupIndex++);
+    els.tableBody.appendChild(top);
+    els.tableBody.appendChild(bot);
   });
+
+  // rows.forEach((row) => {
+  //   const { kickoff_iso_utc, game_key } = row;
+  //   if (!kickoff_iso_utc || !game_key) {
+  //     console.warn("WARN: Missing key fields", { kickoff_iso_utc, game_key });
+  //   }
+
+  //   const ordinal = ordinals.get(game_key) ?? null;
+  //   const gameNumber = formatGameNumber(week, ordinal);
+
+  //   ["away", "home"].forEach((side) => {
+  //     const cells = buildTeamRow(row, side, gameNumber);
+  //     const tr = document.createElement("tr");
+  //     tr.dataset.gameKey = game_key ?? "";
+  //     tr.tabIndex = 0;
+  //     cells.forEach((value, idx) => {
+  //       const td = document.createElement("td");
+  //       td.textContent = value;
+  //       if (numericColumns.has(idx)) {
+  //         td.classList.add("numeric");
+  //       }
+  //       tr.appendChild(td);
+  //     });
+  //     tr.addEventListener("click", () => {
+  //       openGame(game_key);
+  //     });
+  //     tr.addEventListener("keydown", (event) => {
+  //       if (event.key === "Enter") {
+  //         openGame(game_key);
+  //       } else if (event.key === "ArrowRight" && event.ctrlKey) {
+  //         openGame(game_key, { newTab: true });
+  //       }
+  //     });
+  //     tbody.appendChild(tr);
+  //   });
+  // });
 
   const highlightKey = STATE.pendingScrollKey || STATE.highlightedGameKey;
   if (highlightKey) {
