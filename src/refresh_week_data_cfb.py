@@ -319,6 +319,23 @@ def main() -> int:
     sidecar_count = len(list(sidecar_dir.glob("*.json")))
     print(f"PASS: CFB sidecars written -> {sidecar_count} files (schedule rows={schedule_rows})")
     notes.append(f"Sidecars {sidecar_count}/{schedule_rows}")
+    sagarin_receipt_path = base_dir / "schedules_sagarin_receipt.json"
+    if sagarin_receipt_path.exists():
+        try:
+            sagarin_data = json.loads(sagarin_receipt_path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            print(f"WARNING: Unable to parse Sagarin enrichment receipt ({sagarin_receipt_path})")
+        else:
+            rows_considered = int(sagarin_data.get("rows_considered") or 0)
+            coverage = float(sagarin_data.get("coverage_fraction") or 0.0)
+            opp_cov = float(sagarin_data.get("opp_coverage_fraction") or 0.0)
+            print(
+                f"PASS: Sagarin enrichment rows={rows_considered} "
+                f"(coverage {coverage:.0%}, opp {opp_cov:.0%}) -> {sagarin_receipt_path}"
+            )
+            notes.append(f"Sagarin enrichment {coverage:.0%}/{opp_cov:.0%}")
+    else:
+        print(f"WARNING: Sagarin enrichment receipt missing ({sagarin_receipt_path})")
 
     # Game view builder
     print("\n>>> Running src.gameview_build_cfb .")

@@ -5817,7 +5817,7 @@ CFB,2025,8,REG,2025-10-18T19:30:00+00:00,James Madison,Old Dominion,jamesmadison
 CFB,2025,8,REG,2025-10-18T17:00:00+00:00,Johns Hopkins University,Ursinus,johnshopkinsuniversity,ursinus,,,,,cfbd
 CFB,2025,8,REG,2025-10-18T17:00:00+00:00,Juniata College,Susquehanna,juniatacollege,susquehanna,,,,,cfbd
 CFB,2025,8,REG,2025-10-18T23:00:00+00:00,Kentucky,Texas Longhorns,kentucky,texaslonghorns,,,,,cfbd
-CFB,2025,8,REG,2025-10-17T23:00:00+00:00,Kentucky State,Franklin Pierce,kentuckystate,franklinpierce,,,,,cfbd
+CFB,2025,8,REG,2025-10-17T23:00:00+00:00,Kentucky State,Franklin Pierce,kentuckystate,franklinpierce,14.0,17.0,,,cfbd
 CFB,2025,8,REG,2025-10-18T17:00:00+00:00,Kenyon,Wabash College,kenyon,wabashcollege,,,,,cfbd
 CFB,2025,8,REG,2025-10-18T17:00:00+00:00,Kings College (pa),Reading,kingscollegepa,reading,,,,,cfbd
 CFB,2025,8,REG,2025-10-18T19:00:00+00:00,Kutztown University,Millersville,kutztownuniversity,millersville,,,,,cfbd
@@ -5849,14 +5849,14 @@ CFB,2025,8,REG,2025-10-18T18:00:00+00:00,Mcdaniel College,Muhlenberg,mcdanielcol
 CFB,2025,8,REG,2025-10-18T18:00:00+00:00,Mckendree,Missouri Sandt,mckendree,missourisandt,,,,,cfbd
 CFB,2025,8,REG,2025-10-18T23:00:00+00:00,Mcneese,Houston Christian,mcneese,houstonchristian,,,,,cfbd
 CFB,2025,8,REG,2025-10-18T22:00:00+00:00,Mercyhurst,Duquesne,mercyhurst,duquesne,,,,,cfbd
-CFB,2025,8,REG,2025-10-17T23:00:00+00:00,Miami,Louisville,miami,louisville,,,,,cfbd
+CFB,2025,8,REG,2025-10-17T23:00:00+00:00,Miami,Louisville,miami,louisville,21.0,24.0,,,cfbd
 CFB,2025,8,REG,2025-10-18T16:00:00+00:00,Miami (oh),Eastern Michigan,miamioh,easternmichigan,,,,,cfbd
 CFB,2025,8,REG,2025-10-18T16:00:00+00:00,Michigan,Washington,michigan,washington,,,,,cfbd
 CFB,2025,8,REG,2025-10-18T16:00:00+00:00,Michigan Tech,Ferris State,michigantech,ferrisstate,,,,,cfbd
 CFB,2025,8,REG,2025-10-18T19:00:00+00:00,Miles College,Clark Atlanta,milescollege,clarkatlanta,,,,,cfbd
 CFB,2025,8,REG,2025-10-18T23:00:00+00:00,Millikin,Illinois Wesleyan,millikin,illinoiswesleyan,,,,,cfbd
 CFB,2025,8,REG,2025-10-18T18:00:00+00:00,Millsaps,Maryville College (tn),millsaps,maryvillecollegetn,,,,,cfbd
-CFB,2025,8,REG,2025-10-18T00:00:00+00:00,Minnesota,Nebraska,minnesota,nebraska,,,,,cfbd
+CFB,2025,8,REG,2025-10-18T00:00:00+00:00,Minnesota,Nebraska,minnesota,nebraska,24.0,6.0,,,cfbd
 CFB,2025,8,REG,2025-10-18T18:00:00+00:00,Minnesota Morris,Northwestern (mn),minnesotamorris,northwesternmn,,,,,cfbd
 CFB,2025,8,REG,2025-10-18T19:00:00+00:00,Mississippi Valley State,Lincoln (ca),mississippivalleystate,lincolnca,,,,,cfbd
 CFB,2025,8,REG,2025-10-18T18:00:00+00:00,Missouri Southern State,Nebraska-kearney,missourisouthernstate,nebraskakearney,,,,,cfbd
@@ -5954,7 +5954,7 @@ CFB,2025,8,REG,2025-10-18T19:00:00+00:00,Ul Monroe,Troy,ulmonroe,troy,,,,,cfbd
 CFB,2025,8,REG,2025-10-18T20:00:00+00:00,Umass Dartmouth,Worcester St,umassdartmouth,worcesterst,,,,,cfbd
 CFB,2025,8,REG,2025-10-18T17:00:00+00:00,University Of Charleston (wv),Frostburg State,universityofcharlestonwv,frostburgstate,,,,,cfbd
 CFB,2025,8,REG,2025-10-18T18:00:00+00:00,Upper Iowa University,Southwest Baptist,upperiowauniversity,southwestbaptist,,,,,cfbd
-CFB,2025,8,REG,2025-10-18T01:00:00+00:00,Utah State,San José State,utahstate,sanjosstate,,,,,cfbd
+CFB,2025,8,REG,2025-10-18T01:00:00+00:00,Utah State,San José State,utahstate,sanjosstate,30.0,25.0,,,cfbd
 CFB,2025,8,REG,2025-10-18T16:00:00+00:00,Vanderbilt,Lsu,vanderbilt,lsu,,,,,cfbd
 CFB,2025,8,REG,2025-10-18T17:00:00+00:00,Villanova,Hampton,villanova,hampton,,,,,cfbd
 CFB,2025,8,REG,2025-10-18T22:30:00+00:00,Virginia,Washington State,virginia,washingtonstate,,,,,cfbd
@@ -5987,7 +5987,7 @@ CFB,2025,8,REG,2025-10-18T19:30:00+00:00,Wisconsin,Ohio State Buckeyes,wisconsin
 CFB,2025,8,REG,2025-10-18T18:00:00+00:00,Wisconsin-oshkosh,Wisconsin-eau Claire,wisconsinoshkosh,wisconsineauclaire,,,,,cfbd
 CFB,2025,8,REG,2025-10-18T18:00:00+00:00,Wisconsin-platteville,Wisconsin-lacrosse,wisconsinplatteville,wisconsinlacrosse,,,,,cfbd
 CFB,2025,8,REG,2025-10-18T18:00:00+00:00,Wisconsin-stevens Pt,Wisconsin-river Falls,wisconsinstevenspt,wisconsinriverfalls,,,,,cfbd
-CFB,2025,8,REG,2025-10-18T00:00:00+00:00,Wisconsin-whitewater,Wisconsin-stout,wisconsinwhitewater,wisconsinstout,,,,,cfbd
+CFB,2025,8,REG,2025-10-18T00:00:00+00:00,Wisconsin-whitewater,Wisconsin-stout,wisconsinwhitewater,wisconsinstout,34.0,2.0,,,cfbd
 CFB,2025,8,REG,2025-10-18T20:00:00+00:00,Wittenberg,Denison University,wittenberg,denisonuniversity,,,,,cfbd
 CFB,2025,8,REG,2025-10-18T16:00:00+00:00,Wofford,Furman,wofford,furman,,,,,cfbd
 CFB,2025,8,REG,2025-10-17T23:00:00+00:00,Worcester Polytechnic Institute,Springfield,worcesterpolytechnicinstitute,springfield,10.0,24.0,,,cfbd

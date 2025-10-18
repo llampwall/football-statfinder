@@ -513,7 +513,7 @@ async function loadSingleGame(gameKey) {
     console.info(`[CFB Game] odds ${hasOdds ? "present" : "missing"} for ${gameKey}`);
     renderFavoriteBox(game);
   }
-  renderTeamStats(game, teamNames);
+  renderTeamStats(game, sidecar, teamNames);
   renderTables(game, sidecar, teamNames);
   const eoyStatus = await injectEOYIfAvailable();
   if ((STATE.weekPaths?.league ?? STATE.league) === "cfb") {
@@ -678,22 +678,30 @@ function renderFavoriteBox(game) {
   els.marketRvo.textContent = MISSING_VALUE;
 }
 
-function renderTeamStats(game, teamNames) {
+function renderTeamStats(game, sidecar, teamNames) {
   const rows = [
     { prefix: "home", label: teamNames.home },
     { prefix: "away", label: teamNames.away },
   ];
 
   els.teamStatsBody.innerHTML = "";
+  const league = STATE.league ?? DEFAULT_LEAGUE;
+  const atsSources = { home: "none", away: "none" };
 
   rows.forEach(({ prefix, label }) => {
     const tr = document.createElement("tr");
+    let atsCell = "";
+    if (league === "cfb") {
+      const { value: atsValue, source } = resolveAtsValue(game, sidecar, prefix);
+      atsCell = fallback(atsValue);
+      atsSources[prefix] = source || "none";
+    }
     const cells = [
       label,
       formatNumber(game[`${prefix}_pf_pg`], { decimals: 1 }),
       formatNumber(game[`${prefix}_pa_pg`], { decimals: 1 }),
       fallback(game[`${prefix}_su`]),
-      "",
+      league === "cfb" ? atsCell : "",
       formatSigned(game[`${prefix}_to_margin_pg`], { decimals: 1 }),
       formatNumber(game[`${prefix}_ry_pg`], { decimals: 1 }),
       rankOrDash(game[`${prefix}_rush_rank`]),
@@ -720,6 +728,35 @@ function renderTeamStats(game, teamNames) {
 
     els.teamStatsBody.appendChild(tr);
   });
+
+  if (league === "cfb") {
+    console.log(
+      `[CFB Game] ATS sources: home=${atsSources.home} away=${atsSources.away}`
+    );
+  }
+}
+
+function resolveAtsValue(game, sidecar, prefix) {
+  const field = `${prefix}_ats`;
+  const directRaw =
+    game && game[field] !== undefined && game[field] !== null
+      ? String(game[field]).trim()
+      : "";
+  if (directRaw) {
+    return { value: directRaw, source: "row" };
+  }
+  const bucketKey = `${prefix}_ytd`;
+  const bucket = Array.isArray(sidecar?.[bucketKey]) ? sidecar[bucketKey] : [];
+  const fallbackValue =
+    bucket && bucket.length > 0 ? bucket[0]?.ats ?? null : null;
+  const normalized =
+    fallbackValue !== null && fallbackValue !== undefined
+      ? String(fallbackValue).trim()
+      : "";
+  if (normalized) {
+    return { value: normalized, source: "sidecar" };
+  }
+  return { value: null, source: null };
 }
 
 function renderTables(game, sidecar, teamNames) {

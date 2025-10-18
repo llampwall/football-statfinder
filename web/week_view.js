@@ -41,6 +41,8 @@ const STATE = {
   gameOrdinals: new Map(),
   weekPaths: null,
   pathsLogged: false,
+  teamNumberMap: null,
+  loggedCfbExample: false,
 };
 
 const NFL_TEAM_DEFINITIONS = [
@@ -79,6 +81,116 @@ const NFL_TEAM_DEFINITIONS = [
 ];
 
 let TEAM_NUMBER_MAP_CACHE = null;
+
+function isCFBLeague() {
+  return (STATE.league ?? DEFAULT_LEAGUE) === "cfb";
+}
+
+function toDisplayName(primary, fallbackName) {
+  const base =
+    primary !== undefined && primary !== null && String(primary).trim()
+      ? String(primary).trim()
+      : fallbackName !== undefined && fallbackName !== null
+      ? String(fallbackName).trim()
+      : "";
+  if (!base) return "";
+  const words = base.split(/\s+/).map((part) =>
+    part
+      .split("-")
+      .map((segment) =>
+        segment
+          .split("'")
+          .map((piece) => titleCaseToken(piece))
+          .join("'")
+      )
+      .join("-")
+  );
+  return words.join(" ");
+}
+
+function titleCaseToken(token) {
+  if (!token) return "";
+  if (token === token.toUpperCase() && token.length <= 4) {
+    return token.toUpperCase();
+  }
+  if (token.length === 1) {
+    return token.toUpperCase();
+  }
+  return token.charAt(0).toUpperCase() + token.slice(1).toLowerCase();
+}
+
+function buildCfbTeamNumberMap(rows) {
+  const names = new Set();
+  (rows || []).forEach((row) => {
+    const homeName = toDisplayName(row?.home_team_norm, row?.home_team_raw);
+    const awayName = toDisplayName(row?.away_team_norm, row?.away_team_raw);
+    if (homeName) names.add(homeName);
+    if (awayName) names.add(awayName);
+  });
+  const ordered = Array.from(names).sort((a, b) => a.localeCompare(b));
+  const map = new Map();
+  ordered.forEach((name, idx) => map.set(name, idx + 1));
+  console.info(`[CFB Week] numbered ${ordered.length} teams`);
+  return map;
+}
+
+function teamNumberFromDisplay(displayName) {
+  if (!displayName) return null;
+  const map = STATE.teamNumberMap;
+  if (!map || typeof map.get !== "function") return null;
+  return map.get(displayName) ?? null;
+}
+
+function computeFavoredMetrics(row) {
+  if (!row) return null;
+  const favoredRaw = (row.favored_side ?? "").toString().toUpperCase();
+  if (favoredRaw !== "HOME" && favoredRaw !== "AWAY") return null;
+  const favored = favoredRaw === "HOME" ? "home" : "away";
+  const unfavored = favored === "home" ? "away" : "home";
+  const pr = hasNumeric(row[`${favored}_pr`]) ? Number(row[`${favored}_pr`]) : null;
+  const diff = hasNumeric(row.rating_diff_favored_team) ? Number(row.rating_diff_favored_team) : null;
+  const rvo = hasNumeric(row.rating_vs_odds) ? Number(row.rating_vs_odds) : null;
+  const favSos = hasNumeric(row[`${favored}_sos`]) ? Number(row[`${favored}_sos`]) : null;
+  const oppSos = hasNumeric(row[`${unfavored}_sos`]) ? Number(row[`${unfavored}_sos`]) : null;
+  const sosDiff = favSos !== null && oppSos !== null ? favSos - oppSos : null;
+  return {
+    favoredSide: favored,
+    unfavoredSide: unfavored,
+    pr,
+    diff,
+    rvo,
+    sos: favSos,
+    sosDiff,
+  };
+}
+
+function formatFavoredMetric(metrics, side, value, options = {}) {
+  if (!metrics || !metrics.favoredSide) return MISSING_VALUE;
+  if (metrics.favoredSide !== side) return MISSING_VALUE;
+  return formatNumber(value, options);
+}
+
+function logCfbMetrics(row, metrics) {
+  if (!metrics) return;
+  const awayLabel = resolveTeamName(row, "away");
+  const homeLabel = resolveTeamName(row, "home");
+  const prText = formatNumber(metrics.pr, { decimals: 2 });
+  const diffText = formatNumber(metrics.diff, { decimals: 1, signed: true });
+  const rvoText = formatNumber(metrics.rvo, { decimals: 1, signed: true });
+  const sosText = formatNumber(metrics.sos, { decimals: 2 });
+  const sosDiffText = formatNumber(metrics.sosDiff, { decimals: 2, signed: true });
+  if (!STATE.loggedCfbExample) {
+    console.log(
+      `[CFB Week] ${awayLabel}@${homeLabel} PR=${prText} DIFF=${diffText} RvO=${rvoText} SOS=${sosText} ΔSOS=${sosDiffText}`
+    );
+    STATE.loggedCfbExample = true;
+  }
+  if (row.game_key === "20251019_0000_cincinnati_oklahoma_state") {
+    console.log(
+      `[CFB Week] CIN@OKST PR=${prText} DIFF=${diffText} RvO=${rvoText} SOS=${sosText} ΔSOS=${sosDiffText}`
+    );
+  }
+}
 
 attachListeners();
 bootstrap();
@@ -353,6 +465,12 @@ function applyLoadedRows(rows, season, week, { updateHistory = false } = {}) {
   STATE.allRows = safeRows;
   STATE.season = season;
   STATE.week = week;
+  if (isCFBLeague()) {
+    STATE.teamNumberMap = buildCfbTeamNumberMap(safeRows);
+  } else {
+    STATE.teamNumberMap = null;
+  }
+  STATE.loggedCfbExample = false;
 
   if (STATE.pendingScrollKey && !STATE.highlightedGameKey) {
     STATE.highlightedGameKey = STATE.pendingScrollKey;
@@ -637,6 +755,9 @@ function labelFromNorm(norm) {
 }
 
 function buildTeamNumberMap() {
+  if (isCFBLeague()) {
+    return STATE.teamNumberMap ?? new Map();
+  }
   if (TEAM_NUM_MAP) return TEAM_NUM_MAP;
 
   // Use the normalized keys exactly as they appear in games JSONL.
@@ -656,6 +777,16 @@ function buildTeamNumberMap() {
 
 
 function formatTeamNumber(row, side) {
+  if (isCFBLeague()) {
+    const label = resolveTeamName(row, side);
+    if (!label) return MISSING_VALUE;
+    const num = teamNumberFromDisplay(label);
+    if (!num) {
+      warnOnce(`no-teamnum-cfb:${label}`, `No CFB Team # for label='${label}'`);
+      return placeholderTeamNumber();
+    }
+    return num;
+  }
   const rawNorm = side === "home" ? row.home_team_norm : row.away_team_norm;
   const label = resolveTeamName(row, side); // your existing resolver for the Team column
   const norm = coerceTeamNorm(rawNorm, label);
@@ -692,14 +823,17 @@ function appendCell(tr, text, { numeric = false, rowspan = 1 } = {}) {
 function buildGameGroup(row, ordinal, groupIndex) {
   const iso = row?.kickoff_iso_utc ?? null;
   const gameNumber = formatGameNumber(STATE.week, ordinal);
+  const cfb = isCFBLeague();
+  const metrics = cfb ? computeFavoredMetrics(row) : null;
+  if (cfb) {
+    logCfbMetrics(row, metrics);
+  }
 
-  // zebra by game group
-  const stripe = (groupIndex % 2 === 0) ? "group-even" : "group-odd";
+  const stripe = groupIndex % 2 === 0 ? "group-even" : "group-odd";
 
-  // create two rows: top = away, bottom = home
   const trTop = document.createElement("tr");
   const trBot = document.createElement("tr");
-  [trTop, trBot].forEach(tr => {
+  [trTop, trBot].forEach((tr) => {
     tr.dataset.gameKey = row.game_key ?? "";
     tr.classList.add("group", stripe);
     tr.tabIndex = 0;
@@ -711,61 +845,97 @@ function buildGameGroup(row, ordinal, groupIndex) {
     bindGroupHoverAndFocus([trTop, trBot]);
   });
 
-  // --- shared cells (rowspan = 2): Date, Time, Game #
   appendCell(trTop, fmtDatePT(iso), { rowspan: 2 });
   appendCell(trTop, fmtTimePT(iso), { rowspan: 2 });
-
-  // Game # (shared)
   appendCell(trTop, gameNumber, { rowspan: 2 });
 
-  // Team # (away only here; home will be on trBot)
   appendCell(trTop, formatTeamNumber(row, "away"));
-
-  // Team (away)
   appendCell(trTop, resolveTeamName(row, "away"));
-
-  // Odds (away)
   appendCell(trTop, formatOddsCell(row, "away"));
-
-  // Total (your spec: only on favored row; else blank)
-  appendCell(trTop, isFavRow(row, "away") ? formatNumber(row.total, { decimals: 1, signed: true }) : "");
-
-  // W-L-T (away)
+  appendCell(
+    trTop,
+    isFavRow(row, "away") ? formatNumber(row.total, { decimals: 1, signed: true }) : ""
+  );
   appendCell(trTop, teamRecord(row, "away"));
+  appendCell(
+    trTop,
+    cfb
+      ? formatFavoredMetric(metrics, "away", metrics?.pr, { decimals: 2 })
+      : formatNumber(row.away_pr),
+    { numeric: true }
+  );
+  appendCell(
+    trTop,
+    cfb
+      ? formatFavoredMetric(metrics, "away", metrics?.diff, { decimals: 1, signed: true })
+      : isFavRow(row, "away")
+      ? formatNumber(row.rating_diff_favored_team, { decimals: 1, signed: true })
+      : ""
+  );
+  appendCell(
+    trTop,
+    cfb
+      ? formatFavoredMetric(metrics, "away", metrics?.rvo, { decimals: 1, signed: true })
+      : isFavRow(row, "away")
+      ? formatNumber(row.rating_vs_odds, { decimals: 1, signed: true })
+      : ""
+  );
+  appendCell(
+    trTop,
+    cfb ? formatFavoredMetric(metrics, "away", metrics?.sos, { decimals: 2 }) : formatNumber(row.away_sos),
+    { numeric: true }
+  );
+  appendCell(
+    trTop,
+    cfb
+      ? formatFavoredMetric(metrics, "away", metrics?.sosDiff, { decimals: 2, signed: true })
+      : sosDiffForRow(row.home_sos, row.away_sos, "away"),
+    { numeric: true }
+  );
 
-  // Current PR (away)
-  appendCell(trTop, formatNumber(row.away_pr), { numeric: true });
-
-  // Diff (favored only per your buildTeamRow)
-  appendCell(trTop, isFavRow(row, "away")
-    ? formatNumber(row.rating_diff_favored_team, { decimals: 1, signed: true }) : "");
-
-  // Rating vs Odds (favored only)
-  appendCell(trTop, isFavRow(row, "away")
-    ? formatNumber(row.rating_vs_odds, { decimals: 1, signed: true }) : "");
-
-  // SoS (away)
-  appendCell(trTop, formatNumber(row.away_sos), { numeric: true });
-
-  // SoS diff (only on higher-SoS row; else blank)
-  appendCell(trTop, sosDiffForRow(row.home_sos, row.away_sos, "away"), { numeric: true });
-
-  // ===== bottom row (home) =====
-
-  appendCell(trBot, formatTeamNumber(row, "home"));                              // Team #
-  appendCell(trBot, resolveTeamName(row, "home"));                               // Team
-  appendCell(trBot, formatOddsCell(row, "home"));                                // Odds
-  appendCell(trBot, isFavRow(row, "home") ? formatNumber(row.total, {            // Total (fav only)
-    decimals: 1, signed: true }) : "");
-  appendCell(trBot, teamRecord(row, "home"));                                    // W-L-T
-  appendCell(trBot, formatNumber(row.home_pr), { numeric: true });               // Current PR
-  appendCell(trBot, isFavRow(row, "home") ?                                      // Diff (fav only)
-    formatNumber(row.rating_diff_favored_team, { decimals: 1, signed: true }) : "");
-  appendCell(trBot, isFavRow(row, "home") ?                                      // RvO (fav only)
-    formatNumber(row.rating_vs_odds, { decimals: 1, signed: true }) : "");
-  appendCell(trBot, formatNumber(row.home_sos), { numeric: true });              // SoS
-  appendCell(trBot, sosDiffForRow(row.home_sos, row.away_sos, "home"), {         // SoS diff (higher-SoS row only)
-    numeric: true });
+  appendCell(trBot, formatTeamNumber(row, "home"));
+  appendCell(trBot, resolveTeamName(row, "home"));
+  appendCell(trBot, formatOddsCell(row, "home"));
+  appendCell(
+    trBot,
+    isFavRow(row, "home") ? formatNumber(row.total, { decimals: 1, signed: true }) : ""
+  );
+  appendCell(trBot, teamRecord(row, "home"));
+  appendCell(
+    trBot,
+    cfb
+      ? formatFavoredMetric(metrics, "home", metrics?.pr, { decimals: 2 })
+      : formatNumber(row.home_pr),
+    { numeric: true }
+  );
+  appendCell(
+    trBot,
+    cfb
+      ? formatFavoredMetric(metrics, "home", metrics?.diff, { decimals: 1, signed: true })
+      : isFavRow(row, "home")
+      ? formatNumber(row.rating_diff_favored_team, { decimals: 1, signed: true })
+      : ""
+  );
+  appendCell(
+    trBot,
+    cfb
+      ? formatFavoredMetric(metrics, "home", metrics?.rvo, { decimals: 1, signed: true })
+      : isFavRow(row, "home")
+      ? formatNumber(row.rating_vs_odds, { decimals: 1, signed: true })
+      : ""
+  );
+  appendCell(
+    trBot,
+    cfb ? formatFavoredMetric(metrics, "home", metrics?.sos, { decimals: 2 }) : formatNumber(row.home_sos),
+    { numeric: true }
+  );
+  appendCell(
+    trBot,
+    cfb
+      ? formatFavoredMetric(metrics, "home", metrics?.sosDiff, { decimals: 2, signed: true })
+      : sosDiffForRow(row.home_sos, row.away_sos, "home"),
+    { numeric: true }
+  );
 
   return [trTop, trBot];
 }
@@ -809,9 +979,14 @@ function buildTeamRow(row, side, gameNumber) {
 function resolveTeamName(row, side) {
   const sourceKey = side === "home" ? "sagarin_row_home" : "sagarin_row_away";
   const fromSagarin = row?.raw_sources?.[sourceKey]?.team;
-  if (fromSagarin) return fromSagarin;
   const raw = side === "home" ? row.home_team_raw : row.away_team_raw;
   const norm = side === "home" ? row.home_team_norm : row.away_team_norm;
+  if (isCFBLeague()) {
+    const base = fromSagarin ?? raw ?? norm;
+    const display = toDisplayName(base, raw ?? norm);
+    return display || (raw ? String(raw) : norm ? String(norm) : MISSING_VALUE);
+  }
+  if (fromSagarin) return fromSagarin;
   return formatTeam(norm, raw);
 }
 
@@ -1169,6 +1344,13 @@ function formatKickoff(isoString) {
 }
 
 function formatTeam(norm, raw) {
+  if (isCFBLeague()) {
+    const display = toDisplayName(raw ?? norm, raw ?? norm);
+    if (display) return display;
+    if (raw) return String(raw);
+    if (norm) return String(norm);
+    return MISSING_VALUE;
+  }
   if (raw) return raw.toUpperCase();
   if (norm) return String(norm).toUpperCase();
   return MISSING_VALUE;
