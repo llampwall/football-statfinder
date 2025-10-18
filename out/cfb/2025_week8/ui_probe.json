@@ -1,0 +1,25 @@
+{
+  "probe": "cfb-gameview",
+  "season": 2025,
+  "week": 8,
+  "samples": [
+    {
+      "game_key": "20251019_0000_cincinnati_oklahoma_state",
+      "favored_label": "Cincinnati",
+      "spread_cell_examples": {
+        "away_row": "CIN -23.5",
+        "home_row": ""
+      },
+      "total_display": "57.5"
+    },
+    {
+      "game_key": "20251019_0230_florida_state_stanford",
+      "favored_label": null,
+      "spread_cell_examples": {
+        "away_row": "",
+        "home_row": ""
+      },
+      "total_display": ""
+    }
+  ]
+}
