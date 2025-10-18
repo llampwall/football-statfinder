@@ -3,10 +3,10 @@
   "week": 8,
   "window": "2025-10-13T23:00:00Z -> 2025-10-20T02:30:00Z",
   "stats": {
-    "events_total": 63,
-    "events_after_window_filter": 51,
+    "events_total": 62,
+    "events_after_window_filter": 50,
     "matched": 38,
-    "unmatched": 13
+    "unmatched": 12
   },
   "samples": {
     "matched": [
@@ -407,14 +407,6 @@
         "home_norm": "lsu",
         "away_norm": "texasaandm",
         "why": "outside_window"
-      },
-      {
-        "event_home": "California Golden Bears",
-        "event_away": "North Carolina Tar Heels",
-        "event_time": "2025-10-18T02:40:22Z",
-        "home_norm": "californiagolden",
-        "away_norm": "northcarolinatarheels",
-        "why": "no_schedule_candidate"
       },
       {
         "event_home": "UMass Minutemen",

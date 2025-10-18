@@ -7,12 +7,14 @@ import json
 import math
 import subprocess
 import sys
+from collections import Counter
 from pathlib import Path
 from typing import Dict, List, Optional
 
 OUT_ROOT = Path(__file__).resolve().parents[1] / "out"
 
 from src.fetch_games_cfb import load_games, filter_week_reg
+from src.cfb_ats import apply_ats_to_week, build_team_ats
 from src.schedule_master_cfb import (
     ensure_weeks_present as ensure_cfb_schedule_master,
     enrich_from_local_odds,
@@ -123,6 +125,53 @@ def write_gaps_report(
         "notes": report_notes,
     }
     report_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+
+
+def _has_number(value) -> bool:
+    if value is None:
+        return False
+    try:
+        return math.isfinite(float(value))
+    except (TypeError, ValueError):
+        return False
+
+
+def log_odds_join_audit(season: int, week: int, game_records: List[dict], base_dir: Path) -> None:
+    num_games = len(game_records)
+    num_with_spread = sum(1 for rec in game_records if _has_number(rec.get("spread_home_relative")))
+    num_with_total = sum(1 for rec in game_records if _has_number(rec.get("total")))
+    num_with_both = sum(
+        1
+        for rec in game_records
+        if _has_number(rec.get("spread_home_relative")) and _has_number(rec.get("total"))
+    )
+
+    unmatched_names: List[str] = []
+    debug_path = base_dir / "odds_match_debug.json"
+    name_counter: Counter[str] = Counter()
+    if debug_path.exists():
+        try:
+            debug_data = json.loads(debug_path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            print(f"WARNING: Unable to parse odds debug file ({debug_path})")
+        else:
+            unmatched_samples = (
+                debug_data.get("samples", {}).get("unmatched") if isinstance(debug_data, dict) else None
+            )
+            if unmatched_samples and isinstance(unmatched_samples, list):
+                for sample in unmatched_samples:
+                    if not isinstance(sample, dict):
+                        continue
+                    for key in ("event_home", "event_away", "home_norm", "away_norm"):
+                        name = sample.get(key)
+                        if name:
+                            name_counter[str(name)] += 1
+    unmatched_names = [name for name, _ in name_counter.most_common(5)]
+
+    print(
+        f"CFB odds join: rows={num_games} spread={num_with_spread} total={num_with_total} "
+        f"both={num_with_both} unmatched_names={unmatched_names}"
+    )
 
 
 def build_summary(season: int, week: int) -> Dict[str, int]:
@@ -361,6 +410,20 @@ def main() -> int:
         print(f"FAIL: CFB Game View missing fields: {', '.join(missing_favorite_fields)}")
         return 1
     print(f"PASS: CFB Game View rows={len(gv_records)} ({gv_jsonl})")
+    log_odds_join_audit(season, week, gv_records, base_dir)
+    team_ats = build_team_ats(season, week)
+    rows_updated = apply_ats_to_week(season, week, team_ats)
+    weeks_meta = getattr(build_team_ats, "meta", {})
+    scanned_weeks = weeks_meta.get("weeks_scanned") if isinstance(weeks_meta, dict) else []
+    scanned_count = len(scanned_weeks) if scanned_weeks else 0
+    zero_lined = getattr(apply_ats_to_week, "zero_lined", 0)
+    teams_with_data = len(team_ats)
+    prior_label = "none" if week <= 1 else f"1..{week-1}"
+    print(
+        f"CFB ATS: season={season} week={week} prior_weeks={prior_label} scanned={scanned_count} "
+        f"teams={teams_with_data} rows_updated={rows_updated} zero_lined={zero_lined}"
+    )
+    notes.append(f"ATS rows={rows_updated} teams={teams_with_data} zero={zero_lined}")
     notes.append(f"Game View rows={len(gv_records)}")
 
     # Gaps report

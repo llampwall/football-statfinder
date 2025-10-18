@@ -53,11 +53,12 @@
   "notes": [
     "Schedule rows=295",
     "League metrics 136/136 teams meeting threshold (required 100); ranks_ok=1.00",
-    "Odds matched 38/51; unmatched=13",
+    "Odds matched 38/50; unmatched=12",
     "Master enrichment 38/295",
     "Sagarin rows=134; master=6160",
     "Sidecars 296/295",
     "Sagarin enrichment 100%/89%",
+    "ATS rows=0 teams=0 zero=118",
     "Game View rows=59",
     "NFL week baseline not found; skipping cross-league key comparison."
   ]

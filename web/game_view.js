@@ -42,7 +42,7 @@ const els = {
 
 const STORAGE_KEY = "game-view:last-selection";
 const WEEK_CACHE_PREFIX = "week-view:games:";
-const CACHE_VERSION = "v2";
+const CACHE_VERSION = "v4";
 const LEAGUE_STORAGE_KEY = "game-view:league";
 const DEFAULT_LEAGUE = "nfl";
 const VALID_LEAGUES = new Set(["nfl", "cfb"]);
@@ -348,6 +348,24 @@ async function loadGames(autoGameKey) {
   let fromCache = false;
 
   const leagueLower = (paths.league || "").toLowerCase();
+  const cacheKey = weekCacheKey(paths.league, season, week);
+  if (records && records.length > 0) {
+    const staleSchema = records.some(
+      (row) =>
+        !row ||
+        !Object.prototype.hasOwnProperty.call(row, "home_pr") ||
+        !Object.prototype.hasOwnProperty.call(row, "rating_vs_odds")
+    );
+    if (staleSchema) {
+      console.warn("Cache stale (missing odds/ratings fields): refetching from network");
+      try {
+        window.localStorage.removeItem(cacheKey);
+      } catch {
+        // ignore remove failures
+      }
+      records = null;
+    }
+  }
   if (records && records.length > 0 && leagueLower === "cfb") {
     const sample = records.slice(0, Math.min(25, records.length));
     const covered =
@@ -361,13 +379,13 @@ async function loadGames(autoGameKey) {
     if (sample.length > 0 && coverage < 0.6) {
       console.warn("Cache stale (missing CFB odds/metrics): refetching from network");
       try {
-        window.localStorage.removeItem(weekCacheKey(paths.league, season, week));
+        window.localStorage.removeItem(cacheKey);
       } catch {
         // ignore remove failures
       }
       records = null;
     } else if (records) {
-      console.info("Cache OK (v2): using cached games:", records.length);
+      console.info("Cache OK (v3): using cached games:", records.length);
     }
   }
 
@@ -402,7 +420,7 @@ async function loadGames(autoGameKey) {
   } else {
     fromCache = true;
     if (leagueLower !== "cfb") {
-      console.info("Cache OK (v2): using cached games:", records.length);
+      console.info("Cache OK (v3): using cached games:", records.length);
     }
     setStatus("Loaded games from cache.");
     STATE.weekSourcePath = paths.gamesJsonl;
@@ -686,15 +704,12 @@ function renderTeamStats(game, sidecar, teamNames) {
 
   els.teamStatsBody.innerHTML = "";
   const league = STATE.league ?? DEFAULT_LEAGUE;
-  const atsSources = { home: "none", away: "none" };
 
   rows.forEach(({ prefix, label }) => {
     const tr = document.createElement("tr");
     let atsCell = "";
     if (league === "cfb") {
-      const { value: atsValue, source } = resolveAtsValue(game, sidecar, prefix);
-      atsCell = fallback(atsValue);
-      atsSources[prefix] = source || "none";
+      atsCell = MISSING_VALUE;
     }
     const cells = [
       label,
@@ -728,12 +743,6 @@ function renderTeamStats(game, sidecar, teamNames) {
 
     els.teamStatsBody.appendChild(tr);
   });
-
-  if (league === "cfb") {
-    console.log(
-      `[CFB Game] ATS sources: home=${atsSources.home} away=${atsSources.away}`
-    );
-  }
 }
 
 function resolveAtsValue(game, sidecar, prefix) {
