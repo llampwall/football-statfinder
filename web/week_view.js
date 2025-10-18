@@ -22,6 +22,8 @@ const LEAGUE_STORAGE_KEY = "week-view:league";
 const DEFAULT_LEAGUE = "nfl";
 const VALID_LEAGUES = new Set(["nfl", "cfb"]);
 const MISSING_VALUE = "\u2014";
+const WEEK_CACHE_PREFIX = "week-view:games:";
+const CACHE_VERSION = "v2";
 let timezoneLogged = false;
 let warnedTeamNumber = false;
 let warnedGameNumber = false;
@@ -397,6 +399,45 @@ async function loadGames(paths) {
     );
     STATE.pathsLogged = true;
   }
+
+  const leagueLower = (paths.league || "").toLowerCase();
+  let records = readWeekCache(leagueLower, paths.season, paths.week);
+  if (records && records.length && leagueLower === "cfb") {
+    const sample = records.slice(0, Math.min(25, records.length));
+    const covered =
+      sample.length === 0
+        ? 0
+        : sample.reduce(
+            (count, row) => count + (hasMetricsCoverageCFB(row) ? 1 : 0),
+            0
+          );
+    const coverage = sample.length === 0 ? 0 : covered / sample.length;
+    if (sample.length > 0 && coverage < 0.6) {
+      console.warn("Cache stale (missing CFB odds/metrics): refetching from network");
+      try {
+        localStorage.removeItem(weekCacheKey(leagueLower, paths.season, paths.week));
+      } catch {
+        // ignore failures
+      }
+      records = null;
+    } else if (records) {
+      console.info("Cache OK (v2): using cached games:", records.length);
+    }
+  }
+
+  if (records && records.length) {
+    if (leagueLower !== "cfb") {
+      console.info("Cache OK (v2): using cached games:", records.length);
+    }
+    return {
+      success: true,
+      rows: records,
+      count: records.length,
+      message: "Loaded from cache",
+      sourcePath: relPath,
+    };
+  }
+
   try {
     const res = await fetch(url.toString(), { cache: "no-store" });
     if (!res.ok) {
@@ -404,6 +445,9 @@ async function loadGames(paths) {
     }
     const text = await res.text();
     const parsed = parseJsonl(text);
+    if (parsed.records.length) {
+      writeWeekCache(leagueLower, paths.season, paths.week, parsed.records);
+    }
     return {
       success: true,
       rows: parsed.records,
@@ -1167,6 +1211,12 @@ function hasNumeric(value) {
   return Number.isFinite(num);
 }
 
+function hasMetricsCoverageCFB(row) {
+  const homePf = Number(row?.home_pf_pg);
+  const awayPf = Number(row?.away_pf_pg);
+  return Number.isFinite(homePf) || Number.isFinite(awayPf);
+}
+
 function coerceInt(value) {
   if (value === null || value === undefined) return null;
   if (typeof value === "string" && value.trim() === "") return null;
@@ -1185,6 +1235,36 @@ function persistSelection(selection) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
   } catch {
     // ignore storage issues
+  }
+}
+
+function weekCacheKey(league, season, week) {
+  return `${WEEK_CACHE_PREFIX}${CACHE_VERSION}:${league}:${season}:${week}`;
+}
+
+function readWeekCache(league, season, week) {
+  try {
+    const raw = localStorage.getItem(weekCacheKey(league, season, week));
+    if (!raw) return null;
+    try {
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed : null;
+    } catch {
+      return null;
+    }
+  } catch {
+    return null;
+  }
+}
+
+function writeWeekCache(league, season, week, records) {
+  try {
+    localStorage.setItem(
+      weekCacheKey(league, season, week),
+      JSON.stringify(Array.isArray(records) ? records : [])
+    );
+  } catch {
+    // ignore persistence issues
   }
 }
 

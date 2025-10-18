@@ -42,6 +42,7 @@ const els = {
 
 const STORAGE_KEY = "game-view:last-selection";
 const WEEK_CACHE_PREFIX = "week-view:games:";
+const CACHE_VERSION = "v2";
 const LEAGUE_STORAGE_KEY = "game-view:league";
 const DEFAULT_LEAGUE = "nfl";
 const VALID_LEAGUES = new Set(["nfl", "cfb"]);
@@ -346,6 +347,30 @@ async function loadGames(autoGameKey) {
   let records = Array.isArray(cached) ? cached : null;
   let fromCache = false;
 
+  const leagueLower = (paths.league || "").toLowerCase();
+  if (records && records.length > 0 && leagueLower === "cfb") {
+    const sample = records.slice(0, Math.min(25, records.length));
+    const covered =
+      sample.length === 0
+        ? 0
+        : sample.reduce(
+            (count, row) => count + (hasFavoriteCoverageCFB(row) ? 1 : 0),
+            0
+          );
+    const coverage = sample.length === 0 ? 0 : covered / sample.length;
+    if (sample.length > 0 && coverage < 0.6) {
+      console.warn("Cache stale (missing CFB odds/metrics): refetching from network");
+      try {
+        window.localStorage.removeItem(weekCacheKey(paths.league, season, week));
+      } catch {
+        // ignore remove failures
+      }
+      records = null;
+    } else if (records) {
+      console.info("Cache OK (v2): using cached games:", records.length);
+    }
+  }
+
   if (!records || records.length === 0) {
     const relPath = paths.gamesJsonl;
     const fetchPath = `../${relPath}`;
@@ -376,9 +401,9 @@ async function loadGames(autoGameKey) {
     }
   } else {
     fromCache = true;
-    console.log(
-      `INFO: Loaded ${records.length} cached games for season=${season} week=${week} league=${paths.league.toUpperCase()}`
-    );
+    if (leagueLower !== "cfb") {
+      console.info("Cache OK (v2): using cached games:", records.length);
+    }
     setStatus("Loaded games from cache.");
     STATE.weekSourcePath = paths.gamesJsonl;
   }
@@ -447,6 +472,7 @@ async function loadSingleGame(gameKey) {
   const sidecarPath = `../${sidecarRel}`;
   const url = new URL(sidecarPath, window.location.href);
   let sidecar;
+  let sidecarOk = false;
   try {
     const res = await fetch(url.toString());
     if (!res.ok) {
@@ -460,8 +486,9 @@ async function loadSingleGame(gameKey) {
     const sanitized = raw.replace(/([-+]?Infinity|\bNaN\b)/gi, "null");
     sidecar = JSON.parse(sanitized);
     console.log(`PASS: Sidecar loaded (${sidecarPath})`);
+    sidecarOk = true;
   } catch (err) {
-    console.log(`FAIL: Sidecar loaded (${sidecarPath})`, err);
+    console.error(`FAIL: Sidecar loaded (${sidecarPath})`, err);
     setStatus(`Sidecar failed (${err.message})`);
     return;
   }
@@ -478,10 +505,23 @@ async function loadSingleGame(gameKey) {
 
   STATE.lastLoadedAt = new Date();
 
+  const leagueLowerCurrent = (STATE.weekPaths?.league ?? STATE.league ?? DEFAULT_LEAGUE).toLowerCase();
   renderHeader(game, teamNames);
+  if (leagueLowerCurrent === "cfb") {
+    const hasOdds =
+      hasNumeric(game?.spread_favored_team) || hasNumeric(game?.spread_home_relative);
+    console.info(`[CFB Game] odds ${hasOdds ? "present" : "missing"} for ${gameKey}`);
+    renderFavoriteBox(game);
+  }
   renderTeamStats(game, teamNames);
   renderTables(game, sidecar, teamNames);
-  await injectEOYIfAvailable();
+  const eoyStatus = await injectEOYIfAvailable();
+  if ((STATE.weekPaths?.league ?? STATE.league) === "cfb") {
+    const eoyOk = eoyStatus && eoyStatus.data && (eoyStatus.data.home || eoyStatus.data.away) ? "OK" : "SKIP";
+    console.info(
+      `[CFB Game] game_key=${gameKey} sidecar=${sidecarOk ? "OK" : "MISS"} eoy=${eoyOk} | season=${STATE.season} week=${STATE.week}`
+    );
+  }
 
   els.header.classList.remove("hidden");
   els.teamStatsSection.classList.remove("hidden");
@@ -503,6 +543,9 @@ async function loadSingleGame(gameKey) {
     home_present: coverCounts.home,
     away_present: coverCounts.away,
   });
+  if ((STATE.weekPaths?.league ?? STATE.league) === "cfb" && (!homePass || !awayPass)) {
+    console.warn("CFB snapshot metrics missing fields", coverCounts);
+  }
 
   setStatus("Game loaded.");
   els.diagnosticsNote.textContent = `Diagnostics: favorite fields ${hasAllFavoriteKeys ? "OK" : "missing"}, coverage home ${coverCounts.home}, away ${coverCounts.away}`;
@@ -534,34 +577,105 @@ function renderHeader(game, teamNames) {
     <div class="meta-line">Game key: ${fallback(game.game_key)}</div>
   `;
 
-  const favTeam =
-    game.favored_side === "HOME"
-      ? homeName
-      : game.favored_side === "AWAY"
-      ? awayName
-      : null;
-  const spread = formatNumber(game.spread_favored_team, { decimals: 1, signed: true });
+  const league = (STATE.weekPaths?.league ?? STATE.league ?? DEFAULT_LEAGUE).toLowerCase();
+  if (league !== "cfb") {
+    const favoredSide = (game.favored_side || "").toUpperCase();
+    const favTeam =
+      favoredSide === "HOME" ? homeName : favoredSide === "AWAY" ? awayName : null;
+    let favoredLine = MISSING_VALUE;
+    if (favTeam) {
+      if (hasNumeric(game.spread_favored_team)) {
+        const magnitude = Math.abs(Number(game.spread_favored_team));
+        const spread = formatNumber(magnitude, { decimals: 1 });
+        favoredLine = spread !== MISSING_VALUE ? `${favTeam} (\u2212${spread})` : favTeam;
+      } else {
+        favoredLine = favTeam;
+      }
+    }
+    const snapshotIso = typeof game.snapshot_at === "string" ? game.snapshot_at : null;
+    const snapshotPT = snapshotIso ? fmtKickoffPT(snapshotIso) : MISSING_VALUE;
+    const snapshotUTC = snapshotIso ? formatKickoff(snapshotIso) : null;
+    const snapshotTitle =
+      snapshotUTC && snapshotUTC !== MISSING_VALUE ? ` title="UTC: ${snapshotUTC}"` : "";
+    els.favoriteBlock.innerHTML = `
+      <h3>Favorite & Spread</h3>
+      <div class="meta-line">Favored: ${favoredLine}</div>
+      <div class="meta-line">Odds source: ${fallback(game.odds_source)}</div>
+      <div class="meta-line">Snapshot: <span${snapshotTitle}>${snapshotPT}</span></div>
+    `;
+
+    els.marketBlock.innerHTML = `
+      <h3>Market & Ratings</h3>
+      <div class="meta-line">PR Diff (favored): ${formatNumber(game.rating_diff_favored_team, {
+        decimals: 1,
+        signed: true,
+      })}</div>
+      <div class="meta-line">Rating vs Odds: ${formatNumber(game.rating_vs_odds, {
+        decimals: 1,
+        signed: true,
+      })}</div>
+      <div class="meta-line">Total: ${formatNumber(game.total, { decimals: 1 })}</div>
+    `;
+  }
+}
+
+function ensureFavoriteElements() {
+  if (els.favoriteFavored) return;
   els.favoriteBlock.innerHTML = `
     <h3>Favorite & Spread</h3>
-    <div class="meta-line">Favored: ${
-      favTeam ? `${favTeam}${spread !== MISSING_VALUE ? ` (${spread})` : ""}` : MISSING_VALUE
-    }</div>
-    <div class="meta-line">Odds source: ${fallback(game.odds_source)}</div>
-    <div class="meta-line">Snapshot: ${fallback(game.snapshot_at)}</div>
+    <div class="meta-line">Favored: <span id="favorite-favored">${MISSING_VALUE}</span></div>
+    <div class="meta-line">Odds source: <span id="favorite-source">${MISSING_VALUE}</span></div>
+    <div class="meta-line">Snapshot: <span id="favorite-snapshot">${MISSING_VALUE}</span></div>
+    <div class="meta-line">Total: <span id="favorite-total">${MISSING_VALUE}</span></div>
   `;
+  els.favoriteFavored = document.getElementById("favorite-favored");
+  els.favoriteSource = document.getElementById("favorite-source");
+  els.favoriteSnapshot = document.getElementById("favorite-snapshot");
+  els.favoriteTotal = document.getElementById("favorite-total");
+}
 
+function ensureMarketElements() {
+  if (els.marketPrDiff) return;
   els.marketBlock.innerHTML = `
     <h3>Market & Ratings</h3>
-    <div class="meta-line">PR Diff (favored): ${formatNumber(game.rating_diff_favored_team, {
-      decimals: 1,
-      signed: true,
-    })}</div>
-    <div class="meta-line">Rating vs Odds: ${formatNumber(game.rating_vs_odds, {
-      decimals: 1,
-      signed: true,
-    })}</div>
-    <div class="meta-line">Total: ${formatNumber(game.total, { decimals: 1 })}</div>
+    <div class="meta-line">PR Diff (favored): <span id="market-pr-diff">${MISSING_VALUE}</span></div>
+    <div class="meta-line">Rating vs Odds: <span id="market-rvo">${MISSING_VALUE}</span></div>
   `;
+  els.marketPrDiff = document.getElementById("market-pr-diff");
+  els.marketRvo = document.getElementById("market-rvo");
+}
+
+function renderFavoriteBox(game) {
+  ensureFavoriteElements();
+  ensureMarketElements();
+
+  const favored = (game.favored_side || "").toUpperCase();
+  const favCode =
+    favored === "HOME"
+      ? teamShortCode(game, "home")
+      : favored === "AWAY"
+      ? teamShortCode(game, "away")
+      : null;
+
+  let favoredLine = MISSING_VALUE;
+  if (favCode && hasNumeric(game.spread_favored_team)) {
+    const magnitude = Math.abs(Number(game.spread_favored_team));
+    const spreadTxt = formatNumber(magnitude, { decimals: 1 });
+    favoredLine = spreadTxt !== MISSING_VALUE ? `${favCode} \u2212${spreadTxt}` : favCode;
+  } else if (favCode) {
+    favoredLine = favCode;
+  }
+  els.favoriteFavored.textContent = favoredLine ?? MISSING_VALUE;
+
+  els.favoriteSource.textContent = fallback(game.odds_source);
+  const snapshotIso = typeof game.snapshot_at === "string" ? game.snapshot_at : null;
+  els.favoriteSnapshot.textContent = snapshotIso ? fmtKickoffPT(snapshotIso) : MISSING_VALUE;
+  els.favoriteTotal.textContent = hasNumeric(game.total)
+    ? formatNumber(Number(game.total), { decimals: 1 })
+    : MISSING_VALUE;
+
+  els.marketPrDiff.textContent = MISSING_VALUE;
+  els.marketRvo.textContent = MISSING_VALUE;
 }
 
 function renderTeamStats(game, teamNames) {
@@ -579,8 +693,8 @@ function renderTeamStats(game, teamNames) {
       formatNumber(game[`${prefix}_pf_pg`], { decimals: 1 }),
       formatNumber(game[`${prefix}_pa_pg`], { decimals: 1 }),
       fallback(game[`${prefix}_su`]),
-      fallback(game[`${prefix}_ats`]),
-      formatNumber(game[`${prefix}_to_margin_pg`], { decimals: 1, signed: true }),
+      "",
+      formatSigned(game[`${prefix}_to_margin_pg`], { decimals: 1 }),
       formatNumber(game[`${prefix}_ry_pg`], { decimals: 1 }),
       rankOrDash(game[`${prefix}_rush_rank`]),
       formatNumber(game[`${prefix}_py_pg`], { decimals: 1 }),
@@ -652,6 +766,7 @@ async function injectEOYIfAvailable() {
   const awayKey = game?.away_team_norm ?? game?.raw_sources?.sagarin_row_away?.team ?? game?.away_team_raw ?? null;
   const data = await loadEOY(prior, homeKey, awayKey);
   renderEOY(container, prior, data);
+  return { priorSeason: prior, data };
 }
 
 async function loadEOY(priorSeason, homeNorm, awayNorm) {
@@ -1128,6 +1243,15 @@ function getTeamDisplayName(game, side) {
   return side === "home" ? "Home" : "Away";
 }
 
+function teamShortCode(game, side) {
+  const prefix = side === "home" ? "home" : "away";
+  const norm = (game?.[`${prefix}_team_norm`] || "").toUpperCase();
+  const raw = (game?.[`${prefix}_team_raw`] || "").toUpperCase();
+  const display = (norm || raw).replace(/[^A-Z0-9]/g, "");
+  if (!display) return side === "home" ? "HOME" : "AWAY";
+  return display.slice(0, 3);
+}
+
 function toDisplayName(value) {
   if (value === null || value === undefined) return null;
   const str = String(value).trim();
@@ -1155,10 +1279,30 @@ function nicknameCityFromString(value) {
 }
 
 function rankOrDash(value) {
+  return hasNumeric(value) ? String(Number(value)) : MISSING_VALUE;
+}
+
+function formatSigned(value, opts = {}) {
   if (!hasNumeric(value)) return MISSING_VALUE;
   const num = Number(value);
-  if (num < 1 || num > 32) return MISSING_VALUE;
-  return num.toFixed(0);
+  const magnitude = formatNumber(Math.abs(num), { decimals: 1, ...opts });
+  if (magnitude === MISSING_VALUE) return MISSING_VALUE;
+  return `${num >= 0 ? "+" : "\u2212"}${magnitude}`;
+}
+
+function hasFavoriteCoverageCFB(row) {
+  if (!row || typeof row !== "object") return false;
+  const side = String(row.favored_side || "").trim().toUpperCase();
+  const spread = Number(row.spread_favored_team);
+  const source = row.odds_source;
+  const snap = row.snapshot_at;
+  const total = Number(row.total);
+  const sideOk = side === "HOME" || side === "AWAY";
+  const spreadOk = Number.isFinite(spread);
+  const sourceOk = typeof source === "string" && source.trim().length > 0;
+  const snapOk = typeof snap === "string" && snap.trim().length > 0;
+  const totalOk = Number.isFinite(total);
+  return sideOk && spreadOk && sourceOk && snapOk && totalOk;
 }
 
 function formatOpponent(site, opponent) {
@@ -1230,7 +1374,7 @@ function persistSelection(payload) {
 }
 
 function weekCacheKey(league, season, week) {
-  return `${WEEK_CACHE_PREFIX}${league}:${season}:${week}`;
+  return `${WEEK_CACHE_PREFIX}${CACHE_VERSION}:${league}:${season}:${week}`;
 }
 
 function readWeekCache(league, season, week) {
