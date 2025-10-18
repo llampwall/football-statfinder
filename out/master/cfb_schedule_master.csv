@@ -5838,7 +5838,7 @@ CFB,2025,8,REG,2025-10-18T21:00:00+00:00,Louisiana,Southern Miss,louisiana,south
 CFB,2025,8,REG,2025-10-18T18:00:00+00:00,Luther,Simpson College (ia),luther,simpsoncollegeia,,,,,cfbd
 CFB,2025,8,REG,2025-10-18T20:30:00+00:00,Lyoncoll,Centenary,lyoncoll,centenary,,,,,cfbd
 CFB,2025,8,REG,2025-10-18T18:00:00+00:00,Macalester,Augsburg,macalester,augsburg,,,,,cfbd
-CFB,2025,8,REG,2025-10-17T22:00:00+00:00,Maine Maritime,Biddeford,mainemaritime,biddeford,,,,,cfbd
+CFB,2025,8,REG,2025-10-17T22:00:00+00:00,Maine Maritime,Biddeford,mainemaritime,biddeford,14.0,77.0,,,cfbd
 CFB,2025,8,REG,2025-10-18T17:30:00+00:00,Marietta,Muskingum University,marietta,muskingumuniversity,,,,,cfbd
 CFB,2025,8,REG,2025-10-18T19:30:00+00:00,Marshall,Texas State,marshall,texasstate,,,,,cfbd
 CFB,2025,8,REG,2025-10-18T17:00:00+00:00,Martin Luther,Greenville,martinluther,greenville,,,,,cfbd
@@ -5990,7 +5990,7 @@ CFB,2025,8,REG,2025-10-18T18:00:00+00:00,Wisconsin-stevens Pt,Wisconsin-river Fa
 CFB,2025,8,REG,2025-10-18T00:00:00+00:00,Wisconsin-whitewater,Wisconsin-stout,wisconsinwhitewater,wisconsinstout,,,,,cfbd
 CFB,2025,8,REG,2025-10-18T20:00:00+00:00,Wittenberg,Denison University,wittenberg,denisonuniversity,,,,,cfbd
 CFB,2025,8,REG,2025-10-18T16:00:00+00:00,Wofford,Furman,wofford,furman,,,,,cfbd
-CFB,2025,8,REG,2025-10-17T23:00:00+00:00,Worcester Polytechnic Institute,Springfield,worcesterpolytechnicinstitute,springfield,,,,,cfbd
+CFB,2025,8,REG,2025-10-17T23:00:00+00:00,Worcester Polytechnic Institute,Springfield,worcesterpolytechnicinstitute,springfield,10.0,24.0,,,cfbd
 CFB,2025,8,REG,2025-10-18T16:00:00+00:00,Yale,Stonehill,yale,stonehill,,,,,cfbd
 CFB,2025,9,REG,2025-10-26T00:00:00+00:00,Adams State,New Mexico Highlands,adamsstate,newmexicohighlands,,,,,cfbd
 CFB,2025,9,REG,2025-10-25T17:00:00+00:00,Adrian,Hope College,adrian,hopecollege,,,,,cfbd

@@ -281,20 +281,30 @@ def main() -> int:
         print(f"WARNING: master enrichment failed: {exc}")
         notes.append("Master enrichment failed")
 
-    # Sagarin snapshot (may be stubbed)
+    # Sagarin snapshot + master upsert
     print("\n>>> Running src.fetch_sagarin_week_cfb .")
     sag_rc = run_module("src.fetch_sagarin_week_cfb", season, week, check=False)
     sag_csv = base_dir / f"sagarin_cfb_{season}_wk{week}.csv"
+    receipt_path = base_dir / f"sagarin_cfb_{season}_wk{week}_receipt.json"
     if sag_rc != 0:
-        print("FAIL: CFB Sagarin step failed.")
+        debug_hint = receipt_path if receipt_path.exists() else (base_dir / f"sagarin_cfb_{season}_wk{week}_raw.txt")
+        print(f"FAIL: CFB Sagarin fetch failed; see {debug_hint}")
         return sag_rc or 1
     sag_rows = count_csv_rows(sag_csv)
     if sag_rows == 0:
-        print("SKIP: CFB Sagarin not enabled (0 rows emitted).")
-        notes.append("Sagarin skipped (stub output)")
-    else:
-        print(f"PASS: CFB Sagarin rows={sag_rows}")
-        notes.append(f"Sagarin rows={sag_rows}")
+        debug_hint = receipt_path if receipt_path.exists() else sag_csv
+        print(f"FAIL: CFB Sagarin snapshot empty; see {debug_hint}")
+        return 1
+
+    print("\n>>> Running src.sagarin_master_cfb .")
+    master_rc = run_module("src.sagarin_master_cfb", season, week, check=False)
+    if master_rc != 0:
+        print("FAIL: CFB Sagarin master upsert failed.")
+        return master_rc or 1
+    master_csv = OUT_ROOT / "master" / "sagarin_cfb_master.csv"
+    master_rows = count_csv_rows(master_csv)
+    print(f"PASS: CFB Sagarin rows={sag_rows}; master_total={master_rows}")
+    notes.append(f"Sagarin rows={sag_rows}; master={master_rows}")
 
     # Sidecar timelines
     print("\n>>> Running src.build_team_timelines_cfb .")
