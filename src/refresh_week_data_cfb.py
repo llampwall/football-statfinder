@@ -23,6 +23,7 @@ from src.odds.cfb_ingest import ingest_cfb_odds_raw
 from src.odds.cfb_pin_to_schedule import pin_cfb_odds
 from src.odds.cfb_promote_week import promote_week_odds, diff_game_rows
 from src.ratings.sagarin_cfb_fetch import run_cfb_sagarin_staging
+from src.scores.cfb_backfill import backfill_cfb_scores
 from src.schedule_master_cfb import (
     ensure_weeks_present as ensure_cfb_schedule_master,
     enrich_from_local_odds,
@@ -574,19 +575,32 @@ def main() -> int:
     else:
         print("CFB ODDS PROMOTION: disabled via ODDS_PROMOTION_ENABLE")
 
+    backfill_summary = backfill_cfb_scores(season, week)
     team_ats = build_team_ats(season, week)
     rows_updated = apply_ats_to_week(season, week, team_ats)
     weeks_meta = getattr(build_team_ats, "meta", {})
     scanned_weeks = weeks_meta.get("weeks_scanned") if isinstance(weeks_meta, dict) else []
-    scanned_count = len(scanned_weeks) if scanned_weeks else 0
     zero_lined = getattr(apply_ats_to_week, "zero_lined", 0)
     teams_with_data = len(team_ats)
-    prior_label = "none" if week <= 1 else f"1..{week-1}"
-    print(
-        f"CFB ATS: season={season} week={week} prior_weeks={prior_label} scanned={scanned_count} "
-        f"teams={teams_with_data} rows_updated={rows_updated} zero_lined={zero_lined}"
+    weeks_label = (
+        "[" + ",".join(f"W{wk}" for wk in backfill_summary.get("weeks", [])) + "]"
+        if backfill_summary.get("weeks")
+        else "[]"
     )
-    notes.append(f"ATS rows={rows_updated} teams={teams_with_data} zero={zero_lined}")
+    scores_log = (
+        f"Scores(CFB): weeks={weeks_label} updated={backfill_summary.get('updated', 0)} "
+        f"skipped={backfill_summary.get('skipped', 0)}; ATS: teams={teams_with_data} "
+        f"rows_updated={rows_updated}"
+    )
+    print(scores_log)
+    notes.append(
+        f"Scores backfill {weeks_label} "
+        f"updated={backfill_summary.get('updated', 0)} skipped={backfill_summary.get('skipped', 0)} "
+        f"files={backfill_summary.get('files_rewritten', 0)}"
+    )
+    notes.append(
+        f"ATS rows={rows_updated} teams={teams_with_data} zero={zero_lined} weeks_scanned={scanned_weeks}"
+    )
     notes.append(f"Game View rows={len(gv_records)}")
 
     # Gaps report
