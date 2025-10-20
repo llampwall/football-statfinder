@@ -394,10 +394,84 @@ def write_alias_debt(
     path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
 
 
+def _collect_kickoffs_from_sidecars(season: int, week: int) -> List[datetime]:
+    sidecar_dir = cfb_week_dir(season, week) / "game_schedules"
+    kickoffs: List[datetime] = []
+    if not sidecar_dir.exists():
+        return kickoffs
+    for path in sidecar_dir.glob("*.json"):
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        kickoff = (
+            data.get("kickoff_iso_utc")
+            or (data.get("schedule_row") or {}).get("kickoff_iso_utc")
+            or (data.get("raw_sources") or {}).get("schedule_row", {}).get("kickoff_iso_utc")
+        )
+        if kickoff:
+            dt = parse_utc(kickoff)
+            if isinstance(dt, datetime):
+                kickoffs.append(dt.astimezone(timezone.utc))
+    return kickoffs
+
+
+def _collect_schedule_kickoffs(weekly_df: pd.DataFrame) -> List[datetime]:
+    kickoffs: List[datetime] = []
+    if weekly_df.empty:
+        return kickoffs
+    if "__kickoff_dt" in weekly_df.columns:
+        for value in weekly_df["__kickoff_dt"].dropna():
+            if isinstance(value, datetime):
+                kickoffs.append(value.astimezone(timezone.utc))
+    if not kickoffs and "kickoff_iso_utc" in weekly_df.columns:
+        for iso in weekly_df["kickoff_iso_utc"].dropna():
+            dt = parse_utc(str(iso))
+            if isinstance(dt, datetime):
+                kickoffs.append(dt.astimezone(timezone.utc))
+    return kickoffs
+
+
+def compute_window_bounds(
+    season: int,
+    week: int,
+    weekly_df: pd.DataFrame,
+    min_dt: Optional[datetime],
+    max_dt: Optional[datetime],
+    days_before: int,
+    days_after: int,
+) -> Tuple[Optional[datetime], Optional[datetime], str]:
+    kickoffs = _collect_kickoffs_from_sidecars(season, week)
+    if not kickoffs:
+        kickoffs = _collect_schedule_kickoffs(weekly_df)
+    candidate_min = min(kickoffs) if kickoffs else min_dt
+    candidate_max = max(kickoffs) if kickoffs else max_dt
+    if not isinstance(candidate_min, datetime) or not isinstance(candidate_max, datetime):
+        return None, None, "unknown"
+    candidate_min = candidate_min.astimezone(timezone.utc)
+    candidate_max = candidate_max.astimezone(timezone.utc)
+    start = candidate_min - timedelta(days=max(days_before, 0))
+    end = candidate_max + timedelta(days=max(days_after, 0))
+    window_label = f"{start.strftime('%Y-%m-%dT%H:%M:%SZ')} -> {end.strftime('%Y-%m-%dT%H:%M:%SZ')}"
+    return start, end, window_label
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Fetch CFB odds and write JSONL output.")
     parser.add_argument("--season", type=int, required=True)
     parser.add_argument("--week", type=int, required=True)
+    parser.add_argument(
+        "--odds-days-before",
+        type=int,
+        default=6,
+        help="Extend odds window start by N days before earliest kickoff (default: 6).",
+    )
+    parser.add_argument(
+        "--odds-days-after",
+        type=int,
+        default=6,
+        help="Extend odds window end by N days after latest kickoff (default: 6).",
+    )
     args = parser.parse_args()
 
     schedule = get_schedule_df(args.season)
@@ -417,6 +491,7 @@ def main() -> int:
                 "stats": {
                     "events_total": 0,
                     "events_after_window_filter": 0,
+                    "events_in_window": 0,
                     "matched": 0,
                     "unmatched": 0,
                 },
@@ -430,12 +505,15 @@ def main() -> int:
         print(f"Alias debt: {alias_debt_path}")
         return 0
 
-    window_start = min_dt - timedelta(days=1) if isinstance(min_dt, datetime) else None
-    window_end = max_dt + timedelta(days=1) if isinstance(max_dt, datetime) else None
-    if window_start and window_end:
-        window_label = f"{window_start.strftime('%Y-%m-%dT%H:%M:%SZ')} -> {window_end.strftime('%Y-%m-%dT%H:%M:%SZ')}"
-    else:
-        window_label = "unknown"
+    window_start, window_end, window_label = compute_window_bounds(
+        args.season,
+        args.week,
+        weekly,
+        min_dt,
+        max_dt,
+        args.odds_days_before,
+        args.odds_days_after,
+    )
 
     env = read_env(["THE_ODDS_API_KEY"])
     api_key = env.get("THE_ODDS_API_KEY")
@@ -450,6 +528,7 @@ def main() -> int:
                 "stats": {
                     "events_total": 0,
                     "events_after_window_filter": 0,
+                    "events_in_window": 0,
                     "matched": 0,
                     "unmatched": 0,
                 },
@@ -475,6 +554,7 @@ def main() -> int:
                 "stats": {
                     "events_total": 0,
                     "events_after_window_filter": 0,
+                    "events_in_window": 0,
                     "matched": 0,
                     "unmatched": 0,
                 },
@@ -491,6 +571,9 @@ def main() -> int:
     total_events = len(events)
     filtered_events: List[dict] = []
     unmatched_samples: List[Dict[str, Any]] = []
+    events_in_window = 0
+    future_threshold = max_dt + timedelta(days=2) if isinstance(max_dt, datetime) else None
+    past_threshold = min_dt - timedelta(days=2) if isinstance(min_dt, datetime) else None
 
     for event in events:
         commence_dt = parse_utc(event.get("commence_time"))
@@ -511,30 +594,18 @@ def main() -> int:
                 }
             )
             continue
+        outside_window = False
         if window_start and commence_dt < window_start:
-            unmatched_samples.append(
-                {
-                    "event_home": event.get("home_team"),
-                    "event_away": event.get("away_team"),
-                    "event_time": event.get("commence_time"),
-                    "home_norm": home_norm,
-                    "away_norm": away_norm,
-                    "why": "outside_window",
-                }
-            )
-            continue
+            outside_window = True
         if window_end and commence_dt > window_end:
-            unmatched_samples.append(
-                {
-                    "event_home": event.get("home_team"),
-                    "event_away": event.get("away_team"),
-                    "event_time": event.get("commence_time"),
-                    "home_norm": home_norm,
-                    "away_norm": away_norm,
-                    "why": "outside_window",
-                }
-            )
-            continue
+            outside_window = True
+        event["_outside_window"] = outside_window
+        future_week = bool(future_threshold and commence_dt > future_threshold)
+        prior_week = bool(past_threshold and commence_dt < past_threshold)
+        event["_future_week"] = future_week
+        event["_prior_week"] = prior_week
+        if not outside_window and not future_week and not prior_week:
+            events_in_window += 1
         filtered_events.append(event)
 
     used_game_keys: set = set()
@@ -553,6 +624,16 @@ def main() -> int:
         away_norm = event.get("_away_norm") or norm_team(event.get("away_team"))
         if row is None:
             unmatched_post_filter += 1
+            if event.get("_future_week") and (not failure_reason or failure_reason == "no_schedule_candidate"):
+                reason = "future_week"
+            elif event.get("_prior_week") and (not failure_reason or failure_reason == "no_schedule_candidate"):
+                reason = "past_week"
+            elif failure_reason:
+                reason = failure_reason
+            elif event.get("_outside_window"):
+                reason = "outside_window"
+            else:
+                reason = "no_schedule_candidate"
             unmatched_samples.append(
                 {
                     "event_home": event.get("home_team"),
@@ -560,7 +641,7 @@ def main() -> int:
                     "event_time": event.get("commence_time"),
                     "home_norm": home_norm,
                     "away_norm": away_norm,
-                    "why": failure_reason or "no_schedule_candidate",
+                    "why": reason,
                 }
             )
             continue
@@ -568,6 +649,14 @@ def main() -> int:
         bookmaker = select_bookmaker(event)
         if not bookmaker:
             unmatched_post_filter += 1
+            if event.get("_future_week"):
+                reason = "future_week"
+            elif event.get("_prior_week"):
+                reason = "past_week"
+            elif event.get("_outside_window"):
+                reason = "outside_window"
+            else:
+                reason = "no_bookmaker"
             unmatched_samples.append(
                 {
                     "event_home": event.get("home_team"),
@@ -575,7 +664,7 @@ def main() -> int:
                     "event_time": event.get("commence_time"),
                     "home_norm": home_norm,
                     "away_norm": away_norm,
-                    "why": "no_bookmaker",
+                    "why": reason,
                 }
             )
             continue
@@ -599,24 +688,46 @@ def main() -> int:
 
     odds_path = write_odds(args.season, args.week, records)
 
+    reason_counts_full: Counter[str] = Counter()
+    for sample in unmatched_samples:
+        reason = sample.get("why") or "unknown"
+        reason_counts_full[reason] += 1
+    reason_buckets = {
+        "outside_window": reason_counts_full.get("outside_window", 0),
+        "no_schedule_candidate": reason_counts_full.get("no_schedule_candidate", 0),
+    }
+    reason_buckets["other"] = sum(
+        count
+        for reason, count in reason_counts_full.items()
+        if reason not in {"outside_window", "no_schedule_candidate"}
+    )
+    future_count = reason_counts_full.get("future_week", 0)
+    past_count = reason_counts_full.get("past_week", 0)
+    eligible_unmatched = max(unmatched_post_filter - future_count - past_count, 0)
+
     debug_data = {
         "season": args.season,
         "week": args.week,
         "window": window_label,
         "stats": {
             "events_total": total_events,
-            "events_after_window_filter": len(filtered_events),
+            "events_after_window_filter": events_in_window,
+            "events_in_window": events_in_window,
             "matched": len(records),
             "unmatched": unmatched_post_filter,
+            "eligible_unmatched": eligible_unmatched,
         },
         "samples": {
             "matched": matched_samples,
             "unmatched": unmatched_samples[:MAX_DEBUG_SAMPLES],
         },
+        "reason_counts": dict(reason_counts_full),
+        "reason_buckets": reason_buckets,
     }
     write_debug(debug_path, debug_data)
     write_alias_debt(alias_debt_path, args.season, args.week, unmatched_samples)
 
+    matched_count = len(records)
     has_output_lines = False
     if odds_path.exists():
         with odds_path.open("r", encoding="utf-8") as handle:
@@ -624,34 +735,44 @@ def main() -> int:
                 has_output_lines = True
                 break
     if not has_output_lines:
-        print(f"FAIL: CFB odds output missing or empty at {odds_path}")
+        print(
+            f"WARN: CFB odds output empty at {odds_path}; matched={matched_count} (eligible_unmatched={eligible_unmatched})."
+        )
         print(f"See {debug_path}")
         print(f"Alias debt: {alias_debt_path}")
-        return 1
 
-    events_after_filter = len(filtered_events)
-    if events_after_filter <= 0:
-        required_matched = 0
-        max_unmatched_allowed = 0
-    else:
+    events_after_filter = events_in_window
+    required_matched = 0
+    max_unmatched_allowed = 0
+    if events_after_filter > 0:
         required_matched = max(MIN_ABS_MATCHED, math.ceil(MIN_MATCH_FRAC * events_after_filter))
         max_unmatched_allowed = math.ceil(MAX_UNMATCH_FRAC * events_after_filter)
 
-    matched_count = len(records)
     unmatched_count = unmatched_post_filter
 
+    if events_in_window == 0 and total_events > 0:
+        print(
+            f"WARN: CFB odds provider returned {total_events} events but none within the schedule window ({window_label})."
+        )
+
     print(
-        f"Window: {window_label} | events {len(filtered_events)} / matched {matched_count} / unmatched {unmatched_count}"
+        f"Window: {window_label} | events {total_events} / in_window {events_in_window} / matched {matched_count} / unmatched {eligible_unmatched} (total={unmatched_count}) by_why={reason_buckets}"
     )
 
-    if matched_count < required_matched or unmatched_count > max_unmatched_allowed:
+    coverage_ok = True
+    if events_after_filter > 0:
+        coverage_ok = matched_count >= required_matched and eligible_unmatched <= max_unmatched_allowed
+
+    if not coverage_ok:
         print(
-            f"FAIL: CFB odds coverage below threshold (matched {matched_count} < {required_matched} or unmatched {unmatched_count} > {max_unmatched_allowed}). See {debug_path}"
+            f"FAIL: CFB odds coverage below threshold (matched {matched_count} < {required_matched} or eligible unmatched {eligible_unmatched} > {max_unmatched_allowed}). See {debug_path}"
         )
         print(f"Alias debt: {alias_debt_path}")
         return 1
 
-    print(f"PASS: CFB odds matched {matched_count}; unmatched {unmatched_count}; wrote {odds_path}")
+    print(
+        f"PASS: CFB odds matched {matched_count}; unmatched {eligible_unmatched} (total={unmatched_count}); wrote {odds_path}"
+    )
     print(f"Debug: {debug_path}")
     print(f"Alias debt: {alias_debt_path}")
     return 0

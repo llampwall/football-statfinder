@@ -1,16 +1,16 @@
 {
   "fbs_rows": 59,
   "joined_metrics_rows": 59,
-  "joined_odds_rows": 38,
+  "joined_odds_rows": 0,
   "joined_sagarin_rows": 58,
   "output_rows": 59,
-  "odds_games": 38,
+  "odds_games": 0,
   "sagarin_games": 58,
   "coverage_metrics": 1.0,
   "notes": [
     "FBS games: 59",
     "Metrics coverage: 59/59",
-    "Odds coverage: 38/59",
+    "Odds coverage: 0/59",
     "Sagarin coverage: 58/59"
   ],
   "samples": {
@@ -87,9 +87,9 @@
     "metrics_gaps": []
   },
   "ratings": {
-    "eligible": 38,
-    "edges_count": 38,
-    "rvo_count": 38
+    "eligible": 0,
+    "edges_count": 0,
+    "rvo_count": 0
   },
   "failures": []
 }

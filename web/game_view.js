@@ -108,6 +108,7 @@ const REQUIRED_FAVORITE_KEYS = [
 
 const MISSING_VALUE = "\u2014";
 let timezoneLogged = false;
+let loggedCfbAtsOnce = false;
 
 const TEAM_DATA = [
   { city: "Arizona", nickname: "Cardinals", aliases: ["ari", "arz", "arizona", "cardinals", "arizona cardinals"] },
@@ -704,12 +705,25 @@ function renderTeamStats(game, sidecar, teamNames) {
 
   els.teamStatsBody.innerHTML = "";
   const league = STATE.league ?? DEFAULT_LEAGUE;
+  let homeAtsDisplay = null;
+  let awayAtsDisplay = null;
+  if (league === "cfb") {
+    homeAtsDisplay = formatAtsValue(game?.home_ats);
+    awayAtsDisplay = formatAtsValue(game?.away_ats);
+    if (!loggedCfbAtsOnce) {
+      const homeLog = homeAtsDisplay ?? MISSING_VALUE;
+      const awayLog = awayAtsDisplay ?? MISSING_VALUE;
+      console.info(`CFB ATS: home=${homeLog} away=${awayLog}`);
+      loggedCfbAtsOnce = true;
+    }
+  }
 
   rows.forEach(({ prefix, label }) => {
     const tr = document.createElement("tr");
     let atsCell = "";
     if (league === "cfb") {
-      atsCell = MISSING_VALUE;
+      const value = prefix === "home" ? homeAtsDisplay : awayAtsDisplay;
+      atsCell = value ?? MISSING_VALUE;
     }
     const cells = [
       label,
@@ -1210,6 +1224,12 @@ function fallback(value) {
     return MISSING_VALUE;
   }
   return value;
+}
+
+function formatAtsValue(value) {
+  if (value === null || value === undefined) return null;
+  const text = String(value).trim();
+  return text ? text : null;
 }
 
 function logTimeZone(success) {

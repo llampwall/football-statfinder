@@ -192,6 +192,18 @@ def main() -> int:
     parser.add_argument("--season", type=int, required=True)
     parser.add_argument("--week", type=int, required=True)
     parser.add_argument("--include-eoy", action="store_true", help="Also build prior-season CFB EOY metrics")
+    parser.add_argument(
+        "--odds-days-before",
+        type=int,
+        default=6,
+        help="Extend odds window start by N days before earliest kickoff (default: 6).",
+    )
+    parser.add_argument(
+        "--odds-days-after",
+        type=int,
+        default=6,
+        help="Extend odds window end by N days after latest kickoff (default: 6).",
+    )
     args = parser.parse_args()
 
     season = args.season
@@ -297,7 +309,19 @@ def main() -> int:
 
     # Odds snapshot
     print("\n>>> Running src.fetch_week_odds_cfb .")
-    odds_rc = run_module("src.fetch_week_odds_cfb", season, week, check=False)
+    odds_extra_args = [
+        "--odds-days-before",
+        str(args.odds_days_before),
+        "--odds-days-after",
+        str(args.odds_days_after),
+    ]
+    odds_rc = run_module(
+        "src.fetch_week_odds_cfb",
+        season,
+        week,
+        extra_args=odds_extra_args,
+        check=False,
+    )
     odds_debug = base_dir / "odds_match_debug.json"
     if odds_rc != 0 or not odds_debug.exists():
         print(f"FAIL: CFB odds coverage; see {odds_debug}")
@@ -307,15 +331,21 @@ def main() -> int:
     except json.JSONDecodeError:
         odds_stats = {}
     stats = odds_stats.get("stats") or {}
-    events_after = int(stats.get("events_after_window_filter") or 0)
+    events_total = int(stats.get("events_total") or 0)
+    events_in_window = int(stats.get("events_in_window") or stats.get("events_after_window_filter") or 0)
     matched = int(stats.get("matched") or 0)
     unmatched = int(stats.get("unmatched") or 0)
+    reason_buckets = odds_stats.get("reason_buckets") or {}
     odds_path = base_dir / f"odds_{season}_wk{week}.jsonl"
     print(
-        f"PASS: CFB odds matched {matched}/{events_after}; unmatched={unmatched} "
+        f"PASS: CFB odds matched {matched}/{events_in_window} in-window (total={events_total}); unmatched={unmatched} "
         f"({odds_path})"
     )
-    notes.append(f"Odds matched {matched}/{events_after}; unmatched={unmatched}")
+    if reason_buckets:
+        print(f"      by_why={reason_buckets}")
+    notes.append(
+        f"Odds matched {matched}/{events_in_window} (total {events_total}); unmatched={unmatched}"
+    )
 
     try:
         enrichment = enrich_from_local_odds(season, week)

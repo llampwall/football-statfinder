@@ -50,6 +50,32 @@ def normalize_team_name_cfb_stats(name: str | None) -> str:
 
 
 ODDS_TEXT_ALIASES = {
+    # collapsed/book variants → canonical program label
+    "umass": "massachusetts",
+    "buffalo": "buffalo",
+    "appalachianstate": "app state",
+    "coastalcarolina": "coastal carolina",
+    "indianahoosiers": "indiana",
+    "michiganstate": "michigan state",
+    "louisiana": "louisiana",
+    "southernmississippi": "southern miss",
+    "virginiacavaliers": "virginia",
+    "washingtonstate": "washington state",
+    "uclabruins": "ucla",
+    "marylandterrapins": "maryland",
+    "alabamacrimsontide": "alabama",
+    "tennesseevolunteers": "tennessee",
+    "syracuseorange": "syracuse",
+    "pittsburgh": "pittsburgh",
+    "byu": "byu",
+    "utahutes": "utah",
+    "newmexicolobos": "new mexico",
+    "nevadawolfpack": "nevada",
+    "oregonstatebeavers": "oregon state",
+    "lafayetteleopards": "lafayette",
+    "stanfordcardinal": "stanford",
+    "floridastate": "florida state",
+
     "miami (oh) redhawks": "miami (oh)",
     "liberty flames": "liberty",
     "brigham young cougars": "byu",
@@ -89,6 +115,15 @@ ODDS_TEXT_ALIASES = {
 
 MASCOT_WORDS = {
     "aggies",
+    "bluehens",
+    "broncos",
+    "bruins",
+    "cardinal",
+    "cavaliers",
+    "hilltoppers",
+    "hokies",
+    "jaguars",
+    "leopards",
     "badgers",
     "bears",
     "boilermakers",
@@ -96,6 +131,8 @@ MASCOT_WORDS = {
     "bulls",
     "chanticleers",
     "chippewas",
+    "buffaloes",
+    "crimson",
     "dukes",
     "hawks",
     "hawkeyes",
@@ -129,6 +166,7 @@ MASCOT_WORDS = {
     "wildcats",
     "razorbacks",
     "bearcats",
+    "ducks",
     "lions",
     "herd",
     "bobcats",
@@ -144,6 +182,14 @@ MASCOT_WORDS = {
     "jayhawks",
     "owls",
     "warriors",
+    "tide",
+    "orange",
+    "lobos",
+    "tarheels",
+    "volunteers",
+    "utes",
+    "wolfpack",
+    "terrapins",
 }
 
 MULTI_WORD_MASCOTS = {
@@ -154,19 +200,31 @@ MULTI_WORD_MASCOTS = {
     "black knights",
     "golden gophers",
     "golden eagles",
+    "golden bears",
+    "golden flashes",
     "thundering herd",
     "sun devils",
     "mean green",
     "rainbow warriors",
     "scarlet knights",
     "nittany lions",
+    "crimson tide",
+    "fighting illini",
+    "blue hens",
+    "blue raiders",
+    "tar heels",
+    "demon deacons",
 }
 
 
 def normalize_team_name_cfb_odds(name: str) -> str:
     base = normalize_team_name_cfb(name)
     lowered = _clean(base)
-    lowered = ODDS_TEXT_ALIASES.get(lowered, lowered)
+    alias = ODDS_TEXT_ALIASES.get(lowered)
+    if alias is None:
+        alias = ODDS_TEXT_ALIASES.get(lowered.replace(" ", ""))
+    if alias:
+        lowered = _clean(alias)
     for mascot in MULTI_WORD_MASCOTS:
         if lowered.endswith(mascot) and len(lowered) > len(mascot):
             lowered = lowered[: -len(mascot)].strip()

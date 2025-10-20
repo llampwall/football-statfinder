@@ -1,324 +1,137 @@
 {
   "season": 2025,
   "week": 8,
-  "window": "2025-10-13T23:00:00Z -> 2025-10-20T02:30:00Z",
+  "window": "2025-10-08T23:00:00Z -> 2025-10-25T18:00:00Z",
   "stats": {
-    "events_total": 62,
-    "events_after_window_filter": 50,
-    "matched": 38,
-    "unmatched": 12
+    "events_total": 53,
+    "events_after_window_filter": 0,
+    "events_in_window": 0,
+    "matched": 0,
+    "unmatched": 53,
+    "eligible_unmatched": 0
   },
   "samples": {
-    "matched": [
+    "matched": [],
+    "unmatched": [
       {
-        "event_home": "Houston Cougars",
-        "event_away": "Arizona Wildcats",
-        "event_time": "2025-10-18T16:00:00Z",
-        "home_norm": "houston",
-        "away_norm": "arizona",
-        "game_key": "20251018_1600_arizona_houston",
-        "kickoff_iso_utc": "2025-10-18T16:00:00Z",
-        "mode": "ordered_exact"
+        "event_home": "Florida International Panthers",
+        "event_away": "Kennesaw State Owls",
+        "event_time": "2025-10-21T23:00:00Z",
+        "home_norm": "floridainternational",
+        "away_norm": "kennesawstate",
+        "why": "future_week"
       },
       {
-        "event_home": "Tulane Green Wave",
-        "event_away": "Army Black Knights",
-        "event_time": "2025-10-18T16:00:00Z",
-        "home_norm": "tulane",
-        "away_norm": "army",
-        "game_key": "20251018_1600_army_tulane",
-        "kickoff_iso_utc": "2025-10-18T16:00:00Z",
-        "mode": "ordered_exact"
+        "event_home": "Louisiana Tech Bulldogs",
+        "event_away": "Western Kentucky Hilltoppers",
+        "event_time": "2025-10-21T23:30:00Z",
+        "home_norm": "louisianatech",
+        "away_norm": "westernkentucky",
+        "why": "future_week"
       },
       {
-        "event_home": "TCU Horned Frogs",
-        "event_away": "Baylor Bears",
-        "event_time": "2025-10-18T16:00:00Z",
-        "home_norm": "tcu",
-        "away_norm": "baylor",
-        "game_key": "20251018_1600_baylor_tcu",
-        "kickoff_iso_utc": "2025-10-18T16:00:00Z",
-        "mode": "ordered_exact"
+        "event_home": "Delaware Blue Hens",
+        "event_away": "Middle Tennessee Blue Raiders",
+        "event_time": "2025-10-22T23:30:00Z",
+        "home_norm": "delaware",
+        "away_norm": "middletennessee",
+        "why": "future_week"
       },
       {
-        "event_home": "Boston College Eagles",
-        "event_away": "UConn Huskies",
-        "event_time": "2025-10-18T16:00:00Z",
-        "home_norm": "bostoncollege",
-        "away_norm": "uconn",
-        "game_key": "20251018_1600_uconn_boston_college",
-        "kickoff_iso_utc": "2025-10-18T16:00:00Z",
-        "mode": "ordered_exact"
+        "event_home": "New Mexico State Aggies",
+        "event_away": "Missouri State Bears",
+        "event_time": "2025-10-23T01:00:00Z",
+        "home_norm": "newmexicostate",
+        "away_norm": "missouristate",
+        "why": "future_week"
       },
       {
-        "event_home": "Bowling Green Falcons",
-        "event_away": "Central Michigan Chippewas",
-        "event_time": "2025-10-18T16:00:00Z",
-        "home_norm": "bowlinggreen",
-        "away_norm": "centralmichigan",
-        "game_key": "20251018_1600_central_michigan_bowling_green",
-        "kickoff_iso_utc": "2025-10-18T16:00:00Z",
-        "mode": "ordered_exact"
-      },
-      {
-        "event_home": "Duke Blue Devils",
-        "event_away": "Georgia Tech Yellow Jackets",
-        "event_time": "2025-10-18T16:00:00Z",
-        "home_norm": "duke",
-        "away_norm": "georgiatech",
-        "game_key": "20251018_1600_georgia_tech_duke",
-        "kickoff_iso_utc": "2025-10-18T16:00:00Z",
-        "mode": "ordered_exact"
-      },
-      {
-        "event_home": "Miami (OH) RedHawks",
-        "event_away": "Eastern Michigan Eagles",
-        "event_time": "2025-10-18T16:00:00Z",
-        "home_norm": "miamioh",
-        "away_norm": "easternmichigan",
-        "game_key": "20251018_1600_eastern_michigan_miami_oh",
-        "kickoff_iso_utc": "2025-10-18T16:00:00Z",
-        "mode": "ordered_exact"
-      },
-      {
-        "event_home": "Vanderbilt Commodores",
-        "event_away": "LSU Tigers",
-        "event_time": "2025-10-18T16:00:00Z",
-        "home_norm": "vanderbilt",
-        "away_norm": "lsu",
-        "game_key": "20251018_1600_lsu_vanderbilt",
-        "kickoff_iso_utc": "2025-10-18T16:00:00Z",
-        "mode": "ordered_exact"
-      },
-      {
-        "event_home": "Michigan Wolverines",
-        "event_away": "Washington Huskies",
-        "event_time": "2025-10-18T16:00:00Z",
-        "home_norm": "michigan",
-        "away_norm": "washington",
-        "game_key": "20251018_1600_washington_michigan",
-        "kickoff_iso_utc": "2025-10-18T16:00:00Z",
-        "mode": "ordered_exact"
-      },
-      {
-        "event_home": "South Carolina Gamecocks",
-        "event_away": "Oklahoma Sooners",
-        "event_time": "2025-10-18T16:45:00Z",
-        "home_norm": "southcarolina",
-        "away_norm": "oklahoma",
-        "game_key": "20251018_1645_oklahoma_south_carolina",
-        "kickoff_iso_utc": "2025-10-18T16:45:00Z",
-        "mode": "ordered_exact"
-      },
-      {
-        "event_home": "UCF Knights",
-        "event_away": "West Virginia Mountaineers",
-        "event_time": "2025-10-18T17:00:00Z",
-        "home_norm": "ucf",
-        "away_norm": "westvirginia",
-        "game_key": "20251018_1700_west_virginia_ucf",
-        "kickoff_iso_utc": "2025-10-18T17:00:00Z",
-        "mode": "ordered_exact"
-      },
-      {
-        "event_home": "Toledo Rockets",
-        "event_away": "Kent State Golden Flashes",
-        "event_time": "2025-10-18T18:00:00Z",
-        "home_norm": "toledo",
-        "away_norm": "kentstate",
-        "game_key": "20251018_1800_kent_state_toledo",
-        "kickoff_iso_utc": "2025-10-18T18:00:00Z",
-        "mode": "ordered_exact"
-      },
-      {
-        "event_home": "Northwestern Wildcats",
-        "event_away": "Purdue Boilermakers",
-        "event_time": "2025-10-18T19:00:00Z",
-        "home_norm": "northwestern",
-        "away_norm": "purdue",
-        "game_key": "20251018_1900_purdue_northwestern",
-        "kickoff_iso_utc": "2025-10-18T19:00:00Z",
-        "mode": "ordered_exact"
-      },
-      {
-        "event_home": "UL Monroe Warhawks",
-        "event_away": "Troy Trojans",
-        "event_time": "2025-10-18T19:00:00Z",
-        "home_norm": "ulmonroe",
-        "away_norm": "troy",
-        "game_key": "20251018_1900_troy_ul_monroe",
-        "kickoff_iso_utc": "2025-10-18T19:00:00Z",
-        "mode": "ordered_exact"
-      },
-      {
-        "event_home": "Air Force Falcons",
-        "event_away": "Wyoming Cowboys",
-        "event_time": "2025-10-18T19:30:00Z",
-        "home_norm": "airforce",
-        "away_norm": "wyoming",
-        "game_key": "20251018_1930_wyoming_air_force",
-        "kickoff_iso_utc": "2025-10-18T19:30:00Z",
-        "mode": "ordered_exact"
-      },
-      {
-        "event_home": "Ball State Cardinals",
-        "event_away": "Akron Zips",
-        "event_time": "2025-10-18T19:30:00Z",
-        "home_norm": "ballstate",
-        "away_norm": "akron",
-        "game_key": "20251018_1930_akron_ball_state",
-        "kickoff_iso_utc": "2025-10-18T19:30:00Z",
-        "mode": "ordered_exact"
-      },
-      {
-        "event_home": "Arkansas Razorbacks",
-        "event_away": "Texas A&M Aggies",
-        "event_time": "2025-10-18T19:30:00Z",
-        "home_norm": "arkansas",
-        "away_norm": "texasaandm",
-        "game_key": "20251018_1930_texas_aandm_arkansas",
-        "kickoff_iso_utc": "2025-10-18T19:30:00Z",
-        "mode": "ordered_exact"
-      },
-      {
-        "event_home": "Boise State Broncos",
-        "event_away": "UNLV Rebels",
-        "event_time": "2025-10-18T19:30:00Z",
-        "home_norm": "boisestate",
-        "away_norm": "unlv",
-        "game_key": "20251018_1930_unlv_boise_state",
-        "kickoff_iso_utc": "2025-10-18T19:30:00Z",
-        "mode": "ordered_exact"
+        "event_home": "Georgia State Panthers",
+        "event_away": "South Alabama Jaguars",
+        "event_time": "2025-10-23T23:30:00Z",
+        "home_norm": "georgiastate",
+        "away_norm": "southalabama",
+        "why": "future_week"
       },
       {
         "event_home": "Charlotte 49ers",
-        "event_away": "Temple Owls",
-        "event_time": "2025-10-18T19:30:00Z",
+        "event_away": "North Texas Mean Green",
+        "event_time": "2025-10-24T23:00:00Z",
         "home_norm": "charlotte",
-        "away_norm": "temple",
-        "game_key": "20251018_1930_temple_charlotte",
-        "kickoff_iso_utc": "2025-10-18T19:30:00Z",
-        "mode": "ordered_exact"
+        "away_norm": "northtexas",
+        "why": "future_week"
       },
       {
-        "event_home": "Clemson Tigers",
-        "event_away": "SMU Mustangs",
-        "event_time": "2025-10-18T19:30:00Z",
-        "home_norm": "clemsontigers",
-        "away_norm": "smu",
-        "game_key": "20251018_1930_smu_clemson_tigers",
-        "kickoff_iso_utc": "2025-10-18T19:30:00Z",
-        "mode": "ordered_exact"
+        "event_home": "Virginia Tech Hokies",
+        "event_away": "California Golden Bears",
+        "event_time": "2025-10-24T23:30:00Z",
+        "home_norm": "virginiatech",
+        "away_norm": "california",
+        "why": "future_week"
       },
       {
-        "event_home": "Georgia Bulldogs",
-        "event_away": "Ole Miss Rebels",
-        "event_time": "2025-10-18T19:30:00Z",
-        "home_norm": "georgiabulldogs",
-        "away_norm": "olemiss",
-        "game_key": "20251018_1930_ole_miss_georgia_bulldogs",
-        "kickoff_iso_utc": "2025-10-18T19:30:00Z",
-        "mode": "ordered_exact"
+        "event_home": "Nevada Wolf Pack",
+        "event_away": "Boise State Broncos",
+        "event_time": "2025-10-25T02:00:00Z",
+        "home_norm": "nevada",
+        "away_norm": "boisestate",
+        "why": "future_week"
       },
       {
-        "event_home": "James Madison Dukes",
-        "event_away": "Old Dominion Monarchs",
-        "event_time": "2025-10-18T19:30:00Z",
-        "home_norm": "jamesmadison",
-        "away_norm": "olddominion",
-        "game_key": "20251018_1930_old_dominion_james_madison",
-        "kickoff_iso_utc": "2025-10-18T19:30:00Z",
-        "mode": "ordered_exact"
-      },
-      {
-        "event_home": "Marshall Thundering Herd",
-        "event_away": "Texas State Bobcats",
-        "event_time": "2025-10-18T19:30:00Z",
-        "home_norm": "marshall",
-        "away_norm": "texasstate",
-        "game_key": "20251018_1930_texas_state_marshall",
-        "kickoff_iso_utc": "2025-10-18T19:30:00Z",
-        "mode": "ordered_exact"
-      },
-      {
-        "event_home": "North Texas Mean Green",
-        "event_away": "UTSA Roadrunners",
-        "event_time": "2025-10-18T19:30:00Z",
-        "home_norm": "northtexas",
-        "away_norm": "utsa",
-        "game_key": "20251018_1930_utsa_north_texas",
-        "kickoff_iso_utc": "2025-10-18T19:30:00Z",
-        "mode": "ordered_exact"
-      },
-      {
-        "event_home": "Ohio Bobcats",
-        "event_away": "Northern Illinois Huskies",
-        "event_time": "2025-10-18T19:30:00Z",
-        "home_norm": "ohio",
-        "away_norm": "northernillinois",
-        "game_key": "20251018_1930_northern_illinois_ohio",
-        "kickoff_iso_utc": "2025-10-18T19:30:00Z",
-        "mode": "ordered_exact"
-      },
-      {
-        "event_home": "Wisconsin Badgers",
-        "event_away": "Ohio State Buckeyes",
-        "event_time": "2025-10-18T19:30:00Z",
-        "home_norm": "wisconsin",
-        "away_norm": "ohiostatebuckeyes",
-        "game_key": "20251018_1930_ohio_state_buckeyes_wisconsin",
-        "kickoff_iso_utc": "2025-10-18T19:30:00Z",
-        "mode": "ordered_exact"
-      },
-      {
-        "event_home": "Arizona State Sun Devils",
-        "event_away": "Texas Tech Red Raiders",
-        "event_time": "2025-10-18T20:00:00Z",
-        "home_norm": "arizonastate",
-        "away_norm": "texastech",
-        "game_key": "20251018_2000_texas_tech_arizona_state",
-        "kickoff_iso_utc": "2025-10-18T20:00:00Z",
-        "mode": "ordered_exact"
-      },
-      {
-        "event_home": "UAB Blazers",
-        "event_away": "Memphis Tigers",
-        "event_time": "2025-10-18T20:00:00Z",
-        "home_norm": "uab",
-        "away_norm": "memphis",
-        "game_key": "20251018_2000_memphis_uab",
-        "kickoff_iso_utc": "2025-10-18T20:00:00Z",
-        "mode": "ordered_exact"
-      },
-      {
-        "event_home": "Florida Gators",
-        "event_away": "Mississippi State Bulldogs",
-        "event_time": "2025-10-18T20:15:00Z",
-        "home_norm": "florida",
-        "away_norm": "mississippistate",
-        "game_key": "20251018_2015_mississippi_state_florida",
-        "kickoff_iso_utc": "2025-10-18T20:15:00Z",
-        "mode": "ordered_exact"
-      },
-      {
-        "event_home": "Rutgers Scarlet Knights",
-        "event_away": "Oregon Ducks",
-        "event_time": "2025-10-18T22:30:00Z",
-        "home_norm": "rutgers",
-        "away_norm": "oregonducks",
-        "game_key": "20251018_2230_oregon_ducks_rutgers",
-        "kickoff_iso_utc": "2025-10-18T22:30:00Z",
-        "mode": "ordered_exact"
-      }
-    ],
-    "unmatched": [
-      {
-        "event_home": "Washington Huskies",
-        "event_away": "Illinois Fighting Illini",
+        "event_home": "Old Dominion Monarchs",
+        "event_away": "Appalachian State Mountaineers",
         "event_time": "2025-10-25T16:00:00Z",
-        "home_norm": "washington",
-        "away_norm": "illinoisfightingillini",
-        "why": "outside_window"
+        "home_norm": "olddominion",
+        "away_norm": "appalachianstate",
+        "why": "future_week"
+      },
+      {
+        "event_home": "Kent State Golden Flashes",
+        "event_away": "Bowling Green Falcons",
+        "event_time": "2025-10-25T16:00:00Z",
+        "home_norm": "kentstate",
+        "away_norm": "bowlinggreen",
+        "why": "future_week"
+      },
+      {
+        "event_home": "Utah Utes",
+        "event_away": "Colorado Buffaloes",
+        "event_time": "2025-10-25T16:00:00Z",
+        "home_norm": "utah",
+        "away_norm": "colorado",
+        "why": "future_week"
+      },
+      {
+        "event_home": "Eastern Michigan Eagles",
+        "event_away": "Ohio Bobcats",
+        "event_time": "2025-10-25T16:00:00Z",
+        "home_norm": "easternmichigan",
+        "away_norm": "ohio",
+        "why": "future_week"
+      },
+      {
+        "event_home": "Georgia Tech Yellow Jackets",
+        "event_away": "Syracuse Orange",
+        "event_time": "2025-10-25T16:00:00Z",
+        "home_norm": "georgiatech",
+        "away_norm": "syracuse",
+        "why": "future_week"
+      },
+      {
+        "event_home": "Indiana Hoosiers",
+        "event_away": "UCLA Bruins",
+        "event_time": "2025-10-25T16:00:00Z",
+        "home_norm": "indiana",
+        "away_norm": "ucla",
+        "why": "future_week"
+      },
+      {
+        "event_home": "Iowa Hawkeyes",
+        "event_away": "Minnesota Golden Gophers",
+        "event_time": "2025-10-25T16:00:00Z",
+        "home_norm": "iowa",
+        "away_norm": "minnesota",
+        "why": "future_week"
       },
       {
         "event_home": "Kansas Jayhawks",
@@ -326,7 +139,7 @@
         "event_time": "2025-10-25T16:00:00Z",
         "home_norm": "kansas",
         "away_norm": "kansasstate",
-        "why": "outside_window"
+        "why": "future_week"
       },
       {
         "event_home": "Memphis Tigers",
@@ -334,31 +147,23 @@
         "event_time": "2025-10-25T16:00:00Z",
         "home_norm": "memphis",
         "away_norm": "southflorida",
-        "why": "outside_window"
+        "why": "future_week"
       },
       {
-        "event_home": "Michigan State Spartans",
-        "event_away": "Michigan Wolverines",
+        "event_home": "Nebraska Cornhuskers",
+        "event_away": "Northwestern Wildcats",
         "event_time": "2025-10-25T16:00:00Z",
-        "home_norm": "michiganstate",
-        "away_norm": "michigan",
-        "why": "outside_window"
+        "home_norm": "nebraska",
+        "away_norm": "northwestern",
+        "why": "future_week"
       },
       {
-        "event_home": "Mississippi State Bulldogs",
-        "event_away": "Texas Longhorns",
+        "event_home": "North Carolina Tar Heels",
+        "event_away": "Virginia Cavaliers",
         "event_time": "2025-10-25T16:00:00Z",
-        "home_norm": "mississippistate",
-        "away_norm": "texaslonghorns",
-        "why": "outside_window"
-      },
-      {
-        "event_home": "Vanderbilt Commodores",
-        "event_away": "Missouri Tigers",
-        "event_time": "2025-10-25T16:00:00Z",
-        "home_norm": "vanderbilt",
-        "away_norm": "missouri",
-        "why": "outside_window"
+        "home_norm": "northcarolina",
+        "away_norm": "virginia",
+        "why": "future_week"
       },
       {
         "event_home": "Oklahoma Sooners",
@@ -366,7 +171,55 @@
         "event_time": "2025-10-25T16:00:00Z",
         "home_norm": "oklahoma",
         "away_norm": "olemiss",
-        "why": "outside_window"
+        "why": "future_week"
+      },
+      {
+        "event_home": "Purdue Boilermakers",
+        "event_away": "Rutgers Scarlet Knights",
+        "event_time": "2025-10-25T16:00:00Z",
+        "home_norm": "purdue",
+        "away_norm": "rutgers",
+        "why": "future_week"
+      },
+      {
+        "event_home": "Wake Forest Demon Deacons",
+        "event_away": "SMU Mustangs",
+        "event_time": "2025-10-25T16:00:00Z",
+        "home_norm": "wakeforest",
+        "away_norm": "smu",
+        "why": "future_week"
+      },
+      {
+        "event_home": "Arkansas Razorbacks",
+        "event_away": "Auburn Tigers",
+        "event_time": "2025-10-25T16:45:00Z",
+        "home_norm": "arkansas",
+        "away_norm": "auburn",
+        "why": "future_week"
+      },
+      {
+        "event_home": "Buffalo Bulls",
+        "event_away": "Akron Zips",
+        "event_time": "2025-10-25T17:00:00Z",
+        "home_norm": "buffalo",
+        "away_norm": "akron",
+        "why": "future_week"
+      },
+      {
+        "event_home": "New Mexico Lobos",
+        "event_away": "Utah State Aggies",
+        "event_time": "2025-10-25T19:00:00Z",
+        "home_norm": "newmexico",
+        "away_norm": "utahstate",
+        "why": "future_week"
+      },
+      {
+        "event_home": "Rice Owls",
+        "event_away": "UConn Huskies",
+        "event_time": "2025-10-25T19:00:00Z",
+        "home_norm": "rice",
+        "away_norm": "uconn",
+        "why": "future_week"
       },
       {
         "event_home": "South Carolina Gamecocks",
@@ -374,7 +227,7 @@
         "event_time": "2025-10-25T19:30:00Z",
         "home_norm": "southcarolina",
         "away_norm": "alabamacrimsontide",
-        "why": "outside_window"
+        "why": "future_week"
       },
       {
         "event_home": "Iowa State Cyclones",
@@ -382,128 +235,32 @@
         "event_time": "2025-10-25T19:30:00Z",
         "home_norm": "iowastate",
         "away_norm": "byu",
-        "why": "outside_window"
+        "why": "future_week"
       },
       {
-        "event_home": "Indiana Hoosiers",
-        "event_away": "UCLA Bruins",
+        "event_home": "Northern Illinois Huskies",
+        "event_away": "Ball State Cardinals",
         "event_time": "2025-10-25T19:30:00Z",
-        "home_norm": "indianahoosiers",
-        "away_norm": "uclabruins",
-        "why": "outside_window"
+        "home_norm": "northernillinois",
+        "away_norm": "ballstate",
+        "why": "future_week"
       },
       {
-        "event_home": "Cincinnati Bearcats",
-        "event_away": "Baylor Bears",
-        "event_time": "2025-10-25T20:00:00Z",
-        "home_norm": "cincinnati",
-        "away_norm": "baylor",
-        "why": "outside_window"
-      },
-      {
-        "event_home": "LSU Tigers",
-        "event_away": "Texas A&M Aggies",
-        "event_time": "2025-10-25T23:30:00Z",
-        "home_norm": "lsu",
-        "away_norm": "texasaandm",
-        "why": "outside_window"
-      },
-      {
-        "event_home": "UMass Minutemen",
-        "event_away": "Buffalo Bulls",
-        "event_time": "2025-10-18T18:30:00Z",
-        "home_norm": "umass",
-        "away_norm": "buffalo",
-        "why": "no_schedule_candidate"
-      },
-      {
-        "event_home": "Appalachian State Mountaineers",
-        "event_away": "Coastal Carolina Chanticleers",
-        "event_time": "2025-10-18T19:30:00Z",
-        "home_norm": "appalachianstate",
-        "away_norm": "coastalcarolina",
-        "why": "no_schedule_candidate"
-      },
-      {
-        "event_home": "Indiana Hoosiers",
-        "event_away": "Michigan State Spartans",
-        "event_time": "2025-10-18T19:30:00Z",
-        "home_norm": "indianahoosiers",
-        "away_norm": "michiganstate",
-        "why": "no_schedule_candidate"
-      },
-      {
-        "event_home": "Louisiana Ragin Cajuns",
-        "event_away": "Southern Mississippi Golden Eagles",
-        "event_time": "2025-10-18T21:00:00Z",
-        "home_norm": "louisiana",
-        "away_norm": "southernmississippi",
-        "why": "no_schedule_candidate"
-      },
-      {
-        "event_home": "Virginia Cavaliers",
-        "event_away": "Washington State Cougars",
-        "event_time": "2025-10-18T22:30:00Z",
-        "home_norm": "virginiacavaliers",
-        "away_norm": "washingtonstate",
-        "why": "no_schedule_candidate"
-      },
-      {
-        "event_home": "UCLA Bruins",
-        "event_away": "Maryland Terrapins",
-        "event_time": "2025-10-18T23:00:00Z",
-        "home_norm": "uclabruins",
-        "away_norm": "marylandterrapins",
-        "why": "no_schedule_candidate"
-      },
-      {
-        "event_home": "Alabama Crimson Tide",
-        "event_away": "Tennessee Volunteers",
-        "event_time": "2025-10-18T23:30:00Z",
-        "home_norm": "alabamacrimsontide",
-        "away_norm": "tennesseevolunteers",
-        "why": "no_schedule_candidate"
-      },
-      {
-        "event_home": "Syracuse Orange",
-        "event_away": "Pittsburgh Panthers",
-        "event_time": "2025-10-18T23:30:00Z",
-        "home_norm": "syracuseorange",
-        "away_norm": "pittsburgh",
-        "why": "no_schedule_candidate"
-      },
-      {
-        "event_home": "BYU Cougars",
-        "event_away": "Utah Utes",
-        "event_time": "2025-10-19T00:00:00Z",
-        "home_norm": "byu",
-        "away_norm": "utahutes",
-        "why": "no_schedule_candidate"
-      },
-      {
-        "event_home": "New Mexico Lobos",
-        "event_away": "Nevada Wolf Pack",
-        "event_time": "2025-10-19T01:45:00Z",
-        "home_norm": "newmexicolobos",
-        "away_norm": "nevadawolfpack",
-        "why": "no_schedule_candidate"
-      },
-      {
-        "event_home": "Oregon State Beavers",
-        "event_away": "Lafayette Leopards",
-        "event_time": "2025-10-19T02:00:00Z",
-        "home_norm": "oregonstatebeavers",
-        "away_norm": "lafayetteleopards",
-        "why": "no_schedule_candidate"
-      },
-      {
-        "event_home": "Stanford Cardinal",
-        "event_away": "Florida State Seminoles",
-        "event_time": "2025-10-19T02:30:00Z",
-        "home_norm": "stanfordcardinal",
-        "away_norm": "floridastate",
-        "why": "no_schedule_candidate"
+        "event_home": "Central Michigan Chippewas",
+        "event_away": "UMass Minutemen",
+        "event_time": "2025-10-25T19:30:00Z",
+        "home_norm": "centralmichigan",
+        "away_norm": "umass",
+        "why": "future_week"
       }
     ]
+  },
+  "reason_counts": {
+    "future_week": 53
+  },
+  "reason_buckets": {
+    "outside_window": 0,
+    "no_schedule_candidate": 0,
+    "other": 53
   }
 }
