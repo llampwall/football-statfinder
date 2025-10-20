@@ -32,6 +32,32 @@ When in doubt
 - If a change would balloon (e.g., >200 lines across all files), stop and propose how to split it.
 - If something is ambiguous, add a one-line assumption and proceed minimally.
 
+## Documentation Standards (MANDATORY)
+
+**When this applies:** Every task that adds or edits Python/JS files. This is not a separate docs pass — do it as you code.
+
+**Module header (top of every new/edited file):**
+- Purpose & scope (league if applicable).
+- Spec anchor(s) relevant to the change.
+- Invariants (UTC, boundaries, append-only, atomic writes, etc.).
+- Side effects (files written/paths), and “Do not” guardrails.
+- Log contract (exact one-line format if the file emits logs).
+
+**Function docstrings (Google style):**
+- All public functions and any non-trivial helpers.
+- Include Args / Returns / Raises / Notes (UTC/time rules, idempotency).
+
+**Comment blocks (“WHY THIS EXISTS”):**
+- Precede any non-obvious heuristic (e.g., odds pin role-swap, neutral-site rules).
+- Keep it short and precise.
+
+**Spec anchors required:**
+- If the work relates to week computation, provider decoupling, odds, ratings, scores, or ATS, include:
+  - `/context/global_week_and_provider_decoupling.md` in the module header.
+- If using league normalization, include:
+  - `src/common/team_names_<league>.py` as a dependency note.
+
+
 **RUN/EVIDENCE POLICY**
 
 - NEVER claim a command was run unless you executed it in the terminal.

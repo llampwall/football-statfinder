@@ -15,6 +15,7 @@ OUT_ROOT = Path(__file__).resolve().parents[1] / "out"
 
 from src.fetch_games_cfb import load_games, filter_week_reg
 from src.cfb_ats import apply_ats_to_week, build_team_ats
+from src.common.current_week_service import get_current_week
 from src.schedule_master_cfb import (
     ensure_weeks_present as ensure_cfb_schedule_master,
     enrich_from_local_odds,
@@ -205,6 +206,14 @@ def main() -> int:
         help="Extend odds window end by N days after latest kickoff (default: 6).",
     )
     args = parser.parse_args()
+
+    current_week_info = None
+    try:
+        current_week_info = get_current_week("CFB")
+        cur_season, cur_week, cur_ts = current_week_info
+        print(f"CurrentWeek(CFB)={cur_season} W{cur_week} computed_at={cur_ts} (readonly)")
+    except Exception as exc:
+        print(f"CurrentWeek(CFB) unavailable (readonly): {exc}")
 
     season = args.season
     week = args.week
@@ -468,6 +477,10 @@ def main() -> int:
     print(f"Sagarin rows        : {summary['sagarin_rows']}")
     print(f"Sidecar files       : {summary['sidecars']}")
     print("Done.")
+    if current_week_info:
+        print(f"NOTIFY: Global Week Service (read-only) added; logging CurrentWeek(CFB)={current_week_info[0]} W{current_week_info[1]} at refresh start.")
+    else:
+        print("NOTIFY: Global Week Service (read-only) added; logging CurrentWeek(CFB) unavailable at refresh start.")
     return 0
 
 
