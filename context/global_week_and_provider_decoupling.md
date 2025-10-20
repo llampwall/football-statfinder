@@ -216,3 +216,7 @@ This unified plan:
 * Decouples all sources from their own week semantics.
 * Ensures every run ingests *all* data, pins it deterministically to schedule, and only promotes what belongs.
 * Guarantees stable Week/Game views even when providers are early, late, or mislabeled.
+
+
+
+
