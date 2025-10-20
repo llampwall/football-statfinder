@@ -22,6 +22,7 @@ from src.common.io_utils import write_csv, write_jsonl
 from src.odds.cfb_ingest import ingest_cfb_odds_raw
 from src.odds.cfb_pin_to_schedule import pin_cfb_odds
 from src.odds.cfb_promote_week import promote_week_odds, diff_game_rows
+from src.ratings.sagarin_cfb_fetch import run_cfb_sagarin_staging
 from src.schedule_master_cfb import (
     ensure_weeks_present as ensure_cfb_schedule_master,
     enrich_from_local_odds,
@@ -421,29 +422,57 @@ def main() -> int:
         notes.append("Master enrichment failed")
 
     # Sagarin snapshot + master upsert
-    print("\n>>> Running src.fetch_sagarin_week_cfb .")
-    sag_rc = run_module("src.fetch_sagarin_week_cfb", season, week, check=False)
-    sag_csv = base_dir / f"sagarin_cfb_{season}_wk{week}.csv"
-    receipt_path = base_dir / f"sagarin_cfb_{season}_wk{week}_receipt.json"
-    if sag_rc != 0:
-        debug_hint = receipt_path if receipt_path.exists() else (base_dir / f"sagarin_cfb_{season}_wk{week}_raw.txt")
-        print(f"FAIL: CFB Sagarin fetch failed; see {debug_hint}")
-        return sag_rc or 1
-    sag_rows = count_csv_rows(sag_csv)
-    if sag_rows == 0:
-        debug_hint = receipt_path if receipt_path.exists() else sag_csv
-        print(f"FAIL: CFB Sagarin snapshot empty; see {debug_hint}")
-        return 1
+    sagarin_staging_enabled = (
+        os.getenv("SAGARIN_STAGING_ENABLE", "1").strip().lower() not in {"0", "false", "off", "disabled"}
+    )
+    if sagarin_staging_enabled:
+        print("\n>>> Running Sagarin staging flow.")
+        try:
+            sagarin_summary = run_cfb_sagarin_staging(season, week)
+        except Exception as exc:
+            print(f"FAIL: CFB Sagarin staging failed: {exc}")
+            return 1
+        sag_csv = Path(sagarin_summary.get("weekly_csv"))
+        sag_rows = count_csv_rows(sag_csv)
+        if sag_rows == 0:
+            print(f"FAIL: CFB Sagarin staging produced empty snapshot ({sag_csv}).")
+            return 1
+        master_rows = int(sagarin_summary.get("master_total", 0))
+        teams_selected = int(sagarin_summary.get("teams_selected", sag_rows))
+        wrote_master_rows = int(sagarin_summary.get("wrote_master_rows", teams_selected))
+        latest_ts = sagarin_summary.get("latest_fetch_ts")
+        log_line = (
+            f"Sagarin(CFB): latest_fetch_ts={latest_ts} teams={teams_selected} "
+            f"wrote_master_rows={wrote_master_rows} selected_for_build={teams_selected}"
+        )
+        print(log_line)
+        notes.append(f"Sagarin rows={teams_selected}; master={master_rows}")
+    else:
+        print("\n>>> Running src.fetch_sagarin_week_cfb .")
+        sag_rc = run_module("src.fetch_sagarin_week_cfb", season, week, check=False)
+        sag_csv = base_dir / f"sagarin_cfb_{season}_wk{week}.csv"
+        receipt_path = base_dir / f"sagarin_cfb_{season}_wk{week}_receipt.json"
+        if sag_rc != 0:
+            debug_hint = receipt_path if receipt_path.exists() else (
+                base_dir / f"sagarin_cfb_{season}_wk{week}_raw.txt"
+            )
+            print(f"FAIL: CFB Sagarin fetch failed; see {debug_hint}")
+            return sag_rc or 1
+        sag_rows = count_csv_rows(sag_csv)
+        if sag_rows == 0:
+            debug_hint = receipt_path if receipt_path.exists() else sag_csv
+            print(f"FAIL: CFB Sagarin snapshot empty; see {debug_hint}")
+            return 1
 
-    print("\n>>> Running src.sagarin_master_cfb .")
-    master_rc = run_module("src.sagarin_master_cfb", season, week, check=False)
-    if master_rc != 0:
-        print("FAIL: CFB Sagarin master upsert failed.")
-        return master_rc or 1
-    master_csv = OUT_ROOT / "master" / "sagarin_cfb_master.csv"
-    master_rows = count_csv_rows(master_csv)
-    print(f"PASS: CFB Sagarin rows={sag_rows}; master_total={master_rows}")
-    notes.append(f"Sagarin rows={sag_rows}; master={master_rows}")
+        print("\n>>> Running src.sagarin_master_cfb .")
+        master_rc = run_module("src.sagarin_master_cfb", season, week, check=False)
+        if master_rc != 0:
+            print("FAIL: CFB Sagarin master upsert failed.")
+            return master_rc or 1
+        master_csv = OUT_ROOT / "master" / "sagarin_cfb_master.csv"
+        master_rows = count_csv_rows(master_csv)
+        print(f"PASS: CFB Sagarin rows={sag_rows}; master_total={master_rows}")
+        notes.append(f"Sagarin rows={sag_rows}; master={master_rows}")
 
     # Sidecar timelines
     print("\n>>> Running src.build_team_timelines_cfb .")
