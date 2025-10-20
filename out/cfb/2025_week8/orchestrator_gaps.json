@@ -135,8 +135,8 @@
     "Sagarin rows=134; master=6294",
     "Sidecars 296/295",
     "Sagarin enrichment 100%/89%",
-    "Odds promotion promoted=0 current_week=0 other_weeks=4933 mismatch=0",
-    "Scores backfill [W6,W7] updated=286 skipped=1 files=1",
+    "Odds promotion promoted=0 current_week=0 other_weeks=8155 mismatch=0",
+    "Scores backfill [W6,W7] updated=0 skipped=1 files=0",
     "ATS rows=0 teams=0 zero=118 weeks_scanned=[7]",
     "Game View rows=59",
     "NFL week baseline not found; skipping cross-league key comparison."

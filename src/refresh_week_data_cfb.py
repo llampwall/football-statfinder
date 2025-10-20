@@ -198,8 +198,8 @@ def build_summary(season: int, week: int) -> Dict[str, int]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Refresh CFB weekly outputs.")
-    parser.add_argument("--season", type=int, required=True)
-    parser.add_argument("--week", type=int, required=True)
+    parser.add_argument("--season", type=int, help="Season override (optional; defaults to Global Week service).")
+    parser.add_argument("--week", type=int, help="Week override (optional; defaults to Global Week service).")
     parser.add_argument("--include-eoy", action="store_true", help="Also build prior-season CFB EOY metrics")
     parser.add_argument(
         "--odds-days-before",
@@ -218,13 +218,33 @@ def main() -> int:
     current_week_info = None
     try:
         current_week_info = get_current_week("CFB")
-        cur_season, cur_week, cur_ts = current_week_info
-        print(f"CurrentWeek(CFB)={cur_season} W{cur_week} computed_at={cur_ts} (readonly)")
     except Exception as exc:
-        print(f"CurrentWeek(CFB) unavailable (readonly): {exc}")
+        current_week_info = None
+        current_week_error = exc
+    else:
+        current_week_error = None
 
-    season = args.season
-    week = args.week
+    if (args.season is None) != (args.week is None):
+        parser.error("--season and --week must be provided together.")
+
+    auto_mode = args.season is None and args.week is None
+    if auto_mode:
+        if current_week_info is None:
+            raise SystemExit(f"FAIL: Global Week Service unavailable: {current_week_error}")
+        season, week, cur_ts = current_week_info
+        args_label = "auto"
+    else:
+        season = int(args.season)
+        week = int(args.week)
+        cur_ts = current_week_info[2] if current_week_info else "unavailable"
+        args_label = "manual"
+
+    if current_week_info:
+        cur_season, cur_week, cur_ts_logged = current_week_info
+        print(f"CurrentWeek(CFB)={cur_season} W{cur_week} computed_at={cur_ts_logged}; args={args_label}")
+    else:
+        print(f"CurrentWeek(CFB)=unavailable; args={args_label}")
+
     base_dir = OUT_ROOT / "cfb" / f"{season}_week{week}"
     base_dir.mkdir(parents=True, exist_ok=True)
 
@@ -426,6 +446,7 @@ def main() -> int:
     sagarin_staging_enabled = (
         os.getenv("SAGARIN_STAGING_ENABLE", "1").strip().lower() not in {"0", "false", "off", "disabled"}
     )
+    backfill_summary = {"weeks": [], "updated": 0, "skipped": 0, "files_rewritten": 0}
     if sagarin_staging_enabled:
         print("\n>>> Running Sagarin staging flow.")
         try:
@@ -474,6 +495,7 @@ def main() -> int:
         master_rows = count_csv_rows(master_csv)
         print(f"PASS: CFB Sagarin rows={sag_rows}; master_total={master_rows}")
         notes.append(f"Sagarin rows={sag_rows}; master={master_rows}")
+    backfill_summary = backfill_cfb_scores(season, week)
 
     # Sidecar timelines
     print("\n>>> Running src.build_team_timelines_cfb .")
@@ -531,7 +553,7 @@ def main() -> int:
         return 1
 
     legacy_rows = None
-    legacy_flag = os.getenv("ODDS_LEGACY_JOIN_ENABLE", "1").strip().lower() not in {"0", "false", "off", "disabled"}
+    legacy_flag = os.getenv("ODDS_LEGACY_JOIN_ENABLE", "0").strip().lower() not in {"0", "false", "off", "disabled"}
     if legacy_flag:
         legacy_rows = copy.deepcopy(gv_records)
 
@@ -575,7 +597,6 @@ def main() -> int:
     else:
         print("CFB ODDS PROMOTION: disabled via ODDS_PROMOTION_ENABLE")
 
-    backfill_summary = backfill_cfb_scores(season, week)
     team_ats = build_team_ats(season, week)
     rows_updated = apply_ats_to_week(season, week, team_ats)
     weeks_meta = getattr(build_team_ats, "meta", {})
@@ -616,7 +637,10 @@ def main() -> int:
     print(f"Sidecar files       : {summary['sidecars']}")
     print("Done.")
     promoted_total = promotion_info["promoted_games"] if promotion_info is not None else 0
-    print(f"NOTIFY: CFB odds promotion enabled; promoted={promoted_total}.")
+    print(
+        f"NOTIFY: CFB refresh complete week={season}-{week} "
+        f"rows={summary['games_jsonl']} odds_promoted={promoted_total}"
+    )
     return 0
 
 
