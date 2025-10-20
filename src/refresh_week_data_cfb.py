@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 import argparse
+import copy
 import json
 import math
+import os
 import subprocess
 import sys
 from collections import Counter
@@ -16,6 +18,10 @@ OUT_ROOT = Path(__file__).resolve().parents[1] / "out"
 from src.fetch_games_cfb import load_games, filter_week_reg
 from src.cfb_ats import apply_ats_to_week, build_team_ats
 from src.common.current_week_service import get_current_week
+from src.common.io_utils import write_csv, write_jsonl
+from src.odds.cfb_ingest import ingest_cfb_odds_raw
+from src.odds.cfb_pin_to_schedule import pin_cfb_odds
+from src.odds.cfb_promote_week import promote_week_odds, diff_game_rows
 from src.schedule_master_cfb import (
     ensure_weeks_present as ensure_cfb_schedule_master,
     enrich_from_local_odds,
@@ -257,6 +263,51 @@ def main() -> int:
     print(f"PASS: CFB schedule rows={schedule_rows}")
     notes.append(f"Schedule rows={schedule_rows}")
 
+    odds_flag = os.getenv("ODDS_STAGING_ENABLE", "1")
+    staging_counts = {"raw": 0, "pinned": 0, "unmatched": 0}
+    staging_examples: List[str] = []
+    if odds_flag.strip().lower() not in {"0", "false", "off", "disabled"}:
+        raw_payload = ingest_cfb_odds_raw()
+        raw_records = raw_payload.get("records", []) or []
+        day_window = int(os.getenv("ODDS_PIN_DAY_WINDOW", "3"))
+        max_delta_hours = float(os.getenv("ODDS_PIN_MAX_KICKOFF_DELTA_HOURS", "36"))
+        role_swap_enabled = os.getenv("ODDS_ROLE_SWAP_TOLERANCE", "1").strip().lower() not in {"0", "false", "off"}
+        pin_result = pin_cfb_odds(
+            raw_records,
+            day_window=day_window,
+            max_delta_hours=max_delta_hours,
+            role_swap_tolerance=role_swap_enabled,
+        )
+        counts = pin_result.get("counts", {})
+        staging_counts = {
+            "raw": len(raw_records),
+            "pinned": counts.get("pinned", 0),
+            "unmatched": counts.get("unmatched", 0),
+        }
+        staging_examples = pin_result.get("examples_unmatched", []) or []
+        staging_examples = list(dict.fromkeys(staging_examples))[:3]
+        markets_snapshot = counts.get("markets", {}) or {}
+        books_snapshot = counts.get("books", {}) or {}
+        log_line = (
+                "CFB ODDS STAGING: "
+                f"raw={staging_counts['raw']} pinned={staging_counts['pinned']} "
+                f"unmatched={staging_counts['unmatched']} new_raw={len(raw_records)} "
+                f"new_pinned={staging_counts['pinned']} markets={markets_snapshot} "
+                f"books={books_snapshot} window=+/-{day_window}d "
+                f"candidate_sets_zero={staging_counts.get('candidate_sets_zero', 0)} "
+                f"candidate_sets_multi={staging_counts.get('candidate_sets_multi', 0)} "
+                f"max_delta={max_delta_hours}h examples_unmatched={staging_examples}"
+            )
+        if staging_counts["raw"] > 0 and staging_counts["pinned"] == 0:
+            log_line += ' hint="provider ahead or schedule mismatch"'
+        print(log_line)
+        notes.append(
+            f"Odds staging raw={staging_counts['raw']} pinned={staging_counts['pinned']} "
+            f"unmatched={staging_counts['unmatched']}"
+        )
+    else:
+        print("CFB ODDS STAGING: disabled via ODDS_STAGING_ENABLE")
+
     # League metrics
     print("\n>>> Running src.fetch_year_to_date_stats_cfb .")
     lm_rc = run_module("src.fetch_year_to_date_stats_cfb", season, week, check=False)
@@ -448,8 +499,52 @@ def main() -> int:
     if missing_favorite_fields:
         print(f"FAIL: CFB Game View missing fields: {', '.join(missing_favorite_fields)}")
         return 1
+
+    legacy_rows = None
+    legacy_flag = os.getenv("ODDS_LEGACY_JOIN_ENABLE", "1").strip().lower() not in {"0", "false", "off", "disabled"}
+    if legacy_flag:
+        legacy_rows = copy.deepcopy(gv_records)
+
+    promotion_info = None
+    if os.getenv("ODDS_PROMOTION_ENABLE", "1").strip().lower() not in {"0", "false", "off", "disabled"}:
+        policy = os.getenv("ODDS_SELECT_POLICY", "latest_by_fetch_ts")
+        promotion_info = promote_week_odds(gv_records, season, week, policy=policy)
+        if promotion_info["promoted_games"] > 0:
+            write_jsonl(gv_records, gv_jsonl)
+            write_csv(gv_records, gv_csv)
+    else:
+        promotion_info = None
+
     print(f"PASS: CFB Game View rows={len(gv_records)} ({gv_jsonl})")
     log_odds_join_audit(season, week, gv_records, base_dir)
+    legacy_mismatch = 0
+    if promotion_info is not None:
+        if legacy_flag and legacy_rows is not None:
+            diff_summary = diff_game_rows(gv_records, legacy_rows)
+            print(
+                "ODDS DIFF: promoted_only="
+                f"{diff_summary['promoted_only']} legacy_only={diff_summary['legacy_only']} "
+                f"both_equal={diff_summary['both_equal']} mismatched={diff_summary['mismatched']}"
+            )
+            legacy_mismatch = diff_summary['mismatched']
+        log_line = (
+            f"CFB ODDS PROMOTION: week={season}-{week} promoted={promotion_info['promoted_games']} "
+            f"by_market={promotion_info['by_market']} by_book={promotion_info['by_book']} "
+            f"legacy_mismatch={legacy_mismatch}"
+        )
+        if promotion_info['promoted_games'] == 0 and promotion_info.get('other_week_records', 0) > 0:
+            log_line += ' hint="provider ahead; staged"'
+        print(log_line)
+        notes.append(
+            "Odds promotion "
+            f"promoted={promotion_info['promoted_games']} "
+            f"current_week={promotion_info.get('current_week_records', 0)} "
+            f"other_weeks={promotion_info.get('other_week_records', 0)} "
+            f"mismatch={legacy_mismatch}"
+        )
+    else:
+        print("CFB ODDS PROMOTION: disabled via ODDS_PROMOTION_ENABLE")
+
     team_ats = build_team_ats(season, week)
     rows_updated = apply_ats_to_week(season, week, team_ats)
     weeks_meta = getattr(build_team_ats, "meta", {})
@@ -477,10 +572,8 @@ def main() -> int:
     print(f"Sagarin rows        : {summary['sagarin_rows']}")
     print(f"Sidecar files       : {summary['sidecars']}")
     print("Done.")
-    if current_week_info:
-        print(f"NOTIFY: Global Week Service (read-only) added; logging CurrentWeek(CFB)={current_week_info[0]} W{current_week_info[1]} at refresh start.")
-    else:
-        print("NOTIFY: Global Week Service (read-only) added; logging CurrentWeek(CFB) unavailable at refresh start.")
+    promoted_total = promotion_info["promoted_games"] if promotion_info is not None else 0
+    print(f"NOTIFY: CFB odds promotion enabled; promoted={promoted_total}.")
     return 0
 
 

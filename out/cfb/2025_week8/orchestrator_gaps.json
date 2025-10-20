@@ -128,12 +128,14 @@
   },
   "notes": [
     "Schedule rows=295",
+    "Odds staging raw=1077 pinned=933 unmatched=144",
     "League metrics 136/136 teams meeting threshold (required 100); ranks_ok=1.00",
     "Odds matched 0/0 (total 53); unmatched=53",
     "Master enrichment 0/0",
     "Sagarin rows=134; master=6294",
     "Sidecars 296/295",
     "Sagarin enrichment 100%/89%",
+    "Odds promotion promoted=0 current_week=0 other_weeks=2787 mismatch=0",
     "ATS rows=0 teams=0 zero=118",
     "Game View rows=59",
     "NFL week baseline not found; skipping cross-league key comparison."

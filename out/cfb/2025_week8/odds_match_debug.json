@@ -94,14 +94,6 @@
         "why": "future_week"
       },
       {
-        "event_home": "Utah Utes",
-        "event_away": "Colorado Buffaloes",
-        "event_time": "2025-10-25T16:00:00Z",
-        "home_norm": "utah",
-        "away_norm": "colorado",
-        "why": "future_week"
-      },
-      {
         "event_home": "Eastern Michigan Eagles",
         "event_away": "Ohio Bobcats",
         "event_time": "2025-10-25T16:00:00Z",
@@ -123,14 +115,6 @@
         "event_time": "2025-10-25T16:00:00Z",
         "home_norm": "indiana",
         "away_norm": "ucla",
-        "why": "future_week"
-      },
-      {
-        "event_home": "Iowa Hawkeyes",
-        "event_away": "Minnesota Golden Gophers",
-        "event_time": "2025-10-25T16:00:00Z",
-        "home_norm": "iowa",
-        "away_norm": "minnesota",
         "why": "future_week"
       },
       {
@@ -251,6 +235,22 @@
         "event_time": "2025-10-25T19:30:00Z",
         "home_norm": "centralmichigan",
         "away_norm": "umass",
+        "why": "future_week"
+      },
+      {
+        "event_home": "Navy Midshipmen",
+        "event_away": "Florida Atlantic Owls",
+        "event_time": "2025-10-25T19:30:00Z",
+        "home_norm": "navymidshipmen",
+        "away_norm": "floridaatlantic",
+        "why": "future_week"
+      },
+      {
+        "event_home": "Fresno State Bulldogs",
+        "event_away": "San Diego State Aztecs",
+        "event_time": "2025-10-25T19:30:00Z",
+        "home_norm": "fresnostate",
+        "away_norm": "sandiegostateaztecs",
         "why": "future_week"
       }
     ]
