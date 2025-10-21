@@ -99,7 +99,7 @@ def ingest_cfb_odds_raw() -> Dict[str, Any]:
         - Raw staging files are named `<YYYYMMDDTHHMMSSZ>.jsonl` and written
           atomically under `staging/odds_raw/cfb/`.
     """
-    if not _is_enabled(os.getenv("ODDS_STAGING_ENABLE", "1")):
+    if not _is_enabled(getenv("ODDS_STAGING_ENABLE", "1")):
         return {"records": [], "fetch_ts": None, "path": None, "counts": {}}
 
     env = read_env(["THE_ODDS_API_KEY"])

@@ -169,10 +169,10 @@ def _load_week_rows(path: Path) -> List[dict]:
 
 def backfill_nfl_scores(season: int, week: int) -> Dict[str, object]:
     """Backfill missing scores for recent NFL weeks."""
-    if os.getenv("SCORES_BACKFILL_ENABLE", "1").strip().lower() in {"0", "false", "off", "disabled"}:
+    if getenv("SCORES_BACKFILL_ENABLE", "1").strip().lower() in {"0", "false", "off", "disabled"}:
         return {"weeks": [], "updated": 0, "skipped": 0}
 
-    include_weeks = int(os.getenv("BACKFILL_WEEKS", "2") or "2")
+    include_weeks = int(getenv("BACKFILL_WEEKS", "2") or "2")
     if include_weeks <= 0 or week <= 1:
         return {"weeks": [], "updated": 0, "skipped": 0}
 

@@ -179,7 +179,7 @@ def apply_ats_to_week(season: int, week: int, team_ats: Dict[str, Dict[str, int]
         apply_ats_to_week.zero_lined = 0
         return 0
 
-    dry_run = os.getenv("CFB_ATS_DRYRUN", "").strip() == "1"
+    dry_run = getenv("CFB_ATS_DRYRUN", "").strip() == "1"
     updated_rows = 0
     rows: List[dict] = []
     teams_this_week: set[str] = set()

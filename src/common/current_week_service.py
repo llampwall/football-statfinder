@@ -132,8 +132,8 @@ def get_current_week(league: str, *, persist: bool = True) -> Tuple[int, int, st
     if not league_upper:
         raise ValueError("League is required")
     # Environment overrides.
-    force_league = os.getenv("WEEK_FORCE_LEAGUE")
-    force_value = os.getenv("WEEK_FORCE")
+    force_league = getenv("WEEK_FORCE_LEAGUE")
+    force_value = getenv("WEEK_FORCE")
     computed_at = _now_utc()
     if force_league and force_value:
         if force_league.strip().upper() in {league_upper, "ALL", "*"}:

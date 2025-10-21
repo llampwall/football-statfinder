@@ -179,7 +179,7 @@ def run_nfl_sagarin_staging(
     local_html: Optional[Path] = None,
 ) -> Dict[str, object]:
     """Fetch, stage, and snapshot NFL Sagarin ratings for the current week."""
-    if os.getenv("SAGARIN_STAGING_ENABLE", "1").strip().lower() in {"0", "false", "off", "disabled"}:
+    if getenv("SAGARIN_STAGING_ENABLE", "1").strip().lower() in {"0", "false", "off", "disabled"}:
         print("Sagarin(NFL): staging disabled")
         return {
             "latest_fetch_ts": None,

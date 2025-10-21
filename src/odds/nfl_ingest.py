@@ -127,7 +127,7 @@ def _is_enabled(flag: Optional[str]) -> bool:
 
 def ingest_nfl_odds_raw() -> Dict[str, Any]:
     """Fetch, normalize, and stage raw NFL odds provider records."""
-    if not _is_enabled(os.getenv("ODDS_STAGING_ENABLE", "1")):
+    if not _is_enabled(getenv("ODDS_STAGING_ENABLE", "1")):
         return {"records": [], "fetch_ts": None, "path": None, "counts": {}}
 
     env = read_env(["THE_ODDS_API_KEY"])

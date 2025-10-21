@@ -285,15 +285,15 @@ def main() -> int:
     print(f"PASS: CFB schedule rows={schedule_rows}")
     notes.append(f"Schedule rows={schedule_rows}")
 
-    odds_flag = os.getenv("ODDS_STAGING_ENABLE", "1")
+    odds_flag = getenv("ODDS_STAGING_ENABLE", "1")
     staging_counts = {"raw": 0, "pinned": 0, "unmatched": 0}
     staging_examples: List[str] = []
     if odds_flag.strip().lower() not in {"0", "false", "off", "disabled"}:
         raw_payload = ingest_cfb_odds_raw()
         raw_records = raw_payload.get("records", []) or []
-        day_window = int(os.getenv("ODDS_PIN_DAY_WINDOW", "3"))
-        max_delta_hours = float(os.getenv("ODDS_PIN_MAX_KICKOFF_DELTA_HOURS", "36"))
-        role_swap_enabled = os.getenv("ODDS_ROLE_SWAP_TOLERANCE", "1").strip().lower() not in {"0", "false", "off"}
+        day_window = int(getenv("ODDS_PIN_DAY_WINDOW", "3"))
+        max_delta_hours = float(getenv("ODDS_PIN_MAX_KICKOFF_DELTA_HOURS", "36"))
+        role_swap_enabled = getenv("ODDS_ROLE_SWAP_TOLERANCE", "1").strip().lower() not in {"0", "false", "off"}
         pin_result = pin_cfb_odds(
             raw_records,
             day_window=day_window,
@@ -444,7 +444,7 @@ def main() -> int:
 
     # Sagarin snapshot + master upsert
     sagarin_staging_enabled = (
-        os.getenv("SAGARIN_STAGING_ENABLE", "1").strip().lower() not in {"0", "false", "off", "disabled"}
+        getenv("SAGARIN_STAGING_ENABLE", "1").strip().lower() not in {"0", "false", "off", "disabled"}
     )
     backfill_summary = {"weeks": [], "updated": 0, "skipped": 0, "files_rewritten": 0}
     if sagarin_staging_enabled:
@@ -577,13 +577,13 @@ def main() -> int:
         return 1
 
     legacy_rows = None
-    legacy_flag = os.getenv("ODDS_LEGACY_JOIN_ENABLE", "0").strip().lower() not in {"0", "false", "off", "disabled"}
+    legacy_flag = getenv("ODDS_LEGACY_JOIN_ENABLE", "0").strip().lower() not in {"0", "false", "off", "disabled"}
     if legacy_flag:
         legacy_rows = copy.deepcopy(gv_records)
 
     promotion_info = None
-    if os.getenv("ODDS_PROMOTION_ENABLE", "1").strip().lower() not in {"0", "false", "off", "disabled"}:
-        policy = os.getenv("ODDS_SELECT_POLICY", "latest_by_fetch_ts")
+    if getenv("ODDS_PROMOTION_ENABLE", "1").strip().lower() not in {"0", "false", "off", "disabled"}:
+        policy = getenv("ODDS_SELECT_POLICY", "latest_by_fetch_ts")
         promotion_info = promote_week_odds(gv_records, season, week, policy=policy)
         if promotion_info["promoted_games"] > 0:
             write_jsonl(gv_records, gv_jsonl)

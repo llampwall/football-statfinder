@@ -111,7 +111,7 @@ def build_team_ats(season: int, week: int) -> Dict[str, Dict[str, int]]:
     weeks_scanned: List[int] = []
     games_considered = 0
 
-    if week <= 1 or os.getenv("ATS_ENABLE", "1").strip().lower() in {"0", "false", "off", "disabled"}:
+    if week <= 1 or getenv("ATS_ENABLE", "1").strip().lower() in {"0", "false", "off", "disabled"}:
         build_team_ats.meta = {"weeks_scanned": weeks_scanned, "games_considered": games_considered}
         return stats
 
@@ -168,7 +168,7 @@ def build_team_ats(season: int, week: int) -> Dict[str, Dict[str, int]]:
 
 def apply_ats_to_week(season: int, week: int, team_ats: Mapping[str, Mapping[str, int]]) -> int:
     """Apply ATS tallies to the current week's Game View rows."""
-    if os.getenv("ATS_ENABLE", "1").strip().lower() in {"0", "false", "off", "disabled"}:
+    if getenv("ATS_ENABLE", "1").strip().lower() in {"0", "false", "off", "disabled"}:
         apply_ats_to_week.teams_in_week = 0
         return 0
 

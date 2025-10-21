@@ -42,9 +42,9 @@ def _run_odds_staging(season: int, week: int) -> Dict[str, Any]:
     ingest_result = ingest_nfl_odds_raw()
     raw_records = ingest_result.get("records", []) or []
 
-    day_window = int(os.getenv("ODDS_PIN_DAY_WINDOW", "3") or "3")
-    max_delta_hours = float(os.getenv("ODDS_PIN_MAX_KICKOFF_DELTA_HOURS", "36") or "36")
-    role_swap_enabled = os.getenv("ODDS_ROLE_SWAP_TOLERANCE", "1").strip().lower() not in {
+    day_window = int(getenv("ODDS_PIN_DAY_WINDOW", "3") or "3")
+    max_delta_hours = float(getenv("ODDS_PIN_MAX_KICKOFF_DELTA_HOURS", "36") or "36")
+    role_swap_enabled = getenv("ODDS_ROLE_SWAP_TOLERANCE", "1").strip().lower() not in {
         "0",
         "false",
         "off",
@@ -144,15 +144,15 @@ def main() -> None:
     json_path = week_dir / f"games_week_{season}_{week}.jsonl"
     csv_path = week_dir / f"games_week_{season}_{week}.csv"
 
-    if os.getenv("ODDS_PROMOTION_ENABLE", "1").strip().lower() not in {"0", "false", "off", "disabled"}:
+    if getenv("ODDS_PROMOTION_ENABLE", "1").strip().lower() not in {"0", "false", "off", "disabled"}:
         legacy_rows = read_week_json(json_path)
         rows = copy.deepcopy(legacy_rows)
-        policy = os.getenv("ODDS_SELECT_POLICY", "latest_by_fetch_ts") or "latest_by_fetch_ts"
+        policy = getenv("ODDS_SELECT_POLICY", "latest_by_fetch_ts") or "latest_by_fetch_ts"
         promotion_info = promote_week_odds(rows, season, week, policy=policy)
         promoted_total = promotion_info.get("promoted_games", 0)
         if promoted_total > 0:
             write_week_outputs(rows, season, week)
-        legacy_flag = os.getenv("ODDS_LEGACY_JOIN_ENABLE", "0").strip().lower() not in {
+        legacy_flag = getenv("ODDS_LEGACY_JOIN_ENABLE", "0").strip().lower() not in {
             "0",
             "false",
             "off",

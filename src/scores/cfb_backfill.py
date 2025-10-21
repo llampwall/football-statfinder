@@ -138,7 +138,7 @@ def backfill_cfb_scores(
         ``updated`` (count), ``skipped`` (missing finals), ``files_rewritten``.
     """
     if include_weeks_back is None:
-        include_weeks_back = int(os.getenv("REFRESH_INCLUDE_WEEKS_BACK", "2") or "2")
+        include_weeks_back = int(getenv("REFRESH_INCLUDE_WEEKS_BACK", "2") or "2")
     if include_weeks_back <= 0 or week <= 1:
         return {"weeks": [], "updated": 0, "skipped": 0, "files_rewritten": 0}
 
