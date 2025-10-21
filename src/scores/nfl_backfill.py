@@ -34,7 +34,7 @@ from typing import Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
 import pandas as pd
 
 from src.common.io_atomic import write_atomic_csv, write_atomic_jsonl
-from src.common.io_utils import ensure_out_dir
+from src.common.io_utils import ensure_out_dir, getenv
 from src.common.team_names import TEAM_ABBR_TO_FULL, team_merge_key
 from src.schedule_master import load_master as load_nfl_schedule_master
 

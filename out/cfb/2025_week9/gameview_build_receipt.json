@@ -28,15 +28,15 @@
         "kickoff_iso_utc": "2025-10-25T19:30:00Z"
       },
       {
-        "game_key": "20251025_1930_ul_monroe_southern_miss",
-        "home": "Southern Miss",
-        "away": "Ul Monroe",
-        "kickoff_iso_utc": "2025-10-25T19:30:00Z"
-      },
-      {
         "game_key": "20251025_1930_temple_tulsa",
         "home": "Tulsa",
         "away": "Temple",
+        "kickoff_iso_utc": "2025-10-25T19:30:00Z"
+      },
+      {
+        "game_key": "20251025_1930_ul_monroe_southern_miss",
+        "home": "Southern Miss",
+        "away": "Ul Monroe",
         "kickoff_iso_utc": "2025-10-25T19:30:00Z"
       },
       {

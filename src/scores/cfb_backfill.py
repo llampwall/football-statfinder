@@ -32,7 +32,7 @@ from typing import Dict, Iterable, List, Optional, Sequence, Tuple
 import pandas as pd
 
 from src.common.io_atomic import write_atomic_csv, write_atomic_jsonl
-from src.common.io_utils import ensure_out_dir
+from src.common.io_utils import ensure_out_dir, getenv
 from src.schedule_master_cfb import load_master
 
 OUT_ROOT = ensure_out_dir()

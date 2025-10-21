@@ -24,7 +24,7 @@ import sys
 from typing import Any, Dict
 
 from src.common.current_week_service import get_current_week
-from src.common.io_utils import ensure_out_dir
+from src.common.io_utils import ensure_out_dir, getenv
 from src.odds.nfl_ingest import ingest_nfl_odds_raw
 from src.odds.nfl_pin_to_schedule import pin_nfl_odds
 from src.odds.nfl_promote_week import (

@@ -32,6 +32,23 @@ except ImportError:  # pragma: no cover - fallback path
 RepositoryPath = Path(__file__).resolve().parents[2]
 OUT = RepositoryPath / "out"
 
+_ENV_LOADED = False
+
+def load_env_once(override: bool = False) -> None:
+    """Load .env into os.environ once (idempotent)."""
+    global _ENV_LOADED
+    if _ENV_LOADED:
+        return
+    env_path = RepositoryPath / ".env"
+    if load_dotenv and env_path.exists():
+        load_dotenv(dotenv_path=env_path, override=override)
+    _ENV_LOADED = True
+
+def getenv(key: str, default: str | None = None) -> str | None:
+    """Project-safe getenv that ensures .env is loaded once."""
+    load_env_once(override=False)
+    return os.environ.get(key, default)
+
 
 def download_csv(url: str) -> pd.DataFrame:
     """Download a CSV from a URL and return it as a DataFrame."""

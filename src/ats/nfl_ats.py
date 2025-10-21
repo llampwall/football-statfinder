@@ -30,7 +30,7 @@ from pathlib import Path
 from typing import Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
 
 from src.common.io_atomic import write_atomic_csv, write_atomic_jsonl
-from src.common.io_utils import ensure_out_dir
+from src.common.io_utils import ensure_out_dir, getenv
 
 OUT_ROOT = ensure_out_dir()
 NFL_ROOT = OUT_ROOT / "nfl"

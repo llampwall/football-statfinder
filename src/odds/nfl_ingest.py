@@ -33,7 +33,7 @@ from typing import Any, Dict, Iterable, List, Optional
 
 import requests
 
-from src.common.io_utils import ensure_out_dir, read_env
+from src.common.io_utils import ensure_out_dir, read_env, getenv
 from src.common.team_names import normalize_team_display, team_merge_key
 
 OUT_ROOT = ensure_out_dir()

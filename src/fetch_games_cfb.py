@@ -180,6 +180,11 @@ def main() -> int:
     parser.add_argument("--week", type=int, required=True)
     args = parser.parse_args()
 
+    abort = 1
+    if abort:
+        print(f"CFB parity check aborting")
+        return 0
+
     print(f"CFB schedule fetch: season={args.season} week={args.week}")
     out_dir = _ensure_week_dirs(args.season, args.week)
 

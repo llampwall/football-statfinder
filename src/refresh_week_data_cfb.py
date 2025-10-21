@@ -18,7 +18,7 @@ OUT_ROOT = Path(__file__).resolve().parents[1] / "out"
 from src.fetch_games_cfb import load_games, filter_week_reg
 from src.cfb_ats import apply_ats_to_week, build_team_ats
 from src.common.current_week_service import get_current_week
-from src.common.io_utils import write_csv, write_jsonl
+from src.common.io_utils import write_csv, write_jsonl, getenv
 from src.odds.cfb_ingest import ingest_cfb_odds_raw
 from src.odds.cfb_pin_to_schedule import pin_cfb_odds
 from src.odds.cfb_promote_week import promote_week_odds, diff_game_rows

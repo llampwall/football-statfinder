@@ -8,7 +8,7 @@ import os
 from pathlib import Path
 from typing import Dict, Iterator, List, Optional
 
-from src.common.io_utils import write_jsonl
+from src.common.io_utils import write_jsonl, getenv
 
 OUT_ROOT = Path(__file__).resolve().parents[1] / "out"
 CFB_ROOT = OUT_ROOT / "cfb"

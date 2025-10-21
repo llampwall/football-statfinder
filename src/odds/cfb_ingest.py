@@ -25,7 +25,7 @@ from typing import Any, Dict, Iterable, List, Optional, Tuple
 
 import pandas as pd
 
-from src.common.io_utils import ensure_out_dir, read_env
+from src.common.io_utils import ensure_out_dir, read_env, getenv
 from src.common.team_names_cfb import normalize_team_name_cfb_odds, team_merge_key_cfb
 from src.fetch_week_odds_cfb import (
     extract_market,

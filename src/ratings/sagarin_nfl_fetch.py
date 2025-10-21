@@ -35,7 +35,7 @@ import pandas as pd
 
 from src.common.current_week_service import get_current_week
 from src.common.io_atomic import write_atomic_csv, write_atomic_jsonl
-from src.common.io_utils import ensure_out_dir
+from src.common.io_utils import ensure_out_dir, getenv
 from src.fetch_sagarin_week_nfl import (
     SAGARIN_URL,
     extract_table_week,
