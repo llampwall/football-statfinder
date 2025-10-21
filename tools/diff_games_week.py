@@ -1,16 +1,15 @@
-"""Diff helper for CFB games_week JSONL outputs.
+"""Diff helper for games_week JSONL outputs (league-agnostic).
 
 Purpose & scope:
-    Quickly compare two Game View JSONL files while ignoring timestamp-style
-    fields so we can confirm the odds-promotion step does not introduce
-    unexpected schema differences.
-
-Usage:
-    python -m tools.diff_games_week path/to/a.jsonl path/to/b.jsonl
+    Compare two games_week JSONL files while ignoring volatile timestamp
+    fields so odds promotion can be verified without legacy noise.
 
 Ignored fields:
-    * Top-level ``snapshot_at`` (varies per promotion run).
-    * ``raw_sources.odds_row.markets.*.fetch_ts`` (book fetch timestamps).
+    * Top-level ``snapshot_at``
+    * ``raw_sources.odds_row.markets.*.fetch_ts``
+
+Usage:
+    python -m tools.diff_games_week before.jsonl after.jsonl [--limit 5]
 """
 
 from __future__ import annotations
@@ -23,30 +22,30 @@ from typing import Any, Dict, Iterable, Tuple
 IGNORED_TOP_LEVEL = {"snapshot_at"}
 
 
-def _load_game_rows(path: Path) -> Dict[str, Dict[str, Any]]:
-    """Load a games_week JSONL file into a keyed dictionary."""
-    rows: Dict[str, Dict[str, Any]] = {}
+def _load_rows(path: Path) -> Dict[str, Dict[str, Any]]:
+    """Load a games_week JSONL file into a dict keyed by game_key."""
+    records: Dict[str, Dict[str, Any]] = {}
     if not path.exists():
-        return rows
+        return records
     with path.open("r", encoding="utf-8") as handle:
         for line in handle:
-            line = line.strip()
-            if not line:
+            text = line.strip()
+            if not text:
                 continue
             try:
-                record = json.loads(line)
+                record = json.loads(text)
             except json.JSONDecodeError:
                 continue
             key = record.get("game_key")
-            if not isinstance(key, str):
-                continue
-            rows[key] = record
-    return rows
+            if isinstance(key, str) and key:
+                records[key] = record
+    return records
 
 
 def _sanitize(row: Dict[str, Any]) -> Dict[str, Any]:
     """Return a sanitized copy of a row with volatile fields removed."""
     cleaned = {k: v for k, v in row.items() if k not in IGNORED_TOP_LEVEL}
+
     raw_sources = cleaned.get("raw_sources")
     if isinstance(raw_sources, dict):
         odds_row = raw_sources.get("odds_row")
@@ -61,51 +60,46 @@ def _sanitize(row: Dict[str, Any]) -> Dict[str, Any]:
                     sanitized_payload = dict(payload)
                     sanitized_payload.pop("fetch_ts", None)
                     sanitized_markets[market] = sanitized_payload
-                odds_row = dict(odds_row)
-                odds_row["markets"] = sanitized_markets
-                raw_sources = dict(raw_sources)
-                raw_sources["odds_row"] = odds_row
-                cleaned["raw_sources"] = raw_sources
+
+                new_odds = dict(odds_row)
+                new_odds["markets"] = sanitized_markets
+                new_sources = dict(raw_sources)
+                new_sources["odds_row"] = new_odds
+                cleaned["raw_sources"] = new_sources
+
     return cleaned
 
 
 def _compare(
-    rows_a: Dict[str, Dict[str, Any]],
-    rows_b: Dict[str, Dict[str, Any]],
+    before: Dict[str, Dict[str, Any]],
+    after: Dict[str, Dict[str, Any]],
 ) -> Tuple[int, int, Dict[str, Tuple[Dict[str, Any], Dict[str, Any]]]]:
-    """Compare two row maps and return discrepancy details."""
-    only_a = len(set(rows_a) - set(rows_b))
-    only_b = len(set(rows_b) - set(rows_a))
-
+    """Compare two row maps and return (only_before, only_after, mismatches)."""
+    only_before = len(set(before) - set(after))
+    only_after = len(set(after) - set(before))
     mismatches: Dict[str, Tuple[Dict[str, Any], Dict[str, Any]]] = {}
-    for key in set(rows_a) & set(rows_b):
-        if _sanitize(rows_a[key]) != _sanitize(rows_b[key]):
-            mismatches[key] = (rows_a[key], rows_b[key])
 
-    return only_a, only_b, mismatches
+    for key in set(before) & set(after):
+        if _sanitize(before[key]) != _sanitize(after[key]):
+            mismatches[key] = (before[key], after[key])
+
+    return only_before, only_after, mismatches
 
 
 def _build_parser() -> argparse.ArgumentParser:
-    """Create the command-line argument parser."""
     parser = argparse.ArgumentParser(description="Diff games_week JSONL outputs.")
-    parser.add_argument("before", type=Path, help="Path to the baseline games_week JSONL file.")
-    parser.add_argument("after", type=Path, help="Path to the promoted games_week JSONL file.")
-    parser.add_argument(
-        "--limit",
-        type=int,
-        default=5,
-        help="Maximum number of mismatched rows to display (default: 5).",
-    )
+    parser.add_argument("before", type=Path, help="Baseline games_week JSONL file.")
+    parser.add_argument("after", type=Path, help="Promoted games_week JSONL file.")
+    parser.add_argument("--limit", type=int, default=5, help="Max mismatches to display.")
     return parser
 
 
 def main(argv: Iterable[str] | None = None) -> int:
-    """CLI entry point."""
     parser = _build_parser()
-    args = parser.parse_args(argv)
+    args = parser.parse_args(list(argv) if argv is not None else None)
 
-    rows_before = _load_game_rows(args.before)
-    rows_after = _load_game_rows(args.after)
+    rows_before = _load_rows(args.before)
+    rows_after = _load_rows(args.after)
     only_before, only_after, mismatches = _compare(rows_before, rows_after)
 
     print(f"Rows only in {args.before}: {only_before}")

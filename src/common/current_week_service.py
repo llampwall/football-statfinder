@@ -15,7 +15,7 @@ STATE_PATH = OUT_ROOT / "state" / "current_week.json"
 
 MASTER_PATHS: Dict[str, Path] = {
     "CFB": OUT_ROOT / "master" / "cfb_schedule_master.csv",
-    # "NFL": OUT_ROOT / "master" / "nfl_schedule_master.csv",  # placeholder
+    "NFL": OUT_ROOT / "master" / "nfl_schedule_master.csv",
 }
 
 UTC = timezone.utc
