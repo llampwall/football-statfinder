@@ -1,0 +1,83 @@
+{
+  "fbs_rows": 53,
+  "joined_metrics_rows": 53,
+  "joined_odds_rows": 46,
+  "joined_sagarin_rows": 51,
+  "output_rows": 53,
+  "odds_games": 46,
+  "sagarin_games": 51,
+  "coverage_metrics": 1.0,
+  "notes": [
+    "FBS games: 53",
+    "Metrics coverage: 53/53",
+    "Odds coverage: 46/53",
+    "Sagarin coverage: 51/53"
+  ],
+  "samples": {
+    "missing_odds": [
+      {
+        "game_key": "20251025_1600_app_state_old_dominion",
+        "home": "Old Dominion",
+        "away": "App State",
+        "kickoff_iso_utc": "2025-10-25T16:00:00Z"
+      },
+      {
+        "game_key": "20251025_1930_san_diego_state_fresno_state",
+        "home": "Fresno State",
+        "away": "San Diego State",
+        "kickoff_iso_utc": "2025-10-25T19:30:00Z"
+      },
+      {
+        "game_key": "20251025_1930_ul_monroe_southern_miss",
+        "home": "Southern Miss",
+        "away": "Ul Monroe",
+        "kickoff_iso_utc": "2025-10-25T19:30:00Z"
+      },
+      {
+        "game_key": "20251025_1930_temple_tulsa",
+        "home": "Tulsa",
+        "away": "Temple",
+        "kickoff_iso_utc": "2025-10-25T19:30:00Z"
+      },
+      {
+        "game_key": "20251025_1930_florida_atlantic_navy",
+        "home": "Navy",
+        "away": "Florida Atlantic",
+        "kickoff_iso_utc": "2025-10-25T19:30:00Z"
+      },
+      {
+        "game_key": "20251025_1930_massachusetts_central_michigan",
+        "home": "Central Michigan",
+        "away": "Massachusetts",
+        "kickoff_iso_utc": "2025-10-25T19:30:00Z"
+      },
+      {
+        "game_key": "20251025_2300_georgia_southern_arkansas_state",
+        "home": "Arkansas State",
+        "away": "Georgia Southern",
+        "kickoff_iso_utc": "2025-10-25T23:00:00Z"
+      }
+    ],
+    "missing_sagarin": [
+      {
+        "game_key": "20251022_2330_middle_tennessee_delaware",
+        "home": "Delaware",
+        "away": "Middle Tennessee",
+        "kickoff_iso_utc": "2025-10-22T23:30:00Z"
+      },
+      {
+        "game_key": "20251023_0100_missouri_state_new_mexico_state",
+        "home": "New Mexico State",
+        "away": "Missouri State",
+        "kickoff_iso_utc": "2025-10-23T01:00:00Z"
+      }
+    ],
+    "metrics_gaps": []
+  },
+  "ratings": {
+    "eligible": 44,
+    "edges_count": 44,
+    "rvo_count": 44
+  },
+  "failures": []
+}

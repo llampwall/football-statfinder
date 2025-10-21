@@ -1,0 +1,95 @@
+{
+  "fbs_rows": 59,
+  "joined_metrics_rows": 59,
+  "joined_odds_rows": 0,
+  "joined_sagarin_rows": 58,
+  "output_rows": 59,
+  "odds_games": 0,
+  "sagarin_games": 58,
+  "coverage_metrics": 1.0,
+  "notes": [
+    "FBS games: 59",
+    "Metrics coverage: 59/59",
+    "Odds coverage: 0/59",
+    "Sagarin coverage: 58/59"
+  ],
+  "samples": {
+    "missing_odds": [
+      {
+        "game_key": "20251014_2300_new_mexico_state_liberty",
+        "home": "Liberty",
+        "away": "New Mexico State",
+        "kickoff_iso_utc": "2025-10-14T23:00:00Z"
+      },
+      {
+        "game_key": "20251014_2330_arkansas_state_south_alabama",
+        "home": "South Alabama",
+        "away": "Arkansas State",
+        "kickoff_iso_utc": "2025-10-14T23:30:00Z"
+      },
+      {
+        "game_key": "20251015_0000_florida_international_western_kentucky",
+        "home": "Western Kentucky",
+        "away": "Florida International",
+        "kickoff_iso_utc": "2025-10-15T00:00:00Z"
+      },
+      {
+        "game_key": "20251015_2300_delaware_jacksonville_state",
+        "home": "Jacksonville State",
+        "away": "Delaware",
+        "kickoff_iso_utc": "2025-10-15T23:00:00Z"
+      },
+      {
+        "game_key": "20251015_2300_utep_sam_houston",
+        "home": "Sam Houston",
+        "away": "Utep",
+        "kickoff_iso_utc": "2025-10-15T23:00:00Z"
+      },
+      {
+        "game_key": "20251016_2330_tulsa_east_carolina",
+        "home": "East Carolina",
+        "away": "Tulsa",
+        "kickoff_iso_utc": "2025-10-16T23:30:00Z"
+      },
+      {
+        "game_key": "20251017_2300_louisville_miami",
+        "home": "Miami",
+        "away": "Louisville",
+        "kickoff_iso_utc": "2025-10-17T23:00:00Z"
+      },
+      {
+        "game_key": "20251018_0000_nebraska_minnesota",
+        "home": "Minnesota",
+        "away": "Nebraska",
+        "kickoff_iso_utc": "2025-10-18T00:00:00Z"
+      },
+      {
+        "game_key": "20251018_0100_san_jos_state_utah_state",
+        "home": "Utah State",
+        "away": "San Jos\u00e9 State",
+        "kickoff_iso_utc": "2025-10-18T01:00:00Z"
+      },
+      {
+        "game_key": "20251018_0230_north_carolina_california",
+        "home": "California",
+        "away": "North Carolina",
+        "kickoff_iso_utc": "2025-10-18T02:30:00Z"
+      }
+    ],
+    "missing_sagarin": [
+      {
+        "game_key": "20251015_2300_delaware_jacksonville_state",
+        "home": "Jacksonville State",
+        "away": "Delaware",
+        "kickoff_iso_utc": "2025-10-15T23:00:00Z"
+      }
+    ],
+    "metrics_gaps": []
+  },
+  "ratings": {
+    "eligible": 0,
+    "edges_count": 0,
+    "rvo_count": 0
+  },
+  "failures": []
+}

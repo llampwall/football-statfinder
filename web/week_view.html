@@ -82,6 +82,15 @@
       font-size: 0.95rem;
     }
 
+    .controls select {
+      width: 6.5rem;
+      padding: 0.4rem 0.55rem;
+      border: 1px solid #b9bec8;
+      border-radius: 3px;
+      background: #ffffff;
+      font-size: 0.95rem;
+    }
+
     .controls button {
       padding: 0.42rem 0.95rem;
       border-radius: 3px;
@@ -195,10 +204,6 @@
       border-bottom: 1px solid #e6e8ee;
       color: #1f2330;
       position: relative;
-    }
-
-    tbody tr:nth-child(even) td {
-      background: #fafbff;
     }
 
     /* tbody tr:hover td {
@@ -320,6 +325,13 @@
           <div class="status" id="status"></div>
         </div>
         <div class="controls">
+          <label>
+            League
+            <select id="league-select">
+              <option value="nfl">NFL</option>
+              <option value="cfb">CFB</option>
+            </select>
+          </label>
           <label>
             Season
             <input type="number" id="season-input" min="2000" />

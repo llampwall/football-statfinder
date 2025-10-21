@@ -1,0 +1,17 @@
+{
+  "season": 2024,
+  "teams_total": 134,
+  "teams_with_metrics": 134,
+  "covered_fraction": 1.0,
+  "fields_required_per_team": 14,
+  "fields_hit_threshold": 10,
+  "teams_meeting_threshold": 134,
+  "rank_columns_ok_fraction": 1.0,
+  "missing_fields_per_team_sample": {},
+  "source_notes": [
+    "cfbd endpoints used: /teams/fbs (season=2024)",
+    "cfbd endpoints used: /games/teams (regular weeks 1-16)",
+    "cfbd endpoints used: /games/teams (postseason weeks 1-1)",
+    "ATS unavailable for CFB S2D; intentionally blank"
+  ]
+}

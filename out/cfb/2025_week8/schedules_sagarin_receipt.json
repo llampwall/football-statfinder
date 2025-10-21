@@ -1,0 +1,162 @@
+{
+  "season": 2025,
+  "week": 8,
+  "rows_considered": 1902,
+  "rows_enriched": 1902,
+  "opp_rows_enriched": 1694,
+  "coverage_fraction": 1.0,
+  "opp_coverage_fraction": 0.8906414300736067,
+  "missing_examples": [
+    {
+      "season": 2025,
+      "week": 6,
+      "team_norm": "samhouston",
+      "context": "away_ytd_opp_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 5,
+      "team_norm": "appstate",
+      "context": "home_prev_opp_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 7,
+      "team_norm": "floridainternational",
+      "context": "home_prev_opp_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 14,
+      "team_norm": "samhouston",
+      "context": "home_prev_opp_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 1,
+      "team_norm": "southeastmissouristate",
+      "context": "away_prev_opp_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 4,
+      "team_norm": "samhouston",
+      "context": "away_prev_opp_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 10,
+      "team_norm": "floridainternational",
+      "context": "away_prev_opp_not_in_master"
+    },
+    {
+      "season": 2025,
+      "week": 1,
+      "team_norm": "southeastmissouristate",
+      "context": "away_ytd_opp_not_in_master"
+    },
+    {
+      "season": 2025,
+      "week": 5,
+      "team_norm": "ulmonroe",
+      "context": "away_ytd_opp_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 4,
+      "team_norm": "appstate",
+      "context": "home_prev_opp_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 9,
+      "team_norm": "ulmonroe",
+      "context": "home_prev_opp_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 12,
+      "team_norm": "louisiana",
+      "context": "home_prev_opp_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 11,
+      "team_norm": "louisiana",
+      "context": "away_prev_opp_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 13,
+      "team_norm": "ulmonroe",
+      "context": "away_prev_opp_not_in_master"
+    },
+    {
+      "season": 2025,
+      "week": 1,
+      "team_norm": "samhouston",
+      "context": "home_ytd_opp_not_in_master"
+    },
+    {
+      "season": 2025,
+      "week": 1,
+      "team_norm": "floridainternational",
+      "context": "away_ytd_not_in_master"
+    },
+    {
+      "season": 2025,
+      "week": 2,
+      "team_norm": "floridainternational",
+      "context": "away_ytd_not_in_master"
+    },
+    {
+      "season": 2025,
+      "week": 3,
+      "team_norm": "floridainternational",
+      "context": "away_ytd_not_in_master"
+    },
+    {
+      "season": 2025,
+      "week": 4,
+      "team_norm": "floridainternational",
+      "context": "away_ytd_not_in_master"
+    },
+    {
+      "season": 2025,
+      "week": 6,
+      "team_norm": "floridainternational",
+      "context": "away_ytd_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 8,
+      "team_norm": "samhouston",
+      "context": "home_prev_opp_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 1,
+      "team_norm": "floridainternational",
+      "context": "away_prev_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 2,
+      "team_norm": "floridainternational",
+      "context": "away_prev_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 3,
+      "team_norm": "floridainternational",
+      "context": "away_prev_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 4,
+      "team_norm": "floridainternational",
+      "context": "away_prev_not_in_master"
+    }
+  ],
+  "source": "C:\\Users\\Jordan\\Documents\\Football Project George\\NEW PROJECT\\football-statfinder\\out\\master\\sagarin_cfb_master.csv"
+}
