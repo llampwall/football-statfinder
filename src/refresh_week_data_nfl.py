@@ -35,6 +35,8 @@ from src.odds.nfl_promote_week import (
     diff_game_rows,
 )
 from src.ratings.sagarin_nfl_fetch import run_nfl_sagarin_staging
+from src.scores.nfl_backfill import backfill_nfl_scores
+from src.ats.nfl_ats import build_team_ats, apply_ats_to_week
 
 
 def _extract_args(argv: list[str]) -> Tuple[int, int]:
@@ -103,20 +105,34 @@ def main() -> None:
     staging_counts = _run_odds_staging(season, week)
     run_nfl_sagarin_staging()
 
+    backfill_summary = backfill_nfl_scores(season, week)
+    weeks_label = "[" + ",".join(backfill_summary.get("weeks", [])) + "]"
+    print(
+        f"Scores(NFL): weeks={weeks_label} updated={backfill_summary.get('updated', 0)} "
+        f"skipped={backfill_summary.get('skipped', 0)}"
+    )
+
+    team_ats = build_team_ats(season, week)
+    ats_rows_updated = apply_ats_to_week(season, week, team_ats)
+    print(f"ATS(NFL): teams={apply_ats_to_week.teams_in_week} rows_updated={ats_rows_updated}")
+
     promotion_info = None
     legacy_mismatch = 0
     promoted_total = 0
+    rows_count = 0
+
+    out_root = ensure_out_dir()
+    week_dir = out_root / f"{season}_week{week}"
+    json_path = week_dir / f"games_week_{season}_{week}.jsonl"
+    csv_path = week_dir / f"games_week_{season}_{week}.csv"
 
     if os.getenv("ODDS_PROMOTION_ENABLE", "1").strip().lower() not in {"0", "false", "off", "disabled"}:
-        out_root = ensure_out_dir()
-        week_dir = out_root / f"{season}_week{week}"
-        json_path = week_dir / f"games_week_{season}_{week}.jsonl"
-        csv_path = week_dir / f"games_week_{season}_{week}.csv"
         legacy_rows = read_week_json(json_path)
         rows = copy.deepcopy(legacy_rows)
         policy = os.getenv("ODDS_SELECT_POLICY", "latest_by_fetch_ts") or "latest_by_fetch_ts"
         promotion_info = promote_week_odds(rows, season, week, policy=policy)
         promoted_total = promotion_info.get("promoted_games", 0)
+        rows_count = len(rows)
         if promoted_total > 0:
             write_week_outputs(rows, season, week)
         legacy_flag = os.getenv("ODDS_LEGACY_JOIN_ENABLE", "1").strip().lower() not in {
@@ -139,11 +155,11 @@ def main() -> None:
         print(log_line)
     else:
         print("NFL ODDS PROMOTION: disabled via ODDS_PROMOTION_ENABLE")
+        rows_count = len(read_week_json(json_path))
 
     print(
-        f"NOTIFY: NFL odds staging+promotion complete raw={staging_counts.get('raw', 0)} "
-        f"pinned={staging_counts.get('pinned', 0)} promoted={promoted_total} "
-        f"unmatched={staging_counts.get('unmatched', 0)}."
+        f"NOTIFY: NFL refresh complete week={season}-{week} rows={rows_count} "
+        f"odds_promoted={promoted_total}."
     )
 
 
