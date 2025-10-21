@@ -497,6 +497,30 @@ def main() -> int:
         notes.append(f"Sagarin rows={sag_rows}; master={master_rows}")
     backfill_summary = backfill_cfb_scores(season, week)
 
+    # Game view builder
+    print("\n>>> Running src.gameview_build_cfb .")
+    gameview_rc = run_module("src.gameview_build_cfb", season, week, check=False)
+    gv_jsonl = base_dir / f"games_week_{season}_{week}.jsonl"
+    gv_csv = base_dir / f"games_week_{season}_{week}.csv"
+    if gameview_rc != 0 or not gv_jsonl.exists() or not gv_csv.exists():
+        print("FAIL: CFB Game View build failed.")
+        return gameview_rc or 1
+    gv_records = read_jsonl(gv_jsonl)
+    if not gv_records:
+        print("FAIL: CFB Game View JSONL is empty.")
+        return 1
+    favorite_fields = [
+        "spread_home_relative",
+        "favored_side",
+        "spread_favored_team",
+        "rating_diff_favored_team",
+        "rating_vs_odds_favored_team",
+    ]
+    missing_favorite_fields = [field for field in favorite_fields if field not in gv_records[0]]
+    if missing_favorite_fields:
+        print(f"FAIL: CFB Game View missing fields: {', '.join(missing_favorite_fields)}")
+        return 1
+
     # Sidecar timelines
     print("\n>>> Running src.build_team_timelines_cfb .")
     timelines_rc = run_module("src.build_team_timelines_cfb", season, week, check=False)
@@ -528,7 +552,7 @@ def main() -> int:
     else:
         print(f"WARNING: Sagarin enrichment receipt missing ({sagarin_receipt_path})")
 
-    # Game view builder
+    # Game view builder (again - might be necessary)
     print("\n>>> Running src.gameview_build_cfb .")
     gameview_rc = run_module("src.gameview_build_cfb", season, week, check=False)
     gv_jsonl = base_dir / f"games_week_{season}_{week}.jsonl"
