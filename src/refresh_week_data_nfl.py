@@ -21,8 +21,7 @@ import argparse
 import copy
 import os
 import sys
-from pathlib import Path
-from typing import Any, Dict, Tuple
+from typing import Any, Dict
 
 from src.common.current_week_service import get_current_week
 from src.common.io_utils import ensure_out_dir
@@ -37,21 +36,6 @@ from src.odds.nfl_promote_week import (
 from src.ratings.sagarin_nfl_fetch import run_nfl_sagarin_staging
 from src.scores.nfl_backfill import backfill_nfl_scores
 from src.ats.nfl_ats import build_team_ats, apply_ats_to_week
-
-
-def _extract_args(argv: list[str]) -> Tuple[int, int]:
-    parser = argparse.ArgumentParser(add_help=False)
-    parser.add_argument("--season", type=int)
-    parser.add_argument("--week", type=int)
-    known, _ = parser.parse_known_args(argv)
-    if known.season is None or known.week is None:
-        raise SystemExit("NFL refresh requires --season and --week arguments.")
-    return int(known.season), int(known.week)
-
-
-def _log_current_week_readonly() -> None:
-    season, week, ts = get_current_week("NFL")
-    print(f"CurrentWeek(NFL)={season} W{week} computed_at={ts} (readonly)")
 
 
 def _run_odds_staging(season: int, week: int) -> Dict[str, Any]:
@@ -93,12 +77,47 @@ def _run_odds_staging(season: int, week: int) -> Dict[str, Any]:
 
 
 def main() -> None:
-    season, week = _extract_args(sys.argv[1:])
-    _log_current_week_readonly()
+    parser = argparse.ArgumentParser(add_help=False)
+    parser.add_argument("--season", type=int)
+    parser.add_argument("--week", type=int)
+    args, remaining = parser.parse_known_args(sys.argv[1:])
+
+    if (args.season is None) != (args.week is None):
+        raise SystemExit("NFL refresh: provide both --season and --week or neither.")
+
+    current_week_info = None
+    current_week_error = None
+    try:
+        current_week_info = get_current_week("NFL")
+    except Exception as exc:
+        current_week_error = exc
+
+    if args.season is None:
+        if current_week_info is None:
+            raise SystemExit(f"Global Week Service unavailable: {current_week_error}")
+        season, week, current_ts = current_week_info
+        args_label = "auto"
+    else:
+        season = int(args.season)
+        week = int(args.week)
+        current_ts = current_week_info[2] if current_week_info else "unknown"
+        args_label = "manual"
+
+    if current_week_info:
+        cur_season, cur_week, cur_ts = current_week_info
+        print(f"CurrentWeek(NFL)={cur_season} W{cur_week} computed_at={cur_ts}; args={args_label}")
+    else:
+        print(f"CurrentWeek(NFL)=unavailable; args={args_label}")
 
     from src.refresh_week_data import main as legacy_main
 
-    exit_code = legacy_main()
+    original_argv = sys.argv[:]
+    legacy_argv = [original_argv[0], "--season", str(season), "--week", str(week), *remaining]
+    sys.argv = legacy_argv
+    try:
+        exit_code = legacy_main()
+    finally:
+        sys.argv = original_argv
     if exit_code not in (None, 0):
         raise SystemExit(exit_code)
 
@@ -119,7 +138,6 @@ def main() -> None:
     promotion_info = None
     legacy_mismatch = 0
     promoted_total = 0
-    rows_count = 0
 
     out_root = ensure_out_dir()
     week_dir = out_root / f"{season}_week{week}"
@@ -132,10 +150,9 @@ def main() -> None:
         policy = os.getenv("ODDS_SELECT_POLICY", "latest_by_fetch_ts") or "latest_by_fetch_ts"
         promotion_info = promote_week_odds(rows, season, week, policy=policy)
         promoted_total = promotion_info.get("promoted_games", 0)
-        rows_count = len(rows)
         if promoted_total > 0:
             write_week_outputs(rows, season, week)
-        legacy_flag = os.getenv("ODDS_LEGACY_JOIN_ENABLE", "1").strip().lower() not in {
+        legacy_flag = os.getenv("ODDS_LEGACY_JOIN_ENABLE", "0").strip().lower() not in {
             "0",
             "false",
             "off",
@@ -155,13 +172,13 @@ def main() -> None:
         print(log_line)
     else:
         print("NFL ODDS PROMOTION: disabled via ODDS_PROMOTION_ENABLE")
-        rows_count = len(read_week_json(json_path))
+
+    rows_count = len(read_week_json(json_path))
 
     print(
         f"NOTIFY: NFL refresh complete week={season}-{week} rows={rows_count} "
         f"odds_promoted={promoted_total}."
     )
-
 
 if __name__ == "__main__":
     main()
