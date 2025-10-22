@@ -8,7 +8,30 @@
  * Log contract: Logs to `console.error` when hydration fails; otherwise remains quiet.
  */
 
-const DASH = "\u2014";
+const DASH = '—';
+const $ = (id) => document.getElementById(id);
+
+// Standard DOM text helpers shared across printable hydration.
+const setText = (id, v) => {
+  const el = $(id);
+  if (!el) return;
+  const hasValue = v !== null && v !== undefined && v !== "";
+  el.textContent = hasValue ? String(v) : DASH;
+};
+
+const setPlus = (id, n) => {
+  const num = Number(n);
+  if (!Number.isFinite(num)) {
+    setText(id, null);
+    return;
+  }
+  setText(id, num > 0 ? `+${num}` : String(num));
+};
+
+const setRank = (id, n) => {
+  const num = Number(n);
+  setText(id, Number.isFinite(num) ? String(Math.trunc(num)) : null);
+};
 
 const query = new URLSearchParams(window.location.search);
 const leagueParam = (query.get("league") || "NFL").toUpperCase();
@@ -28,7 +51,6 @@ const weekPath =
     ? `${baseDir}/games_week_${seasonParam}_${weekParam}.jsonl`
     : null;
 
-const $ = (id) => document.getElementById(id);
 const WARNED = new Set();
 
 function warnOnce(key, payload) {
@@ -65,23 +87,6 @@ function formatNumber(value, { decimals = 1, signed = false } = {}) {
 function dash(value) {
   return value === null || value === undefined || value === "" ? DASH : value;
 }
-
-function setText(id, value) {
-  const el = $(id);
-  if (el) {
-    el.textContent = value;
-  }
-}
-
-const setTxt = (id, value) => {
-  const el = $(id);
-  if (!el) return;
-  if (value === null || value === undefined || value === "") {
-    el.textContent = DASH;
-  } else {
-    el.textContent = String(value);
-  }
-};
 
 function hasNumeric(value) {
   if (value === null || value === undefined || value === "") return false;
@@ -170,16 +175,6 @@ const toNum = (value) => {
   const num = Number(value);
   return Number.isFinite(num) ? num : null;
 };
-
-function setTxt(id, value) {
-  const el = $(id);
-  if (!el) return;
-  if (value === null || value === undefined || value === "") {
-    el.textContent = DASH;
-  } else {
-    el.textContent = String(value);
-  }
-}
 
 function assignText(id, value) {
   if (value === null || value === undefined || value === "" || value === DASH) return;
@@ -424,7 +419,7 @@ function fillSchedule(tbodyId, schedule) {
 }
 
 function fillEoy(prefix, metrics, teamLabel) {
-  setTxt(`${prefix}Team`, teamLabel || DASH);
+  setText(`${prefix}Team`, teamLabel || DASH);
   if (!metrics) return;
   assignNumber(`${prefix}PF`, metrics["PF"], { decimals: 0 });
   assignNumber(`${prefix}PA`, metrics["PA"], { decimals: 0 });
@@ -529,12 +524,12 @@ function renderError(message) {
 
     fillTeam("t1", row, "away");
     fillTeam("t2", row, "home");
-    setTxt("stats1Team", awayLabel !== DASH ? awayLabel : row?.away_team_name);
-    setTxt("stats2Team", homeLabel !== DASH ? homeLabel : row?.home_team_name);
+    setText("stats1Team", awayLabel !== DASH ? awayLabel : row?.away_team_name);
+    setText("stats2Team", homeLabel !== DASH ? homeLabel : row?.home_team_name);
 
     const gameNo = resolveGameNumber(row);
-    setTxt("t1GameNo", gameNo);
-    setTxt("t2GameNo", gameNo);
+    setText("t1GameNo", gameNo);
+    setText("t2GameNo", gameNo);
 
     let currentMetricsRows = [];
     if (baseDir && Number.isFinite(seasonParam) && Number.isFinite(weekParam)) {
