@@ -69,30 +69,21 @@ python -m http.server 8000
 
     .top-bar {
       display: flex;
-      flex-wrap: wrap;
       gap: 0.75rem 1.2rem;
-      align-items: flex-end;
+      align-items: center;
+      justify-content: space-between;
       border-bottom: 1px solid #d5d8dd;
       padding-bottom: 0.7rem;
+      flex-wrap: wrap;
     }
 
     .controls-group {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.75rem 1rem;
-      align-items: flex-end;
+      gap: 0.75rem 0.65rem;
+      align-items: center;
     }
 
-    .controls-group label {
-      display: flex;
-      flex-direction: column;
-      gap: 0.25rem;
-      font-size: 0.76rem;
-      text-transform: uppercase;
-      color: #424856;
-    }
-
-    .controls-group input,
     .controls-group select {
       min-width: 90px;
       padding: 0.33rem 0.5rem;
@@ -103,7 +94,7 @@ python -m http.server 8000
       font-size: 0.9rem;
     }
 
-    .controls-group button {
+    .btn {
       padding: 0.4rem 0.85rem;
       border-radius: 3px;
       border: 1px solid #0a5ea8;
@@ -113,19 +104,58 @@ python -m http.server 8000
       cursor: pointer;
     }
 
-    .controls-group button:hover {
+    .btn:hover {
       background: #0c6fc7;
+    }
+
+    .btn-primary {
+      border-color: #0a5ea8;
+      background: #0a5ea8;
+    }
+
+    .btn-secondary {
+      border-color: #5a6268;
+      background: #5a6268;
+    }
+
+    .btn-secondary:hover {
+      background: #4e555b;
+    }
+
+    .gv-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .gv-heading {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 600;
+      letter-spacing: 0.01rem;
+    }
+
+    .gv-return {
+      font-size: 1.2rem;
+      text-decoration: none;
+    }
+
+    .gv-return:hover {
+      text-decoration: underline;
+    }
+
+    .game-select {
+      max-width: 400px;
+      width: 100%;
     }
 
     .status {
       font-size: 0.82rem;
       color: #0a5ea8;
       min-height: 1rem;
-    }
-
-    .back-link {
-      font-size: 0.88rem;
-      margin-left: auto;
+      display: none;
     }
 
     .info-header {
@@ -240,7 +270,11 @@ python -m http.server 8000
     }
 
     th.opponent {
-      width: 230px;
+      width: 170px;
+    }
+
+    th.score {
+      width: 40px;
     }
 
     td.score {
@@ -349,45 +383,26 @@ python -m http.server 8000
 </head>
 <body>
   <main class="page">
+    <div class="gv-header">
+      <h1 id="gvHeading" class="gv-heading">—</h1>
+      <a id="lnkReturnWeek" class="gv-return" href="week_view.html">Return to Week</a>
+    </div>
     <header class="top-bar">
-      <div class="title-block">
-        <h1>Game View</h1>
-        <div class="status" id="status"></div>
-      </div>
       <div class="controls-group">
-        <label>
-          League
-          <select id="league-select">
-            <option value="nfl">NFL</option>
-            <option value="cfb">CFB</option>
-          </select>
-        </label>
-        <label>
-          Season
-          <input type="number" id="season-input" min="2000" />
-        </label>
-        <label>
-          Week
-          <input type="number" id="week-input" min="1" max="23" />
-        </label>
-        <button id="load-games-btn" type="button">Load Games</button>
-        <label>
-          Game
-          <select id="game-select">
-            <option value="">Select a game</option>
-          </select>
-        </label>
-        <button id="load-game-btn" type="button">Load Game</button>
-        <button id="btnPrintable" class="btn btn-secondary">Printable View</button>
+        <select id="selGame" class="game-select">
+          <option value="">Select a game</option>
+        </select>
+        <button id="btnLoadGame" type="button" class="btn btn-primary">Load Game</button>
+        <button id="btnPrintable" type="button" class="btn btn-secondary">Printable View</button>
       </div>
-      <a class="back-link" id="week-view-link" href="week_view.html">Week view</a>
+      <div class="status" id="status"></div>
+      <section class="nav-row hidden" id="nav-row">
+        <button type="button" id="prev-game-btn">« Prev</button>
+        <span id="nav-summary"></span>
+        <button type="button" id="next-game-btn">Next »</button>
+      </section>
     </header>
 
-    <section class="nav-row hidden" id="nav-row">
-      <button type="button" id="prev-game-btn">« Prev</button>
-      <span id="nav-summary"></span>
-      <button type="button" id="next-game-btn">Next »</button>
-    </section>
 
     <section id="game-header" class="info-header hidden">
       <div class="info-block" id="teams-block"></div>
@@ -436,8 +451,8 @@ python -m http.server 8000
               <tr>
                 <th>Wk</th>
                 <th class="opponent">Opponent</th>
-                <th>Score</th>
-                <th>Result</th>
+                <th class="score">Score</th>
+                <th>W/L</th>
                 <th>PR (wk)</th>
                 <th>Rank</th>
                 <th>Opp PR (wk)</th>
@@ -458,8 +473,8 @@ python -m http.server 8000
               <tr>
                 <th>Wk</th>
                 <th class="opponent">Opponent</th>
-                <th>Score</th>
-                <th>Result</th>
+                <th class="score">Score</th>
+                <th>W/L</th>
                 <th>PR (wk)</th>
                 <th>Rank</th>
                 <th>Opp PR (wk)</th>
@@ -488,8 +503,8 @@ python -m http.server 8000
               <tr>
                 <th>Wk</th>
                 <th class="opponent">Opponent</th>
-                <th>Score</th>
-                <th>Result</th>
+                <th class="score">Score</th>
+                <th>W/L</th>
                 <th>PR (wk)</th>
                 <th>Rank</th>
                 <th>Opp PR (wk)</th>
@@ -510,8 +525,8 @@ python -m http.server 8000
               <tr>
                 <th>Wk</th>
                 <th class="opponent">Opponent</th>
-                <th>Score</th>
-                <th>Result</th>
+                <th class="score">Score</th>
+                <th>W/L</th>
                 <th>PR (wk)</th>
                 <th>Rank</th>
                 <th>Opp PR (wk)</th>

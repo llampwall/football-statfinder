@@ -1,13 +1,10 @@
 const els = {
-  season: document.getElementById("season-input"),
-  week: document.getElementById("week-input"),
-  leagueSelect: document.getElementById("league-select"),
-  loadGamesBtn: document.getElementById("load-games-btn"),
-  loadGameBtn: document.getElementById("load-game-btn"),
+  loadGameBtn: document.getElementById("btnLoadGame"),
   printableBtn: document.getElementById("btnPrintable"),
-  gameSelect: document.getElementById("game-select"),
+  gameSelect: document.getElementById("selGame"),
   status: document.getElementById("status"),
-  weekLink: document.getElementById("week-view-link"),
+  heading: document.getElementById("gvHeading"),
+  returnLink: document.getElementById("lnkReturnWeek"),
   header: document.getElementById("game-header"),
   teamsBlock: document.getElementById("teams-block"),
   favoriteBlock: document.getElementById("favorite-block"),
@@ -152,13 +149,20 @@ const TEAM_DATA = [
 ];
 
 const TEAM_ALIAS_DISPLAY = TEAM_DATA.reduce((acc, entry) => {
-  const display = `${entry.nickname}, ${entry.city}`;
-  entry.aliases.forEach((alias) => {
-    const key = alias.trim().toLowerCase();
+  const display = `${entry.city} ${entry.nickname}`;
+  const addAlias = (value) => {
+    if (!value) return;
+    const key = String(value).trim().toLowerCase();
+    if (!key) return;
     acc[key] = display;
     const compact = key.replace(/\s+/g, "");
-    acc[compact] = display;
-  });
+    if (compact) acc[compact] = display;
+  };
+
+  addAlias(display);
+  addAlias(`${entry.nickname}, ${entry.city}`);
+  addAlias(`${entry.nickname} ${entry.city}`);
+  entry.aliases.forEach(addAlias);
   return acc;
 }, {});
 
@@ -207,6 +211,8 @@ function setActiveLeague(next, { updateSelect = true, persist = true, updateHist
     }
     window.history.replaceState(null, "", url.toString());
   }
+  setHeading();
+  updateReturnLink();
 }
 
 function buildWeekPaths(league, season, week) {
@@ -228,55 +234,39 @@ function buildWeekPaths(league, season, week) {
 }
 
 function attachListeners() {
-  if (els.leagueSelect) {
-    els.leagueSelect.addEventListener("change", () => {
-      const next = normalizeLeague(els.leagueSelect.value);
-      if (next === STATE.league) return;
-      const hasInputs = Boolean(coerceInt(els.season.value) && coerceInt(els.week.value));
-      setActiveLeague(next, { updateSelect: false, updateHistory: true });
-      STATE.games.clear();
-      STATE.weekPaths = null;
-      STATE.pathsLogged = false;
-      syncWeekLink();
-      if (hasInputs) {
-        loadGames(STATE.currentGameKey);
+  if (els.loadGameBtn) {
+    els.loadGameBtn.addEventListener("click", () => {
+      if (!els.gameSelect) {
+        setStatus("Game list unavailable.");
+        return;
       }
+      const key = els.gameSelect.value;
+      if (!key) {
+        setStatus("Choose a game first.");
+        return;
+      }
+      loadSingleGame(key);
     });
   }
 
-  els.loadGamesBtn.addEventListener("click", () => {
-    loadGames();
-  });
+  if (els.prevGameBtn) {
+    els.prevGameBtn.addEventListener("click", () => {
+      navigateRelative(-1);
+    });
+  }
 
-  els.loadGameBtn.addEventListener("click", () => {
-    const key = els.gameSelect.value;
-    if (!key) {
-      setStatus("Choose a game first.");
-      return;
-    }
-    loadSingleGame(key);
-  });
+  if (els.nextGameBtn) {
+    els.nextGameBtn.addEventListener("click", () => {
+      navigateRelative(1);
+    });
+  }
 
-  ["input", "change"].forEach((evt) => {
-    els.season.addEventListener(evt, syncWeekLink);
-    els.week.addEventListener(evt, syncWeekLink);
-  });
-
-  els.prevGameBtn.addEventListener("click", () => {
-    navigateRelative(-1);
-  });
-
-  els.nextGameBtn.addEventListener("click", () => {
-    navigateRelative(1);
-  });
-
-  els.weekLink.addEventListener("click", () => {
-    rememberWeekRow(STATE.currentGameKey);
-  });
-
-  els.weekLink.addEventListener("click", () => {
-    rememberWeekRow(STATE.currentGameKey, null);
-  });
+  if (els.returnLink) {
+    els.returnLink.addEventListener("click", () => {
+      rememberWeekRow(STATE.currentGameKey);
+      rememberWeekRow(STATE.currentGameKey, null);
+    });
+  }
 
   document.addEventListener("keydown", (event) => {
     if (["INPUT", "TEXTAREA", "SELECT"].includes(document.activeElement.tagName)) return;
@@ -308,26 +298,34 @@ function bootstrap() {
 
   const storedMatchesLeague =
     stored && normalizeLeague(stored.league ?? DEFAULT_LEAGUE) === STATE.league;
-  const initialSeason =
-    numericFromParam(params.get("season")) ?? (storedMatchesLeague ? stored?.season ?? "" : "");
-  const initialWeek =
-    numericFromParam(params.get("week")) ?? (storedMatchesLeague ? stored?.week ?? "" : "");
+  const seasonParam = numericFromParam(params.get("season"));
+  const weekParam = numericFromParam(params.get("week"));
+  const storedSeason = storedMatchesLeague ? numericFromParam(stored?.season) : null;
+  const storedWeek = storedMatchesLeague ? numericFromParam(stored?.week) : null;
+  const initialSeason = seasonParam ?? storedSeason;
+  const initialWeek = weekParam ?? storedWeek;
   const storedGameKey = storedMatchesLeague ? stored?.game_key ?? "" : "";
   const initialGameKey = params.get("game_key") ?? storedGameKey;
   STATE.autoFromStorage = !STATE.deepLinkUsed && storedMatchesLeague && Boolean(storedGameKey);
 
-  els.season.value = initialSeason;
-  els.week.value = initialWeek;
-  syncWeekLink();
+  if (Number.isFinite(initialSeason)) {
+    STATE.season = initialSeason;
+  }
+  if (Number.isFinite(initialWeek)) {
+    STATE.week = initialWeek;
+  }
 
-  if (initialSeason && initialWeek) {
+  setHeading();
+  updateReturnLink();
+
+  if (STATE.season && STATE.week) {
     loadGames(initialGameKey);
   }
 }
 
 async function loadGames(autoGameKey) {
-  const season = coerceInt(els.season.value);
-  const week = coerceInt(els.week.value);
+  const season = coerceInt(STATE.season);
+  const week = coerceInt(STATE.week);
   if (!season || !week) {
     setStatus("Season and week required.");
     return;
@@ -440,6 +438,8 @@ async function loadGames(autoGameKey) {
   STATE.games = new Map(records.map((row) => [row.game_key, row]));
   STATE.season = season;
   STATE.week = week;
+  setHeading();
+  updateReturnLink();
   populateGameSelect(records, autoGameKey);
   if (!fromCache) {
     setStatus(`Loaded ${records.length} games.`);
@@ -456,7 +456,39 @@ async function loadGames(autoGameKey) {
   STATE.autoFromStorage = false;
 }
 
+function formatKickoffShort(iso) {
+  if (!iso) return "";
+  try {
+    const date = new Date(iso);
+    if (Number.isNaN(date.getTime())) return "";
+    const formatter = new Intl.DateTimeFormat("en-US", {
+      month: "short",
+      day: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+      timeZone: "America/Los_Angeles",
+      timeZoneName: "short",
+    });
+    return formatter.format(date);
+  } catch {
+    return "";
+  }
+}
+
+function gameOptionLabel(game) {
+  const away = getTeamDisplayName(game, "away");
+  const home = getTeamDisplayName(game, "home");
+  const iso = game?.kickoff_iso_utc || game?.kickoff || null;
+  const short =
+    formatKickoffShort(iso) ||
+    game?.kickoff_label ||
+    game?.kickoff_short ||
+    (typeof game?.start_time_pt === "string" ? game.start_time_pt : "");
+  return short ? `${away} at ${home} (${short})` : `${away} at ${home}`;
+}
+
 function populateGameSelect(records, autoSelectKey) {
+  if (!els.gameSelect) return;
   els.gameSelect.innerHTML = "";
   const defaultOption = document.createElement("option");
   defaultOption.value = "";
@@ -472,9 +504,8 @@ function populateGameSelect(records, autoSelectKey) {
   sorted.forEach((game) => {
     const option = document.createElement("option");
     option.value = game.game_key;
-    const home = getTeamDisplayName(game, "home");
-    const away = getTeamDisplayName(game, "away");
-    option.textContent = `${home} vs ${away} (${game.game_key})`;
+    option.textContent = gameOptionLabel(game);
+    option.title = game.game_key;
     if (autoSelectKey && autoSelectKey === game.game_key) {
       option.selected = true;
     }
@@ -524,7 +555,7 @@ async function loadSingleGame(gameKey) {
 
   STATE.currentGameKey = gameKey;
   STATE.game = game;
-  if (els.gameSelect.value !== gameKey) {
+  if (els.gameSelect && els.gameSelect.value !== gameKey) {
     els.gameSelect.value = gameKey;
   }
 
@@ -891,9 +922,14 @@ async function loadEOY(priorSeason, homeNorm, awayNorm) {
     const display = toDisplayName(value);
     if (display) {
       push(display);
-      const entry = TEAM_DATA.find((team) => `${team.nickname}, ${team.city}` === display);
+      const entry = TEAM_DATA.find(
+        (team) =>
+          `${team.city} ${team.nickname}` === display ||
+          `${team.nickname}, ${team.city}` === display
+      );
       if (entry) {
         push(`${entry.city} ${entry.nickname}`);
+        push(`${entry.nickname}, ${entry.city}`);
         entry.aliases.forEach(push);
       }
     }
@@ -1357,12 +1393,23 @@ function nicknameCityFromString(value) {
   if (!value) return null;
   const stripped = String(value).trim();
   if (!stripped) return null;
-  if (stripped.includes(",")) return stripped;
+  if (stripped.includes(",")) {
+    const [first, second] = stripped.split(",", 2).map((part) => part.trim());
+    if (first && second) return `${second} ${first}`;
+    return stripped.replace(",", " ");
+  }
+  const lowered = stripped.toLowerCase();
+  const entry = TEAM_DATA.find((team) => {
+    const cityNickname = `${team.city} ${team.nickname}`.toLowerCase();
+    const nicknameCity = `${team.nickname} ${team.city}`.toLowerCase();
+    return cityNickname === lowered || nicknameCity === lowered;
+  });
+  if (entry) return `${entry.city} ${entry.nickname}`;
   const parts = stripped.split(/\s+/);
-  if (parts.length < 2) return null;
+  if (parts.length < 2) return stripped;
   const nickname = parts.pop();
   const city = parts.join(" ");
-  return `${nickname}, ${city}`;
+  return `${city} ${nickname}`;
 }
 
 function rankOrDash(value) {
@@ -1420,20 +1467,6 @@ function numericFromParam(input) {
 function coerceInt(value) {
   const num = numericFromParam(value);
   return num ? Math.trunc(num) : null;
-}
-
-function syncWeekLink() {
-  const season = coerceInt(els.season.value);
-  const week = coerceInt(els.week.value);
-  const params = new URLSearchParams();
-  if (STATE.league && STATE.league !== DEFAULT_LEAGUE) {
-    params.set("league", STATE.league);
-  }
-  if (season) params.set("season", season);
-  if (week) params.set("week", week);
-  els.weekLink.href = params.toString()
-    ? `week_view.html?${params.toString()}`
-    : "week_view.html";
 }
 
 function safeParseLocalStorage() {
@@ -1496,6 +1529,47 @@ function writeWeekCache(league, season, week, records) {
 function setStatus(message) {
   els.status.textContent = message ?? "";
 }
+
+function setHeading() {
+  if (!els.heading) return;
+  const league = (STATE?.league || DEFAULT_LEAGUE).toUpperCase();
+  const seasonValue = STATE?.season;
+  const weekValue = STATE?.week;
+  const seasonText =
+    seasonValue !== null && seasonValue !== undefined && seasonValue !== ""
+      ? seasonValue
+      : MISSING_VALUE;
+  const weekText =
+    weekValue !== null && weekValue !== undefined && weekValue !== ""
+      ? weekValue
+      : MISSING_VALUE;
+  els.heading.textContent = `${league} ${seasonText} Week ${weekText}`;
+}
+
+function updateReturnLink() {
+  if (!els.returnLink) return;
+  els.returnLink.textContent = "Return to Week";
+  try {
+    const url = new URL("week_view.html", window.location.origin);
+    if (STATE.league && STATE.league !== DEFAULT_LEAGUE) {
+      url.searchParams.set("league", STATE.league);
+    }
+    if (STATE.season) url.searchParams.set("season", STATE.season);
+    if (STATE.week) url.searchParams.set("week", STATE.week);
+    els.returnLink.href = url.toString();
+  } catch {
+    const params = new URLSearchParams();
+    if (STATE.league && STATE.league !== DEFAULT_LEAGUE) {
+      params.set("league", STATE.league);
+    }
+    if (STATE.season) params.set("season", STATE.season);
+    if (STATE.week) params.set("week", STATE.week);
+    els.returnLink.href = params.toString()
+      ? `week_view.html?${params.toString()}`
+      : "week_view.html";
+  }
+}
+
 
 
 

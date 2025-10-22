@@ -73,6 +73,16 @@ function setText(id, value) {
   }
 }
 
+const setTxt = (id, value) => {
+  const el = $(id);
+  if (!el) return;
+  if (value === null || value === undefined || value === "") {
+    el.textContent = DASH;
+  } else {
+    el.textContent = String(value);
+  }
+};
+
 function hasNumeric(value) {
   if (value === null || value === undefined || value === "") return false;
   const num = Number(value);

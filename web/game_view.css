@@ -74,6 +74,62 @@ h1 {
   opacity: 0.85;
 }
 
+.gv-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.gv-heading {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.gv-return {
+  font-size: 1.2rem;
+  text-decoration: none;
+}
+
+.gv-return:hover {
+  text-decoration: underline;
+}
+
+.game-select {
+  max-width: 400px;
+  width: 100%;
+}
+
+.btn {
+  padding: 0.4rem 0.85rem;
+  border-radius: 3px;
+  border: 1px solid #0a5ea8;
+  background: #0a5ea8;
+  color: #ffffff;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.btn-primary {
+  border-color: #0a5ea8;
+  background: #0a5ea8;
+}
+
+.btn:hover {
+  background: #0c6fc7;
+}
+
+.btn-secondary {
+  border-color: #5a6268;
+  background: #5a6268;
+}
+
+.btn-secondary:hover {
+  background: #4e555b;
+}
+
 .status {
   margin-left: auto;
   font-size: 0.85rem;
