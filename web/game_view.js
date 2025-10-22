@@ -1,4 +1,5 @@
 import { sitePath, siteUrl } from "./js/base_path.js";
+import { formatPlus, formatNum, formatRank, deriveTopMetrics } from "./js/game_metrics.js";
 
 const els = {
   loadGameBtn: document.getElementById("btnLoadGame"),
@@ -11,6 +12,7 @@ const els = {
   teamsBlock: document.getElementById("teams-block"),
   favoriteBlock: document.getElementById("favorite-block"),
   marketBlock: document.getElementById("market-block"),
+  marketTotal: null,
   teamStatsSection: document.getElementById("team-stats-section"),
   teamStatsBody: document.getElementById("team-stats-body"),
   scheduleCurrent: document.getElementById("schedule-current"),
@@ -195,9 +197,15 @@ function persistLeaguePreference(league) {
   }
 }
 
+function updateDocumentTitle(league) {
+  const label = league === "cfb" ? "CFB" : "NFL";
+  document.title = `${label} – Game View`;
+}
+
 function setActiveLeague(next, { updateSelect = true, persist = true, updateHistory = false } = {}) {
   const league = normalizeLeague(next);
   STATE.league = league;
+  updateDocumentTitle(league);
   if (updateSelect && els.leagueSelect && els.leagueSelect.value !== league) {
     els.leagueSelect.value = league;
   }
@@ -610,11 +618,11 @@ async function loadSingleGame(gameKey) {
 
   const leagueLowerCurrent = (STATE.weekPaths?.league ?? STATE.league ?? DEFAULT_LEAGUE).toLowerCase();
   renderHeader(game, teamNames);
+  renderFavoriteBox(game);
   if (leagueLowerCurrent === "cfb") {
     const hasOdds =
       hasNumeric(game?.spread_favored_team) || hasNumeric(game?.spread_home_relative);
     console.info(`[CFB Game] odds ${hasOdds ? "present" : "missing"} for ${gameKey}`);
-    renderFavoriteBox(game);
   }
   renderTeamStats(game, sidecar, teamNames);
   renderTables(game, sidecar, teamNames);
@@ -696,45 +704,6 @@ function renderHeader(game, teamNames) {
   `;
 
   const league = (STATE.weekPaths?.league ?? STATE.league ?? DEFAULT_LEAGUE).toLowerCase();
-  if (league !== "cfb") {
-    const favoredSide = (game.favored_side || "").toUpperCase();
-    const favTeam =
-      favoredSide === "HOME" ? homeName : favoredSide === "AWAY" ? awayName : null;
-    let favoredLine = MISSING_VALUE;
-    if (favTeam) {
-      if (hasNumeric(game.spread_favored_team)) {
-        const magnitude = Math.abs(Number(game.spread_favored_team));
-        const spread = formatNumber(magnitude, { decimals: 1 });
-        favoredLine = spread !== MISSING_VALUE ? `${favTeam} (\u2212${spread})` : favTeam;
-      } else {
-        favoredLine = favTeam;
-      }
-    }
-    const snapshotIso = typeof game.snapshot_at === "string" ? game.snapshot_at : null;
-    const snapshotPT = snapshotIso ? fmtKickoffPT(snapshotIso) : MISSING_VALUE;
-    const snapshotUTC = snapshotIso ? formatKickoff(snapshotIso) : null;
-    const snapshotTitle =
-      snapshotUTC && snapshotUTC !== MISSING_VALUE ? ` title="UTC: ${snapshotUTC}"` : "";
-    els.favoriteBlock.innerHTML = `
-      <h3>Favorite & Spread</h3>
-      <div class="meta-line">Favored: ${favoredLine}</div>
-      <div class="meta-line">Odds source: ${fallback(game.odds_source)}</div>
-      <div class="meta-line">Snapshot: <span${snapshotTitle}>${snapshotPT}</span></div>
-    `;
-
-    els.marketBlock.innerHTML = `
-      <h3>Market & Ratings</h3>
-      <div class="meta-line">PR Diff (favored): ${formatNumber(game.rating_diff_favored_team, {
-        decimals: 1,
-        signed: true,
-      })}</div>
-      <div class="meta-line">Rating vs Odds: ${formatNumber(game.rating_vs_odds, {
-        decimals: 1,
-        signed: true,
-      })}</div>
-      <div class="meta-line">Total: ${formatNumber(game.total, { decimals: 1 })}</div>
-    `;
-  }
 }
 
 function ensureFavoriteElements() {
@@ -758,9 +727,11 @@ function ensureMarketElements() {
     <h3>Market & Ratings</h3>
     <div class="meta-line">PR Diff (favored): <span id="market-pr-diff">${MISSING_VALUE}</span></div>
     <div class="meta-line">Rating vs Odds: <span id="market-rvo">${MISSING_VALUE}</span></div>
+    <div class="meta-line">Total (O/U): <span id="market-total">${MISSING_VALUE}</span></div>
   `;
   els.marketPrDiff = document.getElementById("market-pr-diff");
   els.marketRvo = document.getElementById("market-rvo");
+  els.marketTotal = document.getElementById("market-total");
 }
 
 function renderFavoriteBox(game) {
@@ -788,12 +759,14 @@ function renderFavoriteBox(game) {
   els.favoriteSource.textContent = fallback(game.odds_source);
   const snapshotIso = typeof game.snapshot_at === "string" ? game.snapshot_at : null;
   els.favoriteSnapshot.textContent = snapshotIso ? fmtKickoffPT(snapshotIso) : MISSING_VALUE;
-  els.favoriteTotal.textContent = hasNumeric(game.total)
-    ? formatNumber(Number(game.total), { decimals: 1 })
-    : MISSING_VALUE;
-
-  els.marketPrDiff.textContent = MISSING_VALUE;
-  els.marketRvo.textContent = MISSING_VALUE;
+  const metrics = deriveTopMetrics(game);
+  const totalDisplay = formatNum(metrics.total, 1);
+  els.favoriteTotal.textContent = totalDisplay;
+  if (els.marketTotal) {
+    els.marketTotal.textContent = totalDisplay;
+  }
+  els.marketPrDiff.textContent = formatPlus(metrics.prDiffFavored, 2);
+  els.marketRvo.textContent = formatPlus(metrics.rvo, 2);
 }
 
 function renderTeamStats(game, sidecar, teamNames) {
@@ -1158,19 +1131,30 @@ function fillScheduleTable(tbody, rows) {
     const tr = document.createElement("tr");
     if (row.result === "W") tr.classList.add("win");
     if (row.result === "L") tr.classList.add("loss");
+    const weekValue = row?.week ?? row?.game_week ?? null;
+    const opponentValue = row?.opp ?? row?.opponent ?? "";
+    const resultValue = row?.result ?? row?.wlt ?? "";
+    const prValue = row?.pr ?? row?.team_pr;
+    const prRankValue = row?.pr_rank ?? row?.team_pr_rank;
+    const oppPrValue = row?.opp_pr ?? row?.opponent_pr;
+    const oppPrRankValue = row?.opp_pr_rank ?? row?.opponent_pr_rank;
+    const sosValue = row?.sos ?? row?.team_sos;
+    const sosRankValue = row?.sos_rank ?? row?.team_sos_rank;
+    const oppSosValue = row?.opp_sos ?? row?.sos_opp;
+    const oppSosRankValue = row?.opp_sos_rank ?? row?.sos_opp_rank;
     const cells = [
-      fallback(row.week),
-      formatOpponent(row.site, row.opp),
-      formatScore(row.pf, row.pa),
-      fallback(row.result),
-      formatNumber(row.pr, { decimals: 1 }),
-      rankOrDash(row.pr_rank),
-      formatNumber(row.opp_pr, { decimals: 1 }),
-      rankOrDash(row.opp_pr_rank),
-      formatNumber(row.sos, { decimals: 2 }),
-      rankOrDash(row.sos_rank),
-      formatNumber(row.opp_sos, { decimals: 2 }),
-      rankOrDash(row.opp_sos_rank),
+      fallback(weekValue),
+      formatOpponent(row.site, opponentValue),
+      formatScore(row.pf ?? row.points_for, row.pa ?? row.points_against),
+      fallback(resultValue),
+      formatNum(prValue, 2),
+      rankOrDash(prRankValue),
+      formatNum(oppPrValue, 2),
+      rankOrDash(oppPrRankValue),
+      formatNum(sosValue, 2),
+      rankOrDash(sosRankValue),
+      formatNum(oppSosValue, 2),
+      rankOrDash(oppSosRankValue),
     ];
 
     cells.forEach((value, idx) => {
@@ -1461,7 +1445,7 @@ function nicknameCityFromString(value) {
 }
 
 function rankOrDash(value) {
-  return hasNumeric(value) ? String(Number(value)) : MISSING_VALUE;
+  return formatRank(value);
 }
 
 function formatSigned(value, opts = {}) {

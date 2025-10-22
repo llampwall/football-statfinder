@@ -1,0 +1,25 @@
+{
+  "ts_utc": "2025-10-22T23:19:19.829937Z",
+  "cfb": {
+    "ok": true,
+    "seconds": 74.715,
+    "notify": "NOTIFY: CFB refresh complete week=2025-9 rows=53 odds_promoted=14",
+    "notes": [
+      "ODDS_REPROMOTE(CFB): week=2025-7 promoted=0 source=staging/odds_pinned",
+      "BACKFILL_REPAIR(CFB): week=2025-7 reason=odds_rvo_missing",
+      "ODDS_REPROMOTE(CFB): week=2025-8 promoted=0 source=staging/odds_pinned",
+      "BACKFILL_REPAIR(CFB): week=2025-8 reason=odds_rvo_missing",
+      "CFB ODDS PROMOTION: week=2025-9 promoted=14 by_market={'spreads': 14, 'totals': 14, 'h2h': 14} by_book={'williamhill_us': 41, 'fanduel': 1} legacy_mismatch=0",
+      "NOTIFY: CFB refresh complete week=2025-9 rows=53 odds_promoted=14"
+    ]
+  },
+  "nfl": {
+    "ok": false,
+    "seconds": 12.717,
+    "notify": null,
+    "notes": [
+      "Traceback (most recent call last):"
+    ]
+  },
+  "host": "DESKTOP-P97ADMK"
+}

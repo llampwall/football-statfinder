@@ -8,6 +8,8 @@
  * Log contract: Logs to `console.error` when hydration fails; otherwise remains quiet.
  */
 
+import { normalizeTeamName } from "./game_metrics.js";
+
 const DASH = '—';
 const $ = (id) => document.getElementById(id);
 
@@ -252,13 +254,17 @@ function resolveMetricsRow(rows, candidates) {
 
 function teamName(row, side) {
   const prefix = side === "home" ? "home" : "away";
-  return (
-    row?.raw_sources?.[`sagarin_row_${side}`]?.team ||
-    row?.[`${prefix}_team_name`] ||
-    row?.[`${prefix}_team_norm`] ||
-    row?.[`${prefix}_team_raw`] ||
-    DASH
-  );
+  const candidates = [
+    row?.raw_sources?.[`sagarin_row_${side}`]?.team,
+    row?.[`${prefix}_team_name`],
+    row?.[`${prefix}_team_norm`],
+    row?.[`${prefix}_team_raw`],
+  ];
+  for (const candidate of candidates) {
+    const name = normalizeTeamName(candidate);
+    if (name) return name;
+  }
+  return DASH;
 }
 
 function spreadFor(side, row) {
