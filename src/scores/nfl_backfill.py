@@ -26,6 +26,8 @@ from __future__ import annotations
 
 import json
 from collections import defaultdict
+import subprocess
+import sys
 from copy import deepcopy
 from datetime import datetime
 from pathlib import Path
@@ -178,6 +180,11 @@ def _align_columns(df: pd.DataFrame, columns: Sequence[str]) -> pd.DataFrame:
     remainder = [col for col in df.columns if col not in ordered]
     return df.reindex(columns=ordered + remainder)
 
+
+def _rebuild_nfl_game_view(season: int, week: int) -> None:
+    cmd = [sys.executable, "-m", "src.gameview_build", "--season", str(season), "--week", str(week)]
+    subprocess.run(cmd, check=False)
+
 def _needs_odds_repair(rows: list[dict]) -> bool:
     """Return True if odds/rvo look nuked on any row."""
     for r in rows or []:
@@ -269,12 +276,15 @@ def backfill_nfl_scores(season: int, week: int) -> Dict[str, object]:
             preserved_rvo_total += preservation["preserved_rvo"]
 
             final_rows = merged_rows
+            rebuild_game_view = False
 
             if promote_prev_enabled and target_week < week:
                 promoted_rows = deepcopy(merged_rows)
                 promote_stats = promote_week_odds(promoted_rows, season, target_week)
                 promoted = promote_stats.get("promoted_games", 0)
                 final_rows = promoted_rows
+                if promoted > 0:
+                    rebuild_game_view = True
                 print(
                     f"ODDS_REPROMOTE(NFL): week={season}-{target_week} "
                     f"promoted={promoted} source=staging/odds_pinned"
@@ -299,6 +309,9 @@ def backfill_nfl_scores(season: int, week: int) -> Dict[str, object]:
                     f"updated_scores={row_updates} preserved_odds={preservation['preserved_odds']} "
                     f"preserved_rvo={preservation['preserved_rvo']}"
                 )
+
+            if rebuild_game_view:
+                _rebuild_nfl_game_view(season, target_week)
 
     return {
         "weeks": [f"W{w}" for w in weeks],

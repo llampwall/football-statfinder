@@ -1,31 +1,37 @@
 {
   "fbs_rows": 53,
   "joined_metrics_rows": 53,
-  "joined_odds_rows": 46,
+  "joined_odds_rows": 44,
   "joined_sagarin_rows": 51,
   "output_rows": 53,
-  "odds_games": 46,
+  "odds_games": 44,
   "sagarin_games": 51,
   "coverage_metrics": 1.0,
   "notes": [
     "FBS games: 53",
     "Metrics coverage: 53/53",
-    "Odds coverage: 46/53",
+    "Odds coverage: 44/53",
     "Sagarin coverage: 51/53"
   ],
   "samples": {
     "missing_odds": [
       {
+        "game_key": "20251021_2300_kennesaw_state_florida_international",
+        "home": "Florida International",
+        "away": "Kennesaw State",
+        "kickoff_iso_utc": "2025-10-21T23:00:00Z"
+      },
+      {
+        "game_key": "20251021_2330_western_kentucky_louisiana_tech",
+        "home": "Louisiana Tech",
+        "away": "Western Kentucky",
+        "kickoff_iso_utc": "2025-10-21T23:30:00Z"
+      },
+      {
         "game_key": "20251025_1600_app_state_old_dominion",
         "home": "Old Dominion",
         "away": "App State",
         "kickoff_iso_utc": "2025-10-25T16:00:00Z"
-      },
-      {
-        "game_key": "20251025_1930_temple_tulsa",
-        "home": "Tulsa",
-        "away": "Temple",
-        "kickoff_iso_utc": "2025-10-25T19:30:00Z"
       },
       {
         "game_key": "20251025_1930_ul_monroe_southern_miss",
@@ -34,9 +40,9 @@
         "kickoff_iso_utc": "2025-10-25T19:30:00Z"
       },
       {
-        "game_key": "20251025_1930_florida_atlantic_navy",
-        "home": "Navy",
-        "away": "Florida Atlantic",
+        "game_key": "20251025_1930_san_diego_state_fresno_state",
+        "home": "Fresno State",
+        "away": "San Diego State",
         "kickoff_iso_utc": "2025-10-25T19:30:00Z"
       },
       {
@@ -46,9 +52,15 @@
         "kickoff_iso_utc": "2025-10-25T19:30:00Z"
       },
       {
-        "game_key": "20251025_1930_san_diego_state_fresno_state",
-        "home": "Fresno State",
-        "away": "San Diego State",
+        "game_key": "20251025_1930_florida_atlantic_navy",
+        "home": "Navy",
+        "away": "Florida Atlantic",
+        "kickoff_iso_utc": "2025-10-25T19:30:00Z"
+      },
+      {
+        "game_key": "20251025_1930_temple_tulsa",
+        "home": "Tulsa",
+        "away": "Temple",
         "kickoff_iso_utc": "2025-10-25T19:30:00Z"
       },
       {
@@ -75,9 +87,9 @@
     "metrics_gaps": []
   },
   "ratings": {
-    "eligible": 44,
-    "edges_count": 44,
-    "rvo_count": 44
+    "eligible": 42,
+    "edges_count": 42,
+    "rvo_count": 42
   },
   "failures": []
 }

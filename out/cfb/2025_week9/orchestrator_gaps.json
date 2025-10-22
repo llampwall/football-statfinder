@@ -16,6 +16,8 @@
     "20251104_0115_dal_ari"
   ],
   "games_week_keys_present_blank": [
+    "20251021_2300_kennesaw_state_florida_international",
+    "20251021_2330_western_kentucky_louisiana_tech",
     "20251022_2330_middle_tennessee_delaware",
     "20251023_0100_missouri_state_new_mexico_state",
     "20251025_1600_app_state_old_dominion",
@@ -45,6 +47,8 @@
       "20251104_0115_dal_ari": 1
     },
     "blank_key_hits": {
+      "20251021_2300_kennesaw_state_florida_international": 5,
+      "20251021_2330_western_kentucky_louisiana_tech": 5,
       "20251022_2330_middle_tennessee_delaware": 2,
       "20251023_0100_missouri_state_new_mexico_state": 2,
       "20251025_1600_app_state_old_dominion": 5,
@@ -58,15 +62,15 @@
   },
   "notes": [
     "Schedule rows=307",
-    "Odds staging raw=1360 pinned=1171 unmatched=189",
+    "Odds staging raw=1349 pinned=1160 unmatched=189",
     "League metrics 136/136 teams meeting threshold (required 100); ranks_ok=1.00",
-    "Odds matched 46/53 (total 60); unmatched=14",
-    "Master enrichment 46/319",
+    "Odds matched 44/51 (total 58); unmatched=14",
+    "Master enrichment 44/319",
     "Sagarin rows=134; master=6562",
     "Sidecars 53/307",
     "Sagarin enrichment 100%/90%",
-    "Odds promotion promoted=14 current_week=5552 other_weeks=63 mismatch=0",
-    "Scores backfill [W7,W8] updated=0 skipped=2 files=0",
+    "Odds promotion promoted=14 current_week=6635 other_weeks=15301 mismatch=0",
+    "Scores backfill [W7,W8] updated=0 skipped=2 files=2",
     "ATS rows=0 teams=0 zero=106 weeks_scanned=[7, 8]",
     "Game View rows=53"
   ]

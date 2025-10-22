@@ -9,8 +9,7 @@ Spec anchors:
     - /context/global_week_and_provider_decoupling.md (B3, E, F, H, I)
 
 Invariants:
-    * Only pinned rows whose ``week`` matches the target week are eligible.
-    * Selection policy is deterministic (latest ``fetch_ts`` wins).
+    * Selection policy is deterministic (latest ``fetch_ts`` per (game_key, market, book)).
     * Promotions mutate in-memory rows; callers decide whether to persist.
 
 Side effects:
@@ -132,14 +131,19 @@ def promote_week_odds(
             eligible_keys.add(key)
 
     pinned_records = _load_pinned(season)
-    week_records = [rec for rec in pinned_records if rec.get("week") == week]
-    other_week_records = len(pinned_records) - len(week_records)
-    relevant_records = [rec for rec in week_records if rec.get("game_key") in eligible_keys]
-    latest_map = _select_latest(relevant_records)
+    season_records = len(pinned_records)
+    relevant_records = [rec for rec in pinned_records if rec.get("game_key") in eligible_keys]
+    current_week_records = len(relevant_records)
+    other_week_records = season_records - current_week_records
+    latest_map = _select_latest(pinned_records)
 
     per_game: Dict[str, Dict[str, List[dict]]] = {}
+    used_record_total = 0
     for (game_key, market, _), record in latest_map.items():
+        if game_key not in eligible_keys:
+            continue
         per_game.setdefault(game_key, {}).setdefault(market, []).append(record)
+        used_record_total += 1
 
     by_market: Dict[str, int] = {}
     by_book: Dict[str, int] = {}
@@ -184,10 +188,10 @@ def promote_week_odds(
 
     return {
         "promoted_games": len(promoted_games),
-        "used_records": len(latest_map),
+        "used_records": used_record_total,
         "available_records": len(relevant_records),
-        "season_records": len(pinned_records),
-        "current_week_records": len(relevant_records),
+        "season_records": season_records,
+        "current_week_records": current_week_records,
         "other_week_records": other_week_records,
         "by_market": by_market,
         "by_book": by_book,

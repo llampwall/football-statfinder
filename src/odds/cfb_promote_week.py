@@ -10,8 +10,7 @@ Spec anchors:
     - /context/global_week_and_provider_decoupling.md (B3, E, F, H, I)
 
 Invariants:
-    * Only pinned rows whose ``week`` equals the target week are eligible.
-    * Selection policy is deterministic (latest ``fetch_ts`` wins).
+    * Selection policy is deterministic (latest ``fetch_ts`` by (game_key, market, book)).
     * UTC timestamps are required for comparisons and copied verbatim.
     * Promotions mutate in-memory rows; callers must persist updated files.
 
@@ -196,15 +195,19 @@ def promote_week_odds(
             eligible_keys.add(key)
 
     pinned_records = list(_load_pinned_for_season(season))
-    week_scoped_records = [rec for rec in pinned_records if rec.get("week") == week]
-    other_week_records = len(pinned_records) - len(week_scoped_records)
-    current_week_records = [rec for rec in week_scoped_records if rec.get("game_key") in eligible_keys]
-    relevant_records = current_week_records
-    latest_map = _select_latest_by_fetch(relevant_records)
+    season_records = len(pinned_records)
+    relevant_records = [rec for rec in pinned_records if rec.get("game_key") in eligible_keys]
+    current_week_records = len(relevant_records)
+    other_week_records = season_records - current_week_records
+    latest_map = _select_latest_by_fetch(pinned_records)
 
     per_game_market: Dict[str, Dict[str, List[dict]]] = defaultdict(lambda: defaultdict(list))
+    used_record_total = 0
     for (game_key, market, _), record in latest_map.items():
+        if game_key not in eligible_keys:
+            continue
         per_game_market[game_key][market].append(record)
+        used_record_total += 1
 
     by_market: Counter[str] = Counter()
     by_book: Counter[str] = Counter()
@@ -246,10 +249,10 @@ def promote_week_odds(
 
     return {
         "promoted_games": len(promoted_games),
-        "used_records": len(latest_map),
+        "used_records": used_record_total,
         "available_records": len(relevant_records),
-        "season_records": len(pinned_records),
-        "current_week_records": len(relevant_records),
+        "season_records": season_records,
+        "current_week_records": current_week_records,
         "other_week_records": other_week_records,
         "by_market": dict(by_market),
         "by_book": dict(by_book),

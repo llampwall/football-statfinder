@@ -3,25 +3,15 @@
   "week": 9,
   "window": "2025-10-15T23:00:00Z -> 2025-11-01T02:15:00Z",
   "stats": {
-    "events_total": 59,
-    "events_after_window_filter": 52,
-    "events_in_window": 52,
-    "matched": 45,
+    "events_total": 58,
+    "events_after_window_filter": 51,
+    "events_in_window": 51,
+    "matched": 44,
     "unmatched": 14,
     "eligible_unmatched": 7
   },
   "samples": {
     "matched": [
-      {
-        "event_home": "Louisiana Tech Bulldogs",
-        "event_away": "Western Kentucky Hilltoppers",
-        "event_time": "2025-10-21T23:33:06Z",
-        "home_norm": "louisianatech",
-        "away_norm": "westernkentucky",
-        "game_key": "20251021_2330_western_kentucky_louisiana_tech",
-        "kickoff_iso_utc": "2025-10-21T23:30:00Z",
-        "mode": "ordered_exact"
-      },
       {
         "event_home": "Delaware Blue Hens",
         "event_away": "Middle Tennessee Blue Raiders",
@@ -309,6 +299,16 @@
         "home_norm": "pittsburgh",
         "away_norm": "ncstate",
         "game_key": "20251025_1930_nc_state_pittsburgh",
+        "kickoff_iso_utc": "2025-10-25T19:30:00Z",
+        "mode": "ordered_exact"
+      },
+      {
+        "event_home": "Washington State Cougars",
+        "event_away": "Toledo Rockets",
+        "event_time": "2025-10-25T19:30:00Z",
+        "home_norm": "washingtonstate",
+        "away_norm": "toledo",
+        "game_key": "20251025_1930_toledo_washington_state",
         "kickoff_iso_utc": "2025-10-25T19:30:00Z",
         "mode": "ordered_exact"
       }

@@ -25,6 +25,8 @@ Do not:
 from __future__ import annotations
 
 import json
+import subprocess
+import sys
 from copy import deepcopy
 from pathlib import Path
 from typing import Dict, Iterable, List, Optional, Sequence, Tuple
@@ -131,6 +133,11 @@ def _align_columns(df: pd.DataFrame, columns: Sequence[str]) -> pd.DataFrame:
     remainder = [col for col in df.columns if col not in ordered]
     return df.reindex(columns=ordered + remainder)
 
+
+def _rebuild_cfb_game_view(season: int, week: int) -> None:
+    cmd = [sys.executable, "-m", "src.gameview_build_cfb", "--season", str(season), "--week", str(week)]
+    subprocess.run(cmd, check=False)
+
 def _needs_odds_repair(rows: list[dict]) -> bool:
     """Return True if any row looks like odds/rvo were nuked."""
     for r in rows or []:
@@ -220,12 +227,15 @@ def backfill_cfb_scores(
             preserved_rvo_total += preservation["preserved_rvo"]
 
             final_rows = merged_rows
+            rebuild_game_view = False
 
             if promote_prev_enabled and prior_week < week:
                 promoted_rows = deepcopy(merged_rows)
                 promote_stats = promote_week_odds(promoted_rows, season, prior_week)
                 promoted_games = promote_stats.get("promoted_games", 0)
                 final_rows = promoted_rows
+                if promoted_games > 0:
+                    rebuild_game_view = True
                 print(
                     f"ODDS_REPROMOTE(CFB): week={season}-{prior_week} "
                     f"promoted={promoted_games} source=staging/odds_pinned"
@@ -253,6 +263,9 @@ def backfill_cfb_scores(
                     f"preserved_odds={preservation['preserved_odds']} "
                     f"preserved_rvo={preservation['preserved_rvo']}"
                 )
+
+            if rebuild_game_view:
+                _rebuild_cfb_game_view(season, prior_week)
 
     return {
         "weeks": weeks_to_scan,
