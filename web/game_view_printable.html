@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>NFL — Game View</title>
+<style>
+  :root { --ink:#000; --muted:#444; }
+  *{ box-sizing:border-box }
+  html,body{ margin:0; padding:0; background:#fff; color:var(--ink) }
+  body{ font:12px/1.25 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif }
+  .page{ max-width:1100px; margin:18px auto 28px; padding:0 16px }
+  h1,h2,h3{ margin:0 0 6px; font-weight:700 }
+  h1{ font-size:16px } h2{ font-size:14px } h3{ font-size:13px }
+  .muted{ color:var(--muted) }
+  .grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:16px }
+  .mt8{ margin-top:8px } .mt12{ margin-top:12px } .mt16{ margin-top:16px }
+  .mb8{ margin-bottom:8px } .mb16{ margin-bottom:16px }
+
+  table{ width:100%; border-collapse:collapse }
+  td{ border:1px solid #000; padding:4px 6px; vertical-align:middle }
+  th{ text-align:center; white-space:nowrap; vertical-align:middle }
+  td.center{ text-align:center } td.right{ text-align:right }
+
+  /* Thin vertical bars between logical groups inside a single table */
+  .vbar { 
+    border-left:1px solid #828282 
+  }
+
+  /* Multi-row header labels for OFFENSIVE | DEFENSIVE blocks */
+  .blockhdr{ font-weight:700; text-transform:uppercase; letter-spacing:.3px; background:#fff }
+
+  /* Footer */
+  .footer{ display:flex; justify-content:space-between; align-items:flex-end; margin-top:14px; font-size:11px }
+  @media print{ .page{ margin:0; padding:0 } }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <div class="mb8">
+    <div><strong id="hdrDate">—</strong></div>
+    <div id="hdrTime">—</div>
+  </div>
+
+  <!-- (1) Game / Odds table -->
+  <table>
+    <colgroup>
+      <col style="width:7%">
+      <col style="width:7%">
+      <col style="width:34%">
+      <col style="width:9%">
+      <col style="width:9%">
+      <col style="width:9%">
+      <col style="width:9%">
+      <col style="width:8%">
+      <col style="width:8%">
+    </colgroup>
+    <thead>
+      <tr>
+        <th>Team #</th>
+        <th>Game #</th>
+        <th class="center">Team Name</th>
+        <th>LV Odds</th>
+        <th>O/U</th>
+        <th>Current PR</th>
+        <th>HFA=2.1<br>Diff</th>
+        <th>Ratings vs. Odds</th>
+        <th>Schedule Strength</th>
+        <th>Diff</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="center" id="t1TeamNo">—</td>
+        <td class="center" id="t1GameNo">—</td>
+        <td id="t1Name">—</td>
+        <td class="center" id="t1Odds">—</td>
+        <td class="center" id="t1OU">—</td>
+        <td class="center" id="t1PR">—</td>
+        <td class="center" id="t1Diff">—</td>
+        <td class="center" id="t1RVO">—</td>
+        <td class="center" id="t1SoS">—</td>
+        <td class="center" id="t1SoSDiff">—</td>
+      </tr>
+      <tr>
+        <td class="center" id="t2TeamNo">—</td>
+        <td class="center" id="t2GameNo">—</td>
+        <td id="t2Name">—</td>
+        <td class="center" id="t2Odds">—</td>
+        <td class="center" id="t2OU">—</td>
+        <td class="center" id="t2PR">—</td>
+        <td class="center" id="t2Diff">—</td>
+        <td class="center" id="t2RVO">—</td>
+        <td class="center" id="t2SoS">—</td>
+        <td class="center" id="t2SoSDiff">—</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- (2) Team season-to-date stats (full-width, two rows) -->
+  <div class="mt12">
+    <table>
+      <colgroup>
+        <col style="width:20%">
+        <col style="width:5%"><col style="width:5%"><col style="width:6%"><col style="width:7%">
+        <!-- OFFENSE -->
+        <col style="width:6%"><col style="width:4%">
+        <col style="width:6%"><col style="width:4%">
+        <col style="width:6%"><col style="width:4%">
+        <!-- DEFENSE -->
+        <col style="width:6%"><col style="width:4%">
+        <col style="width:6%"><col style="width:4%">
+        <col style="width:6%"><col style="width:4%">
+        <col style="width:5%">
+      </colgroup>
+      <thead>
+        <tr>
+          <th rowspan="2"></th>
+          <th rowspan="2">PF</th>
+          <th rowspan="2">PA</th>
+          <th rowspan="2">SU</th>
+          <th rowspan="2">ATS</th>
+          <th colspan="6" class="blockhdr vbar">OFFENSIVE</th>
+          <th colspan="6" class="blockhdr vbar">DEFENSIVE</th>
+          <th rowspan="2" class="vbar">TO</th>
+        </tr>
+        <tr>
+          <th class="vbar">RY(O)</th><th>R</th>
+          <th>PY(O)</th><th>R</th>
+          <th>TY(O)</th><th>R</th>
+          <th class="vbar">RY(D)</th><th>R</th>
+          <th>PY(D)</th><th>R</th>
+          <th>TY(D)</th><th>R</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>—</td>
+          <td class="center" id="t1PF">—</td><td class="center" id="t1PA">—</td><td class="center" id="t1SU">—</td><td class="center" id="t1ATS">—</td>
+          <td class="center vbar" id="t1OffRY">—</td><td class="center">—</td>
+          <td class="center" id="t1OffPY">—</td><td class="center">—</td>
+          <td class="center" id="t1OffTY">—</td><td class="center">—</td>
+          <td class="center vbar" id="t1DefRY">—</td><td class="center">—</td>
+          <td class="center" id="t1DefPY">—</td><td class="center">—</td>
+          <td class="center" id="t1DefTY">—</td><td class="center">—</td>
+          <td class="center vbar" id="t1DefTO">—</td>
+        </tr>
+        <tr>
+          <td>—</td>
+          <td class="center" id="t2PF">—</td><td class="center" id="t2PA">—</td><td class="center" id="t2SU">—</td><td class="center" id="t2ATS">—</td>
+          <td class="center vbar" id="t2OffRY">—</td><td class="center">—</td>
+          <td class="center" id="t2OffPY">—</td><td class="center">—</td>
+          <td class="center" id="t2OffTY">—</td><td class="center">—</td>
+          <td class="center vbar" id="t2DefRY">—</td><td class="center">—</td>
+          <td class="center" id="t2DefPY">—</td><td class="center">—</td>
+          <td class="center" id="t2DefTY">—</td><td class="center">—</td>
+          <td class="center vbar" id="t2DefTO">—</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- (3) Current year schedules (side-by-side) -->
+  <div class="grid-2 mt16">
+    <table>
+      <thead>
+        <tr>
+          <th>—</th>
+          <th>—</th>
+          <th>PR</th><th>PR Opp</th>
+          <th>SoS</th><th>SoS Opp</th>
+          <th>Result</th><th>Score</th>
+        </tr>
+      </thead>
+      <tbody id="sched1Body"></tbody>
+    </table>
+
+    <table>
+      <thead>
+        <tr>
+          <th>—</th>
+          <th>—</th>
+          <th>PR</th><th>PR Opp</th>
+          <th>SoS</th><th>SoS Opp</th>
+          <th>Result</th><th>Score</th>
+        </tr>
+      </thead>
+      <tbody id="sched2Body"></tbody>
+    </table>
+  </div>
+
+  <!-- (4) 2024 Schedule/Scores (same two-up layout) -->
+  <h3 class="mt16 mb8">2024 Schedule/Scores</h3>
+  <div class="grid-2">
+    <table>
+      <thead>
+        <tr>
+          <th>—</th>
+          <th>—</th>
+          <th>PR</th><th>PR Opp</th>
+          <th>SoS</th><th>SoS Opp</th>
+          <th>Result</th><th>Score</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <table>
+      <thead>
+        <tr>
+          <th>—</th>
+          <th>—</th>
+          <th>PR</th><th>PR Opp</th>
+          <th>SoS</th><th>SoS Opp</th>
+          <th>Result</th><th>Score</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <!-- (5) 2024 End of Year Statistics (copy of table 2) -->
+  <h3 class="mt16 mb8">2024 End of Year Statistics</h3>
+  <table>
+    <colgroup>
+      <col style="width:20%">
+      <col style="width:5%"><col style="width:5%"><col style="width:6%"><col style="width:7%">
+      <col style="width:6%"><col style="width:4%">
+      <col style="width:6%"><col style="width:4%">
+      <col style="width:6%"><col style="width:4%">
+      <col style="width:6%"><col style="width:4%">
+      <col style="width:6%"><col style="width:4%">
+      <col style="width:6%"><col style="width:4%">
+      <col style="width:5%">
+    </colgroup>
+    <thead>
+      <tr>
+        <th rowspan="2"></th>
+        <th rowspan="2">PF</th>
+        <th rowspan="2">PA</th>
+        <th rowspan="2">SU</th>
+        <th rowspan="2">ATS</th>
+        <th colspan="6" class="blockhdr vbar">OFFENSIVE</th>
+        <th colspan="6" class="blockhdr vbar">DEFENSIVE</th>
+        <th rowspan="2" class="vbar">TO</th>
+      </tr>
+      <tr>
+        <th class="vbar">RY(O)</th><th>R</th>
+        <th>PY(O)</th><th>R</th>
+        <th>TY(O)</th><th>R</th>
+        <th class="vbar">RY(D)</th><th>R</th>
+        <th>PY(D)</th><th>R</th>
+        <th>TY(D)</th><th>R</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>—</td>
+        <td class="center">—</td><td class="center">—</td><td class="center">—</td><td class="center">—</td>
+        <td class="center vbar">—</td><td class="center">—</td>
+        <td class="center">—</td><td class="center">—</td>
+        <td class="center">—</td><td class="center">—</td>
+        <td class="center vbar">—</td><td class="center">—</td>
+        <td class="center">—</td><td class="center">—</td>
+        <td class="center">—</td><td class="center">—</td>
+        <td class="center vbar">—</td>
+      </tr>
+      <tr>
+        <td>—</td>
+        <td class="center">—</td><td class="center">—</td><td class="center">—</td><td class="center">—</td>
+        <td class="center vbar">—</td><td class="center">—</td>
+        <td class="center">—</td><td class="center">—</td>
+        <td class="center">—</td><td class="center">—</td>
+        <td class="center vbar">—</td><td class="center">—</td>
+        <td class="center">—</td><td class="center">—</td>
+        <td class="center">—</td><td class="center">—</td>
+        <td class="center vbar">—</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Footer -->
+  <div class="footer">
+    <div><strong>Abbreviations:</strong> PF = Points For, PA = Points Against, SU = Straight Up, ATS = Against The Spread, RY/PY/TY = Rush/Pass/Total Yards, R = Rank, TO = Turnovers.</div>
+    <div class="muted">Sheet: Game · Version: 1.0</div>
+  </div>
+</div>
+</body>
+</html>
