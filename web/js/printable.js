@@ -129,6 +129,103 @@ async function loadSidecar(baseDir, gameKey) {
   return JSON.parse(sanitized);
 }
 
+async function loadCsv(path) {
+  const url = new URL(`../${path}`, window.location.href);
+  const res = await fetch(url.toString(), { cache: "no-cache" });
+  if (!res.ok) {
+    throw new Error(`HTTP ${res.status}`);
+  }
+  const text = await res.text();
+  const lines = text.trim().split(/\r?\n/);
+  if (lines.length === 0) {
+    return [];
+  }
+  const headers = lines[0].split(",").map((token) => token.trim());
+  return lines
+    .slice(1)
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .map((line) => {
+      const values = line.split(",");
+      const row = {};
+      headers.forEach((header, idx) => {
+        row[header] = (values[idx] ?? "").trim();
+      });
+      return row;
+    });
+}
+
+const toNum = (value) => {
+  if (value === null || value === undefined || value === "" || value === DASH) return null;
+  const num = Number(value);
+  return Number.isFinite(num) ? num : null;
+};
+
+function setTxt(id, value) {
+  const el = $(id);
+  if (!el) return;
+  if (value === null || value === undefined || value === "") {
+    el.textContent = DASH;
+  } else {
+    el.textContent = String(value);
+  }
+}
+
+function assignText(id, value) {
+  if (value === null || value === undefined || value === "" || value === DASH) return;
+  const el = $(id);
+  if (el) {
+    el.textContent = String(value);
+  }
+}
+
+function assignNumber(id, raw, { decimals = 1, signed = false } = {}) {
+  const value = typeof raw === "number" ? raw : toNum(raw);
+  if (value === null) return;
+  const el = $(id);
+  if (!el) return;
+  el.textContent = formatNumber(value, { decimals, signed });
+}
+
+function teamCandidates(row, side) {
+  const prefix = side === "home" ? "home" : "away";
+  const display = teamName(row, side);
+  const candidates = [
+    display !== DASH ? display : null,
+    row?.[`${prefix}_team_name`] || null,
+    row?.[`${prefix}_team_norm`] || null,
+    row?.[`${prefix}_team_raw`] || null,
+  ]
+    .filter(Boolean)
+    .filter((value, index, array) => array.indexOf(value) === index);
+  return candidates.length ? candidates : [display];
+}
+
+function findTeamRow(rows, name) {
+  if (!Array.isArray(rows) || rows.length === 0) return null;
+  const str = String(name ?? "").trim();
+  if (!str || str === DASH) return null;
+  const direct = rows.find((row) => (row.Team || "") === str);
+  if (direct) return direct;
+  const lower = str.toLowerCase();
+  const lowerMatch = rows.find(
+    (row) => String(row.Team || "").trim().toLowerCase() === lower
+  );
+  if (lowerMatch) return lowerMatch;
+  const key = normalizeKey(str);
+  if (!key) return null;
+  return rows.find((row) => buildAliasKeys(row.Team).has(key)) || null;
+}
+
+function resolveMetricsRow(rows, candidates) {
+  if (!Array.isArray(rows) || rows.length === 0) return null;
+  for (const candidate of candidates) {
+    const match = findTeamRow(rows, candidate);
+    if (match) return match;
+  }
+  return null;
+}
+
 function teamName(row, side) {
   const prefix = side === "home" ? "home" : "away";
   return (
@@ -177,10 +274,20 @@ function resolveTeamNumber(row, side) {
 }
 
 function resolveGameNumber(row) {
-  const gsis = row?.raw_sources?.schedule_row?.gsis;
-  if (gsis === null || gsis === undefined) return DASH;
-  const num = Number(gsis);
-  return Number.isFinite(num) ? String(Math.trunc(num)) : DASH;
+  const candidate =
+    row?.raw_sources?.schedule_row?.game_no ??
+    row?.raw_sources?.schedule_row?.rotation ??
+    row?.rotation_number ??
+    row?.game_no ??
+    row?.raw_sources?.schedule_row?.gsis ??
+    null;
+  if (candidate === null || candidate === undefined || candidate === "") return DASH;
+  const num = Number(candidate);
+  if (Number.isFinite(num)) {
+    return String(Math.trunc(num));
+  }
+  const str = String(candidate).trim();
+  return str ? str : DASH;
 }
 
 function applyHeader(row) {
@@ -261,6 +368,23 @@ function fillTeam(prefix, row, side) {
   );
 }
 
+function fillOffDefFromMetrics(prefix, metrics) {
+  if (!metrics) return;
+  assignNumber(`${prefix}OffRY`, metrics["RY(O)"], { decimals: 1 });
+  assignNumber(`${prefix}OffRYRank`, metrics["R(O)_RY"], { decimals: 0 });
+  assignNumber(`${prefix}OffPY`, metrics["PY(O)"], { decimals: 1 });
+  assignNumber(`${prefix}OffPYRank`, metrics["R(O)_PY"], { decimals: 0 });
+  assignNumber(`${prefix}OffTY`, metrics["TY(O)"], { decimals: 1 });
+  assignNumber(`${prefix}OffTYRank`, metrics["R(O)_TY"], { decimals: 0 });
+  assignNumber(`${prefix}DefRY`, metrics["RY(D)"], { decimals: 1 });
+  assignNumber(`${prefix}DefRYRank`, metrics["R(D)_RY"], { decimals: 0 });
+  assignNumber(`${prefix}DefPY`, metrics["PY(D)"], { decimals: 1 });
+  assignNumber(`${prefix}DefPYRank`, metrics["R(D)_PY"], { decimals: 0 });
+  assignNumber(`${prefix}DefTY`, metrics["TY(D)"], { decimals: 1 });
+  assignNumber(`${prefix}DefTYRank`, metrics["R(D)_TY"], { decimals: 0 });
+  assignNumber(`${prefix}DefTO`, metrics["TO"], { decimals: 1, signed: true });
+}
+
 function fillSchedule(tbodyId, schedule) {
   const body = $(tbodyId);
   if (!body) return;
@@ -289,35 +413,26 @@ function fillSchedule(tbodyId, schedule) {
   });
 }
 
-function fillEoy(prefix, stats) {
-  const set = (suffix, value, opts) => {
-    const el = $(`${prefix}${suffix}`);
-    if (!el) return;
-    if (value === null || value === undefined || value === "") {
-      el.textContent = DASH;
-      return;
-    }
-    if (opts?.format === "number") {
-      el.textContent = formatNumber(value, {
-        decimals: opts.decimals ?? 1,
-        signed: Boolean(opts.signed),
-      });
-      return;
-    }
-    el.textContent = dash(value);
-  };
-
-  set("PF", stats?.pf_pg, { format: "number", decimals: 1 });
-  set("PA", stats?.pa_pg, { format: "number", decimals: 1 });
-  set("SU", stats?.su);
-  set("ATS", stats?.ats);
-  set("OffRY", stats?.ry_pg, { format: "number", decimals: 1 });
-  set("OffPY", stats?.py_pg, { format: "number", decimals: 1 });
-  set("OffTY", stats?.ty_pg, { format: "number", decimals: 1 });
-  set("DefRY", stats?.ry_allowed_pg, { format: "number", decimals: 1 });
-  set("DefPY", stats?.py_allowed_pg, { format: "number", decimals: 1 });
-  set("DefTY", stats?.ty_allowed_pg, { format: "number", decimals: 1 });
-  set("DefTO", stats?.to_margin_pg, { format: "number", decimals: 2, signed: true });
+function fillEoy(prefix, metrics, teamLabel) {
+  setTxt(`${prefix}Team`, teamLabel || DASH);
+  if (!metrics) return;
+  assignNumber(`${prefix}PF`, metrics["PF"], { decimals: 0 });
+  assignNumber(`${prefix}PA`, metrics["PA"], { decimals: 0 });
+  assignText(`${prefix}SU`, metrics["SU"]);
+  assignText(`${prefix}ATS`, metrics["ATS"]);
+  assignNumber(`${prefix}OffRY`, metrics["RY(O)"], { decimals: 1 });
+  assignNumber(`${prefix}OffRYRank`, metrics["R(O)_RY"], { decimals: 0 });
+  assignNumber(`${prefix}OffPY`, metrics["PY(O)"], { decimals: 1 });
+  assignNumber(`${prefix}OffPYRank`, metrics["R(O)_PY"], { decimals: 0 });
+  assignNumber(`${prefix}OffTY`, metrics["TY(O)"], { decimals: 1 });
+  assignNumber(`${prefix}OffTYRank`, metrics["R(O)_TY"], { decimals: 0 });
+  assignNumber(`${prefix}DefRY`, metrics["RY(D)"], { decimals: 1 });
+  assignNumber(`${prefix}DefRYRank`, metrics["R(D)_RY"], { decimals: 0 });
+  assignNumber(`${prefix}DefPY`, metrics["PY(D)"], { decimals: 1 });
+  assignNumber(`${prefix}DefPYRank`, metrics["R(D)_PY"], { decimals: 0 });
+  assignNumber(`${prefix}DefTY`, metrics["TY(D)"], { decimals: 1 });
+  assignNumber(`${prefix}DefTYRank`, metrics["R(D)_TY"], { decimals: 0 });
+  assignNumber(`${prefix}DefTO`, metrics["TO"], { decimals: 1, signed: true });
 }
 
 const EOY_CACHE = new Map();
@@ -345,91 +460,36 @@ function buildAliasKeys(name) {
   return keys;
 }
 
-function parseGames(value) {
-  if (!value) return null;
-  const parts = String(value)
-    .split("-")
-    .map((part) => Number(part));
-  const total = parts.reduce((acc, num) => (Number.isFinite(num) ? acc + num : acc), 0);
-  return total > 0 ? total : null;
-}
-
-function toNum(value) {
-  const num = Number(String(value ?? "").trim());
-  return Number.isFinite(num) ? num : null;
+async function getSeasonMetrics(league, season) {
+  const cacheKey = `${league}:${season}`;
+  if (EOY_CACHE.has(cacheKey)) return EOY_CACHE.get(cacheKey);
+  const path =
+    league === "CFB"
+      ? `out/cfb/final_league_metrics_${season}.csv`
+      : `out/final_league_metrics_${season}.csv`;
+  try {
+    const rows = await loadCsv(path);
+    const entry = { path, rows };
+    EOY_CACHE.set(cacheKey, entry);
+    return entry;
+  } catch (error) {
+    warnOnce(`missing EOY metrics:${league}:${season}`, {
+      league,
+      season,
+      path,
+      error: error?.message ?? error,
+    });
+    const entry = { path, rows: [] };
+    EOY_CACHE.set(cacheKey, entry);
+    return entry;
+  }
 }
 
 async function loadTeamSeasonStats(league, season, teamName) {
   if (!Number.isFinite(season)) return null;
-  const cacheKey = `${league}:${season}`;
-  let cache = EOY_CACHE.get(cacheKey);
-  if (!cache) {
-    const path =
-      league === "CFB"
-        ? `out/cfb/final_league_metrics_${season}.csv`
-        : `out/final_league_metrics_${season}.csv`;
-    try {
-      const url = new URL(`../${path}`, window.location.href);
-      const res = await fetch(url.toString(), { cache: "no-cache" });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      let text = await res.text();
-      if (text.startsWith("\uFEFF")) text = text.slice(1);
-      const lines = text.split(/\r?\n/).filter((line) => line.trim());
-      if (lines.length === 0) throw new Error("empty csv");
-      const headers = lines[0].split(",").map((h) => h.trim());
-      const map = new Map();
-      lines.slice(1).forEach((line) => {
-        const cols = line.split(",");
-        if (cols.every((col) => col.trim() === "")) return;
-        const raw = {};
-        headers.forEach((header, idx) => {
-          raw[header] = (cols[idx] ?? "").trim();
-        });
-        const games = parseGames(raw.SU);
-        const pf = toNum(raw.PF);
-        const pa = toNum(raw.PA);
-        const record = {
-          team: raw.Team,
-          pf_pg: league === "CFB" ? pf : games && pf !== null ? pf / games : pf,
-          pa_pg: league === "CFB" ? pa : games && pa !== null ? pa / games : pa,
-          su: raw.SU || null,
-          ats: raw.ATS || null,
-          to_margin_pg: toNum(raw.TO),
-          ry_pg: toNum(raw["RY(O)"]),
-          py_pg: toNum(raw["PY(O)"]),
-          ty_pg: toNum(raw["TY(O)"]),
-          ry_allowed_pg: toNum(raw["RY(D)"]),
-          py_allowed_pg: toNum(raw["PY(D)"]),
-          ty_allowed_pg: toNum(raw["TY(D)"]),
-        };
-        buildAliasKeys(raw.Team).forEach((key) => {
-          if (!map.has(key)) {
-            map.set(key, record);
-          }
-        });
-      });
-      cache = { map };
-      EOY_CACHE.set(cacheKey, cache);
-    } catch (error) {
-      warnOnce("missing prev-season stats", { league, season, error: error?.message ?? error });
-      return null;
-    }
-  }
-
-  const candidates = [
-    teamName,
-    String(teamName ?? "").replace(/[,]/g, ""),
-  ].filter(Boolean);
-
-  for (const candidate of candidates) {
-    for (const key of buildAliasKeys(candidate)) {
-      const record = cache.map.get(key);
-      if (record) return record;
-    }
-  }
-
-  warnOnce("missing prev-season stats", { league, season, team: teamName });
-  return null;
+  const data = await getSeasonMetrics(league, season);
+  if (!Array.isArray(data.rows) || data.rows.length === 0) return null;
+  return findTeamRow(data.rows, teamName);
 }
 
 function renderError(message) {
@@ -450,11 +510,59 @@ function renderError(message) {
     }
 
     applyHeader(row);
-    const awayDisplay = teamName(row, "away");
-    const homeDisplay = teamName(row, "home");
+    const awayCandidates = teamCandidates(row, "away");
+    const homeCandidates = teamCandidates(row, "home");
+    const awayLabel =
+      awayCandidates.find((value) => value && value !== DASH) || DASH;
+    const homeLabel =
+      homeCandidates.find((value) => value && value !== DASH) || DASH;
 
     fillTeam("t1", row, "away");
     fillTeam("t2", row, "home");
+    setTxt("stats1Team", awayLabel !== DASH ? awayLabel : row?.away_team_name);
+    setTxt("stats2Team", homeLabel !== DASH ? homeLabel : row?.home_team_name);
+
+    const gameNo = resolveGameNumber(row);
+    setTxt("t1GameNo", gameNo);
+    setTxt("t2GameNo", gameNo);
+
+    let currentMetricsRows = [];
+    if (baseDir && Number.isFinite(seasonParam) && Number.isFinite(weekParam)) {
+      const metricsPath = `${baseDir}/league_metrics_${seasonParam}_${weekParam}.csv`;
+      try {
+        currentMetricsRows = await loadCsv(metricsPath);
+      } catch (err) {
+        warnOnce(
+          `missing current league metrics:${leagueParam}:${seasonParam}:${weekParam}`,
+          {
+            metricsPath,
+            error: err?.message ?? err,
+          }
+        );
+      }
+    }
+
+    const awayMetrics = resolveMetricsRow(currentMetricsRows, awayCandidates);
+    if (!awayMetrics && currentMetricsRows.length) {
+      warnOnce(`missing league metrics row:${awayLabel}`, {
+        season: seasonParam,
+        week: weekParam,
+        team: awayLabel,
+        candidates: awayCandidates,
+      });
+    }
+    const homeMetrics = resolveMetricsRow(currentMetricsRows, homeCandidates);
+    if (!homeMetrics && currentMetricsRows.length) {
+      warnOnce(`missing league metrics row:${homeLabel}`, {
+        season: seasonParam,
+        week: weekParam,
+        team: homeLabel,
+        candidates: homeCandidates,
+      });
+    }
+
+    fillOffDefFromMetrics("t1", awayMetrics);
+    fillOffDefFromMetrics("t2", homeMetrics);
 
     const prevSeasonValue = Number.isFinite(seasonParam) ? seasonParam - 1 : null;
 
@@ -478,16 +586,28 @@ function renderError(message) {
       const schedHomePrev = sidecar.home_prev || [];
 
       if (!schedAwayNow.length) {
-        warnOnce(`missing current schedule:${awayDisplay}`, { team: awayDisplay, season: seasonParam });
+        warnOnce(`missing current schedule:${awayLabel}`, {
+          team: awayLabel,
+          season: seasonParam,
+        });
       }
       if (!schedHomeNow.length) {
-        warnOnce(`missing current schedule:${homeDisplay}`, { team: homeDisplay, season: seasonParam });
+        warnOnce(`missing current schedule:${homeLabel}`, {
+          team: homeLabel,
+          season: seasonParam,
+        });
       }
       if (!schedAwayPrev.length) {
-        warnOnce(`missing prev-season schedule:${awayDisplay}`, { team: awayDisplay, season: prevSeasonValue });
+        warnOnce(`missing prev-season schedule:${awayLabel}`, {
+          team: awayLabel,
+          season: prevSeasonValue,
+        });
       }
       if (!schedHomePrev.length) {
-        warnOnce(`missing prev-season schedule:${homeDisplay}`, { team: homeDisplay, season: prevSeasonValue });
+        warnOnce(`missing prev-season schedule:${homeLabel}`, {
+          team: homeLabel,
+          season: prevSeasonValue,
+        });
       }
 
       fillSchedule("sched1Body", schedAwayNow);
@@ -498,14 +618,38 @@ function renderError(message) {
       warnOnce(`missing sidecar schedules:${gameKey}`, { gameKey });
     }
 
+    let eoyAway = null;
+    let eoyHome = null;
     if (Number.isFinite(prevSeasonValue)) {
-      const [eoyAway, eoyHome] = await Promise.all([
-        loadTeamSeasonStats(leagueParam, prevSeasonValue, awayDisplay),
-        loadTeamSeasonStats(leagueParam, prevSeasonValue, homeDisplay),
-      ]);
-      fillEoy("eoy1", eoyAway);
-      fillEoy("eoy2", eoyHome);
+      for (const candidate of awayCandidates) {
+        eoyAway = await loadTeamSeasonStats(leagueParam, prevSeasonValue, candidate);
+        if (eoyAway) break;
+      }
+      if (!eoyAway) {
+        warnOnce(`missing EOY row:${awayLabel}`, {
+          league: leagueParam,
+          season: prevSeasonValue,
+          team: awayLabel,
+          candidates: awayCandidates,
+        });
+      }
+
+      for (const candidate of homeCandidates) {
+        eoyHome = await loadTeamSeasonStats(leagueParam, prevSeasonValue, candidate);
+        if (eoyHome) break;
+      }
+      if (!eoyHome) {
+        warnOnce(`missing EOY row:${homeLabel}`, {
+          league: leagueParam,
+          season: prevSeasonValue,
+          team: homeLabel,
+          candidates: homeCandidates,
+        });
+      }
     }
+
+    fillEoy("eoy1", eoyAway, awayLabel);
+    fillEoy("eoy2", eoyHome, homeLabel);
   } catch (error) {
     renderError(error);
   }
