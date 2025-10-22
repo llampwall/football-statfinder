@@ -37,7 +37,7 @@ const query = new URLSearchParams(window.location.search);
 const leagueParam = (query.get("league") || "NFL").toUpperCase();
 const seasonParam = toNumber(query.get("season"));
 const weekParam = toNumber(query.get("week"));
-const gameKey = (query.get("game") || "").trim();
+const gameKey = (query.get("game_key") || query.get("game") || "").trim();
 
 const baseDir =
   Number.isFinite(seasonParam) && Number.isFinite(weekParam)
@@ -119,11 +119,30 @@ async function loadJsonl(path) {
     throw new Error(`HTTP ${res.status}`);
   }
   const text = await res.text();
-  return text
-    .split("\n")
-    .map((line) => line.trim())
-    .filter(Boolean)
-    .map((line) => JSON.parse(line));
+  return parseJsonl(text);
+}
+
+function parseJsonl(text) {
+  if (!text) return [];
+  const lines = text.replace(/^\uFEFF/, "").split(/\r?\n/);
+  const out = [];
+  for (const raw of lines) {
+    const line = raw && raw.trim();
+    if (!line) continue;
+    const safe = line
+      .replace(/:\s*NaN\b/gi, ": null")
+      .replace(/:\s*-Infinity\b/gi, ": null")
+      .replace(/:\s*Infinity\b/gi, ": null");
+    try {
+      out.push(JSON.parse(safe));
+    } catch (err) {
+      console.warn("PRINTABLE: skip bad JSONL line", {
+        snippet: line.slice(0, 120),
+        err: err?.message ?? err,
+      });
+    }
+  }
+  return out;
 }
 
 async function loadSidecar(baseDir, gameKey) {

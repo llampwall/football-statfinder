@@ -670,13 +670,13 @@ function openPrintable() {
   const league = (STATE?.league || "NFL").toUpperCase();
   const season = String(STATE?.season ?? "");
   const week = String(STATE?.week ?? "");
-  const game = STATE?.game?.game_key || STATE?.currentGameKey || "";
+  const gameKey = STATE?.game?.game_key || STATE?.currentGameKey || "";
 
   const printableUrl = siteUrl("web/game_view_printable.html", {
     league,
     season,
     week,
-    game,
+    game_key: gameKey,
   });
   window.open(printableUrl, "_blank");
 }
