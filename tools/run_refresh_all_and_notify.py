@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import argparse
 import json
 import re
 import socket
@@ -10,8 +11,8 @@ import sys
 import time
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Iterable, List, Optional
-from urllib.error import URLError, HTTPError
+from typing import Dict, Iterable, List, Optional
+from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -22,10 +23,34 @@ from src.common.io_utils import getenv, write_atomic_json  # noqa: E402
 
 ANSI_RE = re.compile(r"\x1B\[[0-?]*[ -/]*[@-~]")
 NOTE_PREFIXES = ("BACKFILL_MERGE(", "BACKFILL_REPAIR(", "ODDS_REPROMOTE(")
+NOTE_SUBSTRINGS = ("ODDS_FETCH_ERROR", "EXCEPTION", "Traceback", "HTTPError")
+PROMOTED_RE = re.compile(r"promoted=(\d+)", re.IGNORECASE)
+NOTIFY_WEEK_RE = re.compile(r"week=(\d{4})-(\d+)", re.IGNORECASE)
+NOTIFY_ROWS_RE = re.compile(r"rows=(\d+)", re.IGNORECASE)
 
 
 def strip_ansi(value: str) -> str:
     return ANSI_RE.sub("", value)
+
+
+def parse_args(argv: Optional[List[str]] = None) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Run Global Week refresh and post summary.")
+    parser.add_argument("--verbose", action="store_true", help="Emit full notes (legacy format).")
+    return parser.parse_args(argv)
+
+
+def _should_capture_line(line: str) -> bool:
+    if line.startswith(NOTE_PREFIXES):
+        return True
+    if any(token in line for token in NOTE_SUBSTRINGS):
+        return True
+    match = PROMOTED_RE.search(line)
+    if match:
+        try:
+            return int(match.group(1)) > 0
+        except ValueError:
+            return False
+    return False
 
 
 def run_refresh(module: str, league_tag: str) -> Dict[str, object]:
@@ -59,14 +84,17 @@ def run_refresh(module: str, league_tag: str) -> Dict[str, object]:
     for line in stripped_lines:
         if notify_line is None and line.startswith(target_prefix):
             notify_line = line
-        if line.startswith(NOTE_PREFIXES):
+        if _should_capture_line(line):
             notes.append(line)
+
+    tail_line = stripped_lines[-1] if stripped_lines else ""
 
     return {
         "rc": proc.returncode,
         "seconds": seconds,
         "notify": notify_line,
         "notes": notes,
+        "tail": tail_line,
     }
 
 
@@ -85,35 +113,140 @@ def write_index_line(path: Path, ts_iso: str, cfb_ok: bool, nfl_ok: bool, cfb_se
 
 
 def post_discord(webhook_url: str, message: str) -> None:
-    # Discord: content <= 2000 chars
-    payload = json.dumps({"content": str(message)[:1900]}).encode("utf-8")
+    trimmed = str(message)[:1900]
+    payload = json.dumps({"content": trimmed}).encode("utf-8")
     headers = {
         "Content-Type": "application/json; charset=utf-8",
         "Accept": "application/json",
-        # Avoid Cloudflare 1010 (Python-urllib UA gets blocked)
-        "User-Agent": "curl/8.5.0"
+        "User-Agent": "curl/8.5.0",
     }
     req = Request(webhook_url, data=payload, headers=headers)
     try:
         with urlopen(req, timeout=10) as resp:
             resp.read()
-    except HTTPError as e:
-        body = e.read().decode("utf-8", "ignore")
-        raise RuntimeError(f"Discord HTTPError {e.code}: {body}")
+    except HTTPError as error:
+        body = error.read().decode("utf-8", "ignore")
+        raise RuntimeError(f"Discord HTTPError {error.code}: {body}")
 
 
-def summarize_notes(sections: Iterable[List[str]], limit: int = 3) -> List[str]:
-    combined: List[str] = []
-    for group in sections:
+def note_has_keyword(line: str) -> bool:
+    if any(token in line for token in NOTE_SUBSTRINGS):
+        return True
+    match = PROMOTED_RE.search(line)
+    if match:
+        try:
+            return int(match.group(1)) > 0
+        except ValueError:
+            return False
+    return False
+
+
+def dedupe_notes(*note_groups: Iterable[str]) -> List[str]:
+    seen = set()
+    output: List[str] = []
+    for group in note_groups:
         for line in group:
-            if line not in combined:
-                combined.append(line)
-            if len(combined) >= limit:
-                return combined[:limit]
-    return combined[:limit]
+            if not line or line in seen:
+                continue
+            seen.add(line)
+            output.append(line)
+    return output
 
 
-def main() -> None:
+def limit_notes(notes: List[str], limit: int = 8) -> List[str]:
+    if len(notes) <= limit:
+        return notes
+    remaining = len(notes) - limit
+    return notes[:limit] + [f"... (+{remaining} more)"]
+
+
+def parse_notify_details(notify: Optional[str]) -> Dict[str, Optional[str]]:
+    week = None
+    rows: Optional[str] = None
+    if notify:
+        week_match = NOTIFY_WEEK_RE.search(notify)
+        if week_match:
+            week = f"{week_match.group(1)}-{week_match.group(2)}"
+        rows_match = NOTIFY_ROWS_RE.search(notify)
+        if rows_match:
+            rows = rows_match.group(1)
+    return {"week": week, "rows": rows}
+
+
+def format_league_line(tag: str, result: Dict[str, object]) -> str:
+    seconds = float(result["seconds"])
+    rc = int(result["rc"])
+    notify = result["notify"]
+    details = parse_notify_details(notify)
+    ok = rc == 0 and bool(notify)
+    if ok:
+        week = details["week"] or "unknown"
+        rows = details["rows"] or "?"
+        return f"✅ {tag} week={week} rows={rows} in {seconds:.1f}s"
+    reasons: List[str] = []
+    if rc != 0:
+        reasons.append(f"exit={rc}")
+    if not notify:
+        reasons.append("missing NOTIFY")
+    reason_text = ", ".join(reasons) if reasons else "unknown issue"
+    return f"❌ {tag} ({reason_text}) in {seconds:.1f}s"
+
+
+def build_verbose_message(ts_iso: str, cfb_result: Dict[str, object], nfl_result: Dict[str, object], json_path: Path) -> str:
+    note_lines = dedupe_notes(cfb_result["notes"], nfl_result["notes"])
+    note_summary = "\n".join(f"- {line}" for line in limit_notes(note_lines, 20)) if note_lines else "- (none)"
+    return (
+        f"REFRESH SUMMARY (UTC {ts_iso})\n"
+        f"CFB → {cfb_result['notify'] or 'missing NOTIFY'}\n"
+        f"NFL → {nfl_result['notify'] or 'missing NOTIFY'}\n"
+        "notes:\n"
+        f"{note_summary}\n"
+        f"log: {json_path.as_posix()}"
+    )
+
+
+def build_compact_message(
+    ts_iso: str,
+    cfb_result: Dict[str, object],
+    nfl_result: Dict[str, object],
+    json_path: Path,
+    show_notes: bool,
+) -> str:
+    cfb_ok = cfb_result["rc"] == 0 and bool(cfb_result["notify"])
+    nfl_ok = nfl_result["rc"] == 0 and bool(nfl_result["notify"])
+    header_icon = "✅" if (cfb_ok and nfl_ok) else "⚠️"
+
+    lines = [
+        f"REFRESH {header_icon} (UTC {ts_iso})",
+        format_league_line("CFB", cfb_result),
+        format_league_line("NFL", nfl_result),
+    ]
+
+    if show_notes:
+        combined_notes = dedupe_notes(
+            cfb_result["notes"],
+            nfl_result["notes"],
+        )
+        extra: List[str] = []
+        if not cfb_ok and cfb_result.get("tail"):
+            extra.append(f"stderr(tail): {cfb_result['tail']}")
+        if not nfl_ok and nfl_result.get("tail"):
+            extra.append(f"stderr(tail): {nfl_result['tail']}")
+        combined_notes.extend(note for note in extra if note)
+        combined_notes = dedupe_notes(combined_notes)
+        limited = limit_notes(combined_notes, 8)
+        if limited:
+            lines.append("")
+            lines.append("notes:")
+            lines.extend(f"- {line}" for line in limited)
+
+    lines.append(f"log: {json_path.as_posix()}")
+    return "\n".join(lines)
+
+
+def main(argv: Optional[List[str]] = None) -> None:
+    args = parse_args(argv)
+
     logs_dir = ensure_logs_dir()
     ts = datetime.now(timezone.utc)
     ts_iso = ts.isoformat().replace("+00:00", "Z")
@@ -157,15 +290,17 @@ def main() -> None:
 
     webhook = (getenv("DISCORD_WEBHOOK_URL") or "").strip()
     if webhook:
-        note_lines = summarize_notes([cfb_result["notes"], nfl_result["notes"]])
-        note_block = "\n".join(f"- {line}" for line in note_lines) if note_lines else "- (none)"
-        message = (
-            f"REFRESH SUMMARY (UTC {ts_iso})\n"
-            f"CFB → {cfb_result['notify'] or 'missing NOTIFY'}\n"
-            f"NFL → {nfl_result['notify'] or 'missing NOTIFY'}\n"
-            "notes:\n"
-            f"{note_block}"
-        )
+        show_notes = args.verbose
+        if not show_notes:
+            combined_notes = dedupe_notes(
+                cfb_result["notes"],
+                nfl_result["notes"],
+            )
+            show_notes = (not cfb_ok or not nfl_ok) or any(note_has_keyword(line) for line in combined_notes)
+        if args.verbose:
+            message = build_verbose_message(ts_iso, cfb_result, nfl_result, json_path)
+        else:
+            message = build_compact_message(ts_iso, cfb_result, nfl_result, json_path, show_notes)
         try:
             post_discord(webhook, message)
         except URLError as exc:
