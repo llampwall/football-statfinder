@@ -235,6 +235,40 @@ function buildWeekPaths(league, season, week) {
   };
 }
 
+async function fetchTextNoThrow(url) {
+  try {
+    const res = await fetch(url, { cache: "no-cache" });
+    if (!res.ok) return null;
+    return await res.text();
+  } catch {
+    return null;
+  }
+}
+
+async function resolveLeagueWhenMissing(season, week, gameKey) {
+  if (!Number.isFinite(season) || !Number.isFinite(week) || !gameKey) return null;
+  const key = String(gameKey).trim();
+  if (!key) return null;
+  const order = ["nfl", "cfb"];
+  for (const lg of order) {
+    const paths = buildWeekPaths(lg, season, week);
+    const text = await fetchTextNoThrow(paths.gamesJsonl);
+    if (!text) continue;
+    const found = text.split("\n").some((line) => {
+      const trimmed = line.trim();
+      if (!trimmed) return false;
+      try {
+        const obj = JSON.parse(trimmed);
+        return obj?.game_key === key;
+      } catch {
+        return false;
+      }
+    });
+    if (found) return lg;
+  }
+  return null;
+}
+
 function attachListeners() {
   if (els.loadGameBtn) {
     els.loadGameBtn.addEventListener("click", () => {
@@ -283,31 +317,42 @@ function attachListeners() {
   if (els.printableBtn) els.printableBtn.addEventListener("click", openPrintable);
 }
 
-function bootstrap() {
+async function bootstrap() {
   const params = new URLSearchParams(window.location.search);
   const stored = safeParseLocalStorage();
   const paramLeagueRaw = params.get("league");
-  const storedLeague = stored?.league ?? loadStoredLeague();
-  const initialLeague = paramLeagueRaw
-    ? normalizeLeague(paramLeagueRaw)
-    : storedLeague ?? DEFAULT_LEAGUE;
-  setActiveLeague(initialLeague, { updateSelect: true, updateHistory: Boolean(paramLeagueRaw) });
+  const seasonParam = numericFromParam(params.get("season"));
+  const weekParam = numericFromParam(params.get("week"));
+  const queryGameKey = params.get("game_key") ?? params.get("game") ?? "";
 
-  if (params.has("season") || params.has("week") || params.has("game_key")) {
+  if (params.has("season") || params.has("week") || params.has("game_key") || params.has("game")) {
     STATE.deepLinkUsed = true;
     console.log("Deep link detected -> auto load path.");
   }
 
+  const storedLeague = stored?.league ?? loadStoredLeague();
+  let initialLeague = paramLeagueRaw
+    ? normalizeLeague(paramLeagueRaw)
+    : storedLeague ?? DEFAULT_LEAGUE;
+
+  if (!paramLeagueRaw && Number.isFinite(seasonParam) && Number.isFinite(weekParam) && queryGameKey) {
+    console.log("Deep link: league missing \u2014 probing NFL/CFB\u2026");
+    const detectedLeague = await resolveLeagueWhenMissing(seasonParam, weekParam, queryGameKey);
+    if (detectedLeague) {
+      initialLeague = detectedLeague;
+    }
+  }
+
+  setActiveLeague(initialLeague, { updateSelect: true, updateHistory: Boolean(paramLeagueRaw) });
+
   const storedMatchesLeague =
     stored && normalizeLeague(stored.league ?? DEFAULT_LEAGUE) === STATE.league;
-  const seasonParam = numericFromParam(params.get("season"));
-  const weekParam = numericFromParam(params.get("week"));
   const storedSeason = storedMatchesLeague ? numericFromParam(stored?.season) : null;
   const storedWeek = storedMatchesLeague ? numericFromParam(stored?.week) : null;
-  const initialSeason = seasonParam ?? storedSeason;
-  const initialWeek = weekParam ?? storedWeek;
+  const initialSeason = Number.isFinite(seasonParam) ? seasonParam : storedSeason;
+  const initialWeek = Number.isFinite(weekParam) ? weekParam : storedWeek;
   const storedGameKey = storedMatchesLeague ? stored?.game_key ?? "" : "";
-  const initialGameKey = params.get("game_key") ?? storedGameKey;
+  const initialGameKey = queryGameKey || storedGameKey;
   STATE.autoFromStorage = !STATE.deepLinkUsed && storedMatchesLeague && Boolean(storedGameKey);
 
   if (Number.isFinite(initialSeason)) {
@@ -518,8 +563,10 @@ function populateGameSelect(records, autoSelectKey) {
 
 async function loadSingleGame(gameKey) {
   const game = STATE.games.get(gameKey);
-  console.log(`${game ? "PASS" : "FAIL"}: Game row found (${gameKey})`);
-  if (!game) {
+  if (game) {
+    console.log(`PASS: Game row found (${gameKey})`);
+  } else {
+    console.log(`FAIL: Game row not found (${gameKey})`);
     setStatus("Game not in loaded set.");
     return;
   }

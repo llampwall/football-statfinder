@@ -1265,7 +1265,7 @@ function openGame(gameKey, { newTab = false } = {}) {
   storeLastViewedGame(gameKey);
   highlightRow(gameKey);
   const url = siteUrl("web/game_view.html", {
-    league: STATE.league && STATE.league !== DEFAULT_LEAGUE ? STATE.league : undefined,
+    league: STATE.league,
     season: STATE.season,
     week: STATE.week,
     game_key: gameKey,
@@ -1345,7 +1345,7 @@ function updateFooter(totalCount, season, week) {
   els.loadedLabel.textContent = `Season ${season}, Week ${week}`;
   els.weekSummary.textContent = `Currently viewing Season ${season}, Week ${week}`;
   els.gameViewLink.href = siteUrl("web/game_view.html", {
-    league: STATE.league && STATE.league !== DEFAULT_LEAGUE ? STATE.league : undefined,
+    league: STATE.league,
     season,
     week,
   });
