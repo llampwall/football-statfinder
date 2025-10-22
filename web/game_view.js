@@ -4,6 +4,7 @@ const els = {
   leagueSelect: document.getElementById("league-select"),
   loadGamesBtn: document.getElementById("load-games-btn"),
   loadGameBtn: document.getElementById("load-game-btn"),
+  printableBtn: document.getElementById("btnPrintable"),
   gameSelect: document.getElementById("game-select"),
   status: document.getElementById("status"),
   weekLink: document.getElementById("week-view-link"),
@@ -92,6 +93,7 @@ const STATE = {
   autoFromStorage: false,
   sortedKeys: [],
   currentGameKey: null,
+  game: null,
   weekSourcePath: null,
   lastLoadedAt: null,
   eoyCache: new Map(),
@@ -285,6 +287,8 @@ function attachListeners() {
       navigateRelative(1);
     }
   });
+
+  if (els.printableBtn) els.printableBtn.addEventListener("click", openPrintable);
 }
 
 function bootstrap() {
@@ -343,6 +347,7 @@ async function loadGames(autoGameKey) {
   }
 
   STATE.currentGameKey = null;
+  STATE.game = null;
 
   const cached = readWeekCache(paths.league, season, week);
   let records = Array.isArray(cached) ? cached : null;
@@ -518,6 +523,7 @@ async function loadSingleGame(gameKey) {
   };
 
   STATE.currentGameKey = gameKey;
+  STATE.game = game;
   if (els.gameSelect.value !== gameKey) {
     els.gameSelect.value = gameKey;
   }
@@ -580,6 +586,21 @@ async function loadSingleGame(gameKey) {
   rememberWeekRow(gameKey, sidecarRel);
   updateUrlWithSelection(gameKey);
   updateNavigationControls();
+}
+
+function openPrintable() {
+  const league = (STATE?.league || "NFL").toUpperCase();
+  const season = String(STATE?.season ?? "");
+  const week = String(STATE?.week ?? "");
+  const game = STATE?.game?.game_key || STATE?.currentGameKey || "";
+
+  const base = new URL("./", window.location.href);
+  const url = new URL("game_view_printable.html", base);
+  url.searchParams.set("league", league);
+  url.searchParams.set("season", season);
+  url.searchParams.set("week", week);
+  url.searchParams.set("game", game);
+  window.open(url.toString(), "_blank");
 }
 
 function renderHeader(game, teamNames) {
