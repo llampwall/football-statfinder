@@ -1,16 +1,16 @@
 {
   "fbs_rows": 53,
   "joined_metrics_rows": 53,
-  "joined_odds_rows": 44,
+  "joined_odds_rows": 0,
   "joined_sagarin_rows": 51,
   "output_rows": 53,
-  "odds_games": 44,
+  "odds_games": 0,
   "sagarin_games": 51,
   "coverage_metrics": 1.0,
   "notes": [
     "FBS games: 53",
     "Metrics coverage: 53/53",
-    "Odds coverage: 44/53",
+    "Odds coverage: 0/53",
     "Sagarin coverage: 51/53"
   ],
   "samples": {
@@ -28,46 +28,52 @@
         "kickoff_iso_utc": "2025-10-21T23:30:00Z"
       },
       {
-        "game_key": "20251025_1600_app_state_old_dominion",
-        "home": "Old Dominion",
-        "away": "App State",
+        "game_key": "20251022_2330_middle_tennessee_delaware",
+        "home": "Delaware",
+        "away": "Middle Tennessee",
+        "kickoff_iso_utc": "2025-10-22T23:30:00Z"
+      },
+      {
+        "game_key": "20251023_0100_missouri_state_new_mexico_state",
+        "home": "New Mexico State",
+        "away": "Missouri State",
+        "kickoff_iso_utc": "2025-10-23T01:00:00Z"
+      },
+      {
+        "game_key": "20251023_2330_south_alabama_georgia_state",
+        "home": "Georgia State",
+        "away": "South Alabama",
+        "kickoff_iso_utc": "2025-10-23T23:30:00Z"
+      },
+      {
+        "game_key": "20251024_2300_north_texas_charlotte",
+        "home": "Charlotte",
+        "away": "North Texas",
+        "kickoff_iso_utc": "2025-10-24T23:00:00Z"
+      },
+      {
+        "game_key": "20251024_2330_california_virginia_tech",
+        "home": "Virginia Tech",
+        "away": "California",
+        "kickoff_iso_utc": "2025-10-24T23:30:00Z"
+      },
+      {
+        "game_key": "20251025_0200_boise_state_nevada",
+        "home": "Nevada",
+        "away": "Boise State",
+        "kickoff_iso_utc": "2025-10-25T02:00:00Z"
+      },
+      {
+        "game_key": "20251025_1600_ucla_indiana",
+        "home": "Indiana",
+        "away": "Ucla",
         "kickoff_iso_utc": "2025-10-25T16:00:00Z"
       },
       {
-        "game_key": "20251025_1930_ul_monroe_southern_miss",
-        "home": "Southern Miss",
-        "away": "Ul Monroe",
-        "kickoff_iso_utc": "2025-10-25T19:30:00Z"
-      },
-      {
-        "game_key": "20251025_1930_san_diego_state_fresno_state",
-        "home": "Fresno State",
-        "away": "San Diego State",
-        "kickoff_iso_utc": "2025-10-25T19:30:00Z"
-      },
-      {
-        "game_key": "20251025_1930_massachusetts_central_michigan",
-        "home": "Central Michigan",
-        "away": "Massachusetts",
-        "kickoff_iso_utc": "2025-10-25T19:30:00Z"
-      },
-      {
-        "game_key": "20251025_1930_florida_atlantic_navy",
-        "home": "Navy",
-        "away": "Florida Atlantic",
-        "kickoff_iso_utc": "2025-10-25T19:30:00Z"
-      },
-      {
-        "game_key": "20251025_1930_temple_tulsa",
-        "home": "Tulsa",
-        "away": "Temple",
-        "kickoff_iso_utc": "2025-10-25T19:30:00Z"
-      },
-      {
-        "game_key": "20251025_2300_georgia_southern_arkansas_state",
-        "home": "Arkansas State",
-        "away": "Georgia Southern",
-        "kickoff_iso_utc": "2025-10-25T23:00:00Z"
+        "game_key": "20251025_1600_ole_miss_oklahoma",
+        "home": "Oklahoma",
+        "away": "Ole Miss",
+        "kickoff_iso_utc": "2025-10-25T16:00:00Z"
       }
     ],
     "missing_sagarin": [
@@ -87,9 +93,9 @@
     "metrics_gaps": []
   },
   "ratings": {
-    "eligible": 42,
-    "edges_count": 42,
-    "rvo_count": 42
+    "eligible": 0,
+    "edges_count": 0,
+    "rvo_count": 0
   },
   "failures": []
 }

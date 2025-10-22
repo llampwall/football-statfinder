@@ -1,449 +1,449 @@
-league,season,week,team_norm,team_raw,pr,rank,sos,sos_rank
-NFL,2024,1,Arizona Cardinals,Arizona Cardinals,17.93,,26.98,4
-NFL,2024,1,Atlanta Falcons,Atlanta Falcons,19.07,,19.17,22
-NFL,2024,1,Baltimore Ravens,Baltimore Ravens,23.62,,27.3,2
-NFL,2024,1,Buffalo Bills,Buffalo Bills,24.87,,15.81,25
-NFL,2024,1,Carolina Panthers,Carolina Panthers,10.57,,19.42,20
-NFL,2024,1,Chicago Bears,Chicago Bears,20.55,,14.61,27
-NFL,2024,1,Cincinnati Bengals,Cincinnati Bengals,21.77,,13.42,28
-NFL,2024,1,Cleveland Browns,Cleveland Browns,19.35,,20.06,18
-NFL,2024,1,Dallas Cowboys,Dallas Cowboys,22.17,,21.46,14
-NFL,2024,1,Denver Broncos,Denver Broncos,14.21,,22.33,10
-NFL,2024,1,Detroit Lions,Detroit Lions,25.09,,19.33,21
-NFL,2024,1,Green Bay Packers,Green Bay Packers,22.81,,24.17,6
-NFL,2024,1,Houston Texans,Houston Texans,24.32,,21.88,12
-NFL,2024,1,Indianapolis Colts,Indianapolis Colts,19.77,,22.2,11
-NFL,2024,1,Jacksonville Jaguars,Jacksonville Jaguars,20.8,,25.77,5
-NFL,2024,1,Kansas City Chiefs,Kansas City Chiefs,25.19,,21.51,13
-NFL,2024,1,Las Vegas Raiders,Las Vegas Raiders,14.45,,20.44,16
-NFL,2024,1,Los Angeles Chargers,Los Angeles Chargers,18.32,,12.34,30
-NFL,2024,1,Los Angeles Rams,Los Angeles Rams,21.44,,27.2,3
-NFL,2024,1,Miami Dolphins,Miami Dolphins,23.66,,18.69,23
-NFL,2024,1,Minnesota Vikings,Minnesota Vikings,20.01,,15.26,26
-NFL,2024,1,New England Patriots,New England Patriots,15.53,,23.88,7
-NFL,2024,1,New Orleans Saints,New Orleans Saints,17.3,,8.46,32
-NFL,2024,1,New York Giants,New York Giants,13.15,,17.9,24
-NFL,2024,1,New York Jets,New York Jets,22.33,,28.9,1
-NFL,2024,1,Philadelphia Eagles,Philadelphia Eagles,24.17,,22.81,8
-NFL,2024,1,Pittsburgh Steelers,Pittsburgh Steelers,21.28,,21.18,15
-NFL,2024,1,San Francisco 49ers,San Francisco 49ers,26.79,,20.22,17
-NFL,2024,1,Seattle Seahawks,Seattle Seahawks,20.22,,12.09,31
-NFL,2024,1,Tampa Bay Buccaneers,Tampa Bay Buccaneers,17.85,,12.56,29
-NFL,2024,1,Tennessee Titans,Tennessee Titans,16.73,,22.67,9
-NFL,2024,1,Washington Commanders,Washington Commanders,14.67,,19.96,19
-NFL,2024,5,Arizona Cardinals,Arizona Cardinals,18.6,,22.17,2
-NFL,2024,5,Atlanta Falcons,Atlanta Falcons,20.5,,21.09,8
-NFL,2024,5,Baltimore Ravens,Baltimore Ravens,24.2,,21.39,4
-NFL,2024,5,Buffalo Bills,Buffalo Bills,24.49,,20.6,13
-NFL,2024,5,Carolina Panthers,Carolina Panthers,10.88,,18.93,23
-NFL,2024,5,Chicago Bears,Chicago Bears,21.14,,17.82,32
-NFL,2024,5,Cincinnati Bengals,Cincinnati Bengals,20.07,,18.7,24
-NFL,2024,5,Cleveland Browns,Cleveland Browns,16.48,,17.88,31
-NFL,2024,5,Dallas Cowboys,Dallas Cowboys,20.69,,19.78,19
-NFL,2024,5,Denver Broncos,Denver Broncos,18.41,,19.66,20
-NFL,2024,5,Detroit Lions,Detroit Lions,24.7,,18.64,25
-NFL,2024,5,Green Bay Packers,Green Bay Packers,23.47,,20.4,16
-NFL,2024,5,Houston Texans,Houston Texans,23.02,,21.29,5
-NFL,2024,5,Indianapolis Colts,Indianapolis Colts,19.94,,21.19,7
-NFL,2024,5,Jacksonville Jaguars,Jacksonville Jaguars,17.74,,20.7,12
-NFL,2024,5,Kansas City Chiefs,Kansas City Chiefs,26.0,,20.41,15
-NFL,2024,5,Las Vegas Raiders,Las Vegas Raiders,13.97,,18.06,29
-NFL,2024,5,Los Angeles Chargers,Los Angeles Chargers,18.97,,18.12,28
-NFL,2024,5,Los Angeles Rams,Los Angeles Rams,18.77,,22.61,1
-NFL,2024,5,Miami Dolphins,Miami Dolphins,18.51,,18.37,27
-NFL,2024,5,Minnesota Vikings,Minnesota Vikings,24.1,,21.74,3
-NFL,2024,5,New England Patriots,New England Patriots,14.0,,21.04,9
-NFL,2024,5,New Orleans Saints,New Orleans Saints,19.39,,20.49,14
-NFL,2024,5,New York Giants,New York Giants,16.19,,20.35,17
-NFL,2024,5,New York Jets,New York Jets,21.8,,19.56,21
-NFL,2024,5,Philadelphia Eagles,Philadelphia Eagles,22.01,,21.0,10
-NFL,2024,5,Pittsburgh Steelers,Pittsburgh Steelers,21.67,,19.91,18
-NFL,2024,5,San Francisco 49ers,San Francisco 49ers,24.09,,19.26,22
-NFL,2024,5,Seattle Seahawks,Seattle Seahawks,19.69,,18.0,30
-NFL,2024,5,Tampa Bay Buccaneers,Tampa Bay Buccaneers,19.61,,20.83,11
-NFL,2024,5,Tennessee Titans,Tennessee Titans,17.18,,21.23,6
-NFL,2024,5,Washington Commanders,Washington Commanders,19.72,,18.42,26
-NFL,2024,12,Arizona Cardinals,Arizona Cardinals,20.61,,22.11,4
-NFL,2024,12,Atlanta Falcons,Atlanta Falcons,17.93,,19.48,21
-NFL,2024,12,Baltimore Ravens,Baltimore Ravens,25.32,,20.42,11
-NFL,2024,12,Buffalo Bills,Buffalo Bills,27.54,,20.72,9
-NFL,2024,12,Carolina Panthers,Carolina Panthers,10.47,,18.24,32
-NFL,2024,12,Chicago Bears,Chicago Bears,18.92,,18.82,25
-NFL,2024,12,Cincinnati Bengals,Cincinnati Bengals,20.43,,18.95,23
-NFL,2024,12,Cleveland Browns,Cleveland Browns,15.81,,19.04,22
-NFL,2024,12,Dallas Cowboys,Dallas Cowboys,16.92,,21.15,7
-NFL,2024,12,Denver Broncos,Denver Broncos,20.2,,18.86,24
-NFL,2024,12,Detroit Lions,Detroit Lions,30.28,,20.3,15
-NFL,2024,12,Green Bay Packers,Green Bay Packers,25.58,,21.2,6
-NFL,2024,12,Houston Texans,Houston Texans,23.04,,20.45,10
-NFL,2024,12,Indianapolis Colts,Indianapolis Colts,19.41,,22.21,3
-NFL,2024,12,Jacksonville Jaguars,Jacksonville Jaguars,16.69,,22.41,1
-NFL,2024,12,Kansas City Chiefs,Kansas City Chiefs,24.18,,19.63,19
-NFL,2024,12,Las Vegas Raiders,Las Vegas Raiders,12.29,,20.39,12
-NFL,2024,12,Los Angeles Chargers,Los Angeles Chargers,21.8,,18.52,28
-NFL,2024,12,Los Angeles Rams,Los Angeles Rams,19.45,,21.26,5
-NFL,2024,12,Miami Dolphins,Miami Dolphins,21.07,,18.65,26
-NFL,2024,12,Minnesota Vikings,Minnesota Vikings,23.51,,20.32,14
-NFL,2024,12,New England Patriots,New England Patriots,13.56,,19.8,18
-NFL,2024,12,New Orleans Saints,New Orleans Saints,16.33,,18.4,30
-NFL,2024,12,New York Giants,New York Giants,12.41,,19.54,20
-NFL,2024,12,New York Jets,New York Jets,18.73,,20.21,17
-NFL,2024,12,Philadelphia Eagles,Philadelphia Eagles,26.47,,18.5,29
-NFL,2024,12,Pittsburgh Steelers,Pittsburgh Steelers,22.43,,18.35,31
-NFL,2024,12,San Francisco 49ers,San Francisco 49ers,21.79,,20.33,13
-NFL,2024,12,Seattle Seahawks,Seattle Seahawks,20.52,,20.22,16
-NFL,2024,12,Tampa Bay Buccaneers,Tampa Bay Buccaneers,20.71,,20.92,8
-NFL,2024,12,Tennessee Titans,Tennessee Titans,16.08,,22.23,2
-NFL,2024,12,Washington Commanders,Washington Commanders,19.51,,18.59,27
-NFL,2024,13,Arizona Cardinals,Arizona Cardinals,20.8,,22.41,1
-NFL,2024,13,Atlanta Falcons,Atlanta Falcons,17.83,,19.52,21
-NFL,2024,13,Baltimore Ravens,Baltimore Ravens,24.93,,20.93,6
-NFL,2024,13,Buffalo Bills,Buffalo Bills,28.24,,20.35,10
-NFL,2024,13,Carolina Panthers,Carolina Panthers,11.07,,18.39,31
-NFL,2024,13,Chicago Bears,Chicago Bears,19.73,,19.86,18
-NFL,2024,13,Cincinnati Bengals,Cincinnati Bengals,20.09,,19.36,24
-NFL,2024,13,Cleveland Browns,Cleveland Browns,15.67,,19.44,23
-NFL,2024,13,Dallas Cowboys,Dallas Cowboys,17.15,,20.29,11
-NFL,2024,13,Denver Broncos,Denver Broncos,20.47,,18.49,28
-NFL,2024,13,Detroit Lions,Detroit Lions,29.68,,20.11,14
-NFL,2024,13,Green Bay Packers,Green Bay Packers,26.04,,20.92,8
-NFL,2024,13,Houston Texans,Houston Texans,22.81,,20.23,12
-NFL,2024,13,Indianapolis Colts,Indianapolis Colts,19.09,,21.61,4
-NFL,2024,13,Jacksonville Jaguars,Jacksonville Jaguars,16.96,,22.4,2
-NFL,2024,13,Kansas City Chiefs,Kansas City Chiefs,23.34,,18.87,26
-NFL,2024,13,Las Vegas Raiders,Las Vegas Raiders,13.04,,20.73,9
-NFL,2024,13,Los Angeles Chargers,Los Angeles Chargers,21.76,,18.46,29
-NFL,2024,13,Los Angeles Rams,Los Angeles Rams,19.93,,20.93,7
-NFL,2024,13,Miami Dolphins,Miami Dolphins,20.62,,19.56,20
-NFL,2024,13,Minnesota Vikings,Minnesota Vikings,23.23,,20.12,13
-NFL,2024,13,New England Patriots,New England Patriots,13.88,,19.47,22
-NFL,2024,13,New Orleans Saints,New Orleans Saints,15.96,,18.44,30
-NFL,2024,13,New York Giants,New York Giants,12.39,,19.66,19
-NFL,2024,13,New York Jets,New York Jets,18.37,,20.07,15
-NFL,2024,13,Philadelphia Eagles,Philadelphia Eagles,26.85,,19.2,25
-NFL,2024,13,Pittsburgh Steelers,Pittsburgh Steelers,22.87,,18.69,27
-NFL,2024,13,San Francisco 49ers,San Francisco 49ers,20.63,,21.04,5
-NFL,2024,13,Seattle Seahawks,Seattle Seahawks,20.8,,20.0,17
-NFL,2024,13,Tampa Bay Buccaneers,Tampa Bay Buccaneers,20.1,,20.05,16
-NFL,2024,13,Tennessee Titans,Tennessee Titans,14.97,,22.19,3
-NFL,2024,13,Washington Commanders,Washington Commanders,20.7,,18.27,32
-NFL,2024,14,Arizona Cardinals,Arizona Cardinals,19.86,,22.43,1
-NFL,2024,14,Atlanta Falcons,Atlanta Falcons,17.04,,20.1,16
-NFL,2024,14,Baltimore Ravens,Baltimore Ravens,24.83,,20.87,9
-NFL,2024,14,Buffalo Bills,Buffalo Bills,27.53,,20.64,10
-NFL,2024,14,Carolina Panthers,Carolina Panthers,11.72,,18.87,26
-NFL,2024,14,Chicago Bears,Chicago Bears,18.34,,20.24,13
-NFL,2024,14,Cincinnati Bengals,Cincinnati Bengals,20.48,,19.17,24
-NFL,2024,14,Cleveland Browns,Cleveland Browns,15.36,,19.77,18
-NFL,2024,14,Dallas Cowboys,Dallas Cowboys,16.82,,20.19,15
-NFL,2024,14,Denver Broncos,Denver Broncos,20.38,,18.51,29
-NFL,2024,14,Detroit Lions,Detroit Lions,29.49,,20.52,11
-NFL,2024,14,Green Bay Packers,Green Bay Packers,26.05,,21.62,3
-NFL,2024,14,Houston Texans,Houston Texans,22.75,,20.1,17
-NFL,2024,14,Indianapolis Colts,Indianapolis Colts,19.05,,21.54,5
-NFL,2024,14,Jacksonville Jaguars,Jacksonville Jaguars,17.15,,21.7,2
-NFL,2024,14,Kansas City Chiefs,Kansas City Chiefs,23.48,,19.05,25
-NFL,2024,14,Las Vegas Raiders,Las Vegas Raiders,12.65,,20.99,7
-NFL,2024,14,Los Angeles Chargers,Los Angeles Chargers,21.52,,18.84,27
-NFL,2024,14,Los Angeles Rams,Los Angeles Rams,20.8,,21.41,6
-NFL,2024,14,Miami Dolphins,Miami Dolphins,20.89,,19.3,23
-NFL,2024,14,Minnesota Vikings,Minnesota Vikings,24.05,,19.76,19
-NFL,2024,14,New England Patriots,New England Patriots,13.93,,19.65,20
-NFL,2024,14,New Orleans Saints,New Orleans Saints,16.01,,17.98,32
-NFL,2024,14,New York Giants,New York Giants,12.45,,19.39,21
-NFL,2024,14,New York Jets,New York Jets,18.2,,20.38,12
-NFL,2024,14,Philadelphia Eagles,Philadelphia Eagles,26.12,,18.61,28
-NFL,2024,14,Pittsburgh Steelers,Pittsburgh Steelers,23.16,,18.17,30
-NFL,2024,14,San Francisco 49ers,San Francisco 49ers,22.24,,20.93,8
-NFL,2024,14,Seattle Seahawks,Seattle Seahawks,21.8,,20.22,14
-NFL,2024,14,Tampa Bay Buccaneers,Tampa Bay Buccaneers,20.59,,19.36,22
-NFL,2024,14,Tennessee Titans,Tennessee Titans,14.71,,21.58,4
-NFL,2024,14,Washington Commanders,Washington Commanders,20.55,,18.07,31
-NFL,2024,18,Arizona Cardinals,Arizona Cardinals,20.46,,21.0,3
-NFL,2024,18,Atlanta Falcons,Atlanta Falcons,17.51,,19.08,27
-NFL,2024,18,Baltimore Ravens,Baltimore Ravens,28.24,,20.47,11
-NFL,2024,18,Buffalo Bills,Buffalo Bills,26.98,,19.8,20
-NFL,2024,18,Carolina Panthers,Carolina Panthers,11.93,,19.48,23
-NFL,2024,18,Chicago Bears,Chicago Bears,17.9,,21.16,2
-NFL,2024,18,Cincinnati Bengals,Cincinnati Bengals,22.42,,19.1,26
-NFL,2024,18,Cleveland Browns,Cleveland Browns,13.04,,20.94,4
-NFL,2024,18,Dallas Cowboys,Dallas Cowboys,16.81,,20.13,15
-NFL,2024,18,Denver Broncos,Denver Broncos,22.7,,19.46,24
-NFL,2024,18,Detroit Lions,Detroit Lions,29.97,,20.73,7
-NFL,2024,18,Green Bay Packers,Green Bay Packers,26.41,,20.61,10
-NFL,2024,18,Houston Texans,Houston Texans,21.12,,19.93,19
-NFL,2024,18,Indianapolis Colts,Indianapolis Colts,16.99,,19.68,21
-NFL,2024,18,Jacksonville Jaguars,Jacksonville Jaguars,15.75,,19.64,22
-NFL,2024,18,Kansas City Chiefs,Kansas City Chiefs,23.75,,20.01,18
-NFL,2024,18,Las Vegas Raiders,Las Vegas Raiders,14.09,,20.66,8
-NFL,2024,18,Los Angeles Chargers,Los Angeles Chargers,23.03,,18.93,29
-NFL,2024,18,Los Angeles Rams,Los Angeles Rams,21.4,,20.78,5
-NFL,2024,18,Miami Dolphins,Miami Dolphins,20.53,,18.92,30
-NFL,2024,18,Minnesota Vikings,Minnesota Vikings,24.09,,20.2,13
-NFL,2024,18,New England Patriots,New England Patriots,14.1,,20.2,12
-NFL,2024,18,New Orleans Saints,New Orleans Saints,14.25,,19.16,25
-NFL,2024,18,New York Giants,New York Giants,12.63,,20.05,16
-NFL,2024,18,New York Jets,New York Jets,17.96,,20.01,17
-NFL,2024,18,Philadelphia Eagles,Philadelphia Eagles,27.01,,18.51,31
-NFL,2024,18,Pittsburgh Steelers,Pittsburgh Steelers,20.53,,20.17,14
-NFL,2024,18,San Francisco 49ers,San Francisco 49ers,19.43,,21.57,1
-NFL,2024,18,Seattle Seahawks,Seattle Seahawks,21.4,,20.65,9
-NFL,2024,18,Tampa Bay Buccaneers,Tampa Bay Buccaneers,22.89,,18.97,28
-NFL,2024,18,Tennessee Titans,Tennessee Titans,13.29,,20.77,6
-NFL,2024,18,Washington Commanders,Washington Commanders,21.38,,18.3,32
-NFL,2025,1,Arizona Cardinals,Arizona Cardinals,20.46,,21.0,3
-NFL,2025,1,Atlanta Falcons,Atlanta Falcons,17.51,,19.08,27
-NFL,2025,1,Baltimore Ravens,Baltimore Ravens,28.24,,20.47,11
-NFL,2025,1,Buffalo Bills,Buffalo Bills,26.98,,19.8,20
-NFL,2025,1,Carolina Panthers,Carolina Panthers,11.93,,19.48,23
-NFL,2025,1,Chicago Bears,Chicago Bears,17.9,,21.16,2
-NFL,2025,1,Cincinnati Bengals,Cincinnati Bengals,22.42,,19.1,26
-NFL,2025,1,Cleveland Browns,Cleveland Browns,13.04,,20.94,4
-NFL,2025,1,Dallas Cowboys,Dallas Cowboys,16.81,,20.13,15
-NFL,2025,1,Denver Broncos,Denver Broncos,22.7,,19.46,24
-NFL,2025,1,Detroit Lions,Detroit Lions,29.97,,20.73,7
-NFL,2025,1,Green Bay Packers,Green Bay Packers,26.41,,20.61,10
-NFL,2025,1,Houston Texans,Houston Texans,21.12,,19.93,19
-NFL,2025,1,Indianapolis Colts,Indianapolis Colts,16.99,,19.68,21
-NFL,2025,1,Jacksonville Jaguars,Jacksonville Jaguars,15.75,,19.64,22
-NFL,2025,1,Kansas City Chiefs,Kansas City Chiefs,23.75,,20.01,18
-NFL,2025,1,Las Vegas Raiders,Las Vegas Raiders,14.09,,20.66,8
-NFL,2025,1,Los Angeles Chargers,Los Angeles Chargers,23.03,,18.93,29
-NFL,2025,1,Los Angeles Rams,Los Angeles Rams,21.4,,20.78,5
-NFL,2025,1,Miami Dolphins,Miami Dolphins,20.53,,18.92,30
-NFL,2025,1,Minnesota Vikings,Minnesota Vikings,24.09,,20.2,13
-NFL,2025,1,New England Patriots,New England Patriots,14.1,,20.2,12
-NFL,2025,1,New Orleans Saints,New Orleans Saints,14.25,,19.16,25
-NFL,2025,1,New York Giants,New York Giants,12.63,,20.05,16
-NFL,2025,1,New York Jets,New York Jets,17.96,,20.01,17
-NFL,2025,1,Philadelphia Eagles,Philadelphia Eagles,27.01,,18.51,31
-NFL,2025,1,Pittsburgh Steelers,Pittsburgh Steelers,20.53,,20.17,14
-NFL,2025,1,San Francisco 49ers,San Francisco 49ers,19.43,,21.57,1
-NFL,2025,1,Seattle Seahawks,Seattle Seahawks,21.4,,20.65,9
-NFL,2025,1,Tampa Bay Buccaneers,Tampa Bay Buccaneers,22.89,,18.97,28
-NFL,2025,1,Tennessee Titans,Tennessee Titans,13.29,,20.77,6
-NFL,2025,1,Washington Commanders,Washington Commanders,21.38,,18.3,32
-NFL,2025,2,Arizona Cardinals,Arizona Cardinals,19.48,,14.42,32
-NFL,2025,2,Atlanta Falcons,Atlanta Falcons,19.81,,21.09,12
-NFL,2025,2,Baltimore Ravens,Baltimore Ravens,26.03,,20.58,15
-NFL,2025,2,Buffalo Bills,Buffalo Bills,25.76,,20.55,16
-NFL,2025,2,Carolina Panthers,Carolina Panthers,15.75,,20.25,19
-NFL,2025,2,Chicago Bears,Chicago Bears,18.47,,22.49,4
-NFL,2025,2,Cincinnati Bengals,Cincinnati Bengals,21.53,,17.09,29
-NFL,2025,2,Cleveland Browns,Cleveland Browns,15.39,,23.78,2
-NFL,2025,2,Dallas Cowboys,Dallas Cowboys,17.32,,21.21,11
-NFL,2025,2,Denver Broncos,Denver Broncos,21.84,,17.15,28
-NFL,2025,2,Detroit Lions,Detroit Lions,24.65,,21.82,7
-NFL,2025,2,Green Bay Packers,Green Bay Packers,25.17,,23.05,3
-NFL,2025,2,Houston Texans,Houston Texans,20.1,,21.83,5
-NFL,2025,2,Indianapolis Colts,Indianapolis Colts,19.52,,17.05,30
-NFL,2025,2,Jacksonville Jaguars,Jacksonville Jaguars,18.79,,18.64,24
-NFL,2025,2,Kansas City Chiefs,Kansas City Chiefs,23.9,,23.79,1
-NFL,2025,2,Las Vegas Raiders,Las Vegas Raiders,18.6,,20.26,18
-NFL,2025,2,Los Angeles Chargers,Los Angeles Chargers,22.17,,21.81,8
-NFL,2025,2,Los Angeles Rams,Los Angeles Rams,21.81,,17.45,27
-NFL,2025,2,Miami Dolphins,Miami Dolphins,14.5,,18.94,23
-NFL,2025,2,Minnesota Vikings,Minnesota Vikings,20.34,,19.14,21
-NFL,2025,2,New England Patriots,New England Patriots,18.35,,16.55,31
-NFL,2025,2,New Orleans Saints,New Orleans Saints,13.09,,19.05,22
-NFL,2025,2,New York Giants,New York Giants,15.9,,21.62,9
-NFL,2025,2,New York Jets,New York Jets,15.07,,21.33,10
-NFL,2025,2,Philadelphia Eagles,Philadelphia Eagles,26.52,,20.61,14
-NFL,2025,2,Pittsburgh Steelers,Pittsburgh Steelers,19.12,,17.46,26
-NFL,2025,2,San Francisco 49ers,San Francisco 49ers,20.92,,17.59,25
-NFL,2025,2,Seattle Seahawks,Seattle Seahawks,19.85,,19.98,20
-NFL,2025,2,Tampa Bay Buccaneers,Tampa Bay Buccaneers,21.85,,21.07,13
-NFL,2025,2,Tennessee Titans,Tennessee Titans,14.79,,21.83,6
-NFL,2025,2,Washington Commanders,Washington Commanders,23.69,,20.53,17
-NFL,2025,4,Arizona Cardinals,Arizona Cardinals,19.0,,17.07,31
-NFL,2025,4,Atlanta Falcons,Atlanta Falcons,18.73,,20.78,18
-NFL,2025,4,Baltimore Ravens,Baltimore Ravens,25.48,,23.55,2
-NFL,2025,4,Buffalo Bills,Buffalo Bills,25.65,,14.74,32
-NFL,2025,4,Carolina Panthers,Carolina Panthers,16.41,,20.93,14
-NFL,2025,4,Chicago Bears,Chicago Bears,19.77,,20.19,19
-NFL,2025,4,Cincinnati Bengals,Cincinnati Bengals,20.36,,21.59,4
-NFL,2025,4,Cleveland Browns,Cleveland Browns,15.24,,24.0,1
-NFL,2025,4,Dallas Cowboys,Dallas Cowboys,16.33,,21.95,3
-NFL,2025,4,Denver Broncos,Denver Broncos,22.63,,18.83,25
-NFL,2025,4,Detroit Lions,Detroit Lions,25.64,,21.28,9
-NFL,2025,4,Green Bay Packers,Green Bay Packers,24.24,,20.28,17
-NFL,2025,4,Houston Texans,Houston Texans,20.62,,19.17,22
-NFL,2025,4,Indianapolis Colts,Indianapolis Colts,18.9,,18.22,28
-NFL,2025,4,Jacksonville Jaguars,Jacksonville Jaguars,18.92,,19.52,24
-NFL,2025,4,Kansas City Chiefs,Kansas City Chiefs,25.64,,21.69,5
-NFL,2025,4,Las Vegas Raiders,Las Vegas Raiders,17.88,,20.88,15
-NFL,2025,4,Los Angeles Chargers,Los Angeles Chargers,21.48,,21.5,6
-NFL,2025,4,Los Angeles Rams,Los Angeles Rams,21.49,,19.61,21
-NFL,2025,4,Miami Dolphins,Miami Dolphins,14.74,,19.35,23
-NFL,2025,4,Minnesota Vikings,Minnesota Vikings,21.5,,18.81,26
-NFL,2025,4,New England Patriots,New England Patriots,18.74,,15.4,29
-NFL,2025,4,New Orleans Saints,New Orleans Saints,11.87,,21.2,10
-NFL,2025,4,New York Giants,New York Giants,16.1,,21.75,7
-NFL,2025,4,New York Jets,New York Jets,14.67,,20.53,12
-NFL,2025,4,Philadelphia Eagles,Philadelphia Eagles,27.61,,21.28,8
-NFL,2025,4,Pittsburgh Steelers,Pittsburgh Steelers,20.38,,19.77,20
-NFL,2025,4,San Francisco 49ers,San Francisco 49ers,20.45,,17.33,30
-NFL,2025,4,Seattle Seahawks,Seattle Seahawks,20.24,,18.23,27
-NFL,2025,4,Tampa Bay Buccaneers,Tampa Bay Buccaneers,21.47,,20.87,16
-NFL,2025,4,Tennessee Titans,Tennessee Titans,13.95,,20.92,13
-NFL,2025,4,Washington Commanders,Washington Commanders,23.93,,19.11,23
-NFL,2025,5,Arizona Cardinals,Arizona Cardinals,19.0,,21.2,10
-NFL,2025,5,Atlanta Falcons,Atlanta Falcons,18.73,,19.61,20
-NFL,2025,5,Baltimore Ravens,Baltimore Ravens,25.48,,19.17,23
-NFL,2025,5,Buffalo Bills,Buffalo Bills,25.65,,20.87,14
-NFL,2025,5,Carolina Panthers,Carolina Panthers,16.41,,20.78,15
-NFL,2025,5,Chicago Bears,Chicago Bears,19.77,,19.77,19
-NFL,2025,5,Cincinnati Bengals,Cincinnati Bengals,20.36,,21.28,9
-NFL,2025,5,Cleveland Browns,Cleveland Browns,15.24,,18.22,28
-NFL,2025,5,Dallas Cowboys,Dallas Cowboys,16.33,,20.53,16
-NFL,2025,5,Denver Broncos,Denver Broncos,22.63,,21.69,5
-NFL,2025,5,Detroit Lions,Detroit Lions,25.64,,15.4,31
-NFL,2025,5,Green Bay Packers,Green Bay Packers,24.24,,19.35,22
-NFL,2025,5,Houston Texans,Houston Texans,20.62,,18.83,25
-NFL,2025,5,Indianapolis Colts,Indianapolis Colts,18.9,,21.75,4
-NFL,2025,5,Jacksonville Jaguars,Jacksonville Jaguars,18.92,,20.93,11
-NFL,2025,5,Kansas City Chiefs,Kansas City Chiefs,25.64,,17.33,29
-NFL,2025,5,Las Vegas Raiders,Las Vegas Raiders,17.88,,21.59,6
-NFL,2025,5,Los Angeles Chargers,Los Angeles Chargers,21.48,,23.55,2
-NFL,2025,5,Los Angeles Rams,Los Angeles Rams,21.49,,24.0,1
-NFL,2025,5,Miami Dolphins,Miami Dolphins,14.74,,20.19,18
-NFL,2025,5,Minnesota Vikings,Minnesota Vikings,21.5,,21.28,8
-NFL,2025,5,New England Patriots,New England Patriots,18.74,,20.88,13
-NFL,2025,5,New Orleans Saints,New Orleans Saints,11.87,,21.5,7
-NFL,2025,5,New York Giants,New York Giants,16.1,,20.28,17
-NFL,2025,5,New York Jets,New York Jets,14.67,,18.23,27
-NFL,2025,5,Philadelphia Eagles,Philadelphia Eagles,27.61,,17.07,30
-NFL,2025,5,Pittsburgh Steelers,Pittsburgh Steelers,20.38,,14.74,32
-NFL,2025,5,San Francisco 49ers,San Francisco 49ers,20.4,,21.95,3
-NFL,2025,5,Seattle Seahawks,Seattle Seahawks,20.24,,20.92,11
-NFL,2025,5,Tampa Bay Buccaneers,Tampa Bay Buccaneers,21.47,,19.52,21
-NFL,2025,5,Tennessee Titans,Tennessee Titans,13.95,,19.11,24
-NFL,2025,5,Washington Commanders,Washington Commanders,23.93,,18.81,26
-NFL,2025,6,Arizona Cardinals,Arizona Cardinals,18.45,,16.21,31
-NFL,2025,6,Atlanta Falcons,Atlanta Falcons,19.0,,21.09,9
-NFL,2025,6,Baltimore Ravens,Baltimore Ravens,22.73,,22.27,2
-NFL,2025,6,Buffalo Bills,Buffalo Bills,24.58,,14.9,32
-NFL,2025,6,Carolina Panthers,Carolina Panthers,16.42,,19.09,26
-NFL,2025,6,Chicago Bears,Chicago Bears,19.61,,20.22,17
-NFL,2025,6,Cincinnati Bengals,Cincinnati Bengals,18.82,,21.95,3
-NFL,2025,6,Cleveland Browns,Cleveland Browns,14.88,,22.78,1
-NFL,2025,6,Dallas Cowboys,Dallas Cowboys,17.29,,20.45,15
-NFL,2025,6,Denver Broncos,Denver Broncos,23.6,,20.91,12
-NFL,2025,6,Detroit Lions,Detroit Lions,26.46,,20.78,14
-NFL,2025,6,Green Bay Packers,Green Bay Packers,24.45,,20.8,13
-NFL,2025,6,Houston Texans,Houston Texans,22.25,,20.99,10
-NFL,2025,6,Indianapolis Colts,Indianapolis Colts,20.9,,17.42,30
-NFL,2025,6,Jacksonville Jaguars,Jacksonville Jaguars,20.44,,20.19,18
-NFL,2025,6,Kansas City Chiefs,Kansas City Chiefs,24.75,,21.19,8
-NFL,2025,6,Las Vegas Raiders,Las Vegas Raiders,16.64,,21.65,5
-NFL,2025,6,Los Angeles Chargers,Los Angeles Chargers,20.79,,20.93,11
-NFL,2025,6,Los Angeles Rams,Los Angeles Rams,21.8,,20.1,19
-NFL,2025,6,Miami Dolphins,Miami Dolphins,14.49,,19.65,21
-NFL,2025,6,Minnesota Vikings,Minnesota Vikings,21.42,,17.96,28
-NFL,2025,6,New England Patriots,New England Patriots,19.63,,17.69,29
-NFL,2025,6,New Orleans Saints,New Orleans Saints,12.34,,19.38,23
-NFL,2025,6,New York Giants,New York Giants,15.14,,20.44,16
-NFL,2025,6,New York Jets,New York Jets,13.64,,19.16,25
-NFL,2025,6,Philadelphia Eagles,Philadelphia Eagles,26.83,,21.34,7
-NFL,2025,6,Pittsburgh Steelers,Pittsburgh Steelers,20.45,,19.6,22
-NFL,2025,6,San Francisco 49ers,San Francisco 49ers,21.03,,19.29,24
-NFL,2025,6,Seattle Seahawks,Seattle Seahawks,20.87,,18.5,27
-NFL,2025,6,Tampa Bay Buccaneers,Tampa Bay Buccaneers,22.0,,21.45,6
-NFL,2025,6,Tennessee Titans,Tennessee Titans,13.72,,21.95,4
-NFL,2025,6,Washington Commanders,Washington Commanders,24.56,,19.84,20
-NFL,2025,7,Arizona Cardinals,Arizona Cardinals,18.63,,17.55,29
-NFL,2025,7,Atlanta Falcons,Atlanta Falcons,19.56,,21.07,8
-NFL,2025,7,Baltimore Ravens,Baltimore Ravens,21.99,,21.26,6
-NFL,2025,7,Buffalo Bills,Buffalo Bills,23.87,,16.02,32
-NFL,2025,7,Carolina Panthers,Carolina Panthers,16.8,,18.24,27
-NFL,2025,7,Chicago Bears,Chicago Bears,20.12,,21.75,4
-NFL,2025,7,Cincinnati Bengals,Cincinnati Bengals,19.1,,22.57,2
-NFL,2025,7,Cleveland Browns,Cleveland Browns,14.7,,22.77,1
-NFL,2025,7,Dallas Cowboys,Dallas Cowboys,17.11,,20.62,14
-NFL,2025,7,Denver Broncos,Denver Broncos,23.08,,19.58,21
-NFL,2025,7,Detroit Lions,Detroit Lions,25.52,,22.24,3
-NFL,2025,7,Green Bay Packers,Green Bay Packers,24.29,,19.49,22
-NFL,2025,7,Houston Texans,Houston Texans,21.93,,20.92,10
-NFL,2025,7,Indianapolis Colts,Indianapolis Colts,20.57,,17.09,31
-NFL,2025,7,Jacksonville Jaguars,Jacksonville Jaguars,19.54,,19.82,18
-NFL,2025,7,Kansas City Chiefs,Kansas City Chiefs,25.31,,21.16,7
-NFL,2025,7,Las Vegas Raiders,Las Vegas Raiders,17.25,,19.99,17
-NFL,2025,7,Los Angeles Chargers,Los Angeles Chargers,20.95,,20.67,13
-NFL,2025,7,Los Angeles Rams,Los Angeles Rams,22.14,,20.61,15
-NFL,2025,7,Miami Dolphins,Miami Dolphins,14.62,,19.35,23
-NFL,2025,7,Minnesota Vikings,Minnesota Vikings,21.52,,18.16,28
-NFL,2025,7,New England Patriots,New England Patriots,19.64,,17.37,30
-NFL,2025,7,New Orleans Saints,New Orleans Saints,12.36,,18.86,25
-NFL,2025,7,New York Giants,New York Giants,16.55,,20.89,11
-NFL,2025,7,New York Jets,New York Jets,14.18,,19.75,20
-NFL,2025,7,Philadelphia Eagles,Philadelphia Eagles,25.59,,21.03,9
-NFL,2025,7,Pittsburgh Steelers,Pittsburgh Steelers,20.78,,18.32,26
-NFL,2025,7,San Francisco 49ers,San Francisco 49ers,20.71,,20.43,16
-NFL,2025,7,Seattle Seahawks,Seattle Seahawks,21.18,,19.3,24
-NFL,2025,7,Tampa Bay Buccaneers,Tampa Bay Buccaneers,22.31,,20.77,12
-NFL,2025,7,Tennessee Titans,Tennessee Titans,13.93,,21.65,5
-NFL,2025,7,Washington Commanders,Washington Redskins,24.19,,19.76,19
-NFL,2025,8,Arizona Cardinals,Arizona Cardinals,18.35,24.0,18.32,27
-NFL,2025,8,Atlanta Falcons,Atlanta Falcons,19.25,20.0,21.24,9
-NFL,2025,8,Baltimore Ravens,Baltimore Ravens,21.92,12.0,21.76,6
-NFL,2025,8,Buffalo Bills,Buffalo Bills,23.55,5.0,15.69,32
-NFL,2025,8,Carolina Panthers,Carolina Panthers,17.01,25.0,18.04,29
-NFL,2025,8,Chicago Bears,Chicago Bears,20.27,18.0,19.51,21
-NFL,2025,8,Cincinnati Bengals,Cincinnati Bengals,18.54,23.0,21.96,3
-NFL,2025,8,Cleveland Browns,Cleveland Browns,15.45,28.0,21.16,11
-NFL,2025,8,Dallas Cowboys,Dallas Cowboys,18.66,22.0,20.58,12
-NFL,2025,8,Denver Broncos,Denver Broncos,22.9,7.0,18.28,28
-NFL,2025,8,Detroit Lions,Detroit Lions,26.5,1.0,21.84,4
-NFL,2025,8,Green Bay Packers,Green Bay Packers,24.59,4.0,20.1,15
-NFL,2025,8,Houston Texans,Houston Texans,21.96,10.0,21.72,7
-NFL,2025,8,Indianapolis Colts,Indianapolis Colts,21.88,13.0,17.53,30
-NFL,2025,8,Jacksonville Jaguars,Jacksonville Jaguars,18.79,21.0,20.5,13
-NFL,2025,8,Kansas City Chiefs,Kansas City Chiefs,26.06,2.0,19.96,17
-NFL,2025,8,Las Vegas Raiders,Las Vegas Raiders,16.07,27.0,21.33,8
-NFL,2025,8,Los Angeles Chargers,Los Angeles Chargers,19.88,19.0,19.98,16
-NFL,2025,8,Los Angeles Rams,Los Angeles Rams,23.53,6.0,20.4,14
-NFL,2025,8,Miami Dolphins,Miami Dolphins,13.56,29.0,19.33,22
-NFL,2025,8,Minnesota Vikings,Minnesota Vikings,21.08,14.0,18.84,25
-NFL,2025,8,New England Patriots,New England Patriots,20.45,17.0,16.82,31
-NFL,2025,8,New Orleans Saints,New Orleans Saints,12.19,32.0,19.79,20
-NFL,2025,8,New York Giants,New York Giants,16.93,26.0,21.77,5
-NFL,2025,8,New York Jets,New York Jets,13.42,30.0,18.72,26
-NFL,2025,8,Philadelphia Eagles,Philadelphia Eagles,25.93,3.0,22.06,2
-NFL,2025,8,Pittsburgh Steelers,Pittsburgh Steelers,20.72,16.0,19.14,23
-NFL,2025,8,San Francisco 49ers,San Francisco 49ers,20.97,15.0,19.83,19
-NFL,2025,8,Seattle Seahawks,Seattle Seahawks,21.93,11.0,18.99,24
-NFL,2025,8,Tampa Bay Buccaneers,Tampa Bay Buccaneers,22.01,9.0,22.21,1
-NFL,2025,8,Tennessee Titans,Tennessee Titans,12.74,31.0,21.2,10
-NFL,2025,8,Washington Commanders,Washington Redskins,22.89,8.0,19.91,18
-NFL,2025,9,Arizona Cardinals,Arizona Cardinals,18.63,,17.55,29
-NFL,2025,9,Atlanta Falcons,Atlanta Falcons,19.56,,21.07,8
-NFL,2025,9,Baltimore Ravens,Baltimore Ravens,21.99,,21.26,6
-NFL,2025,9,Buffalo Bills,Buffalo Bills,23.87,,16.02,32
-NFL,2025,9,Carolina Panthers,Carolina Panthers,16.8,,18.24,27
-NFL,2025,9,Chicago Bears,Chicago Bears,20.12,,21.75,4
-NFL,2025,9,Cincinnati Bengals,Cincinnati Bengals,19.1,,22.57,2
-NFL,2025,9,Cleveland Browns,Cleveland Browns,14.7,,22.77,1
-NFL,2025,9,Dallas Cowboys,Dallas Cowboys,17.11,,20.62,14
-NFL,2025,9,Denver Broncos,Denver Broncos,23.08,,19.58,21
-NFL,2025,9,Detroit Lions,Detroit Lions,25.52,,22.24,3
-NFL,2025,9,Green Bay Packers,Green Bay Packers,24.29,,19.49,22
-NFL,2025,9,Houston Texans,Houston Texans,21.93,,20.92,10
-NFL,2025,9,Indianapolis Colts,Indianapolis Colts,20.57,,17.09,31
-NFL,2025,9,Jacksonville Jaguars,Jacksonville Jaguars,19.54,,19.82,18
-NFL,2025,9,Kansas City Chiefs,Kansas City Chiefs,25.31,,21.16,7
-NFL,2025,9,Las Vegas Raiders,Las Vegas Raiders,17.25,,19.99,17
-NFL,2025,9,Los Angeles Chargers,Los Angeles Chargers,20.95,,20.67,13
-NFL,2025,9,Los Angeles Rams,Los Angeles Rams,22.14,,20.61,15
-NFL,2025,9,Miami Dolphins,Miami Dolphins,14.62,,19.35,23
-NFL,2025,9,Minnesota Vikings,Minnesota Vikings,21.52,,18.16,28
-NFL,2025,9,New England Patriots,New England Patriots,19.64,,17.37,30
-NFL,2025,9,New Orleans Saints,New Orleans Saints,12.36,,18.86,25
-NFL,2025,9,New York Giants,New York Giants,16.55,,20.89,11
-NFL,2025,9,New York Jets,New York Jets,14.18,,19.75,20
-NFL,2025,9,Philadelphia Eagles,Philadelphia Eagles,25.59,,21.03,9
-NFL,2025,9,Pittsburgh Steelers,Pittsburgh Steelers,20.78,,18.32,26
-NFL,2025,9,San Francisco 49ers,San Francisco 49ers,20.71,,20.43,16
-NFL,2025,9,Seattle Seahawks,Seattle Seahawks,21.18,,19.3,24
-NFL,2025,9,Tampa Bay Buccaneers,Tampa Bay Buccaneers,22.31,,20.77,12
-NFL,2025,9,Tennessee Titans,Tennessee Titans,13.93,,21.65,5
-NFL,2025,9,Washington Commanders,Washington Redskins,24.19,,19.76,19
+league,season,week,team_norm,team_raw,pr,rank,sos,sos_rank,pr_rank
+NFL,2024,1,Arizona Cardinals,Arizona Cardinals,17.93,,26.98,4,
+NFL,2024,1,Atlanta Falcons,Atlanta Falcons,19.07,,19.17,22,
+NFL,2024,1,Baltimore Ravens,Baltimore Ravens,23.62,,27.3,2,
+NFL,2024,1,Buffalo Bills,Buffalo Bills,24.87,,15.81,25,
+NFL,2024,1,Carolina Panthers,Carolina Panthers,10.57,,19.42,20,
+NFL,2024,1,Chicago Bears,Chicago Bears,20.55,,14.61,27,
+NFL,2024,1,Cincinnati Bengals,Cincinnati Bengals,21.77,,13.42,28,
+NFL,2024,1,Cleveland Browns,Cleveland Browns,19.35,,20.06,18,
+NFL,2024,1,Dallas Cowboys,Dallas Cowboys,22.17,,21.46,14,
+NFL,2024,1,Denver Broncos,Denver Broncos,14.21,,22.33,10,
+NFL,2024,1,Detroit Lions,Detroit Lions,25.09,,19.33,21,
+NFL,2024,1,Green Bay Packers,Green Bay Packers,22.81,,24.17,6,
+NFL,2024,1,Houston Texans,Houston Texans,24.32,,21.88,12,
+NFL,2024,1,Indianapolis Colts,Indianapolis Colts,19.77,,22.2,11,
+NFL,2024,1,Jacksonville Jaguars,Jacksonville Jaguars,20.8,,25.77,5,
+NFL,2024,1,Kansas City Chiefs,Kansas City Chiefs,25.19,,21.51,13,
+NFL,2024,1,Las Vegas Raiders,Las Vegas Raiders,14.45,,20.44,16,
+NFL,2024,1,Los Angeles Chargers,Los Angeles Chargers,18.32,,12.34,30,
+NFL,2024,1,Los Angeles Rams,Los Angeles Rams,21.44,,27.2,3,
+NFL,2024,1,Miami Dolphins,Miami Dolphins,23.66,,18.69,23,
+NFL,2024,1,Minnesota Vikings,Minnesota Vikings,20.01,,15.26,26,
+NFL,2024,1,New England Patriots,New England Patriots,15.53,,23.88,7,
+NFL,2024,1,New Orleans Saints,New Orleans Saints,17.3,,8.46,32,
+NFL,2024,1,New York Giants,New York Giants,13.15,,17.9,24,
+NFL,2024,1,New York Jets,New York Jets,22.33,,28.9,1,
+NFL,2024,1,Philadelphia Eagles,Philadelphia Eagles,24.17,,22.81,8,
+NFL,2024,1,Pittsburgh Steelers,Pittsburgh Steelers,21.28,,21.18,15,
+NFL,2024,1,San Francisco 49ers,San Francisco 49ers,26.79,,20.22,17,
+NFL,2024,1,Seattle Seahawks,Seattle Seahawks,20.22,,12.09,31,
+NFL,2024,1,Tampa Bay Buccaneers,Tampa Bay Buccaneers,17.85,,12.56,29,
+NFL,2024,1,Tennessee Titans,Tennessee Titans,16.73,,22.67,9,
+NFL,2024,1,Washington Commanders,Washington Commanders,14.67,,19.96,19,
+NFL,2024,5,Arizona Cardinals,Arizona Cardinals,18.6,,22.17,2,
+NFL,2024,5,Atlanta Falcons,Atlanta Falcons,20.5,,21.09,8,
+NFL,2024,5,Baltimore Ravens,Baltimore Ravens,24.2,,21.39,4,
+NFL,2024,5,Buffalo Bills,Buffalo Bills,24.49,,20.6,13,
+NFL,2024,5,Carolina Panthers,Carolina Panthers,10.88,,18.93,23,
+NFL,2024,5,Chicago Bears,Chicago Bears,21.14,,17.82,32,
+NFL,2024,5,Cincinnati Bengals,Cincinnati Bengals,20.07,,18.7,24,
+NFL,2024,5,Cleveland Browns,Cleveland Browns,16.48,,17.88,31,
+NFL,2024,5,Dallas Cowboys,Dallas Cowboys,20.69,,19.78,19,
+NFL,2024,5,Denver Broncos,Denver Broncos,18.41,,19.66,20,
+NFL,2024,5,Detroit Lions,Detroit Lions,24.7,,18.64,25,
+NFL,2024,5,Green Bay Packers,Green Bay Packers,23.47,,20.4,16,
+NFL,2024,5,Houston Texans,Houston Texans,23.02,,21.29,5,
+NFL,2024,5,Indianapolis Colts,Indianapolis Colts,19.94,,21.19,7,
+NFL,2024,5,Jacksonville Jaguars,Jacksonville Jaguars,17.74,,20.7,12,
+NFL,2024,5,Kansas City Chiefs,Kansas City Chiefs,26.0,,20.41,15,
+NFL,2024,5,Las Vegas Raiders,Las Vegas Raiders,13.97,,18.06,29,
+NFL,2024,5,Los Angeles Chargers,Los Angeles Chargers,18.97,,18.12,28,
+NFL,2024,5,Los Angeles Rams,Los Angeles Rams,18.77,,22.61,1,
+NFL,2024,5,Miami Dolphins,Miami Dolphins,18.51,,18.37,27,
+NFL,2024,5,Minnesota Vikings,Minnesota Vikings,24.1,,21.74,3,
+NFL,2024,5,New England Patriots,New England Patriots,14.0,,21.04,9,
+NFL,2024,5,New Orleans Saints,New Orleans Saints,19.39,,20.49,14,
+NFL,2024,5,New York Giants,New York Giants,16.19,,20.35,17,
+NFL,2024,5,New York Jets,New York Jets,21.8,,19.56,21,
+NFL,2024,5,Philadelphia Eagles,Philadelphia Eagles,22.01,,21.0,10,
+NFL,2024,5,Pittsburgh Steelers,Pittsburgh Steelers,21.67,,19.91,18,
+NFL,2024,5,San Francisco 49ers,San Francisco 49ers,24.09,,19.26,22,
+NFL,2024,5,Seattle Seahawks,Seattle Seahawks,19.69,,18.0,30,
+NFL,2024,5,Tampa Bay Buccaneers,Tampa Bay Buccaneers,19.61,,20.83,11,
+NFL,2024,5,Tennessee Titans,Tennessee Titans,17.18,,21.23,6,
+NFL,2024,5,Washington Commanders,Washington Commanders,19.72,,18.42,26,
+NFL,2024,12,Arizona Cardinals,Arizona Cardinals,20.61,,22.11,4,
+NFL,2024,12,Atlanta Falcons,Atlanta Falcons,17.93,,19.48,21,
+NFL,2024,12,Baltimore Ravens,Baltimore Ravens,25.32,,20.42,11,
+NFL,2024,12,Buffalo Bills,Buffalo Bills,27.54,,20.72,9,
+NFL,2024,12,Carolina Panthers,Carolina Panthers,10.47,,18.24,32,
+NFL,2024,12,Chicago Bears,Chicago Bears,18.92,,18.82,25,
+NFL,2024,12,Cincinnati Bengals,Cincinnati Bengals,20.43,,18.95,23,
+NFL,2024,12,Cleveland Browns,Cleveland Browns,15.81,,19.04,22,
+NFL,2024,12,Dallas Cowboys,Dallas Cowboys,16.92,,21.15,7,
+NFL,2024,12,Denver Broncos,Denver Broncos,20.2,,18.86,24,
+NFL,2024,12,Detroit Lions,Detroit Lions,30.28,,20.3,15,
+NFL,2024,12,Green Bay Packers,Green Bay Packers,25.58,,21.2,6,
+NFL,2024,12,Houston Texans,Houston Texans,23.04,,20.45,10,
+NFL,2024,12,Indianapolis Colts,Indianapolis Colts,19.41,,22.21,3,
+NFL,2024,12,Jacksonville Jaguars,Jacksonville Jaguars,16.69,,22.41,1,
+NFL,2024,12,Kansas City Chiefs,Kansas City Chiefs,24.18,,19.63,19,
+NFL,2024,12,Las Vegas Raiders,Las Vegas Raiders,12.29,,20.39,12,
+NFL,2024,12,Los Angeles Chargers,Los Angeles Chargers,21.8,,18.52,28,
+NFL,2024,12,Los Angeles Rams,Los Angeles Rams,19.45,,21.26,5,
+NFL,2024,12,Miami Dolphins,Miami Dolphins,21.07,,18.65,26,
+NFL,2024,12,Minnesota Vikings,Minnesota Vikings,23.51,,20.32,14,
+NFL,2024,12,New England Patriots,New England Patriots,13.56,,19.8,18,
+NFL,2024,12,New Orleans Saints,New Orleans Saints,16.33,,18.4,30,
+NFL,2024,12,New York Giants,New York Giants,12.41,,19.54,20,
+NFL,2024,12,New York Jets,New York Jets,18.73,,20.21,17,
+NFL,2024,12,Philadelphia Eagles,Philadelphia Eagles,26.47,,18.5,29,
+NFL,2024,12,Pittsburgh Steelers,Pittsburgh Steelers,22.43,,18.35,31,
+NFL,2024,12,San Francisco 49ers,San Francisco 49ers,21.79,,20.33,13,
+NFL,2024,12,Seattle Seahawks,Seattle Seahawks,20.52,,20.22,16,
+NFL,2024,12,Tampa Bay Buccaneers,Tampa Bay Buccaneers,20.71,,20.92,8,
+NFL,2024,12,Tennessee Titans,Tennessee Titans,16.08,,22.23,2,
+NFL,2024,12,Washington Commanders,Washington Commanders,19.51,,18.59,27,
+NFL,2024,13,Arizona Cardinals,Arizona Cardinals,20.8,,22.41,1,
+NFL,2024,13,Atlanta Falcons,Atlanta Falcons,17.83,,19.52,21,
+NFL,2024,13,Baltimore Ravens,Baltimore Ravens,24.93,,20.93,6,
+NFL,2024,13,Buffalo Bills,Buffalo Bills,28.24,,20.35,10,
+NFL,2024,13,Carolina Panthers,Carolina Panthers,11.07,,18.39,31,
+NFL,2024,13,Chicago Bears,Chicago Bears,19.73,,19.86,18,
+NFL,2024,13,Cincinnati Bengals,Cincinnati Bengals,20.09,,19.36,24,
+NFL,2024,13,Cleveland Browns,Cleveland Browns,15.67,,19.44,23,
+NFL,2024,13,Dallas Cowboys,Dallas Cowboys,17.15,,20.29,11,
+NFL,2024,13,Denver Broncos,Denver Broncos,20.47,,18.49,28,
+NFL,2024,13,Detroit Lions,Detroit Lions,29.68,,20.11,14,
+NFL,2024,13,Green Bay Packers,Green Bay Packers,26.04,,20.92,8,
+NFL,2024,13,Houston Texans,Houston Texans,22.81,,20.23,12,
+NFL,2024,13,Indianapolis Colts,Indianapolis Colts,19.09,,21.61,4,
+NFL,2024,13,Jacksonville Jaguars,Jacksonville Jaguars,16.96,,22.4,2,
+NFL,2024,13,Kansas City Chiefs,Kansas City Chiefs,23.34,,18.87,26,
+NFL,2024,13,Las Vegas Raiders,Las Vegas Raiders,13.04,,20.73,9,
+NFL,2024,13,Los Angeles Chargers,Los Angeles Chargers,21.76,,18.46,29,
+NFL,2024,13,Los Angeles Rams,Los Angeles Rams,19.93,,20.93,7,
+NFL,2024,13,Miami Dolphins,Miami Dolphins,20.62,,19.56,20,
+NFL,2024,13,Minnesota Vikings,Minnesota Vikings,23.23,,20.12,13,
+NFL,2024,13,New England Patriots,New England Patriots,13.88,,19.47,22,
+NFL,2024,13,New Orleans Saints,New Orleans Saints,15.96,,18.44,30,
+NFL,2024,13,New York Giants,New York Giants,12.39,,19.66,19,
+NFL,2024,13,New York Jets,New York Jets,18.37,,20.07,15,
+NFL,2024,13,Philadelphia Eagles,Philadelphia Eagles,26.85,,19.2,25,
+NFL,2024,13,Pittsburgh Steelers,Pittsburgh Steelers,22.87,,18.69,27,
+NFL,2024,13,San Francisco 49ers,San Francisco 49ers,20.63,,21.04,5,
+NFL,2024,13,Seattle Seahawks,Seattle Seahawks,20.8,,20.0,17,
+NFL,2024,13,Tampa Bay Buccaneers,Tampa Bay Buccaneers,20.1,,20.05,16,
+NFL,2024,13,Tennessee Titans,Tennessee Titans,14.97,,22.19,3,
+NFL,2024,13,Washington Commanders,Washington Commanders,20.7,,18.27,32,
+NFL,2024,14,Arizona Cardinals,Arizona Cardinals,19.86,,22.43,1,
+NFL,2024,14,Atlanta Falcons,Atlanta Falcons,17.04,,20.1,16,
+NFL,2024,14,Baltimore Ravens,Baltimore Ravens,24.83,,20.87,9,
+NFL,2024,14,Buffalo Bills,Buffalo Bills,27.53,,20.64,10,
+NFL,2024,14,Carolina Panthers,Carolina Panthers,11.72,,18.87,26,
+NFL,2024,14,Chicago Bears,Chicago Bears,18.34,,20.24,13,
+NFL,2024,14,Cincinnati Bengals,Cincinnati Bengals,20.48,,19.17,24,
+NFL,2024,14,Cleveland Browns,Cleveland Browns,15.36,,19.77,18,
+NFL,2024,14,Dallas Cowboys,Dallas Cowboys,16.82,,20.19,15,
+NFL,2024,14,Denver Broncos,Denver Broncos,20.38,,18.51,29,
+NFL,2024,14,Detroit Lions,Detroit Lions,29.49,,20.52,11,
+NFL,2024,14,Green Bay Packers,Green Bay Packers,26.05,,21.62,3,
+NFL,2024,14,Houston Texans,Houston Texans,22.75,,20.1,17,
+NFL,2024,14,Indianapolis Colts,Indianapolis Colts,19.05,,21.54,5,
+NFL,2024,14,Jacksonville Jaguars,Jacksonville Jaguars,17.15,,21.7,2,
+NFL,2024,14,Kansas City Chiefs,Kansas City Chiefs,23.48,,19.05,25,
+NFL,2024,14,Las Vegas Raiders,Las Vegas Raiders,12.65,,20.99,7,
+NFL,2024,14,Los Angeles Chargers,Los Angeles Chargers,21.52,,18.84,27,
+NFL,2024,14,Los Angeles Rams,Los Angeles Rams,20.8,,21.41,6,
+NFL,2024,14,Miami Dolphins,Miami Dolphins,20.89,,19.3,23,
+NFL,2024,14,Minnesota Vikings,Minnesota Vikings,24.05,,19.76,19,
+NFL,2024,14,New England Patriots,New England Patriots,13.93,,19.65,20,
+NFL,2024,14,New Orleans Saints,New Orleans Saints,16.01,,17.98,32,
+NFL,2024,14,New York Giants,New York Giants,12.45,,19.39,21,
+NFL,2024,14,New York Jets,New York Jets,18.2,,20.38,12,
+NFL,2024,14,Philadelphia Eagles,Philadelphia Eagles,26.12,,18.61,28,
+NFL,2024,14,Pittsburgh Steelers,Pittsburgh Steelers,23.16,,18.17,30,
+NFL,2024,14,San Francisco 49ers,San Francisco 49ers,22.24,,20.93,8,
+NFL,2024,14,Seattle Seahawks,Seattle Seahawks,21.8,,20.22,14,
+NFL,2024,14,Tampa Bay Buccaneers,Tampa Bay Buccaneers,20.59,,19.36,22,
+NFL,2024,14,Tennessee Titans,Tennessee Titans,14.71,,21.58,4,
+NFL,2024,14,Washington Commanders,Washington Commanders,20.55,,18.07,31,
+NFL,2024,18,Arizona Cardinals,Arizona Cardinals,20.46,,21.0,3,
+NFL,2024,18,Atlanta Falcons,Atlanta Falcons,17.51,,19.08,27,
+NFL,2024,18,Baltimore Ravens,Baltimore Ravens,28.24,,20.47,11,
+NFL,2024,18,Buffalo Bills,Buffalo Bills,26.98,,19.8,20,
+NFL,2024,18,Carolina Panthers,Carolina Panthers,11.93,,19.48,23,
+NFL,2024,18,Chicago Bears,Chicago Bears,17.9,,21.16,2,
+NFL,2024,18,Cincinnati Bengals,Cincinnati Bengals,22.42,,19.1,26,
+NFL,2024,18,Cleveland Browns,Cleveland Browns,13.04,,20.94,4,
+NFL,2024,18,Dallas Cowboys,Dallas Cowboys,16.81,,20.13,15,
+NFL,2024,18,Denver Broncos,Denver Broncos,22.7,,19.46,24,
+NFL,2024,18,Detroit Lions,Detroit Lions,29.97,,20.73,7,
+NFL,2024,18,Green Bay Packers,Green Bay Packers,26.41,,20.61,10,
+NFL,2024,18,Houston Texans,Houston Texans,21.12,,19.93,19,
+NFL,2024,18,Indianapolis Colts,Indianapolis Colts,16.99,,19.68,21,
+NFL,2024,18,Jacksonville Jaguars,Jacksonville Jaguars,15.75,,19.64,22,
+NFL,2024,18,Kansas City Chiefs,Kansas City Chiefs,23.75,,20.01,18,
+NFL,2024,18,Las Vegas Raiders,Las Vegas Raiders,14.09,,20.66,8,
+NFL,2024,18,Los Angeles Chargers,Los Angeles Chargers,23.03,,18.93,29,
+NFL,2024,18,Los Angeles Rams,Los Angeles Rams,21.4,,20.78,5,
+NFL,2024,18,Miami Dolphins,Miami Dolphins,20.53,,18.92,30,
+NFL,2024,18,Minnesota Vikings,Minnesota Vikings,24.09,,20.2,13,
+NFL,2024,18,New England Patriots,New England Patriots,14.1,,20.2,12,
+NFL,2024,18,New Orleans Saints,New Orleans Saints,14.25,,19.16,25,
+NFL,2024,18,New York Giants,New York Giants,12.63,,20.05,16,
+NFL,2024,18,New York Jets,New York Jets,17.96,,20.01,17,
+NFL,2024,18,Philadelphia Eagles,Philadelphia Eagles,27.01,,18.51,31,
+NFL,2024,18,Pittsburgh Steelers,Pittsburgh Steelers,20.53,,20.17,14,
+NFL,2024,18,San Francisco 49ers,San Francisco 49ers,19.43,,21.57,1,
+NFL,2024,18,Seattle Seahawks,Seattle Seahawks,21.4,,20.65,9,
+NFL,2024,18,Tampa Bay Buccaneers,Tampa Bay Buccaneers,22.89,,18.97,28,
+NFL,2024,18,Tennessee Titans,Tennessee Titans,13.29,,20.77,6,
+NFL,2024,18,Washington Commanders,Washington Commanders,21.38,,18.3,32,
+NFL,2025,1,Arizona Cardinals,Arizona Cardinals,20.46,,21.0,3,
+NFL,2025,1,Atlanta Falcons,Atlanta Falcons,17.51,,19.08,27,
+NFL,2025,1,Baltimore Ravens,Baltimore Ravens,28.24,,20.47,11,
+NFL,2025,1,Buffalo Bills,Buffalo Bills,26.98,,19.8,20,
+NFL,2025,1,Carolina Panthers,Carolina Panthers,11.93,,19.48,23,
+NFL,2025,1,Chicago Bears,Chicago Bears,17.9,,21.16,2,
+NFL,2025,1,Cincinnati Bengals,Cincinnati Bengals,22.42,,19.1,26,
+NFL,2025,1,Cleveland Browns,Cleveland Browns,13.04,,20.94,4,
+NFL,2025,1,Dallas Cowboys,Dallas Cowboys,16.81,,20.13,15,
+NFL,2025,1,Denver Broncos,Denver Broncos,22.7,,19.46,24,
+NFL,2025,1,Detroit Lions,Detroit Lions,29.97,,20.73,7,
+NFL,2025,1,Green Bay Packers,Green Bay Packers,26.41,,20.61,10,
+NFL,2025,1,Houston Texans,Houston Texans,21.12,,19.93,19,
+NFL,2025,1,Indianapolis Colts,Indianapolis Colts,16.99,,19.68,21,
+NFL,2025,1,Jacksonville Jaguars,Jacksonville Jaguars,15.75,,19.64,22,
+NFL,2025,1,Kansas City Chiefs,Kansas City Chiefs,23.75,,20.01,18,
+NFL,2025,1,Las Vegas Raiders,Las Vegas Raiders,14.09,,20.66,8,
+NFL,2025,1,Los Angeles Chargers,Los Angeles Chargers,23.03,,18.93,29,
+NFL,2025,1,Los Angeles Rams,Los Angeles Rams,21.4,,20.78,5,
+NFL,2025,1,Miami Dolphins,Miami Dolphins,20.53,,18.92,30,
+NFL,2025,1,Minnesota Vikings,Minnesota Vikings,24.09,,20.2,13,
+NFL,2025,1,New England Patriots,New England Patriots,14.1,,20.2,12,
+NFL,2025,1,New Orleans Saints,New Orleans Saints,14.25,,19.16,25,
+NFL,2025,1,New York Giants,New York Giants,12.63,,20.05,16,
+NFL,2025,1,New York Jets,New York Jets,17.96,,20.01,17,
+NFL,2025,1,Philadelphia Eagles,Philadelphia Eagles,27.01,,18.51,31,
+NFL,2025,1,Pittsburgh Steelers,Pittsburgh Steelers,20.53,,20.17,14,
+NFL,2025,1,San Francisco 49ers,San Francisco 49ers,19.43,,21.57,1,
+NFL,2025,1,Seattle Seahawks,Seattle Seahawks,21.4,,20.65,9,
+NFL,2025,1,Tampa Bay Buccaneers,Tampa Bay Buccaneers,22.89,,18.97,28,
+NFL,2025,1,Tennessee Titans,Tennessee Titans,13.29,,20.77,6,
+NFL,2025,1,Washington Commanders,Washington Commanders,21.38,,18.3,32,
+NFL,2025,2,Arizona Cardinals,Arizona Cardinals,19.48,,14.42,32,
+NFL,2025,2,Atlanta Falcons,Atlanta Falcons,19.81,,21.09,12,
+NFL,2025,2,Baltimore Ravens,Baltimore Ravens,26.03,,20.58,15,
+NFL,2025,2,Buffalo Bills,Buffalo Bills,25.76,,20.55,16,
+NFL,2025,2,Carolina Panthers,Carolina Panthers,15.75,,20.25,19,
+NFL,2025,2,Chicago Bears,Chicago Bears,18.47,,22.49,4,
+NFL,2025,2,Cincinnati Bengals,Cincinnati Bengals,21.53,,17.09,29,
+NFL,2025,2,Cleveland Browns,Cleveland Browns,15.39,,23.78,2,
+NFL,2025,2,Dallas Cowboys,Dallas Cowboys,17.32,,21.21,11,
+NFL,2025,2,Denver Broncos,Denver Broncos,21.84,,17.15,28,
+NFL,2025,2,Detroit Lions,Detroit Lions,24.65,,21.82,7,
+NFL,2025,2,Green Bay Packers,Green Bay Packers,25.17,,23.05,3,
+NFL,2025,2,Houston Texans,Houston Texans,20.1,,21.83,5,
+NFL,2025,2,Indianapolis Colts,Indianapolis Colts,19.52,,17.05,30,
+NFL,2025,2,Jacksonville Jaguars,Jacksonville Jaguars,18.79,,18.64,24,
+NFL,2025,2,Kansas City Chiefs,Kansas City Chiefs,23.9,,23.79,1,
+NFL,2025,2,Las Vegas Raiders,Las Vegas Raiders,18.6,,20.26,18,
+NFL,2025,2,Los Angeles Chargers,Los Angeles Chargers,22.17,,21.81,8,
+NFL,2025,2,Los Angeles Rams,Los Angeles Rams,21.81,,17.45,27,
+NFL,2025,2,Miami Dolphins,Miami Dolphins,14.5,,18.94,23,
+NFL,2025,2,Minnesota Vikings,Minnesota Vikings,20.34,,19.14,21,
+NFL,2025,2,New England Patriots,New England Patriots,18.35,,16.55,31,
+NFL,2025,2,New Orleans Saints,New Orleans Saints,13.09,,19.05,22,
+NFL,2025,2,New York Giants,New York Giants,15.9,,21.62,9,
+NFL,2025,2,New York Jets,New York Jets,15.07,,21.33,10,
+NFL,2025,2,Philadelphia Eagles,Philadelphia Eagles,26.52,,20.61,14,
+NFL,2025,2,Pittsburgh Steelers,Pittsburgh Steelers,19.12,,17.46,26,
+NFL,2025,2,San Francisco 49ers,San Francisco 49ers,20.92,,17.59,25,
+NFL,2025,2,Seattle Seahawks,Seattle Seahawks,19.85,,19.98,20,
+NFL,2025,2,Tampa Bay Buccaneers,Tampa Bay Buccaneers,21.85,,21.07,13,
+NFL,2025,2,Tennessee Titans,Tennessee Titans,14.79,,21.83,6,
+NFL,2025,2,Washington Commanders,Washington Commanders,23.69,,20.53,17,
+NFL,2025,4,Arizona Cardinals,Arizona Cardinals,19.0,,17.07,31,
+NFL,2025,4,Atlanta Falcons,Atlanta Falcons,18.73,,20.78,18,
+NFL,2025,4,Baltimore Ravens,Baltimore Ravens,25.48,,23.55,2,
+NFL,2025,4,Buffalo Bills,Buffalo Bills,25.65,,14.74,32,
+NFL,2025,4,Carolina Panthers,Carolina Panthers,16.41,,20.93,14,
+NFL,2025,4,Chicago Bears,Chicago Bears,19.77,,20.19,19,
+NFL,2025,4,Cincinnati Bengals,Cincinnati Bengals,20.36,,21.59,4,
+NFL,2025,4,Cleveland Browns,Cleveland Browns,15.24,,24.0,1,
+NFL,2025,4,Dallas Cowboys,Dallas Cowboys,16.33,,21.95,3,
+NFL,2025,4,Denver Broncos,Denver Broncos,22.63,,18.83,25,
+NFL,2025,4,Detroit Lions,Detroit Lions,25.64,,21.28,9,
+NFL,2025,4,Green Bay Packers,Green Bay Packers,24.24,,20.28,17,
+NFL,2025,4,Houston Texans,Houston Texans,20.62,,19.17,22,
+NFL,2025,4,Indianapolis Colts,Indianapolis Colts,18.9,,18.22,28,
+NFL,2025,4,Jacksonville Jaguars,Jacksonville Jaguars,18.92,,19.52,24,
+NFL,2025,4,Kansas City Chiefs,Kansas City Chiefs,25.64,,21.69,5,
+NFL,2025,4,Las Vegas Raiders,Las Vegas Raiders,17.88,,20.88,15,
+NFL,2025,4,Los Angeles Chargers,Los Angeles Chargers,21.48,,21.5,6,
+NFL,2025,4,Los Angeles Rams,Los Angeles Rams,21.49,,19.61,21,
+NFL,2025,4,Miami Dolphins,Miami Dolphins,14.74,,19.35,23,
+NFL,2025,4,Minnesota Vikings,Minnesota Vikings,21.5,,18.81,26,
+NFL,2025,4,New England Patriots,New England Patriots,18.74,,15.4,29,
+NFL,2025,4,New Orleans Saints,New Orleans Saints,11.87,,21.2,10,
+NFL,2025,4,New York Giants,New York Giants,16.1,,21.75,7,
+NFL,2025,4,New York Jets,New York Jets,14.67,,20.53,12,
+NFL,2025,4,Philadelphia Eagles,Philadelphia Eagles,27.61,,21.28,8,
+NFL,2025,4,Pittsburgh Steelers,Pittsburgh Steelers,20.38,,19.77,20,
+NFL,2025,4,San Francisco 49ers,San Francisco 49ers,20.45,,17.33,30,
+NFL,2025,4,Seattle Seahawks,Seattle Seahawks,20.24,,18.23,27,
+NFL,2025,4,Tampa Bay Buccaneers,Tampa Bay Buccaneers,21.47,,20.87,16,
+NFL,2025,4,Tennessee Titans,Tennessee Titans,13.95,,20.92,13,
+NFL,2025,4,Washington Commanders,Washington Commanders,23.93,,19.11,23,
+NFL,2025,5,Arizona Cardinals,Arizona Cardinals,19.0,,21.2,10,
+NFL,2025,5,Atlanta Falcons,Atlanta Falcons,18.73,,19.61,20,
+NFL,2025,5,Baltimore Ravens,Baltimore Ravens,25.48,,19.17,23,
+NFL,2025,5,Buffalo Bills,Buffalo Bills,25.65,,20.87,14,
+NFL,2025,5,Carolina Panthers,Carolina Panthers,16.41,,20.78,15,
+NFL,2025,5,Chicago Bears,Chicago Bears,19.77,,19.77,19,
+NFL,2025,5,Cincinnati Bengals,Cincinnati Bengals,20.36,,21.28,9,
+NFL,2025,5,Cleveland Browns,Cleveland Browns,15.24,,18.22,28,
+NFL,2025,5,Dallas Cowboys,Dallas Cowboys,16.33,,20.53,16,
+NFL,2025,5,Denver Broncos,Denver Broncos,22.63,,21.69,5,
+NFL,2025,5,Detroit Lions,Detroit Lions,25.64,,15.4,31,
+NFL,2025,5,Green Bay Packers,Green Bay Packers,24.24,,19.35,22,
+NFL,2025,5,Houston Texans,Houston Texans,20.62,,18.83,25,
+NFL,2025,5,Indianapolis Colts,Indianapolis Colts,18.9,,21.75,4,
+NFL,2025,5,Jacksonville Jaguars,Jacksonville Jaguars,18.92,,20.93,11,
+NFL,2025,5,Kansas City Chiefs,Kansas City Chiefs,25.64,,17.33,29,
+NFL,2025,5,Las Vegas Raiders,Las Vegas Raiders,17.88,,21.59,6,
+NFL,2025,5,Los Angeles Chargers,Los Angeles Chargers,21.48,,23.55,2,
+NFL,2025,5,Los Angeles Rams,Los Angeles Rams,21.49,,24.0,1,
+NFL,2025,5,Miami Dolphins,Miami Dolphins,14.74,,20.19,18,
+NFL,2025,5,Minnesota Vikings,Minnesota Vikings,21.5,,21.28,8,
+NFL,2025,5,New England Patriots,New England Patriots,18.74,,20.88,13,
+NFL,2025,5,New Orleans Saints,New Orleans Saints,11.87,,21.5,7,
+NFL,2025,5,New York Giants,New York Giants,16.1,,20.28,17,
+NFL,2025,5,New York Jets,New York Jets,14.67,,18.23,27,
+NFL,2025,5,Philadelphia Eagles,Philadelphia Eagles,27.61,,17.07,30,
+NFL,2025,5,Pittsburgh Steelers,Pittsburgh Steelers,20.38,,14.74,32,
+NFL,2025,5,San Francisco 49ers,San Francisco 49ers,20.4,,21.95,3,
+NFL,2025,5,Seattle Seahawks,Seattle Seahawks,20.24,,20.92,11,
+NFL,2025,5,Tampa Bay Buccaneers,Tampa Bay Buccaneers,21.47,,19.52,21,
+NFL,2025,5,Tennessee Titans,Tennessee Titans,13.95,,19.11,24,
+NFL,2025,5,Washington Commanders,Washington Commanders,23.93,,18.81,26,
+NFL,2025,6,Arizona Cardinals,Arizona Cardinals,18.45,,16.21,31,
+NFL,2025,6,Atlanta Falcons,Atlanta Falcons,19.0,,21.09,9,
+NFL,2025,6,Baltimore Ravens,Baltimore Ravens,22.73,,22.27,2,
+NFL,2025,6,Buffalo Bills,Buffalo Bills,24.58,,14.9,32,
+NFL,2025,6,Carolina Panthers,Carolina Panthers,16.42,,19.09,26,
+NFL,2025,6,Chicago Bears,Chicago Bears,19.61,,20.22,17,
+NFL,2025,6,Cincinnati Bengals,Cincinnati Bengals,18.82,,21.95,3,
+NFL,2025,6,Cleveland Browns,Cleveland Browns,14.88,,22.78,1,
+NFL,2025,6,Dallas Cowboys,Dallas Cowboys,17.29,,20.45,15,
+NFL,2025,6,Denver Broncos,Denver Broncos,23.6,,20.91,12,
+NFL,2025,6,Detroit Lions,Detroit Lions,26.46,,20.78,14,
+NFL,2025,6,Green Bay Packers,Green Bay Packers,24.45,,20.8,13,
+NFL,2025,6,Houston Texans,Houston Texans,22.25,,20.99,10,
+NFL,2025,6,Indianapolis Colts,Indianapolis Colts,20.9,,17.42,30,
+NFL,2025,6,Jacksonville Jaguars,Jacksonville Jaguars,20.44,,20.19,18,
+NFL,2025,6,Kansas City Chiefs,Kansas City Chiefs,24.75,,21.19,8,
+NFL,2025,6,Las Vegas Raiders,Las Vegas Raiders,16.64,,21.65,5,
+NFL,2025,6,Los Angeles Chargers,Los Angeles Chargers,20.79,,20.93,11,
+NFL,2025,6,Los Angeles Rams,Los Angeles Rams,21.8,,20.1,19,
+NFL,2025,6,Miami Dolphins,Miami Dolphins,14.49,,19.65,21,
+NFL,2025,6,Minnesota Vikings,Minnesota Vikings,21.42,,17.96,28,
+NFL,2025,6,New England Patriots,New England Patriots,19.63,,17.69,29,
+NFL,2025,6,New Orleans Saints,New Orleans Saints,12.34,,19.38,23,
+NFL,2025,6,New York Giants,New York Giants,15.14,,20.44,16,
+NFL,2025,6,New York Jets,New York Jets,13.64,,19.16,25,
+NFL,2025,6,Philadelphia Eagles,Philadelphia Eagles,26.83,,21.34,7,
+NFL,2025,6,Pittsburgh Steelers,Pittsburgh Steelers,20.45,,19.6,22,
+NFL,2025,6,San Francisco 49ers,San Francisco 49ers,21.03,,19.29,24,
+NFL,2025,6,Seattle Seahawks,Seattle Seahawks,20.87,,18.5,27,
+NFL,2025,6,Tampa Bay Buccaneers,Tampa Bay Buccaneers,22.0,,21.45,6,
+NFL,2025,6,Tennessee Titans,Tennessee Titans,13.72,,21.95,4,
+NFL,2025,6,Washington Commanders,Washington Commanders,24.56,,19.84,20,
+NFL,2025,7,Arizona Cardinals,Arizona Cardinals,18.63,,17.55,29,
+NFL,2025,7,Atlanta Falcons,Atlanta Falcons,19.56,,21.07,8,
+NFL,2025,7,Baltimore Ravens,Baltimore Ravens,21.99,,21.26,6,
+NFL,2025,7,Buffalo Bills,Buffalo Bills,23.87,,16.02,32,
+NFL,2025,7,Carolina Panthers,Carolina Panthers,16.8,,18.24,27,
+NFL,2025,7,Chicago Bears,Chicago Bears,20.12,,21.75,4,
+NFL,2025,7,Cincinnati Bengals,Cincinnati Bengals,19.1,,22.57,2,
+NFL,2025,7,Cleveland Browns,Cleveland Browns,14.7,,22.77,1,
+NFL,2025,7,Dallas Cowboys,Dallas Cowboys,17.11,,20.62,14,
+NFL,2025,7,Denver Broncos,Denver Broncos,23.08,,19.58,21,
+NFL,2025,7,Detroit Lions,Detroit Lions,25.52,,22.24,3,
+NFL,2025,7,Green Bay Packers,Green Bay Packers,24.29,,19.49,22,
+NFL,2025,7,Houston Texans,Houston Texans,21.93,,20.92,10,
+NFL,2025,7,Indianapolis Colts,Indianapolis Colts,20.57,,17.09,31,
+NFL,2025,7,Jacksonville Jaguars,Jacksonville Jaguars,19.54,,19.82,18,
+NFL,2025,7,Kansas City Chiefs,Kansas City Chiefs,25.31,,21.16,7,
+NFL,2025,7,Las Vegas Raiders,Las Vegas Raiders,17.25,,19.99,17,
+NFL,2025,7,Los Angeles Chargers,Los Angeles Chargers,20.95,,20.67,13,
+NFL,2025,7,Los Angeles Rams,Los Angeles Rams,22.14,,20.61,15,
+NFL,2025,7,Miami Dolphins,Miami Dolphins,14.62,,19.35,23,
+NFL,2025,7,Minnesota Vikings,Minnesota Vikings,21.52,,18.16,28,
+NFL,2025,7,New England Patriots,New England Patriots,19.64,,17.37,30,
+NFL,2025,7,New Orleans Saints,New Orleans Saints,12.36,,18.86,25,
+NFL,2025,7,New York Giants,New York Giants,16.55,,20.89,11,
+NFL,2025,7,New York Jets,New York Jets,14.18,,19.75,20,
+NFL,2025,7,Philadelphia Eagles,Philadelphia Eagles,25.59,,21.03,9,
+NFL,2025,7,Pittsburgh Steelers,Pittsburgh Steelers,20.78,,18.32,26,
+NFL,2025,7,San Francisco 49ers,San Francisco 49ers,20.71,,20.43,16,
+NFL,2025,7,Seattle Seahawks,Seattle Seahawks,21.18,,19.3,24,
+NFL,2025,7,Tampa Bay Buccaneers,Tampa Bay Buccaneers,22.31,,20.77,12,
+NFL,2025,7,Tennessee Titans,Tennessee Titans,13.93,,21.65,5,
+NFL,2025,7,Washington Commanders,Washington Redskins,24.19,,19.76,19,
+NFL,2025,8,Arizona Cardinals,Arizona Cardinals,18.35,,18.32,27,24.0
+NFL,2025,8,Atlanta Falcons,Atlanta Falcons,19.25,,21.24,9,20.0
+NFL,2025,8,Baltimore Ravens,Baltimore Ravens,21.92,,21.76,6,12.0
+NFL,2025,8,Buffalo Bills,Buffalo Bills,23.55,,15.69,32,5.0
+NFL,2025,8,Carolina Panthers,Carolina Panthers,17.01,,18.04,29,25.0
+NFL,2025,8,Chicago Bears,Chicago Bears,20.27,,19.51,21,18.0
+NFL,2025,8,Cincinnati Bengals,Cincinnati Bengals,18.54,,21.96,3,23.0
+NFL,2025,8,Cleveland Browns,Cleveland Browns,15.45,,21.16,11,28.0
+NFL,2025,8,Dallas Cowboys,Dallas Cowboys,18.66,,20.58,12,22.0
+NFL,2025,8,Denver Broncos,Denver Broncos,22.9,,18.28,28,7.0
+NFL,2025,8,Detroit Lions,Detroit Lions,26.5,,21.84,4,1.0
+NFL,2025,8,Green Bay Packers,Green Bay Packers,24.59,,20.1,15,4.0
+NFL,2025,8,Houston Texans,Houston Texans,21.96,,21.72,7,10.0
+NFL,2025,8,Indianapolis Colts,Indianapolis Colts,21.88,,17.53,30,13.0
+NFL,2025,8,Jacksonville Jaguars,Jacksonville Jaguars,18.79,,20.5,13,21.0
+NFL,2025,8,Kansas City Chiefs,Kansas City Chiefs,26.06,,19.96,17,2.0
+NFL,2025,8,Las Vegas Raiders,Las Vegas Raiders,16.07,,21.33,8,27.0
+NFL,2025,8,Los Angeles Chargers,Los Angeles Chargers,19.88,,19.98,16,19.0
+NFL,2025,8,Los Angeles Rams,Los Angeles Rams,23.53,,20.4,14,6.0
+NFL,2025,8,Miami Dolphins,Miami Dolphins,13.56,,19.33,22,29.0
+NFL,2025,8,Minnesota Vikings,Minnesota Vikings,21.08,,18.84,25,14.0
+NFL,2025,8,New England Patriots,New England Patriots,20.45,,16.82,31,17.0
+NFL,2025,8,New Orleans Saints,New Orleans Saints,12.19,,19.79,20,32.0
+NFL,2025,8,New York Giants,New York Giants,16.93,,21.77,5,26.0
+NFL,2025,8,New York Jets,New York Jets,13.42,,18.72,26,30.0
+NFL,2025,8,Philadelphia Eagles,Philadelphia Eagles,25.93,,22.06,2,3.0
+NFL,2025,8,Pittsburgh Steelers,Pittsburgh Steelers,20.72,,19.14,23,16.0
+NFL,2025,8,San Francisco 49ers,San Francisco 49ers,20.97,,19.83,19,15.0
+NFL,2025,8,Seattle Seahawks,Seattle Seahawks,21.93,,18.99,24,11.0
+NFL,2025,8,Tampa Bay Buccaneers,Tampa Bay Buccaneers,22.01,,22.21,1,9.0
+NFL,2025,8,Tennessee Titans,Tennessee Titans,12.74,,21.2,10,31.0
+NFL,2025,8,Washington Commanders,Washington Redskins,22.89,,19.91,18,8.0
+NFL,2025,9,Arizona Cardinals,Arizona Cardinals,18.63,,17.55,29,
+NFL,2025,9,Atlanta Falcons,Atlanta Falcons,19.56,,21.07,8,
+NFL,2025,9,Baltimore Ravens,Baltimore Ravens,21.99,,21.26,6,
+NFL,2025,9,Buffalo Bills,Buffalo Bills,23.87,,16.02,32,
+NFL,2025,9,Carolina Panthers,Carolina Panthers,16.8,,18.24,27,
+NFL,2025,9,Chicago Bears,Chicago Bears,20.12,,21.75,4,
+NFL,2025,9,Cincinnati Bengals,Cincinnati Bengals,19.1,,22.57,2,
+NFL,2025,9,Cleveland Browns,Cleveland Browns,14.7,,22.77,1,
+NFL,2025,9,Dallas Cowboys,Dallas Cowboys,17.11,,20.62,14,
+NFL,2025,9,Denver Broncos,Denver Broncos,23.08,,19.58,21,
+NFL,2025,9,Detroit Lions,Detroit Lions,25.52,,22.24,3,
+NFL,2025,9,Green Bay Packers,Green Bay Packers,24.29,,19.49,22,
+NFL,2025,9,Houston Texans,Houston Texans,21.93,,20.92,10,
+NFL,2025,9,Indianapolis Colts,Indianapolis Colts,20.57,,17.09,31,
+NFL,2025,9,Jacksonville Jaguars,Jacksonville Jaguars,19.54,,19.82,18,
+NFL,2025,9,Kansas City Chiefs,Kansas City Chiefs,25.31,,21.16,7,
+NFL,2025,9,Las Vegas Raiders,Las Vegas Raiders,17.25,,19.99,17,
+NFL,2025,9,Los Angeles Chargers,Los Angeles Chargers,20.95,,20.67,13,
+NFL,2025,9,Los Angeles Rams,Los Angeles Rams,22.14,,20.61,15,
+NFL,2025,9,Miami Dolphins,Miami Dolphins,14.62,,19.35,23,
+NFL,2025,9,Minnesota Vikings,Minnesota Vikings,21.52,,18.16,28,
+NFL,2025,9,New England Patriots,New England Patriots,19.64,,17.37,30,
+NFL,2025,9,New Orleans Saints,New Orleans Saints,12.36,,18.86,25,
+NFL,2025,9,New York Giants,New York Giants,16.55,,20.89,11,
+NFL,2025,9,New York Jets,New York Jets,14.18,,19.75,20,
+NFL,2025,9,Philadelphia Eagles,Philadelphia Eagles,25.59,,21.03,9,
+NFL,2025,9,Pittsburgh Steelers,Pittsburgh Steelers,20.78,,18.32,26,
+NFL,2025,9,San Francisco 49ers,San Francisco 49ers,20.71,,20.43,16,
+NFL,2025,9,Seattle Seahawks,Seattle Seahawks,21.18,,19.3,24,
+NFL,2025,9,Tampa Bay Buccaneers,Tampa Bay Buccaneers,22.31,,20.77,12,
+NFL,2025,9,Tennessee Titans,Tennessee Titans,13.93,,21.65,5,
+NFL,2025,9,Washington Commanders,Washington Redskins,24.19,,19.76,19,

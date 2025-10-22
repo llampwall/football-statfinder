@@ -63,9 +63,10 @@ Twice-daily refreshes (or manual runs) now read the same centralized schedule, s
 
 ## 8. Ops / Scheduling
 - Recommended cadence: twice daily (morning/evening, UTC anchored) to align with provider data and schedule updates.
-- Entry points (no args):
-  - `python -m tools.run_refresh_cfb_and_notify`
-  - `python -m tools.run_refresh_nfl_and_notify` (if present in ops tooling)
+- Cron automation (GitHub Actions): `0 10,22 * * *` (runs 10:00 and 22:00 UTC).
+- Logs land in `out/logs/refresh_<ISO>.json` with an index at `out/logs/refresh_index.tsv`.
+- Local entry point (no args): `python tools/run_refresh_all_and_notify.py`
+- The script internally runs `python -m src.refresh_week_data_cfb` then `python -m src.refresh_week_data_nfl`.
 - Ensure the scheduler/task runner sets `WorkingDirectory` to the repo root so `.env` is detected and staging paths resolve correctly.
 
 ## 9. UI Stabilization Notes

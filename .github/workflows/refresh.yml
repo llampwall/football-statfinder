@@ -1,0 +1,31 @@
+name: Refresh Global Week
+
+on:
+  schedule:
+    - cron: "0 10,22 * * *"
+  workflow_dispatch:
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    env:
+      THE_ODDS_API_KEY: ${{ secrets.THE_ODDS_API_KEY || vars.THE_ODDS_API_KEY }}
+      CFBD_API_KEY: ${{ secrets.CFBD_API_KEY || vars.CFBD_API_KEY }}
+      DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL || vars.DISCORD_WEBHOOK_URL }}
+      BACKFILL_PROMOTE_PREV: ${{ vars.BACKFILL_PROMOTE_PREV }}
+      BACKFILL_WEEKS: ${{ vars.BACKFILL_WEEKS }}
+      ODDS_PROMOTION_ENABLE: ${{ vars.ODDS_PROMOTION_ENABLE }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run global week refresh
+        run: python tools/run_refresh_all_and_notify.py

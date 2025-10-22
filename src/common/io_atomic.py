@@ -71,4 +71,14 @@ def write_atomic_csv(path: Union[str, Path], data: CsvInput) -> None:
     os.replace(tmp, target)
 
 
-__all__ = ["write_atomic_text", "write_atomic_jsonl", "write_atomic_csv"]
+def write_atomic_json(path: Union[str, Path], payload: Mapping[str, object]) -> None:
+    """Serialize mapping to JSON (utf-8) atomically."""
+    target = Path(path)
+    target.parent.mkdir(parents=True, exist_ok=True)
+    tmp = _tmp_path(target)
+    with tmp.open("w", encoding="utf-8") as handle:
+        json.dump(payload, handle, ensure_ascii=False, indent=2)
+    os.replace(tmp, target)
+
+
+__all__ = ["write_atomic_text", "write_atomic_jsonl", "write_atomic_csv", "write_atomic_json"]
