@@ -131,6 +131,17 @@ def _align_columns(df: pd.DataFrame, columns: Sequence[str]) -> pd.DataFrame:
     remainder = [col for col in df.columns if col not in ordered]
     return df.reindex(columns=ordered + remainder)
 
+def _needs_odds_repair(rows: list[dict]) -> bool:
+    """Return True if any row looks like odds/rvo were nuked."""
+    for r in rows or []:
+        # pick a couple of canonical fields that must not be None/blank
+        if (
+            r.get("spread_favored_team") in (None, "",)
+            and r.get("rating_vs_odds") in (None, "",)
+        ):
+            return True
+    return False
+
 
 def backfill_cfb_scores(
     season: int,
@@ -197,14 +208,19 @@ def backfill_cfb_scores(
             week_changed = True
             updated += 1
             row_updates += 1
+            needs_repair = _needs_odds_repair(existing_rows)
 
-        if week_changed:
+        # if we updated scores OR we detected odds/rvo were nuked, proceed
+        if week_changed or (promote_prev_enabled and prior_week < week and needs_repair):
+            # merge still makes sense; if no score changes it’s effectively a pass-through
             merged_rows = merge_games_week(existing_rows, incoming_rows)
+
             preservation = summarize_preservation(existing_rows, merged_rows)
             preserved_odds_total += preservation["preserved_odds"]
             preserved_rvo_total += preservation["preserved_rvo"]
 
             final_rows = merged_rows
+
             if promote_prev_enabled and prior_week < week:
                 promoted_rows = deepcopy(merged_rows)
                 promote_stats = promote_week_odds(promoted_rows, season, prior_week)
@@ -215,6 +231,13 @@ def backfill_cfb_scores(
                     f"promoted={promoted_games} source=staging/odds_pinned"
                 )
 
+                if not week_changed and needs_repair:
+                    # make it obvious this was a repair without score edits
+                    print(
+                        f"BACKFILL_REPAIR(CFB): week={season}-{prior_week} "
+                        f"reason=odds_rvo_missing"
+                    )
+
             write_atomic_jsonl(json_path, final_rows)
             final_df = pd.DataFrame(final_rows)
             if csv_df is not None:
@@ -222,11 +245,14 @@ def backfill_cfb_scores(
             write_atomic_csv(csv_path, final_df)
             files_rewritten += 1
 
-            print(
-                f"BACKFILL_MERGE(CFB): week={season}-{prior_week} "
-                f"updated_scores={row_updates} preserved_odds={preservation['preserved_odds']} "
-                f"preserved_rvo={preservation['preserved_rvo']}"
-            )
+            # keep the original merge log when scores changed
+            if week_changed:
+                print(
+                    f"BACKFILL_MERGE(CFB): week={season}-{prior_week} "
+                    f"updated_scores={row_updates} "
+                    f"preserved_odds={preservation['preserved_odds']} "
+                    f"preserved_rvo={preservation['preserved_rvo']}"
+                )
 
     return {
         "weeks": weeks_to_scan,

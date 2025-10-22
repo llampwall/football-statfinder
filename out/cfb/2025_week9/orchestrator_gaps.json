@@ -58,14 +58,14 @@
   },
   "notes": [
     "Schedule rows=307",
-    "Odds staging raw=1361 pinned=1172 unmatched=189",
+    "Odds staging raw=1360 pinned=1171 unmatched=189",
     "League metrics 136/136 teams meeting threshold (required 100); ranks_ok=1.00",
     "Odds matched 46/53 (total 60); unmatched=14",
     "Master enrichment 46/319",
     "Sagarin rows=134; master=6562",
     "Sidecars 53/307",
     "Sagarin enrichment 100%/90%",
-    "Odds promotion promoted=14 current_week=5191 other_weeks=42 mismatch=0",
+    "Odds promotion promoted=14 current_week=5552 other_weeks=63 mismatch=0",
     "Scores backfill [W7,W8] updated=0 skipped=2 files=0",
     "ATS rows=0 teams=0 zero=106 weeks_scanned=[7, 8]",
     "Game View rows=53"

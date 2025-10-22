@@ -178,6 +178,16 @@ def _align_columns(df: pd.DataFrame, columns: Sequence[str]) -> pd.DataFrame:
     remainder = [col for col in df.columns if col not in ordered]
     return df.reindex(columns=ordered + remainder)
 
+def _needs_odds_repair(rows: list[dict]) -> bool:
+    """Return True if odds/rvo look nuked on any row."""
+    for r in rows or []:
+        if (
+            r.get("spread_favored_team") in (None, "",)
+            and r.get("rating_vs_odds") in (None, "",)
+        ):
+            return True
+    return False
+
 
 def backfill_nfl_scores(season: int, week: int) -> Dict[str, object]:
     """Backfill missing scores for recent NFL weeks."""
@@ -248,14 +258,17 @@ def backfill_nfl_scores(season: int, week: int) -> Dict[str, object]:
                 file_changed = True
                 updated_total += 1
                 row_updates += 1
+            needs_repair = _needs_odds_repair(existing_rows)
 
-        if file_changed:
+        if file_changed or (promote_prev_enabled and target_week < week and needs_repair):
             merged_rows = merge_games_week(existing_rows, incoming_rows)
+
             preservation = summarize_preservation(existing_rows, merged_rows)
             preserved_odds_total += preservation["preserved_odds"]
             preserved_rvo_total += preservation["preserved_rvo"]
 
             final_rows = merged_rows
+
             if promote_prev_enabled and target_week < week:
                 promoted_rows = deepcopy(merged_rows)
                 promote_stats = promote_week_odds(promoted_rows, season, target_week)
@@ -266,6 +279,12 @@ def backfill_nfl_scores(season: int, week: int) -> Dict[str, object]:
                     f"promoted={promoted} source=staging/odds_pinned"
                 )
 
+                if not file_changed and needs_repair:
+                    print(
+                        f"BACKFILL_REPAIR(NFL): week={season}-{target_week} "
+                        f"reason=odds_rvo_missing"
+                    )
+
             write_atomic_jsonl(json_path, final_rows)
             final_df = pd.DataFrame(final_rows)
             if csv_df is not None:
@@ -273,11 +292,12 @@ def backfill_nfl_scores(season: int, week: int) -> Dict[str, object]:
             write_atomic_csv(csv_path, final_df)
             files_rewritten += 1
 
-            print(
-                f"BACKFILL_MERGE(NFL): week={season}-{target_week} "
-                f"updated_scores={row_updates} preserved_odds={preservation['preserved_odds']} "
-                f"preserved_rvo={preservation['preserved_rvo']}"
-            )
+            if file_changed:
+                print(
+                    f"BACKFILL_MERGE(NFL): week={season}-{target_week} "
+                    f"updated_scores={row_updates} preserved_odds={preservation['preserved_odds']} "
+                    f"preserved_rvo={preservation['preserved_rvo']}"
+                )
 
     return {
         "weeks": [f"W{w}" for w in weeks],
