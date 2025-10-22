@@ -3,11 +3,11 @@
   "week": 9,
   "window": "2025-10-15T23:00:00Z -> 2025-11-01T02:15:00Z",
   "stats": {
-    "events_total": 53,
+    "events_total": 60,
     "events_after_window_filter": 53,
     "events_in_window": 53,
     "matched": 46,
-    "unmatched": 7,
+    "unmatched": 14,
     "eligible_unmatched": 7
   },
   "samples": {
@@ -15,17 +15,17 @@
       {
         "event_home": "Florida International Panthers",
         "event_away": "Kennesaw State Owls",
-        "event_time": "2025-10-21T23:00:00Z",
+        "event_time": "2025-10-21T23:05:28Z",
         "home_norm": "floridainternational",
         "away_norm": "kennesawstate",
         "game_key": "20251021_2300_kennesaw_state_florida_international",
         "kickoff_iso_utc": "2025-10-21T23:00:00Z",
-        "mode": "ordered_exact"
+        "mode": "ordered_near"
       },
       {
         "event_home": "Louisiana Tech Bulldogs",
         "event_away": "Western Kentucky Hilltoppers",
-        "event_time": "2025-10-21T23:30:00Z",
+        "event_time": "2025-10-21T23:33:06Z",
         "home_norm": "louisianatech",
         "away_norm": "westernkentucky",
         "game_key": "20251021_2330_western_kentucky_louisiana_tech",
@@ -369,15 +369,72 @@
         "home_norm": "arkansasstateredwolves",
         "away_norm": "georgiasouthern",
         "why": "no_schedule_candidate"
+      },
+      {
+        "event_home": "Texas State Bobcats",
+        "event_away": "James Madison Dukes",
+        "event_time": "2025-10-29T00:00:00Z",
+        "home_norm": "texasstate",
+        "away_norm": "jamesmadison",
+        "why": "future_week"
+      },
+      {
+        "event_home": "UTSA Roadrunners",
+        "event_away": "Tulane Green Wave",
+        "event_time": "2025-10-30T23:30:00Z",
+        "home_norm": "utsa",
+        "away_norm": "tulane",
+        "why": "future_week"
+      },
+      {
+        "event_home": "SMU Mustangs",
+        "event_away": "Miami Hurricanes",
+        "event_time": "2025-11-01T16:00:00Z",
+        "home_norm": "smu",
+        "away_norm": "miami",
+        "why": "future_week"
+      },
+      {
+        "event_home": "Ohio State Buckeyes",
+        "event_away": "Penn State Nittany Lions",
+        "event_time": "2025-11-01T16:00:00Z",
+        "home_norm": "ohiostatebuckeyes",
+        "away_norm": "pennstate",
+        "why": "future_week"
+      },
+      {
+        "event_home": "Tennessee Volunteers",
+        "event_away": "Oklahoma Sooners",
+        "event_time": "2025-11-01T16:00:00Z",
+        "home_norm": "tennessee",
+        "away_norm": "oklahoma",
+        "why": "future_week"
+      },
+      {
+        "event_home": "Texas Longhorns",
+        "event_away": "Vanderbilt Commodores",
+        "event_time": "2025-11-01T16:00:00Z",
+        "home_norm": "texaslonghorns",
+        "away_norm": "vanderbilt",
+        "why": "future_week"
+      },
+      {
+        "event_home": "Florida Gators",
+        "event_away": "Georgia Bulldogs",
+        "event_time": "2025-11-01T19:30:00Z",
+        "home_norm": "florida",
+        "away_norm": "georgiabulldogs",
+        "why": "future_week"
       }
     ]
   },
   "reason_counts": {
-    "no_schedule_candidate": 7
+    "no_schedule_candidate": 7,
+    "future_week": 7
   },
   "reason_buckets": {
     "outside_window": 0,
     "no_schedule_candidate": 7,
-    "other": 0
+    "other": 7
   }
 }

@@ -22,9 +22,9 @@
         "kickoff_iso_utc": "2025-10-25T16:00:00Z"
       },
       {
-        "game_key": "20251025_1930_san_diego_state_fresno_state",
-        "home": "Fresno State",
-        "away": "San Diego State",
+        "game_key": "20251025_1930_ul_monroe_southern_miss",
+        "home": "Southern Miss",
+        "away": "Ul Monroe",
         "kickoff_iso_utc": "2025-10-25T19:30:00Z"
       },
       {
@@ -34,9 +34,9 @@
         "kickoff_iso_utc": "2025-10-25T19:30:00Z"
       },
       {
-        "game_key": "20251025_1930_ul_monroe_southern_miss",
-        "home": "Southern Miss",
-        "away": "Ul Monroe",
+        "game_key": "20251025_1930_massachusetts_central_michigan",
+        "home": "Central Michigan",
+        "away": "Massachusetts",
         "kickoff_iso_utc": "2025-10-25T19:30:00Z"
       },
       {
@@ -46,9 +46,9 @@
         "kickoff_iso_utc": "2025-10-25T19:30:00Z"
       },
       {
-        "game_key": "20251025_1930_massachusetts_central_michigan",
-        "home": "Central Michigan",
-        "away": "Massachusetts",
+        "game_key": "20251025_1930_san_diego_state_fresno_state",
+        "home": "Fresno State",
+        "away": "San Diego State",
         "kickoff_iso_utc": "2025-10-25T19:30:00Z"
       },
       {

@@ -6333,12 +6333,14 @@ CFB,2025,10,REG,2025-11-01T04:00:00+00:00,American International,Post University
 CFB,2025,10,REG,2025-11-01T17:30:00+00:00,Anderson (in),Franklin,andersonin,franklin,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T17:00:00+00:00,Anderson (sc),Newberry,andersonsc,newberry,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T04:00:00+00:00,Arkansas,Mississippi State,arkansas,mississippistate,,,,,cfbd
+CFB,2025,10,REG,2025-11-01T20:00:00+00:00,Arkansas,Mississippi State,arkansas,mississippistate,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T19:00:00+00:00,Arkansas-monticello,Southwestern Oklahoma State,arkansasmonticello,southwesternoklahomastate,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T19:00:00+00:00,Arkansas-pine Bluff,Southern,arkansaspinebluff,southern,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T19:00:00+00:00,Arkansas Tech,Southern Nazarene,arkansastech,southernnazarene,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T17:00:00+00:00,Ashland,Walsh,ashland,walsh,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T16:00:00+00:00,Assumption,Southern Connecticut State,assumption,southernconnecticutstate,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T04:00:00+00:00,Auburn,Kentucky,auburn,kentucky,,,,,cfbd
+CFB,2025,10,REG,2025-11-01T23:30:00+00:00,Auburn,Kentucky,auburn,kentucky,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T18:00:00+00:00,Augustana (il),Illinois Wesleyan,augustanail,illinoiswesleyan,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T18:00:00+00:00,Augustana University (sd),Northern State,augustanauniversitysd,northernstate,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T18:00:00+00:00,Austin,Lyoncoll,austin,lyoncoll,,,,,cfbd
@@ -6356,6 +6358,7 @@ CFB,2025,10,REG,2025-11-01T04:00:00+00:00,Boston College,Notre Dame Fighting Iri
 CFB,2025,10,REG,2025-11-01T21:00:00+00:00,Bowdoin,Bates,bowdoin,bates,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T18:00:00+00:00,Bowie State,Elizabeth City State,bowiestate,elizabethcitystate,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T04:00:00+00:00,Bowling Green,Buffalo,bowlinggreen,buffalo,,,,,cfbd
+CFB,2025,10,REG,2025-11-01T16:00:00+00:00,Bowling Green,Buffalo,bowlinggreen,buffalo,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T16:00:00+00:00,Brevard College,Huntingdon College (al),brevardcollege,huntingdoncollegeal,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T16:00:00+00:00,Brockport,Alfred University,brockport,alfreduniversity,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T17:00:00+00:00,Bryant,Monmouth,bryant,monmouth,,,,,cfbd
@@ -6370,6 +6373,7 @@ CFB,2025,10,REG,2025-11-01T16:00:00+00:00,Catholic,Lycoming,catholic,lycoming,,,
 CFB,2025,10,REG,2025-11-01T21:00:00+00:00,Central Arkansas,Eastern Kentucky,centralarkansas,easternkentucky,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T18:00:00+00:00,Central College,Buena Vista,centralcollege,buenavista,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T04:00:00+00:00,Central Connecticut,Long Island University,centralconnecticut,longislanduniversity,,,,,cfbd
+CFB,2025,10,REG,2025-11-01T16:00:00+00:00,Central Connecticut,Long Island University,centralconnecticut,longislanduniversity,,,,,cfbd
 CFB,2025,10,REG,2025-11-02T01:00:00+00:00,Central Washington,Angelo State,centralwashington,angelostate,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T17:00:00+00:00,Centre College Kentucky,Berry College,centrecollegekentucky,berrycollege,,,,,cfbd
 CFB,2025,10,REG,2025-11-02T02:00:00+00:00,Chapman,Pomona Pitzer,chapman,pomonapitzer,,,,,cfbd
@@ -6378,6 +6382,7 @@ CFB,2025,10,REG,2025-11-01T18:00:00+00:00,Chicago,Monmouth (il),chicago,monmouth
 CFB,2025,10,REG,2025-11-01T17:00:00+00:00,Christopher Newport,Montclair State,christophernewport,montclairstate,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T20:00:00+00:00,Claremont-mudd-scripps College,California Lutheran University,claremontmuddscrippscollege,californialutheranuniversity,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T04:00:00+00:00,Clemson Tigers,Duke,clemsontigers,duke,,,,,cfbd
+CFB,2025,10,REG,2025-11-01T16:00:00+00:00,Clemson Tigers,Duke,clemsontigers,duke,,,,,cfbd
 CFB,2025,10,REG,2025-10-30T23:30:00+00:00,Coastal Carolina,Marshall,coastalcarolina,marshall,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T17:00:00+00:00,Colgate,Merrimack,colgate,merrimack,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T16:00:00+00:00,College Of New Jersey,Rowan,collegeofnewjersey,rowan,,,,,cfbd
@@ -6410,6 +6415,7 @@ CFB,2025,10,REG,2025-11-01T16:00:00+00:00,Fitchburg State,Bridgewater State,fitc
 CFB,2025,10,REG,2025-11-01T19:30:00+00:00,Florida,Georgia Bulldogs,florida,georgiabulldogs,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T23:00:00+00:00,Florida Aandm,Jackson State,floridaaandm,jacksonstate,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T04:00:00+00:00,Florida State,Wake Forest,floridastate,wakeforest,,,,,cfbd
+CFB,2025,10,REG,2025-11-01T23:30:00+00:00,Florida State,Wake Forest,floridastate,wakeforest,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T18:00:00+00:00,Fort Hays State,Central Missouri,forthaysstate,centralmissouri,,,,,cfbd
 CFB,2025,10,REG,2025-11-02T00:00:00+00:00,Fort Lewis,Adams State,fortlewis,adamsstate,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T22:00:00+00:00,Fort Valley State,Miles College,fortvalleystate,milescollege,,,,,cfbd
@@ -6417,6 +6423,7 @@ CFB,2025,10,REG,2025-11-01T17:00:00+00:00,Franklin And Marshall,Mcdaniel College
 CFB,2025,10,REG,2025-11-01T18:00:00+00:00,Furman,Mercer,furman,mercer,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T17:00:00+00:00,Gallaudet,Hampden-sydney,gallaudet,hampdensydney,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T04:00:00+00:00,Grambling,Alabama Aandm,grambling,alabamaaandm,,,,,cfbd
+CFB,2025,10,REG,2025-11-01T19:00:00+00:00,Grambling,Alabama Aandm,grambling,alabamaaandm,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T18:00:00+00:00,Greeneville,Mars Hill,greeneville,marshill,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T17:00:00+00:00,Greensboro College,Lagrange College,greensborocollege,lagrangecollege,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T17:00:00+00:00,Grove City College,Saint Vincent,grovecitycollege,saintvincent,,,,,cfbd
@@ -6434,6 +6441,7 @@ CFB,2025,10,REG,2025-11-01T19:30:00+00:00,Howard,North Carolina Central,howard,n
 CFB,2025,10,REG,2025-11-01T18:00:00+00:00,Howard Payne,Hardin-simmons,howardpayne,hardinsimmons,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T16:00:00+00:00,Husson,Curry College,husson,currycollege,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T04:00:00+00:00,Illinois,Rutgers,illinois,rutgers,,,,,cfbd
+CFB,2025,10,REG,2025-11-01T16:00:00+00:00,Illinois,Rutgers,illinois,rutgers,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T18:00:00+00:00,Illinois College,Grinnell,illinoiscollege,grinnell,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T19:00:00+00:00,Illinois State,Northern Iowa,illinoisstate,northerniowa,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T19:00:00+00:00,Incarnate Word,Lamar,incarnateword,lamar,,,,,cfbd
@@ -6443,6 +6451,7 @@ CFB,2025,10,REG,2025-11-01T17:00:00+00:00,Ithaca College,Buffalo State,ithacacol
 CFB,2025,10,REG,2025-11-01T18:00:00+00:00,Jamestown College,Minnesota Duluth,jamestowncollege,minnesotaduluth,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T17:00:00+00:00,Kalamazoo,Adrian,kalamazoo,adrian,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T04:00:00+00:00,Kansas,Oklahoma State,kansas,oklahomastate,,,,,cfbd
+CFB,2025,10,REG,2025-11-01T20:00:00+00:00,Kansas,Oklahoma State,kansas,oklahomastate,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T04:00:00+00:00,Kansas State,Texas Tech,kansasstate,texastech,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T17:00:00+00:00,Kean,Castleton,kean,castleton,,,,,cfbd
 CFB,2025,10,REG,2025-10-29T00:00:00+00:00,Kennesaw State,Utep,kennesawstate,utep,,,,,cfbd
@@ -6466,17 +6475,20 @@ CFB,2025,10,REG,2025-11-01T17:30:00+00:00,Manchester,Rose-hulman,manchester,rose
 CFB,2025,10,REG,2025-11-01T18:00:00+00:00,Martin Luther,Northwestern (mn),martinluther,northwesternmn,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T18:00:00+00:00,Mary Hardin-baylor,East Texas Baptist University,maryhardinbaylor,easttexasbaptistuniversity,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T04:00:00+00:00,Maryland,Indiana,maryland,indiana,,,,,cfbd
+CFB,2025,10,REG,2025-11-01T19:30:00+00:00,Maryland,Indiana,maryland,indiana,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T17:00:00+00:00,Maryville College (tn),Rhodes College,maryvillecollegetn,rhodescollege,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T23:00:00+00:00,Mcmurry,Texas Lutheran,mcmurry,texaslutheran,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T23:00:00+00:00,Mcneese,Northwestern State,mcneese,northwesternstate,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T21:00:00+00:00,Methodist,North Carolina Wesleyan,methodist,northcarolinawesleyan,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T04:00:00+00:00,Michigan,Purdue,michigan,purdue,,,,,cfbd
+CFB,2025,10,REG,2025-11-01T23:00:00+00:00,Michigan,Purdue,michigan,purdue,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T16:00:00+00:00,Michigan Tech,Roosevelt,michigantech,roosevelt,,,,,cfbd
 CFB,2025,10,REG,2025-10-29T23:30:00+00:00,Middle Tennessee,Jacksonville State,middletennessee,jacksonvillestate,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T16:00:00+00:00,Millersville,Lock Haven University,millersville,lockhavenuniversity,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T17:00:00+00:00,Millikin,Washington University (st. Louis),millikin,washingtonuniversitystlouis,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T18:00:00+00:00,Millsaps,Southwestern University,millsaps,southwesternuniversity,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T04:00:00+00:00,Minnesota,Michigan State,minnesota,michiganstate,,,,,cfbd
+CFB,2025,10,REG,2025-11-01T19:30:00+00:00,Minnesota,Michigan State,minnesota,michiganstate,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T18:00:00+00:00,Minnesota Morris,Crown College,minnesotamorris,crowncollege,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T17:00:00+00:00,Minnesota State Mankato,Southwest Minnesota State,minnesotastatemankato,southwestminnesotastate,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T18:00:00+00:00,Minnesota State Moorhead,Bemidji State,minnesotastatemoorhead,bemidjistate,,,,,cfbd
@@ -6491,6 +6503,7 @@ CFB,2025,10,REG,2025-11-01T21:00:00+00:00,Murray State,Southern Illinois,murrays
 CFB,2025,10,REG,2025-11-01T17:30:00+00:00,Muskingum University,Baldwin Wallace,muskingumuniversity,baldwinwallace,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T04:00:00+00:00,Nc State,Georgia Tech,ncstate,georgiatech,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T04:00:00+00:00,Nebraska,USC Trojans,nebraska,usctrojans,,,,,cfbd
+CFB,2025,10,REG,2025-11-01T23:30:00+00:00,Nebraska,USC Trojans,nebraska,usctrojans,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T17:00:00+00:00,Nebraska-kearney,Central Oklahoma,nebraskakearney,centraloklahoma,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T18:00:00+00:00,Nebraska Wesleyan,Wartburg,nebraskawesleyan,wartburg,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T20:00:00+00:00,Nicholls,Houston Christian,nicholls,houstonchristian,,,,,cfbd
@@ -6502,6 +6515,7 @@ CFB,2025,10,REG,2025-11-01T18:00:00+00:00,Northern Colorado,Montana State,northe
 CFB,2025,10,REG,2025-11-01T16:00:00+00:00,North Greenville,Ferrum,northgreenville,ferrum,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T18:00:00+00:00,North Park,Carthage,northpark,carthage,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T04:00:00+00:00,North Texas,Navy,northtexas,navy,,,,,cfbd
+CFB,2025,10,REG,2025-11-01T16:00:00+00:00,North Texas,Navy,northtexas,navy,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T16:00:00+00:00,Northwood (mi),Findlay,northwoodmi,findlay,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T16:00:00+00:00,Norwich,Springfield,norwich,springfield,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T16:00:00+00:00,Ohio Dominican,Lake Erie,ohiodominican,lakeerie,,,,,cfbd
@@ -6516,6 +6530,7 @@ CFB,2025,10,REG,2025-11-01T17:00:00+00:00,Pennwest California,Frostburg State,pe
 CFB,2025,10,REG,2025-11-01T19:00:00+00:00,Pittsburg St,Missouri Southern State,pittsburgst,missourisouthernstate,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T16:00:00+00:00,Plymouth State,Framingham State,plymouthstate,framinghamstate,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T04:00:00+00:00,Prairie View Aandm,Alabama State,prairieviewaandm,alabamastate,,,,,cfbd
+CFB,2025,10,REG,2025-11-01T19:00:00+00:00,Prairie View Aandm,Alabama State,prairieviewaandm,alabamastate,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T17:00:00+00:00,Presbyterian,Valparaiso,presbyterian,valparaiso,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T20:00:00+00:00,Puget Sound,Pacific (or),pugetsound,pacificor,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T23:30:00+00:00,Quincy,Indianapolis,quincy,indianapolis,,,,,cfbd
@@ -6539,6 +6554,7 @@ CFB,2025,10,REG,2025-11-01T18:00:00+00:00,Sioux Falls,Winona State,siouxfalls,wi
 CFB,2025,10,REG,2025-11-01T17:00:00+00:00,Slippery Rock,Clarion,slipperyrock,clarion,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T04:00:00+00:00,Smu,Miami,smu,miami,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T04:00:00+00:00,South Alabama,Louisiana,southalabama,louisiana,,,,,cfbd
+CFB,2025,10,REG,2025-11-01T19:30:00+00:00,South Alabama,Louisiana,southalabama,louisiana,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T18:00:00+00:00,South Carolina State,Morgan State,southcarolinastate,morganstate,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T18:00:00+00:00,South Dakota,North Dakota,southdakota,northdakota,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T04:00:00+00:00,South Dakota Mines,Chadron St,southdakotamines,chadronst,,,,,cfbd
@@ -6548,17 +6564,21 @@ CFB,2025,10,REG,2025-11-01T18:00:00+00:00,Southeast Missouri State,Charleston So
 CFB,2025,10,REG,2025-11-02T00:30:00+00:00,Southern Utah,Austin Peay,southernutah,austinpeay,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T17:00:00+00:00,Southern Virginia,Belhaven,southernvirginia,belhaven,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T04:00:00+00:00,Stanford,Pittsburgh,stanford,pittsburgh,,,,,cfbd
+CFB,2025,10,REG,2025-11-01T19:30:00+00:00,Stanford,Pittsburgh,stanford,pittsburgh,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T16:00:00+00:00,St. Anselm,Bentley,stanselm,bentley,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T23:00:00+00:00,Stephen F. Austin,Ut Rio Grande Valley,stephenfaustin,utriograndevalley,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T17:00:00+00:00,Stevenson,Lebanon Valley,stevenson,lebanonvalley,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T04:00:00+00:00,St. Francis (pa),Wagner,stfrancispa,wagner,,,,,cfbd
+CFB,2025,10,REG,2025-11-01T16:00:00+00:00,St. Francis (pa),Wagner,stfrancispa,wagner,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T17:00:00+00:00,St. Lawrence,Rensselaer,stlawrence,rensselaer,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T18:00:00+00:00,St. Norbert,Benedictine University,stnorbert,benedictineuniversity,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T17:00:00+00:00,Stonehill,Robert Morris,stonehill,robertmorris,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T18:00:00+00:00,St. Scholastica,Hamline University,stscholastica,hamlineuniversity,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T04:00:00+00:00,St. Thomas (mn),Marist,stthomasmn,marist,,,,,cfbd
+CFB,2025,10,REG,2025-11-01T18:00:00+00:00,St. Thomas (mn),Marist,stthomasmn,marist,,,,,cfbd
 CFB,2025,10,REG,2025-10-31T23:30:00+00:00,Syracuse,North Carolina,syracuse,northcarolina,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T04:00:00+00:00,Temple,East Carolina,temple,eastcarolina,,,,,cfbd
+CFB,2025,10,REG,2025-11-01T18:00:00+00:00,Temple,East Carolina,temple,eastcarolina,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T04:00:00+00:00,Tennessee,Oklahoma,tennessee,oklahoma,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T20:30:00+00:00,Tennessee State,Lindenwood,tennesseestate,lindenwood,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T17:00:00+00:00,Tennessee Tech,Gardner-webb,tennesseetech,gardnerwebb,,,,,cfbd
@@ -6571,11 +6591,13 @@ CFB,2025,10,REG,2025-11-01T17:00:00+00:00,Tiffin,Kentucky Wesleyan,tiffin,kentuc
 CFB,2025,10,REG,2025-11-01T17:00:00+00:00,Trine University,Alma,trineuniversity,alma,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T17:00:00+00:00,Trinity (ct),Amherst,trinityct,amherst,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T04:00:00+00:00,Troy,Arkansas State,troy,arkansasstate,,,,,cfbd
+CFB,2025,10,REG,2025-11-02T00:00:00+00:00,Troy,Arkansas State,troy,arkansasstate,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T17:00:00+00:00,Tufts,Colby College,tufts,colbycollege,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T19:00:00+00:00,Tuskegee,Lane College,tuskegee,lanecollege,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T20:00:00+00:00,Uc Davis,Idaho State,ucdavis,idahostate,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T16:00:00+00:00,Uconn,Uab,uconn,uab,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T04:00:00+00:00,Ul Monroe,Old Dominion,ulmonroe,olddominion,,,,,cfbd
+CFB,2025,10,REG,2025-11-01T19:30:00+00:00,Ul Monroe,Old Dominion,ulmonroe,olddominion,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T19:00:00+00:00,Unc Pembroke,Wilson,uncpembroke,wilson,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T17:00:00+00:00,Union (ny),Hilbert College,unionny,hilbertcollege,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T17:00:00+00:00,University Of Charleston (wv),West Virginia Wesleyan,universityofcharlestonwv,westvirginiawesleyan,,,,,cfbd
@@ -6592,6 +6614,7 @@ CFB,2025,10,REG,2025-10-30T23:30:00+00:00,Utsa,Tulane,utsa,tulane,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T17:00:00+00:00,Valdosta State,West Alabama,valdostastate,westalabama,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T18:00:00+00:00,Virginia St,Lincoln (pa),virginiast,lincolnpa,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T04:00:00+00:00,Virginia Tech,Louisville,virginiatech,louisville,,,,,cfbd
+CFB,2025,10,REG,2025-11-01T19:00:00+00:00,Virginia Tech,Louisville,virginiatech,louisville,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T17:00:00+00:00,Wabash College,Wittenberg,wabashcollege,wittenberg,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T22:00:00+00:00,Washington And Jefferson,Case Western Reserve,washingtonandjefferson,casewesternreserve,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T17:00:00+00:00,Wayne State (mi),Grand Valley State University,waynestatemi,grandvalleystateuniversity,,,,,cfbd
@@ -6601,6 +6624,7 @@ CFB,2025,10,REG,2025-11-01T19:00:00+00:00,Western Colorado,Csu Pueblo,westerncol
 CFB,2025,10,REG,2025-11-01T17:00:00+00:00,Western Connecticut St,Susquehanna,westernconnecticutst,susquehanna,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T19:30:00+00:00,Western Kentucky,New Mexico State,westernkentucky,newmexicostate,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T04:00:00+00:00,Western Michigan,Central Michigan,westernmichigan,centralmichigan,,,,,cfbd
+CFB,2025,10,REG,2025-11-01T20:00:00+00:00,Western Michigan,Central Michigan,westernmichigan,centralmichigan,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T17:00:00+00:00,Western New England,New England College,westernnewengland,newenglandcollege,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T18:00:00+00:00,Western New Mexico,Ut Permian Basin,westernnewmexico,utpermianbasin,,,,,cfbd
 CFB,2025,10,REG,2025-11-01T20:05:00+00:00,Western Oregon,Midwestern State,westernoregon,midwesternstate,,,,,cfbd
@@ -7419,6 +7443,7 @@ CFB,2025,14,REG,2025-11-29T05:00:00+00:00,Tulsa,Uab,tulsa,uab,,,,,cfbd
 CFB,2025,14,REG,2025-11-29T05:00:00+00:00,USC Trojans,Ucla,usctrojans,ucla,,,,,cfbd
 CFB,2025,14,REG,2025-11-28T21:00:00+00:00,Utah State,Boise State,utahstate,boisestate,,,,,cfbd
 CFB,2025,14,REG,2025-11-28T05:00:00+00:00,Utsa,Army,utsa,army,,,,,cfbd
+CFB,2025,14,REG,2025-11-29T05:00:00+00:00,Utsa,Army,utsa,army,,,,,cfbd
 CFB,2025,14,REG,2025-11-29T05:00:00+00:00,Virginia,Virginia Tech,virginia,virginiatech,,,,,cfbd
 CFB,2025,14,REG,2025-11-29T05:00:00+00:00,Washington,Oregon Ducks,washington,oregonducks,,,,,cfbd
 CFB,2025,14,REG,2025-11-29T23:30:00+00:00,Washington State,Oregon State,washingtonstate,oregonstate,,,,,cfbd
