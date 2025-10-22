@@ -189,6 +189,7 @@ def backfill_cfb_scores(
         csv_df = pd.read_csv(csv_path) if csv_path.exists() else None
         row_updates = 0
         week_changed = False
+        needs_repair = _needs_odds_repair(existing_rows)
 
         for idx, row in enumerate(incoming_rows):
             game_key = row.get("game_key")
@@ -208,7 +209,6 @@ def backfill_cfb_scores(
             week_changed = True
             updated += 1
             row_updates += 1
-            needs_repair = _needs_odds_repair(existing_rows)
 
         # if we updated scores OR we detected odds/rvo were nuked, proceed
         if week_changed or (promote_prev_enabled and prior_week < week and needs_repair):

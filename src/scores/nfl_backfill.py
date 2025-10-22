@@ -220,6 +220,8 @@ def backfill_nfl_scores(season: int, week: int) -> Dict[str, object]:
         csv_df = pd.read_csv(csv_path) if csv_path.exists() else None
         file_changed = False
         row_updates = 0
+        needs_repair = _needs_odds_repair(existing_rows)
+        
         for row in incoming_rows:
             game_key = row.get("game_key")
             if not isinstance(game_key, str):
@@ -258,7 +260,6 @@ def backfill_nfl_scores(season: int, week: int) -> Dict[str, object]:
                 file_changed = True
                 updated_total += 1
                 row_updates += 1
-            needs_repair = _needs_odds_repair(existing_rows)
 
         if file_changed or (promote_prev_enabled and target_week < week and needs_repair):
             merged_rows = merge_games_week(existing_rows, incoming_rows)

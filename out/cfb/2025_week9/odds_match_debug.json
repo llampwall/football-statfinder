@@ -3,25 +3,15 @@
   "week": 9,
   "window": "2025-10-15T23:00:00Z -> 2025-11-01T02:15:00Z",
   "stats": {
-    "events_total": 60,
-    "events_after_window_filter": 53,
-    "events_in_window": 53,
-    "matched": 46,
+    "events_total": 59,
+    "events_after_window_filter": 52,
+    "events_in_window": 52,
+    "matched": 45,
     "unmatched": 14,
     "eligible_unmatched": 7
   },
   "samples": {
     "matched": [
-      {
-        "event_home": "Florida International Panthers",
-        "event_away": "Kennesaw State Owls",
-        "event_time": "2025-10-21T23:05:28Z",
-        "home_norm": "floridainternational",
-        "away_norm": "kennesawstate",
-        "game_key": "20251021_2300_kennesaw_state_florida_international",
-        "kickoff_iso_utc": "2025-10-21T23:00:00Z",
-        "mode": "ordered_near"
-      },
       {
         "event_home": "Louisiana Tech Bulldogs",
         "event_away": "Western Kentucky Hilltoppers",
@@ -309,6 +299,16 @@
         "home_norm": "vanderbilt",
         "away_norm": "missouri",
         "game_key": "20251025_1930_missouri_vanderbilt",
+        "kickoff_iso_utc": "2025-10-25T19:30:00Z",
+        "mode": "ordered_exact"
+      },
+      {
+        "event_home": "Pittsburgh Panthers",
+        "event_away": "NC State Wolfpack",
+        "event_time": "2025-10-25T19:30:00Z",
+        "home_norm": "pittsburgh",
+        "away_norm": "ncstate",
+        "game_key": "20251025_1930_nc_state_pittsburgh",
         "kickoff_iso_utc": "2025-10-25T19:30:00Z",
         "mode": "ordered_exact"
       }
