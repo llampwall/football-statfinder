@@ -91,7 +91,7 @@ Result: future odds stay quietly staged; current odds appear automatically when 
 
 ## D. Score Backfill + ATS Timing
 
-* Before ATS, update scores for the **previous two weeks** (default; tunable via `REFRESH_INCLUDE_WEEKS_BACK`).
+* Before ATS, update scores for the **previous two weeks** (default; tunable via `BACKFILL_WEEKS`).
 * Fetch finals from official stats source.
 * Atomic update of each prior week’s `games_week` file.
 * Then run ATS builder:

@@ -29,6 +29,9 @@ let warnedTeamNumber = false;
 let warnedGameNumber = false;
 const CFB_BLOCK_MESSAGE =
   "CFB: games_week is missing odds/ratings fields—try re-running refresh or hard-reload.";
+const CFB_SOFT_BLOCK =
+  new URLSearchParams(location.search).has("soft") ||
+  localStorage.getItem("cfb_soft_block") === "1";
 
 const STATE = {
   allRows: [],
@@ -165,9 +168,22 @@ function computeCfbCoverageStats(rows) {
 }
 
 function shouldBlockCfbCoverage(stats) {
-  if (!stats) return false;
-  if (!stats.rows) return false;
-  return stats.oddsCovered === 0 || stats.rvoCovered === 0;
+  if (!stats || !stats.rows) return false;
+  const missing = stats.oddsCovered === 0 || stats.rvoCovered === 0;
+  return CFB_SOFT_BLOCK ? false : missing;
+}
+
+function bannerForCfb(stats) {
+  if (!stats || !stats.rows) return null;
+  const missing = stats.oddsCovered === 0 || stats.rvoCovered === 0;
+  if (!missing) return null;
+  const hint =
+    stats.oddsCovered === 0 && stats.rvoCovered === 0
+      ? "odds and rating fields"
+      : stats.oddsCovered === 0
+      ? "odds fields"
+      : "rating-vs-odds fields";
+  return `CFB: games_week loaded (${stats.rows} rows) but ${hint} are blank — run refresh or check backfill logs.`;
 }
 
 function syncCfbCoverage(rows) {

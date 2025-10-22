@@ -25,14 +25,16 @@ Do not:
 from __future__ import annotations
 
 import json
-import os
+from copy import deepcopy
 from pathlib import Path
 from typing import Dict, Iterable, List, Optional, Sequence, Tuple
 
 import pandas as pd
 
+from src.common.backfill_merge import merge_games_week, summarize_preservation
 from src.common.io_atomic import write_atomic_csv, write_atomic_jsonl
 from src.common.io_utils import ensure_out_dir, getenv
+from src.odds.cfb_promote_week import promote_week_odds
 from src.schedule_master_cfb import load_master
 
 OUT_ROOT = ensure_out_dir()
@@ -120,6 +122,16 @@ def _derive_weeks_to_backfill(current_week: int, include_weeks_back: int) -> Lis
     return sorted(weeks)
 
 
+def _is_truthy(value: str) -> bool:
+    return value.strip().lower() in {"1", "true", "yes", "on"}
+
+
+def _align_columns(df: pd.DataFrame, columns: Sequence[str]) -> pd.DataFrame:
+    ordered = [col for col in columns if col in df.columns]
+    remainder = [col for col in df.columns if col not in ordered]
+    return df.reindex(columns=ordered + remainder)
+
+
 def backfill_cfb_scores(
     season: int,
     week: int,
@@ -138,7 +150,7 @@ def backfill_cfb_scores(
         ``updated`` (count), ``skipped`` (missing finals), ``files_rewritten``.
     """
     if include_weeks_back is None:
-        include_weeks_back = int(getenv("REFRESH_INCLUDE_WEEKS_BACK", "2") or "2")
+        include_weeks_back = int(getenv("BACKFILL_WEEKS", "2") or "2")
     if include_weeks_back <= 0 or week <= 1:
         return {"weeks": [], "updated": 0, "skipped": 0, "files_rewritten": 0}
 
@@ -150,23 +162,24 @@ def backfill_cfb_scores(
     updated = 0
     skipped = 0
     files_rewritten = 0
+    preserved_odds_total = 0
+    preserved_rvo_total = 0
+    promote_prev_enabled = _is_truthy(getenv("BACKFILL_PROMOTE_PREV", "0"))
 
     for prior_week in weeks_to_scan:
         week_dir = CFB_ROOT / f"{season}_week{prior_week}"
         json_path = week_dir / f"games_week_{season}_{prior_week}.jsonl"
         csv_path = week_dir / f"games_week_{season}_{prior_week}.csv"
-        records = _load_week_json(json_path)
-        if not records:
+        existing_rows = _load_week_json(json_path)
+        if not existing_rows:
             continue
 
-        changed = False
-        record_map = {row.get("game_key"): idx for idx, row in enumerate(records) if isinstance(row.get("game_key"), str)}
+        incoming_rows = deepcopy(existing_rows)
         csv_df = pd.read_csv(csv_path) if csv_path.exists() else None
-        csv_index: Dict[str, int] = {}
-        if csv_df is not None and "game_key" in csv_df.columns:
-            csv_index = {str(row.game_key): idx for idx, row in csv_df.iterrows()}
+        row_updates = 0
+        week_changed = False
 
-        for idx, row in enumerate(records):
+        for idx, row in enumerate(incoming_rows):
             game_key = row.get("game_key")
             if not isinstance(game_key, str):
                 continue
@@ -180,27 +193,48 @@ def backfill_cfb_scores(
                     skipped += 1
                 continue
 
-            records[idx]["home_score"], records[idx]["away_score"] = scores
-            changed = True
+            incoming_rows[idx]["home_score"], incoming_rows[idx]["away_score"] = scores
+            week_changed = True
             updated += 1
+            row_updates += 1
 
-            if csv_df is not None:
-                csv_idx = csv_index.get(game_key)
-                if csv_idx is not None:
-                    csv_df.at[csv_idx, "home_score"] = scores[0]
-                    csv_df.at[csv_idx, "away_score"] = scores[1]
+        if week_changed:
+            merged_rows = merge_games_week(existing_rows, incoming_rows)
+            preservation = summarize_preservation(existing_rows, merged_rows)
+            preserved_odds_total += preservation["preserved_odds"]
+            preserved_rvo_total += preservation["preserved_rvo"]
 
-        if changed:
-            write_atomic_jsonl(json_path, records)
+            final_rows = merged_rows
+            if promote_prev_enabled and prior_week < week:
+                promoted_rows = deepcopy(merged_rows)
+                promote_stats = promote_week_odds(promoted_rows, season, prior_week)
+                promoted_games = promote_stats.get("promoted_games", 0)
+                final_rows = promoted_rows
+                print(
+                    f"ODDS_REPROMOTE(CFB): week={season}-{prior_week} "
+                    f"promoted={promoted_games} source=staging/odds_pinned"
+                )
+
+            write_atomic_jsonl(json_path, final_rows)
+            final_df = pd.DataFrame(final_rows)
             if csv_df is not None:
-                write_atomic_csv(csv_path, csv_df)
+                final_df = _align_columns(final_df, list(csv_df.columns))
+            write_atomic_csv(csv_path, final_df)
             files_rewritten += 1
+
+            print(
+                f"BACKFILL_MERGE(CFB): week={season}-{prior_week} "
+                f"updated_scores={row_updates} preserved_odds={preservation['preserved_odds']} "
+                f"preserved_rvo={preservation['preserved_rvo']}"
+            )
 
     return {
         "weeks": weeks_to_scan,
         "updated": updated,
         "skipped": skipped,
         "files_rewritten": files_rewritten,
+        "preserved_odds": preserved_odds_total,
+        "preserved_rvo": preserved_rvo_total,
     }
 
 
