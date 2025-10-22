@@ -62,8 +62,17 @@ def fetch_theoddsapi_events(api_key: str) -> Optional[List[dict]]:
         "oddsFormat": "american",
         "apiKey": api_key,
     }
-    resp = requests.get(THE_ODDS_API_URL, params=params, timeout=30)
-    resp.raise_for_status()
+    try:
+        resp = requests.get(THE_ODDS_API_URL, params=params, timeout=30)
+        resp.raise_for_status()
+    except requests.exceptions.HTTPError as exc:
+        status = getattr(exc.response, "status_code", None)
+        if status in {401, 403, 429}:
+            reason = getattr(exc.response, "reason", None) or str(exc)
+            reason = str(reason).strip() or "HTTPError"
+            print(f"ODDS_FETCH_ERROR(CFB): provider=theoddsapi status={status} reason={reason}")
+            return []
+        raise
     data = resp.json()
     if isinstance(data, list):
         return data

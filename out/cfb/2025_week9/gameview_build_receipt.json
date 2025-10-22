@@ -64,15 +64,15 @@
         "kickoff_iso_utc": "2025-10-25T02:00:00Z"
       },
       {
-        "game_key": "20251025_1600_ucla_indiana",
-        "home": "Indiana",
-        "away": "Ucla",
+        "game_key": "20251025_1600_virginia_north_carolina",
+        "home": "North Carolina",
+        "away": "Virginia",
         "kickoff_iso_utc": "2025-10-25T16:00:00Z"
       },
       {
-        "game_key": "20251025_1600_ole_miss_oklahoma",
-        "home": "Oklahoma",
-        "away": "Ole Miss",
+        "game_key": "20251025_1600_kansas_state_kansas",
+        "home": "Kansas",
+        "away": "Kansas State",
         "kickoff_iso_utc": "2025-10-25T16:00:00Z"
       }
     ],
