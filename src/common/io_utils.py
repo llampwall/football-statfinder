@@ -24,6 +24,8 @@ from typing import Iterable, Mapping, Sequence, Union
 import pandas as pd
 import requests
 
+from .io_atomic import write_atomic_json
+
 try:
     from dotenv import load_dotenv
 except ImportError:  # pragma: no cover - fallback path
@@ -31,6 +33,26 @@ except ImportError:  # pragma: no cover - fallback path
 
 RepositoryPath = Path(__file__).resolve().parents[2]
 OUT = RepositoryPath / "out"
+
+_ENV_LOADED = False
+
+def load_env_once(override: bool = True) -> None:
+    """Load .env into os.environ once (idempotent)."""
+    global _ENV_LOADED
+    if _ENV_LOADED:
+        return
+    env_path = RepositoryPath / ".env"
+    if load_dotenv and env_path.exists():
+        load_dotenv(dotenv_path=env_path, override=override)
+    _ENV_LOADED = True
+
+def getenv(key: str, default: str | None = None) -> str | None:
+    """Project-safe getenv that ensures .env is loaded once."""
+    load_env_once(override=True)  # .env is the source of truth in local/dev
+    val = os.environ.get(key, default)
+    if isinstance(val, str):
+        return val.strip().strip('"').strip("'")  # guard stray quotes/space
+    return val
 
 
 def download_csv(url: str) -> pd.DataFrame:
@@ -90,5 +112,6 @@ __all__ = [
     "week_out_dir",
     "write_jsonl",
     "write_csv",
+    "write_atomic_json",
     "read_env",
 ]

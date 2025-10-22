@@ -1,0 +1,23 @@
+{
+  "season": 2025,
+  "week": 9,
+  "window": "2025-10-15T23:00:00Z -> 2025-11-01T02:15:00Z",
+  "stats": {
+    "events_total": 0,
+    "events_after_window_filter": 0,
+    "events_in_window": 0,
+    "matched": 0,
+    "unmatched": 0,
+    "eligible_unmatched": 0
+  },
+  "samples": {
+    "matched": [],
+    "unmatched": []
+  },
+  "reason_counts": {},
+  "reason_buckets": {
+    "outside_window": 0,
+    "no_schedule_candidate": 0,
+    "other": 0
+  }
+}

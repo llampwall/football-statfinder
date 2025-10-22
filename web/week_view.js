@@ -1,6 +1,7 @@
 const els = {
   seasonInput: document.getElementById("season-input"),
   weekInput: document.getElementById("week-input"),
+  leagueSelect: document.getElementById("league-select"),
   loadBtn: document.getElementById("load-btn"),
   status: document.getElementById("status"),
   loadedLabel: document.getElementById("loaded-label"),
@@ -17,21 +18,41 @@ const els = {
 
 const STORAGE_KEY = "week-view:last-selection";
 const LAST_GAME_KEY = "week-view:last-game";
+const LEAGUE_STORAGE_KEY = "week-view:league";
+const DEFAULT_LEAGUE = "nfl";
+const VALID_LEAGUES = new Set(["nfl", "cfb"]);
 const MISSING_VALUE = "\u2014";
+const WEEK_CACHE_PREFIX = "week-view:games:";
+const CACHE_VERSION = "v4";
 let timezoneLogged = false;
 let warnedTeamNumber = false;
 let warnedGameNumber = false;
+const CFB_BLOCK_MESSAGE =
+  "CFB: games_week is missing odds/ratings fields—try re-running refresh or hard-reload.";
+const qs = new URLSearchParams(location.search);
+const ls = localStorage.getItem("cfb_soft_block");
+const CFB_SOFT_BLOCK =
+  qs.has("hard") ? false :
+  qs.has("soft") ? true :
+  (ls == null ? true : ls === "1");
 
 const STATE = {
   allRows: [],
   filteredRows: [],
   season: null,
   week: null,
+  league: DEFAULT_LEAGUE,
   sourcePath: null,
   lastLoadedAt: null,
   pendingScrollKey: null,
   highlightedGameKey: null,
   gameOrdinals: new Map(),
+  weekPaths: null,
+  pathsLogged: false,
+  teamNumberMap: null,
+  loggedCfbExample: false,
+  cfbCoverage: null,
+  cfbBlockActive: false,
 };
 
 const NFL_TEAM_DEFINITIONS = [
@@ -71,8 +92,259 @@ const NFL_TEAM_DEFINITIONS = [
 
 let TEAM_NUMBER_MAP_CACHE = null;
 
+function isCFBLeague() {
+  return (STATE.league ?? DEFAULT_LEAGUE) === "cfb";
+}
+
+function toDisplayName(primary, fallbackName) {
+  const base =
+    primary !== undefined && primary !== null && String(primary).trim()
+      ? String(primary).trim()
+      : fallbackName !== undefined && fallbackName !== null
+      ? String(fallbackName).trim()
+      : "";
+  if (!base) return "";
+  const words = base.split(/\s+/).map((part) =>
+    part
+      .split("-")
+      .map((segment) =>
+        segment
+          .split("'")
+          .map((piece) => titleCaseToken(piece))
+          .join("'")
+      )
+      .join("-")
+  );
+  return words.join(" ");
+}
+
+function titleCaseToken(token) {
+  if (!token) return "";
+  if (token.length === 1) {
+    return token.toUpperCase();
+  }
+  const lower = token.toLowerCase();
+  return lower.charAt(0).toUpperCase() + lower.slice(1);
+}
+
+function buildCfbTeamNumberMap(rows) {
+  const names = new Set();
+  (rows || []).forEach((row) => {
+    const homeName = resolveTeamName(row, "home");
+    const awayName = resolveTeamName(row, "away");
+    if (homeName && homeName !== MISSING_VALUE) names.add(homeName);
+    if (awayName && awayName !== MISSING_VALUE) names.add(awayName);
+  });
+  const ordered = Array.from(names).sort((a, b) => a.localeCompare(b));
+  const map = new Map();
+  ordered.forEach((name, idx) => map.set(name, idx + 1));
+  console.info(`[CFB Week] numbered ${ordered.length} teams`);
+  return map;
+}
+
+function teamNumberFromDisplay(displayName) {
+  if (!displayName) return null;
+  const map = STATE.teamNumberMap;
+  if (!map || typeof map.get !== "function") return null;
+  return map.get(displayName) ?? null;
+}
+
+function computeCfbCoverageStats(rows) {
+  if (!Array.isArray(rows)) {
+    return { rows: 0, oddsCovered: 0, rvoCovered: 0 };
+  }
+  let oddsCovered = 0;
+  let rvoCovered = 0;
+  rows.forEach((row) => {
+    if (row && hasNumeric(row?.spread_favored_team)) {
+      oddsCovered += 1;
+    }
+    if (row && hasNumeric(row?.rating_vs_odds)) {
+      rvoCovered += 1;
+    }
+  });
+  return {
+    rows: rows.length,
+    oddsCovered,
+    rvoCovered,
+  };
+}
+
+function shouldBlockCfbCoverage(stats) {
+  if (!stats || !stats.rows) return false;
+  const missing = stats.oddsCovered === 0 || stats.rvoCovered === 0;
+  return CFB_SOFT_BLOCK ? false : missing;
+}
+
+function bannerForCfb(stats) {
+  if (!stats || !stats.rows) return null;
+  const missing = stats.oddsCovered === 0 || stats.rvoCovered === 0;
+  if (!missing) return null;
+  const hint =
+    stats.oddsCovered === 0 && stats.rvoCovered === 0
+      ? "odds and rating fields"
+      : stats.oddsCovered === 0
+      ? "odds fields"
+      : "rating-vs-odds fields";
+  return `CFB: games_week loaded (${stats.rows} rows) but ${hint} are blank — run refresh or check backfill logs.`;
+}
+
+function syncCfbCoverage(rows) {
+  const stats = computeCfbCoverageStats(rows);
+  STATE.cfbCoverage = stats;
+  STATE.cfbBlockActive = shouldBlockCfbCoverage(stats);
+  const logCoverage = () => {
+    let negSosDiffs = 0;
+    try {
+      const cells = document.querySelectorAll('td[data-col="sosDiff"]');
+      if (cells && cells.length) {
+        negSosDiffs = Array.from(cells).filter((td) =>
+          String(td.textContent || "").trim().startsWith("\u2212")
+        ).length;
+      }
+    } catch {
+      negSosDiffs = 0;
+    }
+    console.log(
+      `CFB Week rows=${stats.rows}; odds_covered=${stats.oddsCovered}; rvo_covered=${stats.rvoCovered}; sosDiff_negatives=${negSosDiffs}`
+    );
+  };
+  if (typeof requestAnimationFrame === "function") {
+    requestAnimationFrame(logCoverage);
+  } else {
+    setTimeout(logCoverage, 0);
+  }
+  if (STATE.cfbBlockActive) {
+    setStatus(CFB_BLOCK_MESSAGE);
+  } else if (els.status && els.status.textContent === CFB_BLOCK_MESSAGE) {
+    setStatus("");
+  }
+}
+
+function computeFavoredMetrics(row) {
+  if (!row) return null;
+  const favoredRaw = (row.favored_side ?? "").toString().toUpperCase();
+  if (favoredRaw !== "HOME" && favoredRaw !== "AWAY") return null;
+  const favored = favoredRaw === "HOME" ? "home" : "away";
+  const unfavored = favored === "home" ? "away" : "home";
+  let pr = hasNumeric(row[`${favored}_pr`]) ? Number(row[`${favored}_pr`]) : null;
+  if (favored === "home" && pr !== null && hasNumeric(row.hfa)) {
+    pr += Number(row.hfa);
+  }
+  const diff = hasNumeric(row.rating_diff_favored_team) ? Number(row.rating_diff_favored_team) : null;
+  const rvo = hasNumeric(row.rating_vs_odds) ? Number(row.rating_vs_odds) : null;
+  const favSos = hasNumeric(row[`${favored}_sos`]) ? Number(row[`${favored}_sos`]) : null;
+  const oppSos = hasNumeric(row[`${unfavored}_sos`]) ? Number(row[`${unfavored}_sos`]) : null;
+  const sosDiff = favSos !== null && oppSos !== null ? favSos - oppSos : null;
+  return {
+    favoredSide: favored,
+    unfavoredSide: unfavored,
+    pr,
+    diff,
+    rvo,
+    sos: favSos,
+    sosDiff,
+  };
+}
+
+function formatFavoredMetric(metrics, side, value, options = {}) {
+  if (!metrics || !metrics.favoredSide) return MISSING_VALUE;
+  if (metrics.favoredSide !== side) return MISSING_VALUE;
+  return formatNumber(value, options);
+}
+
+function sosDiffCell(row, side) {
+  const h = Number(row.home_sos);
+  const a = Number(row.away_sos);
+  if (!Number.isFinite(h) || !Number.isFinite(a)) return MISSING_VALUE;
+  const diff = side === "home" ? h - a : a - h;
+  return diff > 0 ? formatNumber(diff, { decimals: 2 }) : "";
+}
+
+function logCfbMetrics(row, metrics) {
+  if (!metrics) return;
+  const awayLabel = resolveTeamName(row, "away");
+  const homeLabel = resolveTeamName(row, "home");
+  const prText = formatNumber(metrics.pr, { decimals: 2 });
+  const diffText = formatNumber(metrics.diff, { decimals: 1, signed: true });
+  const rvoText = formatNumber(metrics.rvo, { decimals: 1, signed: true });
+  const sosText = formatNumber(metrics.sos, { decimals: 2 });
+  const sosDiffText = formatNumber(metrics.sosDiff, { decimals: 2, signed: true });
+  if (!STATE.loggedCfbExample) {
+    console.log(
+      `[CFB Week] ${awayLabel}@${homeLabel} PR=${prText} DIFF=${diffText} RvO=${rvoText} SOS=${sosText} ΔSOS=${sosDiffText}`
+    );
+    STATE.loggedCfbExample = true;
+  }
+  if (row.game_key === "20251019_0000_cincinnati_oklahoma_state") {
+    console.log(
+      `[CFB Week] CIN@OKST PR=${prText} DIFF=${diffText} RvO=${rvoText} SOS=${sosText} ΔSOS=${sosDiffText}`
+    );
+  }
+}
+
 attachListeners();
 bootstrap();
+
+function normalizeLeague(raw) {
+  if (raw === null || raw === undefined) return DEFAULT_LEAGUE;
+  const value = String(raw).trim().toLowerCase();
+  return VALID_LEAGUES.has(value) ? value : DEFAULT_LEAGUE;
+}
+
+function loadStoredLeague() {
+  try {
+    const raw = localStorage.getItem(LEAGUE_STORAGE_KEY);
+    if (!raw) return null;
+    return normalizeLeague(raw);
+  } catch {
+    return null;
+  }
+}
+
+function persistLeaguePreference(league) {
+  try {
+    localStorage.setItem(LEAGUE_STORAGE_KEY, league);
+  } catch {
+    // ignore storage errors
+  }
+}
+
+function setActiveLeague(next, { updateSelect = true, persist = true, updateHistory = false } = {}) {
+  const league = normalizeLeague(next);
+  STATE.league = league;
+  if (updateSelect && els.leagueSelect && els.leagueSelect.value !== league) {
+    els.leagueSelect.value = league;
+  }
+  if (persist) {
+    persistLeaguePreference(league);
+  }
+  if (updateHistory) {
+    const url = new URL(window.location.href);
+    if (league === DEFAULT_LEAGUE) {
+      url.searchParams.delete("league");
+    } else {
+      url.searchParams.set("league", league);
+    }
+    window.history.replaceState(null, "", url.toString());
+  }
+}
+
+function buildWeekPaths(league, season, week) {
+  const normalized = normalizeLeague(league);
+  const baseDir =
+    normalized === "cfb"
+      ? `out/cfb/${season}_week${week}`
+      : `out/${season}_week${week}`;
+  return {
+    league: normalized,
+    season,
+    week,
+    baseDir,
+    gamesJsonl: `${baseDir}/games_week_${season}_${week}.jsonl`,
+    sidecarDir: `${baseDir}/game_schedules`,
+  };
+}
 
 function attachListeners() {
   els.loadBtn.addEventListener("click", () => {
@@ -82,8 +354,21 @@ function attachListeners() {
       setStatus("Provide season and week.");
       return;
     }
-    loadAndRender(season, week, { fromControl: true });
+    const league = normalizeLeague(els.leagueSelect?.value ?? STATE.league);
+    setActiveLeague(league, { updateSelect: true, updateHistory: true });
+    loadAndRender(season, week, { fromControl: true, league });
   });
+
+  if (els.leagueSelect) {
+    els.leagueSelect.addEventListener("change", () => {
+      const next = normalizeLeague(els.leagueSelect.value);
+      if (next === STATE.league) return;
+      setActiveLeague(next, { updateSelect: false, updateHistory: true });
+      if (STATE.season && STATE.week) {
+        loadAndRender(STATE.season, STATE.week, { fromControl: true, league: next });
+      }
+    });
+  }
 
   els.teamFilter.addEventListener("input", () => {
     applyFilters();
@@ -99,14 +384,27 @@ async function bootstrap() {
   const paramSeason = coerceInt(params.get("season"));
   const paramWeek = coerceInt(params.get("week"));
   const paramGame = params.get("game_key");
+  const paramLeagueRaw = params.get("league");
+
+  const storedSelection = loadStoredSelection();
+  const storedLastGame = loadStoredLastGame();
+  const storedLeague = storedSelection ? storedSelection.league : null;
+  const fallbackLeague = storedLeague ?? loadStoredLeague();
+  const initialLeague = paramLeagueRaw
+    ? normalizeLeague(paramLeagueRaw)
+    : fallbackLeague ?? DEFAULT_LEAGUE;
+  setActiveLeague(initialLeague, {
+    updateSelect: true,
+    updateHistory: Boolean(paramLeagueRaw) || initialLeague !== DEFAULT_LEAGUE,
+  });
 
   if (paramSeason) els.seasonInput.value = paramSeason;
   if (paramWeek) els.weekInput.value = paramWeek;
 
-  const available = await listAvailableWeeks();
+  const available = await listAvailableWeeks(STATE.league);
   if (available.length) {
     console.log(
-      "Available weeks:",
+      `Available weeks (league=${STATE.league.toUpperCase()}):`,
       available.map((entry) => `${entry.season}w${entry.week}`).join(", ")
     );
   } else {
@@ -121,7 +419,7 @@ async function bootstrap() {
   } else if (paramSeason) {
     target = available.find((item) => item.season === paramSeason) ?? null;
     if (!target) {
-      console.warn(`WARN: No data found for season ${paramSeason} in /out listing.`);
+      console.warn(`WARN: No data found for season ${paramSeason} in directory listing.`);
     }
   } else if (paramWeek) {
     target = available.find((item) => item.week === paramWeek) ?? null;
@@ -135,12 +433,16 @@ async function bootstrap() {
     );
   }
 
-  const storedSelection = loadStoredSelection();
-  const storedLastGame = loadStoredLastGame();
+  const selectionMatchesLeague =
+    storedSelection &&
+    normalizeLeague(storedSelection.league ?? DEFAULT_LEAGUE) === STATE.league;
+  const lastMatchesLeague =
+    storedLastGame &&
+    normalizeLeague(storedLastGame.league ?? DEFAULT_LEAGUE) === STATE.league;
 
-  if (!target && storedSelection) {
+  if (!target && selectionMatchesLeague) {
     console.log("Fallback to stored selection", storedSelection);
-    target = storedSelection;
+    target = { season: storedSelection.season, week: storedSelection.week };
   }
 
   if (!target) {
@@ -151,11 +453,18 @@ async function bootstrap() {
   els.seasonInput.value = target.season;
   els.weekInput.value = target.week;
 
-  preparePendingScroll(target.season, target.week, paramGame, storedSelection, storedLastGame);
+  preparePendingScroll(
+    target.season,
+    target.week,
+    paramGame,
+    selectionMatchesLeague ? storedSelection : null,
+    lastMatchesLeague ? storedLastGame : null
+  );
 
   const loaded = await loadAndRender(target.season, target.week);
   if (!loaded) {
     if (
+      selectionMatchesLeague &&
       storedSelection &&
       (storedSelection.season !== target.season || storedSelection.week !== target.week)
     ) {
@@ -174,9 +483,11 @@ async function bootstrap() {
   }
 }
 
-async function listAvailableWeeks() {
+async function listAvailableWeeks(league) {
   try {
-    const url = new URL("../out/", window.location.href);
+    const normalized = normalizeLeague(league);
+    const basePath = normalized === "cfb" ? "../out/cfb/" : "../out/";
+    const url = new URL(basePath, window.location.href);
     const res = await fetch(url.toString(), { cache: "no-store" });
     if (!res.ok) {
       console.warn(`WARN: Directory listing fetch failed with status ${res.status}`);
@@ -202,18 +513,29 @@ async function listAvailableWeeks() {
       return b.week - a.week;
     });
   } catch (err) {
-    console.warn("WARN: Unable to parse /out directory listing.", err);
+    console.warn("WARN: Unable to parse directory listing.", err);
     return [];
   }
 }
 
 async function loadAndRender(season, week, options = {}) {
-  const { fromControl = false } = options;
+  const { fromControl = false, league: leagueOverride = null } = options;
+  const league = normalizeLeague(leagueOverride ?? STATE.league ?? DEFAULT_LEAGUE);
+  const shouldUpdateLeagueHistory = fromControl || league !== DEFAULT_LEAGUE;
+  setActiveLeague(league, {
+    updateSelect: true,
+    updateHistory: shouldUpdateLeagueHistory,
+  });
+  const paths = buildWeekPaths(league, season, week);
+  STATE.weekPaths = paths;
+  STATE.pathsLogged = false;
   setStatus("Loading games...");
-  const result = await loadGames(season, week);
+  const result = await loadGames(paths);
   if (!result.success) {
     setStatus(result.message);
-    console.log(`FAIL: Load season=${season} week=${week} (${result.message})`);
+    console.log(
+      `FAIL: Load season=${season} week=${week} league=${league.toUpperCase()} (${result.message})`
+    );
     return false;
   }
 
@@ -234,6 +556,18 @@ function applyLoadedRows(rows, season, week, { updateHistory = false } = {}) {
   STATE.allRows = safeRows;
   STATE.season = season;
   STATE.week = week;
+  if (isCFBLeague()) {
+    STATE.teamNumberMap = buildCfbTeamNumberMap(safeRows);
+    syncCfbCoverage(safeRows);
+  } else {
+    STATE.teamNumberMap = null;
+    STATE.cfbCoverage = null;
+    if (STATE.cfbBlockActive && els.status?.textContent === CFB_BLOCK_MESSAGE) {
+      setStatus("");
+    }
+    STATE.cfbBlockActive = false;
+  }
+  STATE.loggedCfbExample = false;
 
   if (STATE.pendingScrollKey && !STATE.highlightedGameKey) {
     STATE.highlightedGameKey = STATE.pendingScrollKey;
@@ -248,22 +582,95 @@ function applyLoadedRows(rows, season, week, { updateHistory = false } = {}) {
   }
 
   applyFilters();
-  persistSelection({ season, week, last_game_key: STATE.highlightedGameKey ?? null });
+  persistSelection({
+    league: STATE.league,
+    season,
+    week,
+    last_game_key: STATE.highlightedGameKey ?? null,
+  });
 
   if (updateHistory) {
     const url = new URL(window.location.href);
     url.searchParams.set("season", season);
     url.searchParams.set("week", week);
+    if (STATE.league === DEFAULT_LEAGUE) {
+      url.searchParams.delete("league");
+    } else {
+      url.searchParams.set("league", STATE.league);
+    }
     window.history.replaceState(null, "", url.toString());
   }
 
   return true;
 }
 
-async function loadGames(season, week) {
-  const relPath = `out/${season}_week${week}/games_week_${season}_${week}.jsonl`;
+async function loadGames(paths) {
+  const relPath = paths.gamesJsonl;
   const path = `../${relPath}`;
   const url = new URL(path, window.location.href);
+  if (!STATE.pathsLogged) {
+    console.log(
+      `[league] Week View -> ${paths.league.toUpperCase()} base=${paths.baseDir} games=${relPath}`
+    );
+    STATE.pathsLogged = true;
+  }
+
+  const leagueLower = (paths.league || "").toLowerCase();
+  const cacheKey = weekCacheKey(leagueLower, paths.season, paths.week);
+  let records = readWeekCache(leagueLower, paths.season, paths.week);
+  if (records && records.length) {
+    const staleSchema = records.some(
+      (row) =>
+        !row ||
+        !Object.prototype.hasOwnProperty.call(row, "home_pr") ||
+        !Object.prototype.hasOwnProperty.call(row, "rating_vs_odds")
+    );
+    if (staleSchema) {
+      console.warn("Cache stale (missing odds/ratings fields): refetching from network");
+      try {
+        localStorage.removeItem(cacheKey);
+      } catch {
+        // ignore storage errors
+      }
+      records = null;
+    }
+  }
+  if (records && records.length && leagueLower === "cfb") {
+    const sample = records.slice(0, Math.min(25, records.length));
+    const covered =
+      sample.length === 0
+        ? 0
+        : sample.reduce(
+            (count, row) => count + (hasMetricsCoverageCFB(row) ? 1 : 0),
+            0
+          );
+    const coverage = sample.length === 0 ? 0 : covered / sample.length;
+    if (sample.length > 0 && coverage < 0.6) {
+      console.warn("Cache stale (missing CFB odds/metrics): refetching from network");
+      try {
+        localStorage.removeItem(cacheKey);
+      } catch {
+        // ignore failures
+      }
+      records = null;
+    } else if (records) {
+      console.info("Cache OK (v3): using cached games:", records.length);
+    }
+  }
+
+  if (records && records.length) {
+    if (leagueLower !== "cfb") {
+      console.info("Cache OK (v3): using cached games:", records.length);
+    }
+    return {
+      success: true,
+      rows: records,
+      count: records.length,
+      message: "Loaded from cache",
+      sourcePath: relPath,
+    };
+  }
+
   try {
     const res = await fetch(url.toString(), { cache: "no-store" });
     if (!res.ok) {
@@ -271,6 +678,9 @@ async function loadGames(season, week) {
     }
     const text = await res.text();
     const parsed = parseJsonl(text);
+    if (parsed.records.length) {
+      writeWeekCache(leagueLower, paths.season, paths.week, parsed.records);
+    }
     return {
       success: true,
       rows: parsed.records,
@@ -279,7 +689,10 @@ async function loadGames(season, week) {
       sourcePath: relPath,
     };
   } catch (err) {
-    console.error(`FAIL: loadGames season=${season} week=${week}`, err);
+    console.error(
+      `FAIL: loadGames season=${paths.season} week=${paths.week} league=${paths.league}`,
+      err
+    );
     return { success: false, message: `Failed to load: ${err.message}`, sourcePath: relPath };
   }
 }
@@ -330,6 +743,18 @@ function applyFilters() {
 function renderTable(rows, { season, week }) {
   const tbody = els.tableBody;
   tbody.innerHTML = "";
+
+  if (isCFBLeague() && STATE.cfbBlockActive) {
+    const tr = document.createElement("tr");
+    const td = document.createElement("td");
+    td.colSpan = 16;
+    td.textContent = CFB_BLOCK_MESSAGE;
+    tr.appendChild(td);
+    tbody.appendChild(tr);
+    updateFilterMeta(0, STATE.allRows.length);
+    highlightRow(null);
+    return;
+  }
 
   if (!rows || rows.length === 0) {
     const tr = document.createElement("tr");
@@ -457,6 +882,9 @@ function labelFromNorm(norm) {
 }
 
 function buildTeamNumberMap() {
+  if (isCFBLeague()) {
+    return STATE.teamNumberMap ?? new Map();
+  }
   if (TEAM_NUM_MAP) return TEAM_NUM_MAP;
 
   // Use the normalized keys exactly as they appear in games JSONL.
@@ -476,6 +904,16 @@ function buildTeamNumberMap() {
 
 
 function formatTeamNumber(row, side) {
+  if (isCFBLeague()) {
+    const label = resolveTeamName(row, side);
+    if (!label) return MISSING_VALUE;
+    const num = teamNumberFromDisplay(label);
+    if (!num) {
+      warnOnce(`no-teamnum-cfb:${label}`, `No CFB Team # for label='${label}'`);
+      return placeholderTeamNumber();
+    }
+    return num;
+  }
   const rawNorm = side === "home" ? row.home_team_norm : row.away_team_norm;
   const label = resolveTeamName(row, side); // your existing resolver for the Team column
   const norm = coerceTeamNorm(rawNorm, label);
@@ -512,14 +950,17 @@ function appendCell(tr, text, { numeric = false, rowspan = 1 } = {}) {
 function buildGameGroup(row, ordinal, groupIndex) {
   const iso = row?.kickoff_iso_utc ?? null;
   const gameNumber = formatGameNumber(STATE.week, ordinal);
+  const cfb = isCFBLeague();
+  const metrics = cfb ? computeFavoredMetrics(row) : null;
+  if (cfb) {
+    logCfbMetrics(row, metrics);
+  }
 
-  // zebra by game group
-  const stripe = (groupIndex % 2 === 0) ? "group-even" : "group-odd";
+  const stripe = groupIndex % 2 === 0 ? "group-even" : "group-odd";
 
-  // create two rows: top = away, bottom = home
   const trTop = document.createElement("tr");
   const trBot = document.createElement("tr");
-  [trTop, trBot].forEach(tr => {
+  [trTop, trBot].forEach((tr) => {
     tr.dataset.gameKey = row.game_key ?? "";
     tr.classList.add("group", stripe);
     tr.tabIndex = 0;
@@ -531,61 +972,95 @@ function buildGameGroup(row, ordinal, groupIndex) {
     bindGroupHoverAndFocus([trTop, trBot]);
   });
 
-  // --- shared cells (rowspan = 2): Date, Time, Game #
   appendCell(trTop, fmtDatePT(iso), { rowspan: 2 });
   appendCell(trTop, fmtTimePT(iso), { rowspan: 2 });
-
-  // Game # (shared)
   appendCell(trTop, gameNumber, { rowspan: 2 });
 
-  // Team # (away only here; home will be on trBot)
   appendCell(trTop, formatTeamNumber(row, "away"));
-
-  // Team (away)
   appendCell(trTop, resolveTeamName(row, "away"));
-
-  // Odds (away)
   appendCell(trTop, formatOddsCell(row, "away"));
-
-  // Total (your spec: only on favored row; else blank)
-  appendCell(trTop, isFavRow(row, "away") ? formatNumber(row.total, { decimals: 1, signed: true }) : "");
-
-  // W-L-T (away)
+  appendCell(
+    trTop,
+    isFavRow(row, "away") ? formatNumber(row.total, { decimals: 1 }) : ""
+  );
   appendCell(trTop, teamRecord(row, "away"));
+  appendCell(
+    trTop,
+    cfb ? formatNumber(row.away_pr, { decimals: 2 }) : formatNumber(row.away_pr),
+    { numeric: true }
+  );
+  appendCell(
+    trTop,
+    cfb
+      ? formatFavoredMetric(metrics, "away", metrics?.diff, { decimals: 1, signed: true })
+      : isFavRow(row, "away")
+      ? formatNumber(row.rating_diff_favored_team, { decimals: 1, signed: true })
+      : ""
+  );
+  appendCell(
+    trTop,
+    cfb
+      ? formatFavoredMetric(metrics, "away", metrics?.rvo, { decimals: 1, signed: true })
+      : isFavRow(row, "away")
+      ? formatNumber(row.rating_vs_odds, { decimals: 1, signed: true })
+      : ""
+  );
+  appendCell(
+    trTop,
+    cfb ? formatNumber(row.away_sos, { decimals: 2 }) : formatNumber(row.away_sos),
+    { numeric: true }
+  );
+  const sosDiffAwayCell = appendCell(
+    trTop,
+    cfb ? sosDiffCell(row, "away") : sosDiffForRow(row.home_sos, row.away_sos, "away"),
+    { numeric: true }
+  );
+  if (cfb && sosDiffAwayCell) {
+    sosDiffAwayCell.dataset.col = "sosDiff";
+  }
 
-  // Current PR (away)
-  appendCell(trTop, formatNumber(row.away_pr), { numeric: true });
-
-  // Diff (favored only per your buildTeamRow)
-  appendCell(trTop, isFavRow(row, "away")
-    ? formatNumber(row.rating_diff_favored_team, { decimals: 1, signed: true }) : "");
-
-  // Rating vs Odds (favored only)
-  appendCell(trTop, isFavRow(row, "away")
-    ? formatNumber(row.rating_vs_odds, { decimals: 1, signed: true }) : "");
-
-  // SoS (away)
-  appendCell(trTop, formatNumber(row.away_sos), { numeric: true });
-
-  // SoS diff (only on higher-SoS row; else blank)
-  appendCell(trTop, sosDiffForRow(row.home_sos, row.away_sos, "away"), { numeric: true });
-
-  // ===== bottom row (home) =====
-
-  appendCell(trBot, formatTeamNumber(row, "home"));                              // Team #
-  appendCell(trBot, resolveTeamName(row, "home"));                               // Team
-  appendCell(trBot, formatOddsCell(row, "home"));                                // Odds
-  appendCell(trBot, isFavRow(row, "home") ? formatNumber(row.total, {            // Total (fav only)
-    decimals: 1, signed: true }) : "");
-  appendCell(trBot, teamRecord(row, "home"));                                    // W-L-T
-  appendCell(trBot, formatNumber(row.home_pr), { numeric: true });               // Current PR
-  appendCell(trBot, isFavRow(row, "home") ?                                      // Diff (fav only)
-    formatNumber(row.rating_diff_favored_team, { decimals: 1, signed: true }) : "");
-  appendCell(trBot, isFavRow(row, "home") ?                                      // RvO (fav only)
-    formatNumber(row.rating_vs_odds, { decimals: 1, signed: true }) : "");
-  appendCell(trBot, formatNumber(row.home_sos), { numeric: true });              // SoS
-  appendCell(trBot, sosDiffForRow(row.home_sos, row.away_sos, "home"), {         // SoS diff (higher-SoS row only)
-    numeric: true });
+  appendCell(trBot, formatTeamNumber(row, "home"));
+  appendCell(trBot, resolveTeamName(row, "home"));
+  appendCell(trBot, formatOddsCell(row, "home"));
+  appendCell(
+    trBot,
+    isFavRow(row, "home") ? formatNumber(row.total, { decimals: 1 }) : ""
+  );
+  appendCell(trBot, teamRecord(row, "home"));
+  appendCell(
+    trBot,
+    cfb ? formatNumber(row.home_pr, { decimals: 2 }) : formatNumber(row.home_pr),
+    { numeric: true }
+  );
+  appendCell(
+    trBot,
+    cfb
+      ? formatFavoredMetric(metrics, "home", metrics?.diff, { decimals: 1, signed: true })
+      : isFavRow(row, "home")
+      ? formatNumber(row.rating_diff_favored_team, { decimals: 1, signed: true })
+      : ""
+  );
+  appendCell(
+    trBot,
+    cfb
+      ? formatFavoredMetric(metrics, "home", metrics?.rvo, { decimals: 1, signed: true })
+      : isFavRow(row, "home")
+      ? formatNumber(row.rating_vs_odds, { decimals: 1, signed: true })
+      : ""
+  );
+  appendCell(
+    trBot,
+    cfb ? formatNumber(row.home_sos, { decimals: 2 }) : formatNumber(row.home_sos),
+    { numeric: true }
+  );
+  const sosDiffHomeCell = appendCell(
+    trBot,
+    cfb ? sosDiffCell(row, "home") : sosDiffForRow(row.home_sos, row.away_sos, "home"),
+    { numeric: true }
+  );
+  if (cfb && sosDiffHomeCell) {
+    sosDiffHomeCell.dataset.col = "sosDiff";
+  }
 
   return [trTop, trBot];
 }
@@ -594,16 +1069,22 @@ function buildGameGroup(row, ordinal, groupIndex) {
 function buildTeamRow(row, side, gameNumber) {
   const iso = row?.kickoff_iso_utc ?? null;
   const favored = isFavRow(row, side);
+  const cfb = isCFBLeague();
+  const metrics = cfb ? computeFavoredMetrics(row) : null;
   const currentPrValue = side === "home" ? row.home_pr : row.away_pr;
   const sosValue = side === "home" ? row.home_sos : row.away_sos;
 
   const total = favored
-    ? formatNumber(row.total, { decimals: 1, signed: true })
+    ? formatNumber(row.total, { decimals: 1 })
     : "";
-  const diff = favored
+  const diff = cfb
+    ? formatFavoredMetric(metrics, side, metrics?.diff, { decimals: 1, signed: true })
+    : favored
     ? formatNumber(row.rating_diff_favored_team, { decimals: 1, signed: true })
     : "";
-  const rvo = favored
+  const rvo = cfb
+    ? formatFavoredMetric(metrics, side, metrics?.rvo, { decimals: 1, signed: true })
+    : favored
     ? formatNumber(row.rating_vs_odds, { decimals: 1, signed: true })
     : "";
   const gameValue = gameNumber ?? placeholderGameNumber();
@@ -618,36 +1099,85 @@ function buildTeamRow(row, side, gameNumber) {
     formatOddsCell(row, side),
     total,
     teamRecord(row, side),
-    formatNumber(currentPrValue),
+    cfb ? formatNumber(currentPrValue, { decimals: 2 }) : formatNumber(currentPrValue),
     diff,
     rvo,
-    formatNumber(sosValue),
-    sosDiffForRow(row.home_sos, row.away_sos, side),
+    cfb ? formatNumber(sosValue, { decimals: 2 }) : formatNumber(sosValue),
+    cfb ? sosDiffCell(row, side) : sosDiffForRow(row.home_sos, row.away_sos, side),
   ];
 }
 
 function resolveTeamName(row, side) {
   const sourceKey = side === "home" ? "sagarin_row_home" : "sagarin_row_away";
   const fromSagarin = row?.raw_sources?.[sourceKey]?.team;
-  if (fromSagarin) return fromSagarin;
   const raw = side === "home" ? row.home_team_raw : row.away_team_raw;
   const norm = side === "home" ? row.home_team_norm : row.away_team_norm;
+  if (isCFBLeague()) {
+    const base = fromSagarin ?? raw ?? norm;
+    const display = toDisplayName(base, raw ?? norm);
+    return display || (raw ? String(raw) : norm ? String(norm) : MISSING_VALUE);
+  }
+  if (fromSagarin) return fromSagarin;
   return formatTeam(norm, raw);
 }
 
 function getTeamCode(row, side) {
+  const oddsRow = row?.raw_sources?.odds_row;
+  const oddsKey = side === "home" ? "home_team_code" : "away_team_code";
+  const oddsValue =
+    oddsRow && typeof oddsRow[oddsKey] === "string" ? oddsRow[oddsKey].trim() : "";
+  if (oddsValue) {
+    return oddsValue.toUpperCase();
+  }
   const raw = side === "home" ? row.home_team_raw : row.away_team_raw;
   const norm = side === "home" ? row.home_team_norm : row.away_team_norm;
-  if (raw) return String(raw).toUpperCase();
-  if (norm) return String(norm).toUpperCase();
-  return "";
+  const base = raw ?? norm;
+  if (!base) return "";
+  return deriveTeamCodeFromName(base);
+}
+
+function deriveTeamCodeFromName(name) {
+  if (!name) return "";
+  const text = String(name).trim();
+  if (!text) return "";
+  const cleaned = text.replace(/[^A-Za-z0-9\s]/g, " ").replace(/\s+/g, " ").trim();
+  if (!cleaned) return "";
+  const upper = cleaned.toUpperCase();
+  if (/^[A-Z0-9]{2,5}$/.test(upper)) {
+    return upper;
+  }
+  const words = cleaned.split(" ");
+  if (words.length === 1) {
+    const token = words[0];
+    if (token.length <= 4) return token.toUpperCase();
+    return token.slice(0, 4).toUpperCase();
+  }
+  if (words.length === 2) {
+    const first = words[0].slice(0, 2);
+    const second = words[1].slice(0, 2);
+    return (first + second).toUpperCase();
+  }
+  let code = "";
+  words.forEach((word) => {
+    if (!word) return;
+    if (word.length <= 2) {
+      code += word.toUpperCase();
+    } else {
+      code += word[0].toUpperCase();
+    }
+  });
+  if (code.length < 3) {
+    const fallback = words.join("").slice(0, 4).toUpperCase();
+    return fallback;
+  }
+  return code.slice(0, 4);
 }
 
 function formatOddsCell(row, side) {
   if (!isFavRow(row, side)) return "";
   if (!hasNumeric(row.spread_favored_team)) return MISSING_VALUE;
-  const code = getTeamCode(row, side);
   const spread = formatNumber(row.spread_favored_team, { decimals: 1, signed: true });
+  // CFB: show just the signed spread (no team code)
   return spread;
 }
 
@@ -733,9 +1263,14 @@ function openGame(gameKey, { newTab = false } = {}) {
   }
   storeLastViewedGame(gameKey);
   highlightRow(gameKey);
-  const url = `game_view.html?season=${STATE.season}&week=${STATE.week}&game_key=${encodeURIComponent(
-    gameKey
-  )}`;
+  const params = new URLSearchParams();
+  if (STATE.league && STATE.league !== DEFAULT_LEAGUE) {
+    params.set("league", STATE.league);
+  }
+  params.set("season", STATE.season);
+  params.set("week", STATE.week);
+  params.set("game_key", gameKey);
+  const url = `game_view.html?${params.toString()}`;
   if (newTab) {
     window.open(url, "_blank", "noopener");
   } else {
@@ -747,11 +1282,21 @@ function storeLastViewedGame(gameKey) {
   if (!STATE.season || !STATE.week) return;
   STATE.highlightedGameKey = gameKey;
   STATE.pendingScrollKey = gameKey;
-  persistSelection({ season: STATE.season, week: STATE.week, last_game_key: gameKey });
+  persistSelection({
+    league: STATE.league,
+    season: STATE.season,
+    week: STATE.week,
+    last_game_key: gameKey,
+  });
   try {
     localStorage.setItem(
       LAST_GAME_KEY,
-      JSON.stringify({ season: STATE.season, week: STATE.week, game_key: gameKey })
+      JSON.stringify({
+        league: STATE.league,
+        season: STATE.season,
+        week: STATE.week,
+        game_key: gameKey,
+      })
     );
   } catch {
     // ignore storage failures
@@ -800,8 +1345,18 @@ function updateFooter(totalCount, season, week) {
   }
   els.loadedLabel.textContent = `Season ${season}, Week ${week}`;
   els.weekSummary.textContent = `Currently viewing Season ${season}, Week ${week}`;
-  els.gameViewLink.href = `game_view.html?season=${season}&week=${week}`;
-  els.latestLink.href = "week_view.html";
+  const baseParams = new URLSearchParams();
+  if (STATE.league && STATE.league !== DEFAULT_LEAGUE) {
+    baseParams.set("league", STATE.league);
+  }
+  baseParams.set("season", season);
+  baseParams.set("week", week);
+  const gameHref = new URLSearchParams(baseParams);
+  els.gameViewLink.href = `game_view.html?${gameHref.toString()}`;
+  els.latestLink.href =
+    STATE.league && STATE.league !== DEFAULT_LEAGUE
+      ? `week_view.html?league=${STATE.league}`
+      : "week_view.html";
 }
 
 function exportVisibleCsv() {
@@ -964,6 +1519,13 @@ function formatKickoff(isoString) {
 }
 
 function formatTeam(norm, raw) {
+  if (isCFBLeague()) {
+    const display = toDisplayName(raw ?? norm, raw ?? norm);
+    if (display) return display;
+    if (raw) return String(raw);
+    if (norm) return String(norm);
+    return MISSING_VALUE;
+  }
   if (raw) return raw.toUpperCase();
   if (norm) return String(norm).toUpperCase();
   return MISSING_VALUE;
@@ -1006,6 +1568,12 @@ function hasNumeric(value) {
   return Number.isFinite(num);
 }
 
+function hasMetricsCoverageCFB(row) {
+  const homePf = Number(row?.home_pf_pg);
+  const awayPf = Number(row?.away_pf_pg);
+  return Number.isFinite(homePf) || Number.isFinite(awayPf);
+}
+
 function coerceInt(value) {
   if (value === null || value === undefined) return null;
   if (typeof value === "string" && value.trim() === "") return null;
@@ -1019,9 +1587,41 @@ function setStatus(message) {
 
 function persistSelection(selection) {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(selection));
+    const payload = { ...selection };
+    payload.league = normalizeLeague(payload.league ?? STATE.league ?? DEFAULT_LEAGUE);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
   } catch {
     // ignore storage issues
+  }
+}
+
+function weekCacheKey(league, season, week) {
+  return `${WEEK_CACHE_PREFIX}${CACHE_VERSION}:${league}:${season}:${week}`;
+}
+
+function readWeekCache(league, season, week) {
+  try {
+    const raw = localStorage.getItem(weekCacheKey(league, season, week));
+    if (!raw) return null;
+    try {
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed : null;
+    } catch {
+      return null;
+    }
+  } catch {
+    return null;
+  }
+}
+
+function writeWeekCache(league, season, week, records) {
+  try {
+    localStorage.setItem(
+      weekCacheKey(league, season, week),
+      JSON.stringify(Array.isArray(records) ? records : [])
+    );
+  } catch {
+    // ignore persistence issues
   }
 }
 
@@ -1029,7 +1629,11 @@ function loadStoredSelection() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return null;
-    return JSON.parse(raw);
+    const parsed = JSON.parse(raw);
+    if (parsed && typeof parsed === "object") {
+      parsed.league = normalizeLeague(parsed.league ?? DEFAULT_LEAGUE);
+    }
+    return parsed;
   } catch {
     return null;
   }
@@ -1039,7 +1643,11 @@ function loadStoredLastGame() {
   try {
     const raw = localStorage.getItem(LAST_GAME_KEY);
     if (!raw) return null;
-    return JSON.parse(raw);
+    const parsed = JSON.parse(raw);
+    if (parsed && typeof parsed === "object") {
+      parsed.league = normalizeLeague(parsed.league ?? DEFAULT_LEAGUE);
+    }
+    return parsed;
   } catch {
     return null;
   }

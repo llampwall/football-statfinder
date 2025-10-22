@@ -1,0 +1,101 @@
+{
+  "fbs_rows": 52,
+  "joined_metrics_rows": 52,
+  "joined_odds_rows": 0,
+  "joined_sagarin_rows": 50,
+  "output_rows": 52,
+  "odds_games": 0,
+  "sagarin_games": 50,
+  "coverage_metrics": 1.0,
+  "notes": [
+    "FBS games: 52",
+    "Metrics coverage: 52/52",
+    "Odds coverage: 0/52",
+    "Sagarin coverage: 50/52"
+  ],
+  "samples": {
+    "missing_odds": [
+      {
+        "game_key": "20251029_0000_utep_kennesaw_state",
+        "home": "Kennesaw State",
+        "away": "Utep",
+        "kickoff_iso_utc": "2025-10-29T00:00:00Z"
+      },
+      {
+        "game_key": "20251029_0000_james_madison_texas_state",
+        "home": "Texas State",
+        "away": "James Madison",
+        "kickoff_iso_utc": "2025-10-29T00:00:00Z"
+      },
+      {
+        "game_key": "20251029_2330_jacksonville_state_middle_tennessee",
+        "home": "Middle Tennessee",
+        "away": "Jacksonville State",
+        "kickoff_iso_utc": "2025-10-29T23:30:00Z"
+      },
+      {
+        "game_key": "20251030_0000_florida_international_missouri_state",
+        "home": "Missouri State",
+        "away": "Florida International",
+        "kickoff_iso_utc": "2025-10-30T00:00:00Z"
+      },
+      {
+        "game_key": "20251030_2330_tulane_utsa",
+        "home": "Utsa",
+        "away": "Tulane",
+        "kickoff_iso_utc": "2025-10-30T23:30:00Z"
+      },
+      {
+        "game_key": "20251030_2330_marshall_coastal_carolina",
+        "home": "Coastal Carolina",
+        "away": "Marshall",
+        "kickoff_iso_utc": "2025-10-30T23:30:00Z"
+      },
+      {
+        "game_key": "20251031_2300_memphis_rice",
+        "home": "Rice",
+        "away": "Memphis",
+        "kickoff_iso_utc": "2025-10-31T23:00:00Z"
+      },
+      {
+        "game_key": "20251031_2330_north_carolina_syracuse",
+        "home": "Syracuse",
+        "away": "North Carolina",
+        "kickoff_iso_utc": "2025-10-31T23:30:00Z"
+      },
+      {
+        "game_key": "20251101_0000_sam_houston_louisiana_tech",
+        "home": "Louisiana Tech",
+        "away": "Sam Houston",
+        "kickoff_iso_utc": "2025-11-01T00:00:00Z"
+      },
+      {
+        "game_key": "20251101_0400_kentucky_auburn",
+        "home": "Auburn",
+        "away": "Kentucky",
+        "kickoff_iso_utc": "2025-11-01T04:00:00Z"
+      }
+    ],
+    "missing_sagarin": [
+      {
+        "game_key": "20251030_0000_florida_international_missouri_state",
+        "home": "Missouri State",
+        "away": "Florida International",
+        "kickoff_iso_utc": "2025-10-30T00:00:00Z"
+      },
+      {
+        "game_key": "20251101_1930_delaware_liberty",
+        "home": "Liberty",
+        "away": "Delaware",
+        "kickoff_iso_utc": "2025-11-01T19:30:00Z"
+      }
+    ],
+    "metrics_gaps": []
+  },
+  "ratings": {
+    "eligible": 0,
+    "edges_count": 0,
+    "rvo_count": 0
+  },
+  "failures": []
+}

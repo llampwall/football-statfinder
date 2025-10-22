@@ -1,0 +1,21 @@
+{
+  "ts_utc": "2025-10-22T04:31:56.319200Z",
+  "cfb": {
+    "ok": true,
+    "seconds": 69.356,
+    "notify": "NOTIFY: CFB refresh complete week=2025-9 rows=53 odds_promoted=14",
+    "notes": [
+      "ODDS_REPROMOTE(CFB): week=2025-7 promoted=0 source=staging/odds_pinned",
+      "BACKFILL_REPAIR(CFB): week=2025-7 reason=odds_rvo_missing",
+      "ODDS_REPROMOTE(CFB): week=2025-8 promoted=0 source=staging/odds_pinned",
+      "BACKFILL_REPAIR(CFB): week=2025-8 reason=odds_rvo_missing"
+    ]
+  },
+  "nfl": {
+    "ok": false,
+    "seconds": 9.338,
+    "notify": null,
+    "notes": []
+  },
+  "host": "DESKTOP-P97ADMK"
+}

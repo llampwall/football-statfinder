@@ -20,6 +20,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 import ssl
+import urllib.error
 import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
@@ -90,7 +91,15 @@ def fetch_odds_theoddsapi(season: int, week: int, api_key: str, book_pref: Optio
         "oddsFormat": "american",
         "apiKey": api_key,
     }
-    data = _http_get_json(url, params)
+    try:
+        data = _http_get_json(url, params)
+    except urllib.error.HTTPError as exc:
+        if exc.code in {401, 403, 429}:
+            reason = exc.reason or getattr(exc, "msg", "") or "HTTPError"
+            reason = str(reason).strip() or "HTTPError"
+            print(f"ODDS_FETCH_ERROR(NFL): provider=theoddsapi status={exc.code} reason={reason}")
+            return []
+        raise
 
     out: List[Dict[str, Any]] = []
     snap = now_utc_iso()
@@ -180,7 +189,15 @@ def fetch_odds_donbest(season: int, week: int, token: str, scope: str = "odds") 
     if scope not in ("odds", "open", "close"):
         scope = "odds"
     url = f"{DONBEST_BASE}/{scope}/NFL/?token={urllib.parse.quote(token)}"
-    data = _http_get_bytes(url)
+    try:
+        data = _http_get_bytes(url)
+    except urllib.error.HTTPError as exc:
+        if exc.code in {401, 403, 429}:
+            reason = exc.reason or getattr(exc, "msg", "") or "HTTPError"
+            reason = str(reason).strip() or "HTTPError"
+            print(f"ODDS_FETCH_ERROR(NFL): provider=donbest status={exc.code} reason={reason}")
+            return []
+        raise
     root = ET.fromstring(data)
 
     out: List[Dict[str, Any]] = []
