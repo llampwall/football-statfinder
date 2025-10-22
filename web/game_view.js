@@ -1,3 +1,5 @@
+import { sitePath, siteUrl } from "./js/base_path.js";
+
 const els = {
   loadGameBtn: document.getElementById("btnLoadGame"),
   printableBtn: document.getElementById("btnPrintable"),
@@ -225,10 +227,10 @@ function buildWeekPaths(league, season, week) {
     league: normalized,
     season,
     week,
-    baseDir,
-    gamesJsonl: `${baseDir}/games_week_${season}_${week}.jsonl`,
+    baseDir: sitePath(baseDir),
+    gamesJsonl: sitePath(`${baseDir}/games_week_${season}_${week}.jsonl`),
     sidecarPath(gameKey) {
-      return `${baseDir}/game_schedules/${gameKey}.json`;
+      return sitePath(`${baseDir}/game_schedules/${gameKey}.json`);
     },
   };
 }
@@ -394,9 +396,8 @@ async function loadGames(autoGameKey) {
   }
 
   if (!records || records.length === 0) {
-    const relPath = paths.gamesJsonl;
-    const fetchPath = `../${relPath}`;
-    const url = new URL(fetchPath, window.location.href);
+    const resourcePath = paths.gamesJsonl;
+    const url = new URL(resourcePath, window.location.origin);
     setStatus("Loading games.");
     try {
       const res = await fetch(url.toString());
@@ -412,7 +413,7 @@ async function loadGames(autoGameKey) {
         return;
       }
       writeWeekCache(paths.league, season, week, records);
-      STATE.weekSourcePath = relPath;
+      STATE.weekSourcePath = resourcePath;
     } catch (err) {
       console.log(
         `FAIL: Games loaded (${season} week ${week} league=${paths.league.toUpperCase()})`,
@@ -524,8 +525,7 @@ async function loadSingleGame(gameKey) {
   }
   const paths = STATE.weekPaths ?? buildWeekPaths(STATE.league, STATE.season, STATE.week);
   const sidecarRel = paths.sidecarPath(gameKey);
-  const sidecarPath = `../${sidecarRel}`;
-  const url = new URL(sidecarPath, window.location.href);
+  const url = new URL(sidecarRel, window.location.origin);
   let sidecar;
   let sidecarOk = false;
   try {
@@ -540,10 +540,10 @@ async function loadSingleGame(gameKey) {
     }
     const sanitized = raw.replace(/([-+]?Infinity|\bNaN\b)/gi, "null");
     sidecar = JSON.parse(sanitized);
-    console.log(`PASS: Sidecar loaded (${sidecarPath})`);
+    console.log(`PASS: Sidecar loaded (${sidecarRel})`);
     sidecarOk = true;
   } catch (err) {
-    console.error(`FAIL: Sidecar loaded (${sidecarPath})`, err);
+    console.error(`FAIL: Sidecar loaded (${sidecarRel})`, err);
     setStatus(`Sidecar failed (${err.message})`);
     return;
   }
@@ -625,13 +625,13 @@ function openPrintable() {
   const week = String(STATE?.week ?? "");
   const game = STATE?.game?.game_key || STATE?.currentGameKey || "";
 
-  const base = new URL("./", window.location.href);
-  const url = new URL("game_view_printable.html", base);
-  url.searchParams.set("league", league);
-  url.searchParams.set("season", season);
-  url.searchParams.set("week", week);
-  url.searchParams.set("game", game);
-  window.open(url.toString(), "_blank");
+  const printableUrl = siteUrl("web/game_view_printable.html", {
+    league,
+    season,
+    week,
+    game,
+  });
+  window.open(printableUrl, "_blank");
 }
 
 function renderHeader(game, teamNames) {
@@ -937,7 +937,8 @@ async function loadEOY(priorSeason, homeNorm, awayNorm) {
   };
   if (!cache) {
     try {
-      const url = new URL(`../${path}`, window.location.href);
+      const fullPath = sitePath(path);
+      const url = new URL(fullPath, window.location.origin);
       const res = await fetch(url.toString());
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       let text = await res.text();
@@ -1549,25 +1550,11 @@ function setHeading() {
 function updateReturnLink() {
   if (!els.returnLink) return;
   els.returnLink.textContent = "Return to Week";
-  try {
-    const url = new URL("week_view.html", window.location.origin);
-    if (STATE.league && STATE.league !== DEFAULT_LEAGUE) {
-      url.searchParams.set("league", STATE.league);
-    }
-    if (STATE.season) url.searchParams.set("season", STATE.season);
-    if (STATE.week) url.searchParams.set("week", STATE.week);
-    els.returnLink.href = url.toString();
-  } catch {
-    const params = new URLSearchParams();
-    if (STATE.league && STATE.league !== DEFAULT_LEAGUE) {
-      params.set("league", STATE.league);
-    }
-    if (STATE.season) params.set("season", STATE.season);
-    if (STATE.week) params.set("week", STATE.week);
-    els.returnLink.href = params.toString()
-      ? `week_view.html?${params.toString()}`
-      : "week_view.html";
-  }
+  els.returnLink.href = siteUrl("web/week_view.html", {
+    league: STATE.league && STATE.league !== DEFAULT_LEAGUE ? STATE.league : undefined,
+    season: STATE.season,
+    week: STATE.week,
+  });
 }
 
 

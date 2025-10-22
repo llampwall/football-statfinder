@@ -1,3 +1,5 @@
+import { sitePath, siteUrl } from "./js/base_path.js";
+
 const els = {
   seasonInput: document.getElementById("season-input"),
   weekInput: document.getElementById("week-input"),
@@ -340,9 +342,9 @@ function buildWeekPaths(league, season, week) {
     league: normalized,
     season,
     week,
-    baseDir,
-    gamesJsonl: `${baseDir}/games_week_${season}_${week}.jsonl`,
-    sidecarDir: `${baseDir}/game_schedules`,
+    baseDir: sitePath(baseDir),
+    gamesJsonl: sitePath(`${baseDir}/games_week_${season}_${week}.jsonl`),
+    sidecarDir: sitePath(`${baseDir}/game_schedules`),
   };
 }
 
@@ -486,9 +488,9 @@ async function bootstrap() {
 async function listAvailableWeeks(league) {
   try {
     const normalized = normalizeLeague(league);
-    const basePath = normalized === "cfb" ? "../out/cfb/" : "../out/";
-    const url = new URL(basePath, window.location.href);
-    const res = await fetch(url.toString(), { cache: "no-store" });
+    const listingPath = normalized === "cfb" ? "out/cfb/" : "out/";
+    const url = siteUrl(listingPath);
+    const res = await fetch(url, { cache: "no-store" });
     if (!res.ok) {
       console.warn(`WARN: Directory listing fetch failed with status ${res.status}`);
       return [];
@@ -605,12 +607,11 @@ function applyLoadedRows(rows, season, week, { updateHistory = false } = {}) {
 }
 
 async function loadGames(paths) {
-  const relPath = paths.gamesJsonl;
-  const path = `../${relPath}`;
-  const url = new URL(path, window.location.href);
+  const resourcePath = paths.gamesJsonl;
+  const url = new URL(resourcePath, window.location.origin);
   if (!STATE.pathsLogged) {
     console.log(
-      `[league] Week View -> ${paths.league.toUpperCase()} base=${paths.baseDir} games=${relPath}`
+      `[league] Week View -> ${paths.league.toUpperCase()} base=${paths.baseDir} games=${resourcePath}`
     );
     STATE.pathsLogged = true;
   }
@@ -667,7 +668,7 @@ async function loadGames(paths) {
       rows: records,
       count: records.length,
       message: "Loaded from cache",
-      sourcePath: relPath,
+      sourcePath: resourcePath,
     };
   }
 
@@ -686,14 +687,14 @@ async function loadGames(paths) {
       rows: parsed.records,
       count: parsed.count,
       message: parsed.count ? "Loaded" : "No games in file",
-      sourcePath: relPath,
+      sourcePath: resourcePath,
     };
   } catch (err) {
     console.error(
       `FAIL: loadGames season=${paths.season} week=${paths.week} league=${paths.league}`,
       err
     );
-    return { success: false, message: `Failed to load: ${err.message}`, sourcePath: relPath };
+    return { success: false, message: `Failed to load: ${err.message}`, sourcePath: resourcePath };
   }
 }
 
@@ -1263,14 +1264,12 @@ function openGame(gameKey, { newTab = false } = {}) {
   }
   storeLastViewedGame(gameKey);
   highlightRow(gameKey);
-  const params = new URLSearchParams();
-  if (STATE.league && STATE.league !== DEFAULT_LEAGUE) {
-    params.set("league", STATE.league);
-  }
-  params.set("season", STATE.season);
-  params.set("week", STATE.week);
-  params.set("game_key", gameKey);
-  const url = `game_view.html?${params.toString()}`;
+  const url = siteUrl("web/game_view.html", {
+    league: STATE.league && STATE.league !== DEFAULT_LEAGUE ? STATE.league : undefined,
+    season: STATE.season,
+    week: STATE.week,
+    game_key: gameKey,
+  });
   if (newTab) {
     window.open(url, "_blank", "noopener");
   } else {
@@ -1345,18 +1344,14 @@ function updateFooter(totalCount, season, week) {
   }
   els.loadedLabel.textContent = `Season ${season}, Week ${week}`;
   els.weekSummary.textContent = `Currently viewing Season ${season}, Week ${week}`;
-  const baseParams = new URLSearchParams();
-  if (STATE.league && STATE.league !== DEFAULT_LEAGUE) {
-    baseParams.set("league", STATE.league);
-  }
-  baseParams.set("season", season);
-  baseParams.set("week", week);
-  const gameHref = new URLSearchParams(baseParams);
-  els.gameViewLink.href = `game_view.html?${gameHref.toString()}`;
-  els.latestLink.href =
-    STATE.league && STATE.league !== DEFAULT_LEAGUE
-      ? `week_view.html?league=${STATE.league}`
-      : "week_view.html";
+  els.gameViewLink.href = siteUrl("web/game_view.html", {
+    league: STATE.league && STATE.league !== DEFAULT_LEAGUE ? STATE.league : undefined,
+    season,
+    week,
+  });
+  els.latestLink.href = siteUrl("web/week_view.html", {
+    league: STATE.league && STATE.league !== DEFAULT_LEAGUE ? STATE.league : undefined,
+  });
 }
 
 function exportVisibleCsv() {
