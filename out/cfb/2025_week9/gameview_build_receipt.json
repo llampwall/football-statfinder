@@ -64,15 +64,15 @@
         "kickoff_iso_utc": "2025-10-25T02:00:00Z"
       },
       {
-        "game_key": "20251025_1600_virginia_north_carolina",
-        "home": "North Carolina",
-        "away": "Virginia",
+        "game_key": "20251025_1600_northwestern_nebraska",
+        "home": "Nebraska",
+        "away": "Northwestern",
         "kickoff_iso_utc": "2025-10-25T16:00:00Z"
       },
       {
-        "game_key": "20251025_1600_kansas_state_kansas",
-        "home": "Kansas",
-        "away": "Kansas State",
+        "game_key": "20251025_1600_smu_wake_forest",
+        "home": "Wake Forest",
+        "away": "Smu",
         "kickoff_iso_utc": "2025-10-25T16:00:00Z"
       }
     ],

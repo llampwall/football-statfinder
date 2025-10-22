@@ -29,9 +29,12 @@ let warnedTeamNumber = false;
 let warnedGameNumber = false;
 const CFB_BLOCK_MESSAGE =
   "CFB: games_week is missing odds/ratings fields—try re-running refresh or hard-reload.";
+const qs = new URLSearchParams(location.search);
+const ls = localStorage.getItem("cfb_soft_block");
 const CFB_SOFT_BLOCK =
-  new URLSearchParams(location.search).has("soft") ||
-  localStorage.getItem("cfb_soft_block") === "1";
+  qs.has("hard") ? false :
+  qs.has("soft") ? true :
+  (ls == null ? true : ls === "1");
 
 const STATE = {
   allRows: [],
