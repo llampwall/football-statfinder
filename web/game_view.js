@@ -12,7 +12,7 @@ const els = {
   teamsBlock: document.getElementById("teams-block"),
   favoriteBlock: document.getElementById("favorite-block"),
   marketBlock: document.getElementById("market-block"),
-  marketTotal: null,
+  marketHfa: null,
   teamStatsSection: document.getElementById("team-stats-section"),
   teamStatsBody: document.getElementById("team-stats-body"),
   scheduleCurrent: document.getElementById("schedule-current"),
@@ -713,7 +713,7 @@ function ensureFavoriteElements() {
     <div class="meta-line">Favored: <span id="favorite-favored">${MISSING_VALUE}</span></div>
     <div class="meta-line">Odds source: <span id="favorite-source">${MISSING_VALUE}</span></div>
     <div class="meta-line">Snapshot: <span id="favorite-snapshot">${MISSING_VALUE}</span></div>
-    <div class="meta-line">Total: <span id="favorite-total">${MISSING_VALUE}</span></div>
+    <div class="meta-line">O/U: <span id="favorite-total">${MISSING_VALUE}</span></div>
   `;
   els.favoriteFavored = document.getElementById("favorite-favored");
   els.favoriteSource = document.getElementById("favorite-source");
@@ -725,45 +725,48 @@ function ensureMarketElements() {
   if (els.marketPrDiff) return;
   els.marketBlock.innerHTML = `
     <h3>Market & Ratings</h3>
-    <div class="meta-line">PR Diff (favored): <span id="market-pr-diff">${MISSING_VALUE}</span></div>
+    <div class="meta-line">PR Diff (hfa: <span id="market-hfa">${MISSING_VALUE}</span>): <span id="market-pr-diff">${MISSING_VALUE}</span></div>
     <div class="meta-line">Rating vs Odds: <span id="market-rvo">${MISSING_VALUE}</span></div>
-    <div class="meta-line">Total (O/U): <span id="market-total">${MISSING_VALUE}</span></div>
   `;
+  els.marketHfa = document.getElementById("market-hfa");
   els.marketPrDiff = document.getElementById("market-pr-diff");
   els.marketRvo = document.getElementById("market-rvo");
-  els.marketTotal = document.getElementById("market-total");
 }
 
 function renderFavoriteBox(game) {
   ensureFavoriteElements();
   ensureMarketElements();
 
-  const favored = (game.favored_side || "").toUpperCase();
+  const metrics = deriveTopMetrics(game, STATE.league);
+  const favoredSide = (metrics.favoredSide || game.favored_side || "")
+    .toString()
+    .trim()
+    .toUpperCase();
   const favCode =
-    favored === "HOME"
+    favoredSide === "HOME"
       ? teamShortCode(game, "home")
-      : favored === "AWAY"
+      : favoredSide === "AWAY"
       ? teamShortCode(game, "away")
       : null;
 
-  let favoredLine = MISSING_VALUE;
+  let favoredLine = metrics.favoredTeam ?? MISSING_VALUE;
   if (favCode && hasNumeric(game.spread_favored_team)) {
     const magnitude = Math.abs(Number(game.spread_favored_team));
     const spreadTxt = formatNumber(magnitude, { decimals: 1 });
-    favoredLine = spreadTxt !== MISSING_VALUE ? `${favCode} \u2212${spreadTxt}` : favCode;
+    const baseLabel = metrics.favoredTeam || favCode;
+    favoredLine = spreadTxt !== MISSING_VALUE ? `${baseLabel} \u2212${spreadTxt}` : baseLabel;
   } else if (favCode) {
-    favoredLine = favCode;
+    favoredLine = metrics.favoredTeam || favCode;
   }
   els.favoriteFavored.textContent = favoredLine ?? MISSING_VALUE;
 
   els.favoriteSource.textContent = fallback(game.odds_source);
   const snapshotIso = typeof game.snapshot_at === "string" ? game.snapshot_at : null;
   els.favoriteSnapshot.textContent = snapshotIso ? fmtKickoffPT(snapshotIso) : MISSING_VALUE;
-  const metrics = deriveTopMetrics(game);
   const totalDisplay = formatNum(metrics.total, 1);
   els.favoriteTotal.textContent = totalDisplay;
-  if (els.marketTotal) {
-    els.marketTotal.textContent = totalDisplay;
+  if (els.marketHfa) {
+    els.marketHfa.textContent = formatNum(metrics.hfa, 1);
   }
   els.marketPrDiff.textContent = formatPlus(metrics.prDiffFavored, 2);
   els.marketRvo.textContent = formatPlus(metrics.rvo, 2);

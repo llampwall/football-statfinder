@@ -4,6 +4,8 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -38,6 +40,141 @@ SIDE_COLUMNS = [
 
 MIN_SAGARIN_COVERAGE = 0.85
 
+LEAGUE_METRICS_PATH = (
+    lambda season, week: Path("out") / "cfb" / f"{season}_week{week}" / f"league_metrics_{season}_{week}.csv"
+)
+
+
+@dataclass
+class RankMaps:
+    pr: Dict[str, int]
+    sos: Dict[str, int]
+
+
+def _is_finite(value: Any) -> bool:
+    try:
+        return value is not None and math.isfinite(float(value))
+    except (TypeError, ValueError):
+        return False
+
+
+def _normalize_team_key(raw: Any) -> Optional[str]:
+    if raw is None:
+        return None
+    return team_merge_key_cfb(str(raw))
+
+
+def _rank_by_value(values: Dict[str, float], descending: bool = True) -> Dict[str, int]:
+    ordered = sorted(values.items(), key=lambda kv: kv[1], reverse=descending)
+    ranks: Dict[str, int] = {}
+    rank = 1
+    for key, _ in ordered:
+        if key in ranks:
+            continue
+        ranks[key] = rank
+        rank += 1
+    return ranks
+
+
+def _extract_from_metrics_csv(path: Path) -> RankMaps | None:
+    if not path.exists():
+        return None
+    df = pd.read_csv(path)
+    if df.empty:
+        return None
+
+    if "Team" not in df.columns:
+        return None
+
+    df["team_key"] = df["Team"].map(_normalize_team_key)
+    df = df.dropna(subset=["team_key"])
+
+    pr_rank_columns = [col for col in df.columns if col.lower() in {"pr_rank", "rank"}]
+    pr_value_columns = [col for col in df.columns if col.lower() in {"pr", "power rating", "powerrating"}]
+
+    sos_rank_columns = [col for col in df.columns if col.lower() in {"sos_rank"}]
+    sos_value_columns = [col for col in df.columns if col.lower() in {"sos", "strength of schedule"}]
+
+    pr_ranks: Dict[str, int] = {}
+    if pr_rank_columns:
+        col = pr_rank_columns[0]
+        for key, value in zip(df["team_key"], df[col]):
+            if _is_finite(value):
+                pr_ranks[key] = int(round(float(value)))
+    if not pr_ranks and pr_value_columns:
+        col = pr_value_columns[0]
+        values = {key: df.iloc[idx][col] for idx, key in enumerate(df["team_key"]) if _is_finite(df.iloc[idx][col])}
+        pr_ranks = _rank_by_value(values, descending=True)
+
+    sos_ranks: Dict[str, int] = {}
+    if sos_rank_columns:
+        col = sos_rank_columns[0]
+        for key, value in zip(df["team_key"], df[col]):
+            if _is_finite(value):
+                sos_ranks[key] = int(round(float(value)))
+    if not sos_ranks and sos_value_columns:
+        col = sos_value_columns[0]
+        values = {key: df.iloc[idx][col] for idx, key in enumerate(df["team_key"]) if _is_finite(df.iloc[idx][col])}
+        sos_ranks = _rank_by_value(values, descending=True)
+
+    if not pr_ranks and not sos_ranks:
+        return None
+    return RankMaps(pr=pr_ranks, sos=sos_ranks)
+
+
+def _extract_from_sagarin_lookup(
+    lookup: Dict[Tuple[int, int, str], Dict[str, Optional[float]]],
+    season: int,
+    week: int,
+) -> RankMaps:
+    pr_values: Dict[str, float] = {}
+    pr_ranks: Dict[str, int] = {}
+    sos_values: Dict[str, float] = {}
+    sos_ranks: Dict[str, int] = {}
+
+    for (s, w, team_key), payload in lookup.items():
+        if s != season or w != week:
+            continue
+        key = _normalize_team_key(team_key)
+        if not key:
+            continue
+        pr = payload.get("pr")
+        if _is_finite(pr):
+            pr_values[key] = float(pr)
+        rank = payload.get("rank")
+        if _is_finite(rank):
+            pr_ranks[key] = int(round(float(rank)))
+        sos = payload.get("sos")
+        if _is_finite(sos):
+            sos_values[key] = float(sos)
+        sos_rank = payload.get("sos_rank")
+        if _is_finite(sos_rank):
+            sos_ranks[key] = int(round(float(sos_rank)))
+
+    if not pr_ranks and pr_values:
+        pr_ranks = _rank_by_value(pr_values, descending=True)
+    if not sos_ranks and sos_values:
+        sos_ranks = _rank_by_value(sos_values, descending=True)
+
+    return RankMaps(pr=pr_ranks, sos=sos_ranks)
+
+
+def load_week_rank_maps(
+    season: int,
+    week: int,
+    cache: Dict[Tuple[int, int], RankMaps],
+    sagarin_lookup: Dict[Tuple[int, int, str], Dict[str, Optional[float]]],
+) -> RankMaps:
+    key = (season, week)
+    if key in cache:
+        return cache[key]
+
+    maps = _extract_from_metrics_csv(LEAGUE_METRICS_PATH(season, week))
+    if maps is None:
+        maps = _extract_from_sagarin_lookup(sagarin_lookup, season, week)
+
+    cache[key] = maps
+    return maps
 
 def _round_two(val: Optional[float]) -> Optional[float]:
     if val is None or pd.isna(val):
@@ -274,6 +411,18 @@ def _project_rows(df: pd.DataFrame) -> List[dict]:
     df = df.sort_values(["season", "week", "date"], na_position="last").copy()
     records = []
     for row in df.itertuples(index=False):
+        def _clean(value, *, rank: bool = False):
+            if value is None:
+                return None
+            if not _is_finite(value):
+                return None
+            num = float(value)
+            if rank:
+                return int(round(num))
+            if abs(num - round(num)) < 1e-6:
+                return int(round(num))
+            return num
+
         records.append(
             {
                 "season": int(row.season) if pd.notna(row.season) else None,
@@ -281,17 +430,17 @@ def _project_rows(df: pd.DataFrame) -> List[dict]:
                 "date": row.date,
                 "opp": row.opp,
                 "site": row.site,
-                "pf": row.pf,
-                "pa": row.pa,
+                "pf": _clean(row.pf),
+                "pa": _clean(row.pa),
                 "result": row.result,
-                "pr": row.pr,
-                "pr_rank": row.pr_rank,
-                "sos": row.sos,
-                "sos_rank": row.sos_rank,
-                "opp_pr": row.opp_pr,
-                "opp_pr_rank": row.opp_pr_rank,
-                "opp_sos": row.opp_sos,
-                "opp_sos_rank": row.opp_sos_rank,
+                "pr": _clean(row.pr),
+                "pr_rank": _clean(row.pr_rank, rank=True),
+                "sos": _clean(row.sos),
+                "sos_rank": _clean(row.sos_rank, rank=True),
+                "opp_pr": _clean(row.opp_pr),
+                "opp_pr_rank": _clean(row.opp_pr_rank, rank=True),
+                "opp_sos": _clean(row.opp_sos),
+                "opp_sos_rank": _clean(row.opp_sos_rank, rank=True),
             }
         )
     return records
@@ -339,6 +488,45 @@ def build_sidecars(season: int, week: int) -> dict:
     teams_missing_prev: List[str] = []
     join_issues: List[dict] = []
     spot_logged = False
+    rank_cache: Dict[Tuple[int, int], RankMaps] = {}
+    rank_fix_counts = {"pr": 0, "opp_pr": 0, "sos": 0, "opp_sos": 0}
+
+    def _apply_rank_fallbacks(df: pd.DataFrame) -> None:
+        if df.empty:
+            return
+        for idx, row in df.iterrows():
+            season_val = row.get("season")
+            week_val = row.get("week")
+            if pd.isna(season_val) or pd.isna(week_val):
+                continue
+            try:
+                season_key = int(season_val)
+                week_key = int(week_val)
+            except (TypeError, ValueError):
+                continue
+            ranks = load_week_rank_maps(season_key, week_key, rank_cache, sagarin_lookup)
+            team_key = _normalize_team_key(row.get("team_key"))
+            opp_key = _normalize_team_key(row.get("opp_key"))
+            if team_key and not _is_finite(row.get("pr_rank")):
+                new_rank = ranks.pr.get(team_key)
+                if new_rank is not None:
+                    df.at[idx, "pr_rank"] = int(new_rank)
+                    rank_fix_counts["pr"] += 1
+            if team_key and not _is_finite(row.get("sos_rank")):
+                new_rank = ranks.sos.get(team_key)
+                if new_rank is not None:
+                    df.at[idx, "sos_rank"] = int(new_rank)
+                    rank_fix_counts["sos"] += 1
+            if opp_key and not _is_finite(row.get("opp_pr_rank")):
+                new_rank = ranks.pr.get(opp_key)
+                if new_rank is not None:
+                    df.at[idx, "opp_pr_rank"] = int(new_rank)
+                    rank_fix_counts["opp_pr"] += 1
+            if opp_key and not _is_finite(row.get("opp_sos_rank")):
+                new_rank = ranks.sos.get(opp_key)
+                if new_rank is not None:
+                    df.at[idx, "opp_sos_rank"] = int(new_rank)
+                    rank_fix_counts["opp_sos"] += 1
 
     for _, game in games_df.iterrows():
         game_key = game.get("game_key")
@@ -386,6 +574,10 @@ def build_sidecars(season: int, week: int) -> dict:
         _enrich_frame_with_sagarin(away_ytd, "away_ytd", sagarin_lookup, sagarin_week_index, sagarin_stats)
         _enrich_frame_with_sagarin(home_prev, "home_prev", sagarin_lookup, sagarin_week_index, sagarin_stats)
         _enrich_frame_with_sagarin(away_prev, "away_prev", sagarin_lookup, sagarin_week_index, sagarin_stats)
+        _apply_rank_fallbacks(home_ytd)
+        _apply_rank_fallbacks(away_ytd)
+        _apply_rank_fallbacks(home_prev)
+        _apply_rank_fallbacks(away_prev)
 
         home_ytd_list = _project_rows(home_ytd)
         away_ytd_list = _project_rows(away_ytd)
@@ -470,6 +662,15 @@ def build_sidecars(season: int, week: int) -> dict:
         raise SystemExit(
             f"FAIL: Sagarin enrichment coverage {coverage_fraction:.0%}; see {sagarin_receipt_path}"
         )
+
+    print(
+        "SIDEcar_RANKS(CFB): "
+        f"week={season}-{week} "
+        f"fixed_pr={rank_fix_counts['pr']} "
+        f"fixed_opp_pr={rank_fix_counts['opp_pr']} "
+        f"fixed_sos={rank_fix_counts['sos']} "
+        f"fixed_opp_sos={rank_fix_counts['opp_sos']}"
+    )
 
     return receipt
 

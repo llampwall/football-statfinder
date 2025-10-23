@@ -8,7 +8,7 @@
  * Log contract: Logs to `console.error` when hydration fails; otherwise remains quiet.
  */
 
-import { normalizeTeamName } from "./game_metrics.js";
+import { deriveTopMetrics, formatPlus, normalizeTeamName } from "./game_metrics.js";
 
 const DASH = '—';
 const $ = (id) => document.getElementById(id);
@@ -353,15 +353,37 @@ function applyHeader(row) {
   setText("hdrTime", timeFmt.format(kickoff));
 }
 
-function fillTeam(prefix, row, side) {
+function fillTeam(prefix, row, side, metrics) {
+  const sideKey = side === "home" ? "HOME" : "AWAY";
   setText(`${prefix}TeamNo`, resolveTeamNumber(row, side));
   setText(`${prefix}GameNo`, resolveGameNumber(row));
   setText(`${prefix}Name`, dash(teamName(row, side)));
   setText(`${prefix}Odds`, spreadFor(side, row));
-  setText(`${prefix}OU`, formatNumber(row?.total, { decimals: 1 }));
+  const totalSource = metrics?.total ?? row?.total;
+  setText(`${prefix}OU`, formatNumber(totalSource, { decimals: 1 }));
   setText(`${prefix}PR`, formatNumber(row?.[`${side}_pr`], { decimals: 2 }));
-  setText(`${prefix}Diff`, ratingDiffFor(side, row));
-  setText(`${prefix}RVO`, ratingVsOddsFor(side, row));
+  const diffDerived =
+    metrics && metrics.prDiffFavored !== null && metrics.favoredSide
+      ? metrics.favoredSide === sideKey
+        ? metrics.prDiffFavored
+        : metrics.prDiffFavored * -1
+      : null;
+  if (diffDerived !== null) {
+    setText(`${prefix}Diff`, formatPlus(diffDerived, 2));
+  } else {
+    setText(`${prefix}Diff`, ratingDiffFor(side, row));
+  }
+  const rvoDerived =
+    metrics && metrics.rvo !== null && metrics.favoredSide
+      ? metrics.favoredSide === sideKey
+        ? metrics.rvo
+        : metrics.rvo * -1
+      : null;
+  if (rvoDerived !== null) {
+    setText(`${prefix}RVO`, formatPlus(rvoDerived, 2));
+  } else {
+    setText(`${prefix}RVO`, ratingVsOddsFor(side, row));
+  }
   setText(`${prefix}SoS`, formatNumber(row?.[`${side}_sos`], { decimals: 2 }));
   setText(`${prefix}SoSDiff`, sosDiffFor(side, row));
   setText(`${prefix}PF`, formatNumber(row?.[`${side}_pf_pg`], { decimals: 1 }));
@@ -547,8 +569,16 @@ function renderError(message) {
     const homeLabel =
       homeCandidates.find((value) => value && value !== DASH) || DASH;
 
-    fillTeam("t1", row, "away");
-    fillTeam("t2", row, "home");
+    const leagueKey = leagueParam.toLowerCase();
+    const metrics = deriveTopMetrics(row, leagueKey);
+    const hfaLabel = document.getElementById("top-hfa");
+    if (hfaLabel) {
+      const hfaText = formatNumber(metrics.hfa, { decimals: 1 });
+      hfaLabel.textContent = `HFA=${hfaText}`;
+    }
+
+    fillTeam("t1", row, "away", metrics);
+    fillTeam("t2", row, "home", metrics);
     setText("stats1Team", awayLabel !== DASH ? awayLabel : row?.away_team_name);
     setText("stats2Team", homeLabel !== DASH ? homeLabel : row?.home_team_name);
 

@@ -1,4 +1,5 @@
 const DASH = "—";
+const DEFAULT_HFA = { nfl: 2.2, cfb: 2.1 };
 
 const trimTrailingZeros = (str) =>
   str.includes(".") ? str.replace(/\.0+$|(\.\d*?[1-9])0+$/u, "$1") : str;
@@ -72,7 +73,35 @@ function teamNameFromRow(row, side) {
   return null;
 }
 
-export function deriveTopMetrics(row) {
+export function getHfa(row, league = "nfl") {
+  const sources = [
+    row?.hfa,
+    row?.hfa_adjust,
+    row?.raw_sources?.sagarin_row_home?.hfa,
+    row?.raw_sources?.sagarin_row_away?.hfa,
+  ];
+  for (const source of sources) {
+    const value = toNumber(source);
+    if (value !== null) return value;
+  }
+  const leagueKey = String(league || "nfl").toLowerCase();
+  return DEFAULT_HFA[leagueKey] ?? 0;
+}
+
+function resolveFavoredSide(row) {
+  let favoredSide = String(row?.favored_side || "").trim().toUpperCase();
+  if (favoredSide) return favoredSide;
+  const spreadHome = toNumber(row?.spread_home_relative ?? row?.spread);
+  if (spreadHome !== null) {
+    if (spreadHome < 0) return "HOME";
+    if (spreadHome > 0) return "AWAY";
+  }
+  const diff = toNumber(row?.rating_diff);
+  if (diff !== null) return diff >= 0 ? "HOME" : "AWAY";
+  return "";
+}
+
+export function deriveTopMetrics(row, league = "nfl") {
   if (!row) {
     return {
       total: null,
@@ -83,44 +112,57 @@ export function deriveTopMetrics(row) {
     };
   }
 
-  const total = coalesceNumber(row.total, row.schedule_total);
-
-  const favoredSide = String(row?.favored_side || "")
-    .trim()
-    .toUpperCase();
+  const leagueKey = String(league || "nfl").toLowerCase();
+  const hfa = getHfa(row, leagueKey);
   const homePR = toNumber(row?.home_pr);
   const awayPR = toNumber(row?.away_pr);
-  const hfa = coalesceNumber(row?.hfa, row?.raw_sources?.sagarin_row_home?.hfa);
+  let favoredSide = resolveFavoredSide(row);
+
+  let favoredPr = null;
+  let unfavoredPr = null;
+  if (favoredSide === "HOME") {
+    if (homePR !== null) favoredPr = homePR + hfa;
+    if (awayPR !== null) unfavoredPr = awayPR;
+  } else if (favoredSide === "AWAY") {
+    if (awayPR !== null) favoredPr = awayPR;
+    if (homePR !== null) unfavoredPr = homePR + hfa;
+  } else if (homePR !== null && awayPR !== null) {
+    favoredPr = homePR + hfa;
+    unfavoredPr = awayPR;
+    favoredSide = "HOME";
+  }
 
   let prDiffFavored = null;
-  if (homePR !== null && awayPR !== null) {
-    const homeEdge = homePR + (hfa ?? 0);
-    const diff = homeEdge - awayPR;
-    if (favoredSide === "HOME") {
-      prDiffFavored = diff;
-    } else if (favoredSide === "AWAY") {
-      prDiffFavored = diff * -1;
+  if (favoredPr !== null && unfavoredPr !== null) {
+    prDiffFavored = favoredPr - unfavoredPr;
+  } else {
+    const diffFavoredField = toNumber(row?.rating_diff_favored_team);
+    if (diffFavoredField !== null) {
+      prDiffFavored = diffFavoredField;
     } else {
-      prDiffFavored = diff;
+      const diffHome = toNumber(row?.rating_diff);
+      if (diffHome !== null) {
+        prDiffFavored = favoredSide === "AWAY" ? diffHome * -1 : diffHome;
+      }
     }
   }
 
-  let rvo = toNumber(row?.rating_vs_odds);
-  if (rvo === null) {
-    rvo = toNumber(row?.rating_vs_odds_favored_team);
-  }
+  const total = coalesceNumber(row?.total, row?.schedule_total);
 
-  const spreadFavored = coalesceNumber(row?.spread_favored_team);
-  const spreadHome = coalesceNumber(row?.spread_home_relative);
-  const spreadAbs =
-    spreadFavored !== null
-      ? Math.abs(spreadFavored)
-      : spreadHome !== null
-      ? Math.abs(spreadHome)
-      : null;
-
-  if (rvo === null && prDiffFavored !== null && spreadAbs !== null) {
-    rvo = prDiffFavored - spreadAbs;
+  let rvo = toNumber(row?.rating_vs_odds ?? row?.rating_vs_odds_favored_team);
+  const spreadCandidates = [
+    toNumber(row?.spread_favored_team),
+    toNumber(row?.spread_home_relative),
+    toNumber(row?.spread),
+  ];
+  const spreadMagnitude = (() => {
+    for (const candidate of spreadCandidates) {
+      if (candidate !== null) return Math.abs(candidate);
+    }
+    return null;
+  })();
+  if (rvo === null && prDiffFavored !== null && spreadMagnitude !== null) {
+    rvo = prDiffFavored - spreadMagnitude;
   }
 
   const favoredTeam =
@@ -136,6 +178,7 @@ export function deriveTopMetrics(row) {
     rvo,
     favoredTeam,
     favoredSide: favoredSide || null,
+    hfa,
   };
 }
 
@@ -145,4 +188,6 @@ export const GameMetrics = {
   formatRank,
   deriveTopMetrics,
   normalizeTeamName,
+  getHfa,
+  DEFAULT_HFA,
 };

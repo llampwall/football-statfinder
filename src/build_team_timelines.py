@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import json
+import math
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, Tuple
 
@@ -11,6 +13,149 @@ import pandas as pd
 from src.common.team_names import team_merge_key
 from src.schedule_master import load_master as load_schedule_master
 
+
+_LEAGUE_METRICS_PATH = {
+    "nfl": lambda season, week: Path("out") / f"{season}_week{week}" / f"league_metrics_{season}_{week}.csv",
+}
+
+
+@dataclass
+class RankMaps:
+    pr: Dict[str, int]
+    sos: Dict[str, int]
+
+
+def _normalize_rank_key(team_name: str | None) -> str | None:
+    if not team_name:
+        return None
+    return team_merge_key(team_name)
+
+
+def _is_finite(value) -> bool:
+    try:
+        return value is not None and math.isfinite(float(value))
+    except (TypeError, ValueError):
+        return False
+
+
+def _rank_by_value(items: Dict[str, float], descending: bool = True) -> Dict[str, int]:
+    ordered = sorted(
+        ((key, val) for key, val in items.items() if _is_finite(val)),
+        key=lambda pair: pair[1],
+        reverse=descending,
+    )
+    ranks: Dict[str, int] = {}
+    rank = 1
+    for key, _ in ordered:
+        if key in ranks:
+            continue
+        ranks[key] = rank
+        rank += 1
+    return ranks
+
+
+def _extract_from_metrics_csv(path: Path) -> RankMaps | None:
+    if not path.exists():
+        return None
+    df = pd.read_csv(path)
+    if df.empty:
+        return None
+
+    team_col_candidates = ["Team", "team", "TEAM"]
+    team_col = next((col for col in team_col_candidates if col in df.columns), None)
+    if not team_col:
+        return None
+
+    teams = df[team_col].map(_normalize_rank_key)
+
+    pr_rank_cols = [col for col in df.columns if col.lower() in {"pr_rank", "rank_pr", "prrank"}]
+    pr_value_cols = [col for col in df.columns if col.lower() in {"pr", "rating", "power_rating"}]
+
+    sos_rank_cols = [col for col in df.columns if col.lower() in {"sos_rank", "rank_sos", "sosrank"}]
+    sos_value_cols = [col for col in df.columns if col.lower() in {"sos", "strength_of_schedule"}]
+
+    pr_rank_map: Dict[str, int] = {}
+    if pr_rank_cols:
+        col = pr_rank_cols[0]
+        for key, value in zip(teams, df[col]):
+            if key and _is_finite(value):
+                pr_rank_map[key] = int(round(float(value)))
+    if not pr_rank_map and pr_value_cols:
+        col = pr_value_cols[0]
+        value_map = {key: df.iloc[idx][col] for idx, key in enumerate(teams) if key}
+        pr_rank_map = _rank_by_value(value_map, descending=True)
+
+    sos_rank_map: Dict[str, int] = {}
+    if sos_rank_cols:
+        col = sos_rank_cols[0]
+        for key, value in zip(teams, df[col]):
+            if key and _is_finite(value):
+                sos_rank_map[key] = int(round(float(value)))
+    if not sos_rank_map and sos_value_cols:
+        col = sos_value_cols[0]
+        value_map = {key: df.iloc[idx][col] for idx, key in enumerate(teams) if key}
+        sos_rank_map = _rank_by_value(value_map, descending=True)
+
+    if not pr_rank_map and not sos_rank_map:
+        return None
+    return RankMaps(pr=pr_rank_map, sos=sos_rank_map)
+
+
+def _extract_from_master(pr_master: pd.DataFrame, season: int, week: int) -> RankMaps:
+    subset = pr_master[(pr_master["season"] == season) & (pr_master["week"] == week)].copy()
+    if subset.empty:
+        return RankMaps(pr={}, sos={})
+    subset["team_key"] = subset["team_norm"].map(team_merge_key)
+    subset = subset.dropna(subset=["team_key"])
+
+    pr_rank_col = "pr_rank" if "pr_rank" in subset.columns else None
+    sos_rank_col = "sos_rank" if "sos_rank" in subset.columns else None
+
+    pr_values = {row.team_key: row.pr for row in subset.itertuples() if _is_finite(row.pr)}
+    sos_values = {row.team_key: row.sos for row in subset.itertuples() if _is_finite(row.sos)}
+
+    pr_rank_map: Dict[str, int] = {}
+    if pr_rank_col and subset[pr_rank_col].notna().any():
+        for row in subset.itertuples():
+            if row.team_key and _is_finite(getattr(row, pr_rank_col)):
+                pr_rank_map[row.team_key] = int(round(float(getattr(row, pr_rank_col))))
+    if not pr_rank_map:
+        pr_rank_map = _rank_by_value(pr_values, descending=True)
+
+    sos_rank_map: Dict[str, int] = {}
+    if sos_rank_col and subset[sos_rank_col].notna().any():
+        for row in subset.itertuples():
+            if row.team_key and _is_finite(getattr(row, sos_rank_col)):
+                sos_rank_map[row.team_key] = int(round(float(getattr(row, sos_rank_col))))
+    if not sos_rank_map:
+        sos_rank_map = _rank_by_value(sos_values, descending=True)
+
+    return RankMaps(pr=pr_rank_map, sos=sos_rank_map)
+
+
+def load_week_rank_maps(
+    league: str,
+    season: int,
+    week: int,
+    pr_master: pd.DataFrame,
+    cache: Dict[Tuple[int, int], RankMaps],
+) -> RankMaps:
+    key = (season, week)
+    if key in cache:
+        return cache[key]
+
+    league_lower = league.lower()
+    rank_maps: RankMaps | None = None
+    metric_path_factory = _LEAGUE_METRICS_PATH.get(league_lower)
+    if metric_path_factory:
+        metrics_path = metric_path_factory(season, week)
+        rank_maps = _extract_from_metrics_csv(metrics_path)
+
+    if rank_maps is None:
+        rank_maps = _extract_from_master(pr_master, season, week)
+
+    cache[key] = rank_maps
+    return rank_maps
 
 def _dateutc(iso: str | None) -> str | None:
     return iso.split("T")[0] if isinstance(iso, str) and "T" in iso else None
@@ -108,6 +253,78 @@ def build_timelines(
     details: Dict[str, dict] = {}
 
     missing_schedule = []
+    rank_cache: Dict[Tuple[int, int], RankMaps] = {}
+    rank_fix_counts = {"pr": 0, "opp_pr": 0, "sos": 0, "opp_sos": 0}
+
+    def _valid_rank(value) -> bool:
+        return value is not None and _is_finite(value) and int(float(value)) > 0
+
+    def _apply_rank_fallbacks(df: pd.DataFrame) -> None:
+        if df.empty:
+            return
+        for idx, row in df.iterrows():
+            season_val = row.get("season")
+            week_val = row.get("week")
+            if season_val is None or week_val is None:
+                continue
+            try:
+                season_key = int(season_val)
+                week_key = int(week_val)
+            except (TypeError, ValueError):
+                continue
+            rank_maps = load_week_rank_maps("nfl", season_key, week_key, pr_master, rank_cache)
+            team_key = row.get("team_key")
+            opp_key = row.get("opp_key")
+            if team_key:
+                team_key = str(team_key)
+            if opp_key:
+                opp_key = str(opp_key)
+
+            if not _valid_rank(row.get("pr_rank")) and team_key:
+                new_rank = rank_maps.pr.get(team_key)
+                if new_rank is not None:
+                    df.at[idx, "pr_rank"] = int(new_rank)
+                    rank_fix_counts["pr"] += 1
+            if not _valid_rank(row.get("sos_rank")) and team_key:
+                new_rank = rank_maps.sos.get(team_key)
+                if new_rank is not None:
+                    df.at[idx, "sos_rank"] = int(new_rank)
+                    rank_fix_counts["sos"] += 1
+            if not _valid_rank(row.get("opp_pr_rank")) and opp_key:
+                new_rank = rank_maps.pr.get(opp_key)
+                if new_rank is not None:
+                    df.at[idx, "opp_pr_rank"] = int(new_rank)
+                    rank_fix_counts["opp_pr"] += 1
+            if not _valid_rank(row.get("opp_sos_rank")) and opp_key:
+                new_rank = rank_maps.sos.get(opp_key)
+                if new_rank is not None:
+                    df.at[idx, "opp_sos_rank"] = int(new_rank)
+                    rank_fix_counts["opp_sos"] += 1
+
+    def _sanitize_entry(entry: dict) -> None:
+        numeric_fields = [
+            "pr",
+            "pr_rank",
+            "sos",
+            "sos_rank",
+            "opp_pr",
+            "opp_pr_rank",
+            "opp_sos",
+            "opp_sos_rank",
+            "pf",
+            "pa",
+        ]
+        for field in numeric_fields:
+            value = entry.get(field)
+            if value is None:
+                continue
+            if _is_finite(value):
+                if field.endswith("rank"):
+                    entry[field] = int(round(float(value)))
+                else:
+                    entry[field] = float(value)
+            else:
+                entry[field] = None
 
     for _, game in games_df.iterrows():
         game_key = game["game_key"]
@@ -138,6 +355,7 @@ def build_timelines(
                 return df
             df = df.merge(pr_team, how="left", left_on=["season", "week", "team_key"], right_on=["season", "week", "team_key"])
             df = df.merge(opp_pr, how="left", left_on=["season", "week", "opp_key"], right_on=["season", "week", "opp_team_key"])
+            _apply_rank_fallbacks(df)
             return df
 
         home_ytd = _augment(home_ytd)
@@ -180,6 +398,7 @@ def build_timelines(
                 if last_key and key < last_key:
                     raise RuntimeError(f"Timeline not sorted for team key {team_key_value}")
                 last_key = key
+                _sanitize_entry(entry)
             expected_team = sum(
                 1
                 for row in timeline
@@ -237,8 +456,37 @@ def build_timelines(
         }
 
     details["_missing"] = missing_schedule
+    details["_rank_fix_counts"] = rank_fix_counts
 
     return written, details
 
 
 __all__ = ["build_timelines"]
+LeagueMetricsPaths = {
+    "nfl": lambda season, week: Path("out") / f"{season}_week{week}" / f"league_metrics_{season}_{week}.csv",
+    "cfb": lambda season, week: Path("out") / "cfb" / f"{season}_week{week}" / f"league_metrics_{season}_{week}.csv",
+}
+
+
+@dataclass
+class RankMaps:
+    pr: Dict[str, int]
+    sos: Dict[str, int]
+
+
+def _normalize_rank_key(team: str | None) -> str | None:
+    if not team:
+        return None
+    return team_merge_key(team)
+
+
+def _rank_series(values: pd.Series, descending: bool = True) -> Dict[str, int]:
+    ordered = (
+        values.dropna()
+        .sort_values(ascending=not descending)
+        .reset_index(drop=True)
+    )
+    ranks: Dict[str, int] = {}
+    rank = 1
+    for _, row in ordered.items():
+        pass

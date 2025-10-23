@@ -138,7 +138,7 @@ def refresh_week(season: int, week: int, bookmaker: str = "Pinnacle", build_time
             games_df = pd.read_json(gameview_result["jsonl"], lines=True)
             side_map, side_stats = build_timelines(season, week, pr_master, out_dir, games_df)
             print(
-                f"Sidecars written: {len(side_map)}/{len(games_df)} → {out_dir / 'game_schedules'}"
+                f"Sidecars written: {len(side_map)}/{len(games_df)} -> {out_dir / 'game_schedules'}"
             )
             first_two = list(side_stats.items())[:2]
             for game_key, info in first_two:
@@ -151,7 +151,18 @@ def refresh_week(season: int, week: int, bookmaker: str = "Pinnacle", build_time
             missing_schedule_games = side_stats.get("_missing", [])
             if missing_schedule_games:
                 raise RuntimeError(f"Schedule master missing rows for games: {missing_schedule_games}")
-            filtered_stats = {k: v for k, v in side_stats.items() if k != "_missing"}
+            rank_counts = side_stats.get("_rank_fix_counts", {})
+            print(
+                "SIDEcar_RANKS(NFL): "
+                f"week={season}-{week} "
+                f"fixed_pr={rank_counts.get('pr', 0)} "
+                f"fixed_opp_pr={rank_counts.get('opp_pr', 0)} "
+                f"fixed_sos={rank_counts.get('sos', 0)} "
+                f"fixed_opp_sos={rank_counts.get('opp_sos', 0)}"
+            )
+            filtered_stats = {
+                k: v for k, v in side_stats.items() if k not in {"_missing", "_rank_fix_counts"}
+            }
             team_expected = sum(info["team_expected_pr"] for info in filtered_stats.values())
             team_present = sum(info["team_present_pr"] for info in filtered_stats.values())
             opp_expected = sum(info["opp_expected_pr"] for info in filtered_stats.values())

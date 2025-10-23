@@ -1,4 +1,5 @@
 import { sitePath, siteUrl } from "./js/base_path.js";
+import { getHfa } from "./js/game_metrics.js";
 
 const els = {
   seasonInput: document.getElementById("season-input"),
@@ -230,8 +231,8 @@ function computeFavoredMetrics(row) {
   const favored = favoredRaw === "HOME" ? "home" : "away";
   const unfavored = favored === "home" ? "away" : "home";
   let pr = hasNumeric(row[`${favored}_pr`]) ? Number(row[`${favored}_pr`]) : null;
-  if (favored === "home" && pr !== null && hasNumeric(row.hfa)) {
-    pr += Number(row.hfa);
+  if (favored === "home" && pr !== null) {
+    pr += getHfa(row, STATE.league);
   }
   const diff = hasNumeric(row.rating_diff_favored_team) ? Number(row.rating_diff_favored_team) : null;
   const rvo = hasNumeric(row.rating_vs_odds) ? Number(row.rating_vs_odds) : null;
@@ -247,6 +248,14 @@ function computeFavoredMetrics(row) {
     sos: favSos,
     sosDiff,
   };
+}
+
+function rowHasExplicitHfa(row) {
+  if (!row) return false;
+  if (hasNumeric(row?.hfa) || hasNumeric(row?.hfa_adjust)) return true;
+  if (hasNumeric(row?.raw_sources?.sagarin_row_home?.hfa)) return true;
+  if (hasNumeric(row?.raw_sources?.sagarin_row_away?.hfa)) return true;
+  return false;
 }
 
 function formatFavoredMetric(metrics, side, value, options = {}) {
@@ -744,6 +753,18 @@ function applyFilters() {
 function renderTable(rows, { season, week }) {
   const tbody = els.tableBody;
   tbody.innerHTML = "";
+
+  const diffHeader = document.querySelector("th.diff-header");
+  if (diffHeader) {
+    const sample = Array.isArray(rows) ? rows.find((row) => rowHasExplicitHfa(row)) : null;
+    if (sample) {
+      const hfaValue = getHfa(sample, STATE.league);
+      const display = formatNumber(hfaValue, { decimals: 1 });
+      diffHeader.innerHTML = `(HFA=${display})<br>Diff`;
+    } else {
+      diffHeader.textContent = "Diff";
+    }
+  }
 
   if (isCFBLeague() && STATE.cfbBlockActive) {
     const tr = document.createElement("tr");
