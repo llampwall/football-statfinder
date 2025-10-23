@@ -1,5 +1,5 @@
 import { sitePath, siteUrl } from "./js/base_path.js";
-import { formatPlus, formatNum, formatRank, deriveTopMetrics } from "./js/game_metrics.js";
+import { formatPlus, formatNum, formatRank, deriveTopMetrics, rollupRecords } from "./js/game_metrics.js";
 
 const els = {
   loadGameBtn: document.getElementById("btnLoadGame"),
@@ -779,33 +779,28 @@ function renderTeamStats(game, sidecar, teamNames) {
   ];
 
   els.teamStatsBody.innerHTML = "";
-  const league = STATE.league ?? DEFAULT_LEAGUE;
-  let homeAtsDisplay = null;
-  let awayAtsDisplay = null;
-  if (league === "cfb") {
-    homeAtsDisplay = formatAtsValue(game?.home_ats);
-    awayAtsDisplay = formatAtsValue(game?.away_ats);
-    if (!loggedCfbAtsOnce) {
-      const homeLog = homeAtsDisplay ?? MISSING_VALUE;
-      const awayLog = awayAtsDisplay ?? MISSING_VALUE;
-      console.info(`CFB ATS: home=${homeLog} away=${awayLog}`);
-      loggedCfbAtsOnce = true;
-    }
-  }
+  const league = (STATE.league ?? DEFAULT_LEAGUE).toLowerCase();
+
+  // Only show ATS when a real value exists in the week row.
+  const hasAts =
+    typeof game?.home_ats === "string" || typeof game?.away_ats === "string";
 
   rows.forEach(({ prefix, label }) => {
     const tr = document.createElement("tr");
+
+    // ATS cell – only for leagues that have it AND only when present.
     let atsCell = "";
-    if (league === "cfb") {
-      const value = prefix === "home" ? homeAtsDisplay : awayAtsDisplay;
-      atsCell = value ?? MISSING_VALUE;
+    if (hasAts) {
+      const value = prefix === "home" ? game?.home_ats : game?.away_ats;
+      atsCell = formatAtsValue(value) ?? MISSING_VALUE;
     }
+
     const cells = [
       label,
       formatNumber(game[`${prefix}_pf_pg`], { decimals: 1 }),
       formatNumber(game[`${prefix}_pa_pg`], { decimals: 1 }),
       fallback(game[`${prefix}_su`]),
-      league === "cfb" ? atsCell : "",
+      hasAts ? atsCell : "",                         // <— guard
       formatSigned(game[`${prefix}_to_margin_pg`], { decimals: 1 }),
       formatNumber(game[`${prefix}_ry_pg`], { decimals: 1 }),
       rankOrDash(game[`${prefix}_rush_rank`]),
@@ -824,15 +819,15 @@ function renderTeamStats(game, sidecar, teamNames) {
     cells.forEach((value, idx) => {
       const td = document.createElement("td");
       td.textContent = value;
-      if (idx === 0) {
-        td.style.fontWeight = "600";
-      }
+      if (idx === 0) td.style.fontWeight = "600";
       tr.appendChild(td);
     });
 
     els.teamStatsBody.appendChild(tr);
   });
 }
+
+
 
 function resolveAtsValue(game, sidecar, prefix) {
   const field = `${prefix}_ats`;

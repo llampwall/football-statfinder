@@ -670,10 +670,10 @@ function renderError(message) {
         });
       }
 
-      fillSchedule("sched1Body", schedAwayNow);
-      fillSchedule("sched2Body", schedHomeNow);
-      fillSchedule("sched1BodyPrev", schedAwayPrev);
-      fillSchedule("sched2BodyPrev", schedHomePrev);
+      fillSchedule("sched1Body", schedHomeNow);
+      fillSchedule("sched2Body", schedAwayNow);
+      fillSchedule("sched1BodyPrev", schedHomePrev);
+      fillSchedule("sched2BodyPrev", schedAwayPrev);
     } else {
       warnOnce(`missing sidecar schedules:${gameKey}`, { gameKey });
     }

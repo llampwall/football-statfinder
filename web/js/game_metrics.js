@@ -101,6 +101,28 @@ function resolveFavoredSide(row) {
   return "";
 }
 
+// Compute SU/ATS totals from a schedule array.
+// Each entry can have entry.result ("W"/"L"), and either entry.ats ("W"/"L"/"P")
+// or entry.to_margin (number: >0 win ATS, <0 loss ATS, 0 push).
+export function rollupRecords(schedule = []) {
+  let suW = 0, suL = 0, atsW = 0, atsL = 0, atsP = 0;
+  for (const r of schedule) {
+    const res = (r?.result || "").toUpperCase();
+    if (res === "W") suW++; else if (res === "L") suL++;
+
+    const ats = (r?.ats || "").toUpperCase();
+    if (ats === "W") atsW++;
+    else if (ats === "L") atsL++;
+    else if (ats === "P") atsP++;
+    else if (Number.isFinite(r?.to_margin)) {
+      if (r.to_margin > 0) atsW++;
+      else if (r.to_margin < 0) atsL++;
+      else atsP++;
+    }
+  }
+  return { su: `${suW}-${suL}`, ats: `${atsW}-${atsL}-${atsP}` };
+}
+
 export function deriveTopMetrics(row, league = "nfl") {
   if (!row) {
     return {

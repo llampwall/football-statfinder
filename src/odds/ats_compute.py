@@ -11,12 +11,12 @@ import json
 import math
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple, Iterable
 
 from src.common.io_utils import ensure_out_dir
 from src.common.team_names import team_merge_key
 from src.common.team_names_cfb import team_merge_key_cfb
-from .odds_history import get_closing_spread
+from src.odds import odds_history   # safe to import; it can no-op when offline
 
 _OUT_ROOT = ensure_out_dir()
 _PINNED_ROOT = _OUT_ROOT / "staging" / "odds_pinned"
@@ -68,27 +68,33 @@ def _load_jsonl(path: Path) -> List[dict]:
     return records
 
 
-def _load_pinned_index(league: str, season: int) -> Dict[str, dict]:
-    cache_key = (league, season)
-    if cache_key in _PINNED_CACHE:
-        return _PINNED_CACHE[cache_key]
-    path = _PINNED_ROOT / league.lower() / f"{season}.jsonl"
-    index: Dict[str, dict] = {}
-    for record in _load_jsonl(path):
-        if record.get("market") != "spreads":
-            continue
-        if record.get("season") != season:
-            continue
-        game_key = record.get("game_key")
-        if not isinstance(game_key, str):
-            continue
-        existing = index.get(game_key)
-        candidate_ts = _parse_ts(record.get("fetch_ts")) or datetime.min.replace(tzinfo=timezone.utc)
-        existing_ts = _parse_ts(existing.get("fetch_ts")) if existing else None
-        if existing is None or (existing_ts is not None and candidate_ts > existing_ts):
-            index[game_key] = record
-    _PINNED_CACHE[cache_key] = index
-    return index
+def load_pinned_index(idx: dict,
+                      league: str,
+                      season: int,
+                      game_key: str,
+                      rec: dict) -> dict:
+    """
+    Insert/replace the pinned odds record for a game_key.
+
+    Replace if:
+      - there is no existing record, OR
+      - existing record has no fetch_ts, OR
+      - new rec.fetch_ts is newer than existing fetch_ts
+    """
+    g = idx.setdefault((league, season), {})
+    cur = g.get(game_key)
+    def _to_dt(x):
+        if not x: return None
+        if isinstance(x, (int, float)):
+            return datetime.fromtimestamp(float(x), tz=timezone.utc)
+        return datetime.fromisoformat(str(x).replace("Z", "+00:00"))
+
+    new_when = _to_dt(rec.get("fetch_ts"))
+    cur_when = _to_dt(cur.get("fetch_ts") if isinstance(cur, dict) else None)
+
+    if (cur is None) or (cur_when is None) or (new_when and cur_when and new_when > cur_when):
+        g[game_key] = rec
+    return idx
 
 
 def _load_snapshots(league: str, season: int, week: int) -> List[dict]:
@@ -103,6 +109,31 @@ def _load_snapshots(league: str, season: int, week: int) -> List[dict]:
     rows = _load_jsonl(path)
     _SNAPSHOT_CACHE[cache_key] = rows
     return rows
+
+
+
+def pick_latest_before(records: Iterable[Dict[str, Any]],
+                       cutoff: datetime) -> Optional[Dict[str, Any]]:
+    """
+    Return the record with the greatest fetch_ts <= cutoff.
+    Records missing/invalid fetch_ts are ignored.
+    """
+    best: Tuple[datetime, Dict[str, Any]] | None = None
+    for r in records or []:
+        ts = r.get("fetch_ts")
+        if not ts:
+            continue
+        try:
+            # allow both iso string and epoch float
+            if isinstance(ts, (int, float)):
+                when = datetime.fromtimestamp(float(ts), tz=timezone.utc)
+            else:
+                when = datetime.fromisoformat(str(ts).replace("Z", "+00:00"))
+        except Exception:
+            continue
+        if when <= cutoff and (best is None or when > best[0]):
+            best = (when, r)
+    return best[1] if best else None
 
 
 def _record_to_payload(
@@ -152,69 +183,39 @@ def _record_to_payload(
     }
 
 
-def resolve_closing_spread(
-    league: str,
-    season: int,
-    game_row: Dict[str, Any],
-) -> Optional[Dict[str, Any]]:
-    """Resolve closing spread for a game using pinned, snapshot, then history."""
-    game_key = game_row.get("game_key")
-    if not isinstance(game_key, str):
-        return None
-    week = game_row.get("week")
+def resolve_closing_spread(league: str, season: int, game_row: dict) -> Optional[dict]:
+    """
+    Returns {"favored_team": str, "spread": float, "source": "pinned|snapshot|history", "book": Optional[str]}
+    or None if nothing can be resolved.
+    """
+    game_key = game_row.get("game_key", "")
+    kickoff = game_row.get("kickoff_iso_utc")
+    cutoff = None
     try:
-        week_int = int(week)
+        cutoff = datetime.fromisoformat(str(kickoff).replace("Z", "+00:00"))
     except Exception:
-        week_int = None
-    kickoff_iso = game_row.get("kickoff_iso_utc") or game_row.get("kickoff_iso")
-    kickoff_dt = _parse_ts(kickoff_iso) if kickoff_iso else None
-    home_norm = game_row.get("home_team_norm") or game_row.get("home_team_raw")
-    away_norm = game_row.get("away_team_norm") or game_row.get("away_team_raw")
+        cutoff = datetime.now(tz=timezone.utc)
 
-    pinned_index = _load_pinned_index(league, season)
-    pinned_record = pinned_index.get(game_key)
-    if pinned_record:
-        payload = _record_to_payload(pinned_record, league, home_norm, away_norm)
-        if payload:
-            payload["source"] = "pinned"
-            return payload
+    # 1) pinned (exact match by game_key)
+    pinned_idx: dict = _PINNED_CACHE.get((league, season), {})
+    pinned = pinned_idx.get(game_key)
+    if pinned and isinstance(pinned, dict) and "spread" in pinned and pinned.get("favored_team"):
+        return {"favored_team": pinned["favored_team"], "spread": float(pinned["spread"]),
+                "source": "pinned", "book": pinned.get("book")}
 
-    if week_int is not None:
-        snapshots = _load_snapshots(league, season, week_int)
-        candidates: List[Tuple[datetime, dict]] = []
-        row_home_token = _normalize_team(league, home_norm)
-        row_away_token = _normalize_team(league, away_norm)
-        for snap in snapshots:
-            snap_home = _normalize_team(league, snap.get("home_team_norm") or snap.get("home_team_raw"))
-            snap_away = _normalize_team(league, snap.get("away_team_norm") or snap.get("away_team_raw"))
-            if row_home_token and snap_home and snap_home != row_home_token:
-                continue
-            if row_away_token and snap_away and snap_away != row_away_token:
-                continue
-            ts = _parse_ts(snap.get("snapshot_at")) or datetime.min.replace(tzinfo=timezone.utc)
-            if kickoff_dt and ts > kickoff_dt:
-                continue
-            if snap.get("spread_home_relative") is None:
-                continue
-            candidates.append((ts, snap))
-        if not candidates:
-            for snap in snapshots:
-                if snap.get("spread_home_relative") is None:
-                    continue
-                ts = _parse_ts(snap.get("snapshot_at")) or datetime.min.replace(tzinfo=timezone.utc)
-                candidates.append((ts, snap))
-                break
-        if candidates:
-            candidates.sort(key=lambda item: item[0], reverse=True)
-            payload = _record_to_payload(candidates[0][1], league, home_norm, away_norm)
-            if payload:
-                payload["source"] = "snapshot"
-                return payload
+    # 2) snapshot(s) near kickoff (pre-kick latest)
+    snapshots: List[dict] = _SNAPSHOT_CACHE.get((league, season), {}).get(game_key, [])
+    snap = pick_latest_before(snapshots, cutoff)
+    if snap and "spread" in snap and snap.get("favored_team"):
+        return {"favored_team": snap["favored_team"], "spread": float(snap["spread"]),
+                "source": "snapshot", "book": snap.get("book")}
 
-    history_payload = get_closing_spread(league, game_row)
-    if history_payload:
-        history_payload["source"] = "history"
-        return history_payload
+    # 3) history via The Odds API (last pre-kick)
+    hist = odds_history.get_closing_spread(league, game_row)  # may return None offline
+    if hist and "spread" in hist and hist.get("favored_team"):
+        return {"favored_team": hist["favored_team"], "spread": float(hist["spread"]),
+                "source": "history", "book": hist.get("book")}
+
     return None
 
 

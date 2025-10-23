@@ -43,7 +43,6 @@ from src.common.team_names import TEAM_ABBR_TO_FULL, team_merge_key
 from src.odds.nfl_promote_week import promote_week_odds
 from src.odds.ats_compute import compute_ats, resolve_closing_spread, is_blank as ats_is_blank
 from src.schedule_master import load_master as load_nfl_schedule_master
-from src.odds.ats_compute import compute_ats, resolve_closing_spread, is_blank as atsats_is_blank
 
 OUT_ROOT = ensure_out_dir()
 NFL_ROOT = OUT_ROOT
@@ -222,28 +221,32 @@ def _load_sidecar(sidecar_dir: Path, game_key: str, cache: Dict[str, dict]) -> O
     return cache[game_key]
 
 
-def _update_sidecar_entry(entries: Iterable[dict], season: int, week: int, *, ats: Optional[str], margin: Optional[float]) -> bool:
-    updated = False
-    for entry in entries or []:
-        entry_season = entry.get("season")
-        entry_week = entry.get("week")
-        try:
-            entry_season = int(entry_season)
-            entry_week = int(entry_week)
-        except Exception:
-            continue
-        if entry_season != season or entry_week != week:
-            continue
-        if ats and atsats_is_blank(entry.get("ats")):
-            entry["ats"] = ats
-            updated = True
-        if margin is not None:
-            current_margin = entry.get("to_margin")
-            if not _is_finite_number(current_margin):
-                entry["to_margin"] = round(float(margin), 2)
-                updated = True
-        break
-    return updated
+def _update_sidecar_entry(sidecar: dict,
+                          is_home: bool,
+                          season: int,
+                          week: int,
+                          *, ats: str | None,
+                          to_margin: float | None) -> None:
+    """
+    Ensure the home_ytd/away_ytd list exists, locate the (season, week) entry,
+    and update or append with ATS + to_margin.
+    """
+    key = "home_ytd" if is_home else "away_ytd"
+    rows = sidecar.setdefault(key, [])
+    # locate row
+    row = None
+    for r in rows:
+        if r.get("season") == season and r.get("week") == week:
+            row = r
+            break
+    if row is None:
+        row = {"season": season, "week": week}
+        rows.append(row)
+    if ats is not None:
+        row["ats"] = ats
+    if to_margin is not None and math.isfinite(to_margin):
+        row["to_margin"] = round(float(to_margin), 3)
+
 
 
 

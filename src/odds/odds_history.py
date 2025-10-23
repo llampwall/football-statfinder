@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import json
+import json, time
 import math
 from datetime import datetime, timezone
 from pathlib import Path
@@ -20,6 +20,7 @@ _OUT_ROOT = ensure_out_dir()
 _PINNED_ROOT = _OUT_ROOT / "staging" / "odds_pinned"
 
 _PINNED_EVENT_CACHE: Dict[Tuple[str, int], Dict[str, str]] = {}
+_CLOSING_CACHE: dict[tuple[str, str], dict] = {}
 
 
 def _parse_ts(value: Optional[str]) -> Optional[datetime]:
@@ -132,6 +133,11 @@ def get_closing_spread(league: str, game_row: Dict[str, Any]) -> Optional[Dict[s
     event_id = _extract_event_id(league, season or 0, game_row)
     if not event_id:
         return None
+    
+    game_key = game_row.get("game_key", "")
+    cache_key = (league.lower(), str(game_key))
+    if cache_key in _CLOSING_CACHE:
+        return _CLOSING_CACHE[cache_key]
 
     params = {
         "apiKey": api_key,
@@ -191,4 +197,5 @@ def get_closing_spread(league: str, game_row: Dict[str, Any]) -> Optional[Dict[s
                     "fetched_ts": ts_value,
                 }
                 best_ts = ts_dt
+    _CLOSING_CACHE[cache_key] = best
     return best
