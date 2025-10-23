@@ -25,7 +25,8 @@ Do not:
 from __future__ import annotations
 
 import json
-from collections import defaultdict
+import math
+from collections import Counter, defaultdict
 import subprocess
 import sys
 from copy import deepcopy
@@ -36,11 +37,13 @@ from typing import Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
 import pandas as pd
 
 from src.common.backfill_merge import merge_games_week, summarize_preservation
-from src.common.io_atomic import write_atomic_csv, write_atomic_jsonl
+from src.common.io_atomic import write_atomic_csv, write_atomic_jsonl, write_atomic_json
 from src.common.io_utils import ensure_out_dir, getenv
 from src.common.team_names import TEAM_ABBR_TO_FULL, team_merge_key
 from src.odds.nfl_promote_week import promote_week_odds
+from src.odds.ats_compute import compute_ats, resolve_closing_spread, is_blank as ats_is_blank
 from src.schedule_master import load_master as load_nfl_schedule_master
+from src.odds.ats_compute import compute_ats, resolve_closing_spread, is_blank as atsats_is_blank
 
 OUT_ROOT = ensure_out_dir()
 NFL_ROOT = OUT_ROOT
@@ -189,11 +192,227 @@ def _needs_odds_repair(rows: list[dict]) -> bool:
     """Return True if odds/rvo look nuked on any row."""
     for r in rows or []:
         if (
-            r.get("spread_favored_team") in (None, "",)
-            and r.get("rating_vs_odds") in (None, "",)
+            r.get("spread_favored_team") in (None, "")
+            and r.get("rating_vs_odds") in (None, "")
         ):
             return True
     return False
+
+
+def _is_finite_number(value: object) -> bool:
+    try:
+        return value is not None and math.isfinite(float(value))
+    except (TypeError, ValueError):
+        return False
+
+
+def _load_sidecar(sidecar_dir: Path, game_key: str, cache: Dict[str, dict]) -> Optional[dict]:
+    if game_key in cache:
+        return cache[game_key]
+    path = sidecar_dir / f"{game_key}.json"
+    if not path.exists():
+        cache[game_key] = None  # cache miss to avoid repeat IO
+        return None
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        cache[game_key] = None
+        return None
+    cache[game_key] = {"path": path, "data": payload, "dirty": False}
+    return cache[game_key]
+
+
+def _update_sidecar_entry(entries: Iterable[dict], season: int, week: int, *, ats: Optional[str], margin: Optional[float]) -> bool:
+    updated = False
+    for entry in entries or []:
+        entry_season = entry.get("season")
+        entry_week = entry.get("week")
+        try:
+            entry_season = int(entry_season)
+            entry_week = int(entry_week)
+        except Exception:
+            continue
+        if entry_season != season or entry_week != week:
+            continue
+        if ats and atsats_is_blank(entry.get("ats")):
+            entry["ats"] = ats
+            updated = True
+        if margin is not None:
+            current_margin = entry.get("to_margin")
+            if not _is_finite_number(current_margin):
+                entry["to_margin"] = round(float(margin), 2)
+                updated = True
+        break
+    return updated
+
+
+
+
+def _sidecar_needs_ats(entries: Iterable[dict], season: int, week: int) -> bool:
+    for entry in entries or []:
+        try:
+            entry_season = int(entry.get("season"))
+            entry_week = int(entry.get("week"))
+        except Exception:
+            continue
+        if entry_season != season or entry_week != week:
+            continue
+        if ats_is_blank(entry.get("ats")):
+            return True
+        if not _is_finite_number(entry.get("to_margin")):
+            return True
+        return False
+    return True
+def _compute_team_ats(entries: Iterable[dict], season: int, thru_week: int) -> Tuple[str, Optional[float]]:
+    wins = losses = pushes = 0
+    margins: List[float] = []
+    for entry in entries or []:
+        try:
+            entry_season = int(entry.get("season"))
+            entry_week = int(entry.get("week"))
+        except Exception:
+            continue
+        if entry_season != season or entry_week > thru_week:
+            continue
+        result = (entry.get("ats") or "").strip().upper()
+        if result == "W":
+            wins += 1
+        elif result == "L":
+            losses += 1
+        elif result == "P":
+            pushes += 1
+        margin = entry.get("to_margin")
+        if _is_finite_number(margin):
+            margins.append(float(margin))
+    record = f"{wins}-{losses}-{pushes}"
+    avg_margin = sum(margins) / len(margins) if margins else None
+    return record, avg_margin
+
+
+def _game_needs_ats(row: Mapping[str, Any]) -> bool:
+    if ats_is_blank(row.get("home_ats")) or ats_is_blank(row.get("away_ats")):
+        return True
+    if not _is_finite_number(row.get("home_to_margin_pg")) or not _is_finite_number(row.get("away_to_margin_pg")):
+        return True
+    return False
+
+
+def _apply_ats_backfill(
+    league: str,
+    season: int,
+    week: int,
+    rows: List[dict],
+    sidecar_dir: Path,
+) -> Tuple[int, Counter, bool]:
+    sidecar_cache: Dict[str, Optional[dict]] = {}
+    source_counts: Counter = Counter()
+    games_fixed = 0
+    rows_changed = False
+
+    for row in rows:
+        game_key = row.get("game_key")
+        if not isinstance(game_key, str):
+            continue
+        row_needs = _game_needs_ats(row)
+        sidecar_entry = _load_sidecar(sidecar_dir, game_key, sidecar_cache)
+        sidecar_needs = False
+        if sidecar_entry:
+            data = sidecar_entry["data"]
+            sidecar_needs = _sidecar_needs_ats(data.get("home_ytd"), season, week) or _sidecar_needs_ats(data.get("away_ytd"), season, week)
+        if not row_needs and not sidecar_needs:
+            continue
+        home_score = row.get("home_score")
+        away_score = row.get("away_score")
+        try:
+            home_score_int = int(home_score)
+            away_score_int = int(away_score)
+        except Exception:
+            continue
+        closing = resolve_closing_spread(league, season, row)
+        if not closing:
+            continue
+        ats_payload = compute_ats(home_score_int, away_score_int, closing.get("favored_team"), closing.get("spread"))
+        if not ats_payload:
+            continue
+
+        game_updated = False
+
+        if sidecar_entry:
+            data = sidecar_entry["data"]
+            home_changed = _update_sidecar_entry(
+                data.get("home_ytd"), season, week, ats=ats_payload["home_ats"], margin=ats_payload["to_margin_home"]
+            )
+            away_changed = _update_sidecar_entry(
+                data.get("away_ytd"), season, week, ats=ats_payload["away_ats"], margin=ats_payload["to_margin_away"]
+            )
+            if home_changed or away_changed:
+                sidecar_entry["dirty"] = True
+                game_updated = True
+
+            home_record, home_avg = _compute_team_ats(data.get("home_ytd"), season, week)
+            away_record, away_avg = _compute_team_ats(data.get("away_ytd"), season, week)
+
+            if home_record and row.get("home_ats") != home_record:
+                row["home_ats"] = home_record
+                game_updated = True
+            if away_record and row.get("away_ats") != away_record:
+                row["away_ats"] = away_record
+                game_updated = True
+            if home_avg is not None:
+                avg_val = round(float(home_avg), 2)
+                current = row.get("home_to_margin_pg")
+                if not _is_finite_number(current) or abs(float(current) - avg_val) > 1e-6:
+                    row["home_to_margin_pg"] = avg_val
+                    game_updated = True
+            if away_avg is not None:
+                avg_val = round(float(away_avg), 2)
+                current = row.get("away_to_margin_pg")
+                if not _is_finite_number(current) or abs(float(current) - avg_val) > 1e-6:
+                    row["away_to_margin_pg"] = avg_val
+                    game_updated = True
+        else:
+            if ats_is_blank(row.get("home_ats")):
+                result = ats_payload["home_ats"]
+                if result == "W":
+                    row["home_ats"] = "1-0-0"
+                elif result == "L":
+                    row["home_ats"] = "0-1-0"
+                else:
+                    row["home_ats"] = "0-0-1"
+                game_updated = True
+            if ats_is_blank(row.get("away_ats")):
+                result = ats_payload["away_ats"]
+                if result == "W":
+                    row["away_ats"] = "1-0-0"
+                elif result == "L":
+                    row["away_ats"] = "0-1-0"
+                else:
+                    row["away_ats"] = "0-0-1"
+                game_updated = True
+            if not _is_finite_number(row.get("home_to_margin_pg")):
+                row["home_to_margin_pg"] = round(ats_payload["to_margin_home"], 2)
+                game_updated = True
+            if not _is_finite_number(row.get("away_to_margin_pg")):
+                row["away_to_margin_pg"] = round(ats_payload["to_margin_away"], 2)
+                game_updated = True
+
+        if game_updated:
+            row.setdefault("raw_sources", {})["closing_spread"] = {
+                "source": closing.get("source"),
+                "book": closing.get("book"),
+                "spread": closing.get("spread"),
+                "favored_team": closing.get("favored_team"),
+                "fetched_ts": closing.get("fetched_ts"),
+            }
+            source_counts[closing.get("source", "unknown")] += 1
+            games_fixed += 1
+            rows_changed = True
+
+    for entry in sidecar_cache.values():
+        if entry and entry.get("dirty"):
+            write_atomic_json(entry["path"], entry["data"])
+
+    return games_fixed, source_counts, rows_changed
 
 
 def backfill_nfl_scores(season: int, week: int) -> Dict[str, object]:
@@ -216,6 +435,8 @@ def backfill_nfl_scores(season: int, week: int) -> Dict[str, object]:
     preserved_odds_total = 0
     preserved_rvo_total = 0
     files_rewritten = 0
+    total_ats_fixed = 0
+    ats_source_counts: Counter = Counter()
     promote_prev_enabled = _is_truthy(getenv("BACKFILL_PROMOTE_PREV", "0"))
 
     for target_week in weeks:
@@ -268,33 +489,55 @@ def backfill_nfl_scores(season: int, week: int) -> Dict[str, object]:
                 updated_total += 1
                 row_updates += 1
 
-        if file_changed or (promote_prev_enabled and target_week < week and needs_repair):
-            merged_rows = merge_games_week(existing_rows, incoming_rows)
+        merged_rows = merge_games_week(existing_rows, incoming_rows)
+        preservation = summarize_preservation(existing_rows, merged_rows)
 
-            preservation = summarize_preservation(existing_rows, merged_rows)
-            preserved_odds_total += preservation["preserved_odds"]
-            preserved_rvo_total += preservation["preserved_rvo"]
+        final_rows = merged_rows
+        rebuild_game_view = False
+        promoted = 0
 
-            final_rows = merged_rows
-            rebuild_game_view = False
+        if promote_prev_enabled and target_week < week:
+            promoted_rows = deepcopy(merged_rows)
+            promote_stats = promote_week_odds(promoted_rows, season, target_week)
+            promoted = promote_stats.get("promoted_games", 0)
+            final_rows = promoted_rows
+            if promoted > 0:
+                rebuild_game_view = True
+                file_changed = True
+            print(
+                f"ODDS_REPROMOTE(NFL): week={season}-{target_week} "
+                f"promoted={promoted} source=staging/odds_pinned"
+            )
 
-            if promote_prev_enabled and target_week < week:
-                promoted_rows = deepcopy(merged_rows)
-                promote_stats = promote_week_odds(promoted_rows, season, target_week)
-                promoted = promote_stats.get("promoted_games", 0)
-                final_rows = promoted_rows
-                if promoted > 0:
-                    rebuild_game_view = True
+            if not file_changed and needs_repair:
                 print(
-                    f"ODDS_REPROMOTE(NFL): week={season}-{target_week} "
-                    f"promoted={promoted} source=staging/odds_pinned"
+                    f"BACKFILL_REPAIR(NFL): week={season}-{target_week} "
+                    f"reason=odds_rvo_missing"
                 )
 
-                if not file_changed and needs_repair:
-                    print(
-                        f"BACKFILL_REPAIR(NFL): week={season}-{target_week} "
-                        f"reason=odds_rvo_missing"
-                    )
+        sidecar_dir = NFL_ROOT / f"{season}_week{target_week}" / "game_schedules"
+        ats_games_fixed, ats_counts, ats_rows_changed = _apply_ats_backfill(
+            "nfl", season, target_week, final_rows, sidecar_dir
+        )
+        total_ats_fixed += ats_games_fixed
+        ats_source_counts.update(ats_counts)
+        if ats_rows_changed:
+            file_changed = True
+        source_str = (
+            f"pinned:{ats_counts.get('pinned', 0)},"
+            f"snapshot:{ats_counts.get('snapshot', 0)},"
+            f"history:{ats_counts.get('history', 0)}"
+        )
+        print(
+            f"ATS_BACKFILL(NFL): week={season}-{target_week} "
+            f"games_fixed={ats_games_fixed} source_counts={source_str}"
+        )
+        if ats_games_fixed > 0:
+            rebuild_game_view = True
+
+        if file_changed or promoted > 0:
+            preserved_odds_total += preservation["preserved_odds"]
+            preserved_rvo_total += preservation["preserved_rvo"]
 
             write_atomic_jsonl(json_path, final_rows)
             final_df = pd.DataFrame(final_rows)
@@ -303,7 +546,7 @@ def backfill_nfl_scores(season: int, week: int) -> Dict[str, object]:
             write_atomic_csv(csv_path, final_df)
             files_rewritten += 1
 
-            if file_changed:
+            if row_updates > 0:
                 print(
                     f"BACKFILL_MERGE(NFL): week={season}-{target_week} "
                     f"updated_scores={row_updates} preserved_odds={preservation['preserved_odds']} "
@@ -312,7 +555,6 @@ def backfill_nfl_scores(season: int, week: int) -> Dict[str, object]:
 
             if rebuild_game_view:
                 _rebuild_nfl_game_view(season, target_week)
-
     return {
         "weeks": [f"W{w}" for w in weeks],
         "updated": updated_total,
@@ -320,6 +562,8 @@ def backfill_nfl_scores(season: int, week: int) -> Dict[str, object]:
         "files_rewritten": files_rewritten,
         "preserved_odds": preserved_odds_total,
         "preserved_rvo": preserved_rvo_total,
+        "ats_fixed": total_ats_fixed,
+        "ats_sources": dict(ats_source_counts),
     }
 
 

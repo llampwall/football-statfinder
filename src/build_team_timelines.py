@@ -311,6 +311,7 @@ def build_timelines(
             "opp_pr_rank",
             "opp_sos",
             "opp_sos_rank",
+            "to_margin",
             "pf",
             "pa",
         ]
@@ -376,6 +377,8 @@ def build_timelines(
                 "pf",
                 "pa",
                 "result",
+                "ats",
+                "to_margin",
                 "pr",
                 "pr_rank",
                 "sos",

@@ -15,17 +15,17 @@
       {
         "event_home": "Delaware Blue Hens",
         "event_away": "Middle Tennessee Blue Raiders",
-        "event_time": "2025-10-22T23:33:00Z",
+        "event_time": "2025-10-22T23:35:34Z",
         "home_norm": "delaware",
         "away_norm": "middletennessee",
         "game_key": "20251022_2330_middle_tennessee_delaware",
         "kickoff_iso_utc": "2025-10-22T23:30:00Z",
-        "mode": "ordered_exact"
+        "mode": "ordered_near"
       },
       {
         "event_home": "New Mexico State Aggies",
         "event_away": "Missouri State Bears",
-        "event_time": "2025-10-23T01:00:00Z",
+        "event_time": "2025-10-23T01:02:55Z",
         "home_norm": "newmexicostate",
         "away_norm": "missouristate",
         "game_key": "20251023_0100_missouri_state_new_mexico_state",

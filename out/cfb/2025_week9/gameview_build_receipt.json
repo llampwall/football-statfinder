@@ -34,6 +34,12 @@
         "kickoff_iso_utc": "2025-10-25T16:00:00Z"
       },
       {
+        "game_key": "20251025_1930_san_diego_state_fresno_state",
+        "home": "Fresno State",
+        "away": "San Diego State",
+        "kickoff_iso_utc": "2025-10-25T19:30:00Z"
+      },
+      {
         "game_key": "20251025_1930_florida_atlantic_navy",
         "home": "Navy",
         "away": "Florida Atlantic",
@@ -43,12 +49,6 @@
         "game_key": "20251025_1930_massachusetts_central_michigan",
         "home": "Central Michigan",
         "away": "Massachusetts",
-        "kickoff_iso_utc": "2025-10-25T19:30:00Z"
-      },
-      {
-        "game_key": "20251025_1930_san_diego_state_fresno_state",
-        "home": "Fresno State",
-        "away": "San Diego State",
         "kickoff_iso_utc": "2025-10-25T19:30:00Z"
       },
       {
