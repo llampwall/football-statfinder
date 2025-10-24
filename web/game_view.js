@@ -615,6 +615,7 @@ async function loadSingleGame(gameKey) {
   }
 
   STATE.lastLoadedAt = new Date();
+  console.log({game});
 
   const leagueLowerCurrent = (STATE.weekPaths?.league ?? STATE.league ?? DEFAULT_LEAGUE).toLowerCase();
   renderHeader(game, teamNames);
