@@ -71,8 +71,8 @@
     "Sagarin rows=134; master=6788",
     "Sidecars 53/307",
     "Sagarin enrichment 100%/90%",
-    "Odds promotion promoted=14 current_week=12280 other_weeks=27004 mismatch=0",
-    "Scores backfill [W7,W8] updated=55 skipped=2 files=1",
+    "Odds promotion promoted=14 current_week=12680 other_weeks=27818 mismatch=0",
+    "Scores backfill [W7,W8] updated=0 skipped=2 files=0",
     "ATS rows=0 teams=0 zero=0 weeks_scanned=[]",
     "Game View rows=53"
   ]
