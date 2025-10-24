@@ -1,0 +1,162 @@
+{
+  "season": 2025,
+  "week": 5,
+  "rows_considered": 1466,
+  "rows_enriched": 1466,
+  "opp_rows_enriched": 1310,
+  "coverage_fraction": 1.0,
+  "opp_coverage_fraction": 0.8935879945429741,
+  "missing_examples": [
+    {
+      "season": 2025,
+      "week": 1,
+      "team_norm": "army",
+      "context": "away_ytd_not_in_master"
+    },
+    {
+      "season": 2025,
+      "week": 2,
+      "team_norm": "army",
+      "context": "away_ytd_not_in_master"
+    },
+    {
+      "season": 2025,
+      "week": 4,
+      "team_norm": "army",
+      "context": "away_ytd_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 3,
+      "team_norm": "appstate",
+      "context": "home_prev_opp_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 8,
+      "team_norm": "army",
+      "context": "home_prev_opp_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 1,
+      "team_norm": "army",
+      "context": "away_prev_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 2,
+      "team_norm": "army",
+      "context": "away_prev_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 4,
+      "team_norm": "army",
+      "context": "away_prev_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 5,
+      "team_norm": "army",
+      "context": "away_prev_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 6,
+      "team_norm": "army",
+      "context": "away_prev_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 7,
+      "team_norm": "army",
+      "context": "away_prev_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 8,
+      "team_norm": "army",
+      "context": "away_prev_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 10,
+      "team_norm": "army",
+      "context": "away_prev_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 11,
+      "team_norm": "army",
+      "context": "away_prev_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 13,
+      "team_norm": "army",
+      "context": "away_prev_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 14,
+      "team_norm": "army",
+      "context": "away_prev_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 15,
+      "team_norm": "army",
+      "context": "away_prev_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 16,
+      "team_norm": "army",
+      "context": "away_prev_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 9,
+      "team_norm": "miami",
+      "context": "away_prev_opp_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 11,
+      "team_norm": "ucf",
+      "context": "home_prev_opp_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 2,
+      "team_norm": "longislanduniversity",
+      "context": "away_prev_opp_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 3,
+      "team_norm": "ucf",
+      "context": "away_prev_opp_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 11,
+      "team_norm": "sanjosstate",
+      "context": "home_prev_opp_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 8,
+      "team_norm": "miamioh",
+      "context": "home_prev_opp_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 15,
+      "team_norm": "miamioh",
+      "context": "home_prev_opp_not_in_master"
+    }
+  ],
+  "source": "C:\\Users\\Jordan\\Documents\\Football Project George\\NEW PROJECT\\football-statfinder\\out\\master\\sagarin_cfb_master.csv"
+}

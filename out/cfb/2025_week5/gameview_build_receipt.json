@@ -1,0 +1,95 @@
+{
+  "fbs_rows": 51,
+  "joined_metrics_rows": 51,
+  "joined_odds_rows": 0,
+  "joined_sagarin_rows": 50,
+  "output_rows": 51,
+  "odds_games": 0,
+  "sagarin_games": 50,
+  "coverage_metrics": 1.0,
+  "notes": [
+    "FBS games: 51",
+    "Metrics coverage: 51/51",
+    "Odds coverage: 0/51",
+    "Sagarin coverage: 50/51"
+  ],
+  "samples": {
+    "missing_odds": [
+      {
+        "game_key": "20250925_2330_army_east_carolina",
+        "home": "East Carolina",
+        "away": "Army",
+        "kickoff_iso_utc": "2025-09-25T23:30:00Z"
+      },
+      {
+        "game_key": "20250926_2300_florida_state_virginia",
+        "home": "Virginia",
+        "away": "Florida State",
+        "kickoff_iso_utc": "2025-09-26T23:00:00Z"
+      },
+      {
+        "game_key": "20250927_0100_tcu_arizona_state",
+        "home": "Arizona State",
+        "away": "Tcu",
+        "kickoff_iso_utc": "2025-09-27T01:00:00Z"
+      },
+      {
+        "game_key": "20250927_0230_houston_oregon_state",
+        "home": "Oregon State",
+        "away": "Houston",
+        "kickoff_iso_utc": "2025-09-27T02:30:00Z"
+      },
+      {
+        "game_key": "20250927_1600_notre_dame_fighting_irish_arkansas",
+        "home": "Arkansas",
+        "away": "Notre Dame Fighting Irish",
+        "kickoff_iso_utc": "2025-09-27T16:00:00Z"
+      },
+      {
+        "game_key": "20250927_1600_duke_syracuse",
+        "home": "Syracuse",
+        "away": "Duke",
+        "kickoff_iso_utc": "2025-09-27T16:00:00Z"
+      },
+      {
+        "game_key": "20250927_1600_ucf_kansas_state",
+        "home": "Kansas State",
+        "away": "Ucf",
+        "kickoff_iso_utc": "2025-09-27T16:00:00Z"
+      },
+      {
+        "game_key": "20250927_1600_louisville_pittsburgh",
+        "home": "Pittsburgh",
+        "away": "Louisville",
+        "kickoff_iso_utc": "2025-09-27T16:00:00Z"
+      },
+      {
+        "game_key": "20250927_1600_rutgers_minnesota",
+        "home": "Minnesota",
+        "away": "Rutgers",
+        "kickoff_iso_utc": "2025-09-27T16:00:00Z"
+      },
+      {
+        "game_key": "20250927_1600_usc_trojans_illinois",
+        "home": "Illinois",
+        "away": "USC Trojans",
+        "kickoff_iso_utc": "2025-09-27T16:00:00Z"
+      }
+    ],
+    "missing_sagarin": [
+      {
+        "game_key": "20250927_2300_western_kentucky_missouri_state",
+        "home": "Missouri State",
+        "away": "Western Kentucky",
+        "kickoff_iso_utc": "2025-09-27T23:00:00Z"
+      }
+    ],
+    "metrics_gaps": []
+  },
+  "ratings": {
+    "eligible": 0,
+    "edges_count": 0,
+    "rvo_count": 0
+  },
+  "failures": []
+}
