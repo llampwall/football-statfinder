@@ -222,7 +222,7 @@ def _load_sidecar(sidecar_dir: Path, game_key: str, cache: Dict[str, dict]) -> O
 
 
 def _is_blank(value: Any) -> bool:
-    return value in (None, "", " ", "—", "-", "NaN") or (isinstance(value, float) and value != value)
+    return value in (None, "", " ", "\u2014", "-", "NaN") or (isinstance(value, float) and value != value)
 
 
 def _update_sidecar_entry(

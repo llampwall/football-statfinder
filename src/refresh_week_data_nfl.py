@@ -19,11 +19,14 @@ from __future__ import annotations
 
 import argparse
 import copy
+import json
 import os
 import sys
+from collections import Counter
 from typing import Any, Dict
 
 from src.common.current_week_service import get_current_week
+from src.common.io_atomic import write_atomic_json
 from src.common.io_utils import ensure_out_dir, getenv
 from src.odds.nfl_ingest import ingest_nfl_odds_raw
 from src.odds.nfl_pin_to_schedule import pin_nfl_odds
@@ -33,8 +36,9 @@ from src.odds.nfl_promote_week import (
     write_week_outputs,
     diff_game_rows,
 )
+from src.odds.ats_compute import resolve_closing_spread, compute_ats
 from src.ratings.sagarin_nfl_fetch import run_nfl_sagarin_staging
-from src.scores.nfl_backfill import backfill_nfl_scores
+from src.scores.nfl_backfill import backfill_nfl_scores, _update_sidecar_entry
 from src.ats.nfl_ats import build_team_ats, apply_ats_to_week
 
 
@@ -74,6 +78,126 @@ def _run_odds_staging(season: int, week: int) -> Dict[str, Any]:
         log_line += ' hint="provider ahead or schedule mismatch"'
     print(log_line)
     return counts
+
+
+_BLANK_SENTINELS = {None, "", "\u2014", "-"}
+
+
+def _merge_only(old_value: Any, new_value: Any) -> Any:
+    return new_value if old_value in _BLANK_SENTINELS else old_value
+
+
+def _to_records_if_df(obj):
+    try:
+        import pandas as pd  # type: ignore
+
+        if isinstance(obj, pd.DataFrame):
+            return obj.to_dict("records"), "df"
+    except Exception:
+        pass
+    return obj, "list"
+
+
+def _load_sidecar_map(sidecar_dir) -> Dict[str, Dict[str, Any]]:
+    side_map: Dict[str, Dict[str, Any]] = {}
+    if not sidecar_dir or not sidecar_dir.exists():
+        return side_map
+    for path in sidecar_dir.glob("*.json"):
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            continue
+        if not isinstance(payload, dict):
+            continue
+        game_key = payload.get("game_key") or path.stem
+        if not isinstance(game_key, str) or not game_key:
+            continue
+        side_map[game_key] = {"data": payload, "path": path, "dirty": False}
+    return side_map
+
+
+def backfill_ats_for_week(
+    league: str,
+    season: int,
+    week: int,
+    games_obj,
+    sidecars: Dict[str, Dict[str, Any]],
+):
+    games, mode = _to_records_if_df(games_obj)
+    counts: Counter[str] = Counter()
+    games_fixed = 0
+
+    for game in games or []:
+        if not isinstance(game, dict):
+            continue
+        game_key = game.get("game_key")
+        if not isinstance(game_key, str):
+            continue
+        try:
+            home_score = int(game.get("home_score"))
+            away_score = int(game.get("away_score"))
+        except (TypeError, ValueError):
+            continue
+        if home_score == 0 and away_score == 0:
+            continue
+
+        closing = resolve_closing_spread(league, season, game)
+        if not closing or closing.get("favored_team") is None or closing.get("spread") is None:
+            continue
+
+        ats_payload = compute_ats(home_score, away_score, closing["favored_team"], float(closing["spread"]))
+        if not ats_payload:
+            continue
+
+        game_changed = False
+
+        for field, new_value in (
+            ("home_ats", ats_payload["home_ats"]),
+            ("away_ats", ats_payload["away_ats"]),
+            ("to_margin_home", ats_payload["to_margin_home"]),
+            ("to_margin_away", ats_payload["to_margin_away"]),
+        ):
+            current = game.get(field)
+            merged = _merge_only(current, new_value)
+            if merged != current:
+                game[field] = merged
+                game_changed = True
+
+        sidecar_entry = sidecars.get(game_key)
+        if sidecar_entry:
+            data = sidecar_entry.get("data") or {}
+            home_changed = _update_sidecar_entry(
+                data.get("home_ytd"),
+                season,
+                week,
+                ats=ats_payload["home_ats"],
+                to_margin=ats_payload["to_margin_home"],
+            )
+            away_changed = _update_sidecar_entry(
+                data.get("away_ytd"),
+                season,
+                week,
+                ats=ats_payload["away_ats"],
+                to_margin=ats_payload["to_margin_away"],
+            )
+            if home_changed or away_changed:
+                sidecar_entry["dirty"] = True
+                game_changed = True
+
+        if game_changed:
+            counts[closing.get("source") or "unknown"] += 1
+            games_fixed += 1
+
+    print(
+        f"ATS_BACKFILL({league}): week={season}-{week} games_fixed={games_fixed} "
+        f"source_counts=pinned:{counts['pinned']},snapshot:{counts['snapshot']},history:{counts['history']}"
+    )
+
+    if mode == "df":
+        import pandas as pd  # type: ignore
+
+        return pd.DataFrame(games), games_fixed, counts
+    return games, games_fixed, counts
 
 
 def main() -> None:
@@ -131,6 +255,28 @@ def main() -> None:
         f"skipped={backfill_summary.get('skipped', 0)}"
     )
 
+    out_root = ensure_out_dir()
+    week_dir = out_root / f"{season}_week{week}"
+    json_path = week_dir / f"games_week_{season}_{week}.jsonl"
+    csv_path = week_dir / f"games_week_{season}_{week}.csv"
+    sidecar_dir = week_dir / "game_schedules"
+
+    current_rows = read_week_json(json_path)
+    sidecar_map = _load_sidecar_map(sidecar_dir)
+    current_rows, ats_games_fixed, ats_counts = backfill_ats_for_week(
+        "NFL",
+        season,
+        week,
+        current_rows,
+        sidecar_map,
+    )
+    rows_for_write = current_rows if isinstance(current_rows, list) else current_rows.to_dict("records")  # type: ignore[attr-defined]
+    if ats_games_fixed > 0:
+        write_week_outputs(rows_for_write, season, week)
+    for entry in sidecar_map.values():
+        if entry.get("dirty"):
+            write_atomic_json(entry["path"], entry["data"])
+
     team_ats = build_team_ats(season, week)
     ats_rows_updated = apply_ats_to_week(season, week, team_ats)
     print(f"ATS(NFL): teams={apply_ats_to_week.teams_in_week} rows_updated={ats_rows_updated}")
@@ -138,11 +284,6 @@ def main() -> None:
     promotion_info = None
     legacy_mismatch = 0
     promoted_total = 0
-
-    out_root = ensure_out_dir()
-    week_dir = out_root / f"{season}_week{week}"
-    json_path = week_dir / f"games_week_{season}_{week}.jsonl"
-    csv_path = week_dir / f"games_week_{season}_{week}.csv"
 
     if getenv("ODDS_PROMOTION_ENABLE", "1").strip().lower() not in {"0", "false", "off", "disabled"}:
         legacy_rows = read_week_json(json_path)

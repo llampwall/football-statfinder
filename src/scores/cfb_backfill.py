@@ -31,7 +31,7 @@ import sys
 from copy import deepcopy
 from collections import Counter
 from pathlib import Path
-from typing import Dict, Any,Iterable, List, Mapping, Optional, Sequence, Tuple
+from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
 
 import pandas as pd
 
@@ -159,7 +159,18 @@ def _load_sidecar(sidecar_dir: Path, game_key: str, cache: Dict[str, Optional[di
     return cache[game_key]
 
 
-def _update_sidecar_entry(entries: Iterable[dict], season: int, week: int, *, ats: Optional[str], margin: Optional[float]) -> bool:
+def _is_blank(value: Any) -> bool:
+    return value in (None, "", "\u2014", "-")
+
+
+def _update_sidecar_entry(
+    entries: Iterable[dict],
+    season: int,
+    week: int,
+    *,
+    ats: Optional[str] = None,
+    to_margin: Optional[float] = None,
+) -> bool:
     updated = False
     for entry in entries or []:
         try:
@@ -169,15 +180,12 @@ def _update_sidecar_entry(entries: Iterable[dict], season: int, week: int, *, at
             continue
         if entry_season != season or entry_week != week:
             continue
-        if ats and ats_is_blank(entry.get("ats")):
+        if ats and _is_blank(entry.get("ats")):
             entry["ats"] = ats
             updated = True
-        if margin is not None:
-            current_margin = entry.get("to_margin")
-            if not _is_finite_number(current_margin):
-                entry["to_margin"] = round(float(margin), 2)
-                updated = True
-        break
+        if to_margin is not None and _is_blank(entry.get("to_margin")):
+            entry["to_margin"] = to_margin
+            updated = True
     return updated
 
 
@@ -275,10 +283,10 @@ def _apply_ats_backfill(
         if sidecar_entry:
             data = sidecar_entry["data"]
             home_changed = _update_sidecar_entry(
-                data.get("home_ytd"), season, week, ats=ats_payload["home_ats"], margin=ats_payload["to_margin_home"]
+                data.get("home_ytd"), season, week, ats=ats_payload["home_ats"], to_margin=ats_payload["to_margin_home"]
             )
             away_changed = _update_sidecar_entry(
-                data.get("away_ytd"), season, week, ats=ats_payload["away_ats"], margin=ats_payload["to_margin_away"]
+                data.get("away_ytd"), season, week, ats=ats_payload["away_ats"], to_margin=ats_payload["to_margin_away"]
             )
             if home_changed or away_changed:
                 sidecar_entry["dirty"] = True
