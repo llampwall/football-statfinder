@@ -1,0 +1,162 @@
+{
+  "season": 2025,
+  "week": 3,
+  "rows_considered": 1228,
+  "rows_enriched": 1228,
+  "opp_rows_enriched": 1090,
+  "coverage_fraction": 1.0,
+  "opp_coverage_fraction": 0.8876221498371335,
+  "missing_examples": [
+    {
+      "season": 2024,
+      "week": 1,
+      "team_norm": "northcarolinaaandt",
+      "context": "home_prev_opp_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 3,
+      "team_norm": "olemiss",
+      "context": "home_prev_opp_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 5,
+      "team_norm": "louisiana",
+      "context": "home_prev_opp_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 8,
+      "team_norm": "uconn",
+      "context": "home_prev_opp_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 13,
+      "team_norm": "miami",
+      "context": "home_prev_opp_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 5,
+      "team_norm": "ucf",
+      "context": "away_prev_opp_not_in_master"
+    },
+    {
+      "season": 2025,
+      "week": 2,
+      "team_norm": "army",
+      "context": "away_ytd_opp_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 10,
+      "team_norm": "ucf",
+      "context": "home_prev_opp_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 1,
+      "team_norm": "utmartin",
+      "context": "away_prev_opp_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 13,
+      "team_norm": "usctrojans",
+      "context": "home_prev_opp_not_in_master"
+    },
+    {
+      "season": 2025,
+      "week": 2,
+      "team_norm": "stfrancispa",
+      "context": "away_ytd_opp_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 2,
+      "team_norm": "stfrancispa",
+      "context": "home_prev_opp_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 12,
+      "team_norm": "miamioh",
+      "context": "home_prev_opp_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 5,
+      "team_norm": "uconn",
+      "context": "away_prev_opp_not_in_master"
+    },
+    {
+      "season": 2025,
+      "week": 1,
+      "team_norm": "sanjosstate",
+      "context": "away_ytd_opp_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 4,
+      "team_norm": "usctrojans",
+      "context": "home_prev_opp_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 2,
+      "team_norm": "floridainternational",
+      "context": "away_prev_opp_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 9,
+      "team_norm": "miamioh",
+      "context": "away_prev_opp_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 11,
+      "team_norm": "miami",
+      "context": "home_prev_opp_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 2,
+      "team_norm": "appstate",
+      "context": "away_prev_opp_not_in_master"
+    },
+    {
+      "season": 2025,
+      "week": 1,
+      "team_norm": "nicholls",
+      "context": "home_ytd_opp_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 5,
+      "team_norm": "ulmonroe",
+      "context": "home_prev_opp_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 13,
+      "team_norm": "louisiana",
+      "context": "home_prev_opp_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 5,
+      "team_norm": "army",
+      "context": "home_prev_opp_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 6,
+      "team_norm": "uconn",
+      "context": "home_prev_opp_not_in_master"
+    }
+  ],
+  "source": "C:\\Users\\Jordan\\Documents\\Football Project George\\NEW PROJECT\\football-statfinder\\out\\master\\sagarin_cfb_master.csv"
+}
