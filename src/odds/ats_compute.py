@@ -11,12 +11,12 @@ import json
 import math
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple, Iterable
+from typing import Any, Dict, Iterable, List, Optional, Tuple
 
 from src.common.io_utils import ensure_out_dir
 from src.common.team_names import team_merge_key
 from src.common.team_names_cfb import team_merge_key_cfb
-from src.odds import odds_history   # safe to import; it can no-op when offline
+from src.odds.odds_history import get_closing_spread   # safe to import; it can no-op when offline
 
 _OUT_ROOT = ensure_out_dir()
 _PINNED_ROOT = _OUT_ROOT / "staging" / "odds_pinned"
@@ -68,33 +68,55 @@ def _load_jsonl(path: Path) -> List[dict]:
     return records
 
 
-def load_pinned_index(idx: dict,
-                      league: str,
-                      season: int,
-                      game_key: str,
-                      rec: dict) -> dict:
+def _load_pinned_index(league: str, season: int) -> Dict[str, dict]:
     """
-    Insert/replace the pinned odds record for a game_key.
-
-    Replace if:
-      - there is no existing record, OR
-      - existing record has no fetch_ts, OR
-      - new rec.fetch_ts is newer than existing fetch_ts
+    Build and cache an index of pinned spread records for a league/season:
+      { game_key: record }
     """
-    g = idx.setdefault((league, season), {})
-    cur = g.get(game_key)
-    def _to_dt(x):
-        if not x: return None
-        if isinstance(x, (int, float)):
-            return datetime.fromtimestamp(float(x), tz=timezone.utc)
-        return datetime.fromisoformat(str(x).replace("Z", "+00:00"))
+    cache_key = (league.lower(), int(season))
+    if cache_key in _PINNED_CACHE:
+        return _PINNED_CACHE[cache_key]
 
-    new_when = _to_dt(rec.get("fetch_ts"))
-    cur_when = _to_dt(cur.get("fetch_ts") if isinstance(cur, dict) else None)
+    idx: Dict[str, dict] = {}
+    path = _PINNED_ROOT / league.lower() / f"{season}.jsonl"
+    if path.exists():
+        for rec in _load_jsonl(path):
+            # only spreads, and only rows that have a game_key
+            if rec.get("market") == "spreads" and isinstance(rec.get("game_key"), str):
+                # use the existing helper to handle “newer fetch_ts wins”
+                load_pinned_index(idx, league, season, rec["game_key"], rec)
 
-    if (cur is None) or (cur_when is None) or (new_when and cur_when and new_when > cur_when):
-        g[game_key] = rec
+    _PINNED_CACHE[cache_key] = idx
     return idx
+
+
+# def load_pinned_index(idx: dict,
+#                       league: str,
+#                       season: int,
+#                       game_key: str,
+#                       rec: dict) -> dict:
+#     """
+#     Insert/replace the pinned odds record for a game_key.
+
+#     Replace if:
+#       - there is no existing record, OR
+#       - existing record has no fetch_ts, OR
+#       - new rec.fetch_ts is newer than existing fetch_ts
+#     """
+#     g = idx.setdefault((league, season), {})
+#     cur = g.get(game_key)
+#     def _to_dt(x):
+#         if not x: return None
+#         if isinstance(x, (int, float)):
+#             return datetime.fromtimestamp(float(x), tz=timezone.utc)
+#         return datetime.fromisoformat(str(x).replace("Z", "+00:00"))
+
+#     new_when = _to_dt(rec.get("fetch_ts"))
+#     cur_when = _to_dt(cur.get("fetch_ts") if isinstance(cur, dict) else None)
+
+#     if (cur is None) or (cur_when is None) or (new_when and cur_when and new_when > cur_when):
+#         g[game_key] = rec
+#     return idx
 
 
 def _load_snapshots(league: str, season: int, week: int) -> List[dict]:
@@ -184,37 +206,46 @@ def _record_to_payload(
 
 
 def resolve_closing_spread(league: str, season: int, game_row: dict) -> Optional[dict]:
-    """
-    Returns {"favored_team": str, "spread": float, "source": "pinned|snapshot|history", "book": Optional[str]}
-    or None if nothing can be resolved.
-    """
-    game_key = game_row.get("game_key", "")
-    kickoff = game_row.get("kickoff_iso_utc")
-    cutoff = None
+    """Resolve closing spread using odds history, pinned data, then local snapshots."""
+    history = get_closing_spread(league, game_row)
+    if history and _is_finite(history.get("spread")) and history.get("favored_team"):
+        payload = {
+            "favored_team": history.get("favored_team"),
+            "spread": float(abs(history["spread"])),
+            "book": history.get("book"),
+            "fetched_ts": history.get("fetched_ts"),
+            "source": "history",
+        }
+        return payload
+    
+    # 2) pinned (from out/staging/odds_pinned/<league>/<season>.jsonl)
+    pinned_index = _load_pinned_index(league, season)
+    pinned_record = pinned_index.get(game_row.get("game_key"))
+    if pinned_record:
+        home_norm = game_row.get("home_team_norm") or game_row.get("home_team_raw")
+        away_norm = game_row.get("away_team_norm") or game_row.get("away_team_raw")
+        payload = _record_to_payload(pinned_record, league, home_norm, away_norm)
+        if payload:
+            payload["source"] = "pinned"
+            return payload
+
+    # 3) latest pre-kick local snapshot (odds_{season}_wk{week}.jsonl)
     try:
-        cutoff = datetime.fromisoformat(str(kickoff).replace("Z", "+00:00"))
+        week = int(game_row.get("week"))
     except Exception:
-        cutoff = datetime.now(tz=timezone.utc)
-
-    # 1) pinned (exact match by game_key)
-    pinned_idx: dict = _PINNED_CACHE.get((league, season), {})
-    pinned = pinned_idx.get(game_key)
-    if pinned and isinstance(pinned, dict) and "spread" in pinned and pinned.get("favored_team"):
-        return {"favored_team": pinned["favored_team"], "spread": float(pinned["spread"]),
-                "source": "pinned", "book": pinned.get("book")}
-
-    # 2) snapshot(s) near kickoff (pre-kick latest)
-    snapshots: List[dict] = _SNAPSHOT_CACHE.get((league, season), {}).get(game_key, [])
-    snap = pick_latest_before(snapshots, cutoff)
-    if snap and "spread" in snap and snap.get("favored_team"):
-        return {"favored_team": snap["favored_team"], "spread": float(snap["spread"]),
-                "source": "snapshot", "book": snap.get("book")}
-
-    # 3) history via The Odds API (last pre-kick)
-    hist = odds_history.get_closing_spread(league, game_row)  # may return None offline
-    if hist and "spread" in hist and hist.get("favored_team"):
-        return {"favored_team": hist["favored_team"], "spread": float(hist["spread"]),
-                "source": "history", "book": hist.get("book")}
+        week = None
+    kickoff_ts = _parse_ts(game_row.get("kickoff_iso_utc") or game_row.get("kickoff_iso"))
+    cutoff = kickoff_ts or datetime.max.replace(tzinfo=timezone.utc)
+    if week is not None:
+        home_norm = game_row.get("home_team_norm") or game_row.get("home_team_raw")
+        away_norm = game_row.get("away_team_norm") or game_row.get("away_team_raw")
+        snapshots = _load_snapshots(league, season, week)
+        snap_record = pick_latest_before(snapshots, cutoff)
+        if snap_record:
+            payload = _record_to_payload(snap_record, league, home_norm, away_norm)
+            if payload:
+                payload["source"] = "snapshot"
+                return payload
 
     return None
 

@@ -32,7 +32,7 @@ import sys
 from copy import deepcopy
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
+from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
 
 import pandas as pd
 
@@ -221,35 +221,34 @@ def _load_sidecar(sidecar_dir: Path, game_key: str, cache: Dict[str, dict]) -> O
     return cache[game_key]
 
 
-def _update_sidecar_entry(sidecar: dict,
-                          is_home: bool,
-                          season: int,
-                          week: int,
-                          *, ats: str | None,
-                          to_margin: float | None) -> None:
-    """
-    Ensure the home_ytd/away_ytd list exists, locate the (season, week) entry,
-    and update or append with ATS + to_margin.
-    """
-    key = "home_ytd" if is_home else "away_ytd"
-    rows = sidecar.setdefault(key, [])
-    # locate row
-    row = None
-    for r in rows:
-        if r.get("season") == season and r.get("week") == week:
-            row = r
-            break
-    if row is None:
-        row = {"season": season, "week": week}
-        rows.append(row)
-    if ats is not None:
-        row["ats"] = ats
-    if to_margin is not None and math.isfinite(to_margin):
-        row["to_margin"] = round(float(to_margin), 3)
+def _is_blank(value: Any) -> bool:
+    return value in (None, "", " ", "—", "-", "NaN") or (isinstance(value, float) and value != value)
 
 
+def _update_sidecar_entry(
+    entries: Iterable[Dict[str, Any]],
+    season: int,
+    week: int,
+    *,
+    ats: Optional[str] = None,
+    to_margin: Optional[float] = None,
+) -> bool:
+    """Returns True if any entry was updated."""
+    changed = False
+    for entry in entries or []:
+        try:
+            if int(entry.get("season")) != season or int(entry.get("week")) != week:
+                continue
+        except Exception:
+            continue
 
-
+        if ats is not None and _is_blank(entry.get("ats")):
+            entry["ats"] = ats
+            changed = True
+        if to_margin is not None and _is_blank(entry.get("to_margin")):
+            entry["to_margin"] = to_margin
+            changed = True
+    return changed
 
 def _sidecar_needs_ats(entries: Iterable[dict], season: int, week: int) -> bool:
     for entry in entries or []:
@@ -343,10 +342,10 @@ def _apply_ats_backfill(
         if sidecar_entry:
             data = sidecar_entry["data"]
             home_changed = _update_sidecar_entry(
-                data.get("home_ytd"), season, week, ats=ats_payload["home_ats"], margin=ats_payload["to_margin_home"]
+                data.get("home_ytd"), season, week, ats=ats_payload["home_ats"], to_margin=ats_payload["to_margin_home"]
             )
             away_changed = _update_sidecar_entry(
-                data.get("away_ytd"), season, week, ats=ats_payload["away_ats"], margin=ats_payload["to_margin_away"]
+                data.get("away_ytd"), season, week, ats=ats_payload["away_ats"], to_margin=ats_payload["to_margin_away"]
             )
             if home_changed or away_changed:
                 sidecar_entry["dirty"] = True
