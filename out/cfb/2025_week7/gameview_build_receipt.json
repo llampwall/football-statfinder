@@ -1,0 +1,95 @@
+{
+  "fbs_rows": 56,
+  "joined_metrics_rows": 56,
+  "joined_odds_rows": 0,
+  "joined_sagarin_rows": 55,
+  "output_rows": 56,
+  "odds_games": 0,
+  "sagarin_games": 55,
+  "coverage_metrics": 1.0,
+  "notes": [
+    "FBS games: 56",
+    "Metrics coverage: 56/56",
+    "Odds coverage: 0/56",
+    "Sagarin coverage: 55/56"
+  ],
+  "samples": {
+    "missing_odds": [
+      {
+        "game_key": "20251008_2330_missouri_state_middle_tennessee",
+        "home": "Middle Tennessee",
+        "away": "Missouri State",
+        "kickoff_iso_utc": "2025-10-08T23:30:00Z"
+      },
+      {
+        "game_key": "20251009_0000_liberty_utep",
+        "home": "Utep",
+        "away": "Liberty",
+        "kickoff_iso_utc": "2025-10-09T00:00:00Z"
+      },
+      {
+        "game_key": "20251009_2300_louisiana_tech_kennesaw_state",
+        "home": "Kennesaw State",
+        "away": "Louisiana Tech",
+        "kickoff_iso_utc": "2025-10-09T23:00:00Z"
+      },
+      {
+        "game_key": "20251009_2330_east_carolina_tulane",
+        "home": "Tulane",
+        "away": "East Carolina",
+        "kickoff_iso_utc": "2025-10-09T23:30:00Z"
+      },
+      {
+        "game_key": "20251010_0000_jacksonville_state_sam_houston",
+        "home": "Sam Houston",
+        "away": "Jacksonville State",
+        "kickoff_iso_utc": "2025-10-10T00:00:00Z"
+      },
+      {
+        "game_key": "20251010_0000_southern_miss_georgia_southern",
+        "home": "Georgia Southern",
+        "away": "Southern Miss",
+        "kickoff_iso_utc": "2025-10-10T00:00:00Z"
+      },
+      {
+        "game_key": "20251010_2330_south_florida_north_texas",
+        "home": "North Texas",
+        "away": "South Florida",
+        "kickoff_iso_utc": "2025-10-10T23:30:00Z"
+      },
+      {
+        "game_key": "20251011_0100_fresno_state_colorado_state",
+        "home": "Colorado State",
+        "away": "Fresno State",
+        "kickoff_iso_utc": "2025-10-11T01:00:00Z"
+      },
+      {
+        "game_key": "20251011_0100_rutgers_washington",
+        "home": "Washington",
+        "away": "Rutgers",
+        "kickoff_iso_utc": "2025-10-11T01:00:00Z"
+      },
+      {
+        "game_key": "20251011_1600_ucla_michigan_state",
+        "home": "Michigan State",
+        "away": "Ucla",
+        "kickoff_iso_utc": "2025-10-11T16:00:00Z"
+      }
+    ],
+    "missing_sagarin": [
+      {
+        "game_key": "20251008_2330_missouri_state_middle_tennessee",
+        "home": "Middle Tennessee",
+        "away": "Missouri State",
+        "kickoff_iso_utc": "2025-10-08T23:30:00Z"
+      }
+    ],
+    "metrics_gaps": []
+  },
+  "ratings": {
+    "eligible": 0,
+    "edges_count": 0,
+    "rvo_count": 0
+  },
+  "failures": []
+}
