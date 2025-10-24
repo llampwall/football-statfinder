@@ -23,12 +23,13 @@ import json
 import os
 import sys
 from collections import Counter
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, Iterable, List, Optional, Tuple
 from pathlib import Path
 
 from src.common.current_week_service import get_current_week
 from src.common.io_atomic import write_atomic_json
 from src.common.io_utils import ensure_out_dir, getenv
+from src.common.team_names import team_merge_key
 from src.odds.nfl_ingest import ingest_nfl_odds_raw
 from src.odds.nfl_pin_to_schedule import pin_nfl_odds
 from src.odds.nfl_promote_week import (
@@ -115,6 +116,107 @@ def _load_sidecar_map(sidecar_dir) -> Dict[str, Dict[str, Any]]:
     return side_map
 
 
+# --- weekly prior-week sidecar touch-ups ---
+
+def _iter_games_for_weeks(out_root: Path, season: int, weeks: Iterable[int]):
+    for w in weeks:
+        wk_dir = out_root / f"{season}_week{w}"
+        path = wk_dir / f"games_week_{season}_{w}.jsonl"
+        if not path.exists():
+            continue
+        with path.open("r", encoding="utf-8") as handle:
+            for line in handle:
+                text = line.strip()
+                if not text:
+                    continue
+                try:
+                    yield w, json.loads(text)
+                except Exception:
+                    continue
+
+
+def _sidecar_backfill_prior_weeks(
+    *,
+    season: int,
+    week: int,
+    out_root: Path,
+    sidecar_payload: Dict[str, Any],
+) -> int:
+    """
+    Merge prior-week ATS/to-margin from games_week JSONL files into sidecar YTD rows.
+    """
+    if week <= 1:
+        return 0
+
+    def _normalize(token: Any) -> Optional[str]:
+        if not token:
+            return None
+        return team_merge_key(str(token))
+
+    index: Dict[tuple, Dict[str, Any]] = {}
+    for key in ("home_ytd", "away_ytd"):
+        for entry in sidecar_payload.get(key) or []:
+            try:
+                entry_season = int(entry.get("season"))
+                entry_week = int(entry.get("week"))
+            except Exception:
+                continue
+            if entry_season != season:
+                continue
+            opp_norm = _normalize(entry.get("opp"))
+            site = str(entry.get("site") or "")
+            index[(key, entry_week)] = entry
+            if opp_norm is not None:
+                index[(key, entry_week, opp_norm, site)] = entry
+
+    updated = 0
+    weeks_iter = range(1, week)
+    for w, game in _iter_games_for_weeks(out_root, season, weeks_iter):
+        home_ats = game.get("home_ats")
+        away_ats = game.get("away_ats")
+        home_tm = game.get("to_margin_home")
+        away_tm = game.get("to_margin_away")
+
+        def _lookup(kind: str, opp_norm: Optional[str], site_code: str) -> Optional[Dict[str, Any]]:
+            entry = None
+            if opp_norm is not None:
+                entry = index.get((kind, w, opp_norm, site_code))
+                if entry is None:
+                    entry = index.get((kind, w, opp_norm, ""))
+            if entry is None:
+                entry = index.get((kind, w))
+            return entry
+
+        away_norm = _normalize(game.get("away_team_norm")) or _normalize(game.get("away_team_raw"))
+        home_norm = _normalize(game.get("home_team_norm")) or _normalize(game.get("home_team_raw"))
+
+        def _fill(entry: Optional[Dict[str, Any]], ats_value: Any, margin_value: Any) -> bool:
+            if entry is None:
+                return False
+            changed = False
+            if ats_value not in (None, "", "—"):
+                new_ats = _merge_only(entry.get("ats"), ats_value)
+                if new_ats != entry.get("ats"):
+                    entry["ats"] = new_ats
+                    changed = True
+            if margin_value not in (None, ""):
+                new_tm = _merge_only(entry.get("to_margin"), margin_value)
+                if new_tm != entry.get("to_margin"):
+                    entry["to_margin"] = new_tm
+                    changed = True
+            return changed
+
+        home_entry = _lookup("home_ytd", away_norm, "H")
+        if _fill(home_entry, home_ats, home_tm):
+            updated += 1
+
+        away_entry = _lookup("away_ytd", home_norm, "A")
+        if _fill(away_entry, away_ats, away_tm):
+            updated += 1
+
+    return updated
+
+
 # --- replace the old backfill_ats_for_week with this version in BOTH NFL/CFB refreshers ---
 
 def backfill_ats_for_week(
@@ -159,9 +261,22 @@ def backfill_ats_for_week(
             # _update_sidecar_entry will no-op if the sidecar’s already filled).
             res = resolve_closing_spread(LEAGUE, season, g)
             if res:
+                raw_sources = g.get("raw_sources") if isinstance(g.get("raw_sources"), dict) else {}
+                schedule_row = raw_sources.get("schedule_row") if isinstance(raw_sources, dict) else {}
+                home_score_val = g.get("home_score")
+                away_score_val = g.get("away_score")
+                if home_score_val in (None, "") and isinstance(schedule_row, dict):
+                    home_score_val = schedule_row.get("home_score")
+                if away_score_val in (None, "") and isinstance(schedule_row, dict):
+                    away_score_val = schedule_row.get("away_score")
+                try:
+                    home_score_int = int(home_score_val)
+                    away_score_int = int(away_score_val)
+                except (TypeError, ValueError):
+                    continue
                 out = compute_ats(
-                    int(g.get("home_score") or 0),
-                    int(g.get("away_score") or 0),
+                    home_score_int,
+                    away_score_int,
                     res["favored_team"],
                     float(res["spread"]),
                 )
@@ -276,6 +391,24 @@ def main() -> None:
         current_rows,
         sidecar_map,
     )
+
+    prior_updates_total = 0
+    for entry in sidecar_map.values():
+        payload = entry.get("data")
+        if not isinstance(payload, dict):
+            continue
+        updated = _sidecar_backfill_prior_weeks(
+            season=season,
+            week=week,
+            out_root=out_root,
+            sidecar_payload=payload,
+        )
+        if updated:
+            entry["dirty"] = True
+            prior_updates_total += updated
+    if prior_updates_total:
+        print(f"ATS_SIDECAR_FIX(NFL): week={season}-{week} rows_updated={prior_updates_total}")
+
     rows_for_write = current_rows if isinstance(current_rows, list) else current_rows.to_dict("records")  # type: ignore[attr-defined]
     if ats_games_fixed > 0:
         write_week_outputs(rows_for_write, season, week)

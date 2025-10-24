@@ -1,5 +1,19 @@
 {
-  "games_week_keys_missing": [],
+  "games_week_keys_missing": [
+    "20251024_0015_lac_min",
+    "20251026_1700_atl_mia",
+    "20251026_1700_bal_chi",
+    "20251026_1700_car_buf",
+    "20251026_1700_cin_nyj",
+    "20251026_1700_hou_49ers",
+    "20251026_1700_ne_cle",
+    "20251026_1700_phi_nyg",
+    "20251026_2005_no_tb",
+    "20251026_2025_den_dal",
+    "20251026_2025_ind_ten",
+    "20251027_0020_pit_gb",
+    "20251028_0015_kc_commanders"
+  ],
   "games_week_keys_present_blank": [
     "20251014_2300_new_mexico_state_liberty",
     "20251014_2330_arkansas_state_south_alabama",
@@ -63,7 +77,21 @@
   ],
   "counts": {
     "rows": 59,
-    "missing_key_hits": {},
+    "missing_key_hits": {
+      "20251024_0015_lac_min": 1,
+      "20251026_1700_atl_mia": 1,
+      "20251026_1700_bal_chi": 1,
+      "20251026_1700_car_buf": 1,
+      "20251026_1700_cin_nyj": 1,
+      "20251026_1700_hou_49ers": 1,
+      "20251026_1700_ne_cle": 1,
+      "20251026_1700_phi_nyg": 1,
+      "20251026_2005_no_tb": 1,
+      "20251026_2025_den_dal": 1,
+      "20251026_2025_ind_ten": 1,
+      "20251027_0020_pit_gb": 1,
+      "20251028_0015_kc_commanders": 1
+    },
     "blank_key_hits": {
       "20251014_2300_new_mexico_state_liberty": 5,
       "20251014_2330_arkansas_state_south_alabama": 5,
@@ -128,17 +156,16 @@
   },
   "notes": [
     "Schedule rows=295",
-    "Odds staging raw=1212 pinned=1045 unmatched=167",
+    "Odds staging raw=1417 pinned=1206 unmatched=211",
     "League metrics 136/136 teams meeting threshold (required 100); ranks_ok=1.00",
-    "Odds matched 0/0 (total 53); unmatched=53",
+    "Odds matched 0/0 (total 61); unmatched=61",
     "Master enrichment 0/0",
-    "Sagarin rows=134; master=6294",
+    "Sagarin rows=134; master=6562",
     "Sidecars 296/295",
     "Sagarin enrichment 100%/89%",
-    "Odds promotion promoted=0 current_week=0 other_weeks=10245 mismatch=0",
+    "Odds promotion promoted=0 current_week=0 other_weeks=27135 mismatch=0",
     "Scores backfill [W6,W7] updated=0 skipped=1 files=0",
     "ATS rows=0 teams=0 zero=118 weeks_scanned=[7]",
-    "Game View rows=59",
-    "NFL week baseline not found; skipping cross-league key comparison."
+    "Game View rows=59"
   ]
 }

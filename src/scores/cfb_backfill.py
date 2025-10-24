@@ -171,7 +171,10 @@ def _update_sidecar_entry(
     ats: Optional[str] = None,
     to_margin: Optional[float] = None,
 ) -> bool:
+    if entries is None:
+        return False
     updated = False
+    matched = False
     for entry in entries or []:
         try:
             entry_season = int(entry.get("season"))
@@ -180,12 +183,21 @@ def _update_sidecar_entry(
             continue
         if entry_season != season or entry_week != week:
             continue
+        matched = True
         if ats and _is_blank(entry.get("ats")):
             entry["ats"] = ats
             updated = True
         if to_margin is not None and _is_blank(entry.get("to_margin")):
             entry["to_margin"] = to_margin
             updated = True
+    if not matched and isinstance(entries, list) and (ats is not None or to_margin is not None):
+        new_entry = {"season": season, "week": week}
+        if ats is not None:
+            new_entry["ats"] = ats
+        if to_margin is not None:
+            new_entry["to_margin"] = to_margin
+        entries.append(new_entry)
+        updated = True
     return updated
 
 
@@ -495,10 +507,11 @@ def backfill_cfb_scores(
             preserved_rvo_total += preservation["preserved_rvo"]
 
             write_atomic_jsonl(json_path, final_rows)
-            final_df = pd.DataFrame(final_rows)
-            if csv_df is not None:
+            final_df = pd.DataFrame(final_rows) if final_rows else None
+            if csv_df is not None and final_df is not None:
                 final_df = _align_columns(final_df, list(csv_df.columns))
-            write_atomic_csv(csv_path, final_df)
+            if final_df is not None and len(final_df) > 0:
+                write_atomic_csv(csv_path, final_df)
             files_rewritten += 1
 
             if week_changed:

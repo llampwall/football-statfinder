@@ -234,13 +234,17 @@ def _update_sidecar_entry(
     to_margin: Optional[float] = None,
 ) -> bool:
     """Returns True if any entry was updated."""
+    if entries is None:
+        return False
     changed = False
+    matched = False
     for entry in entries or []:
         try:
             if int(entry.get("season")) != season or int(entry.get("week")) != week:
                 continue
         except Exception:
             continue
+        matched = True
 
         if ats is not None and _is_blank(entry.get("ats")):
             entry["ats"] = ats
@@ -248,6 +252,15 @@ def _update_sidecar_entry(
         if to_margin is not None and _is_blank(entry.get("to_margin")):
             entry["to_margin"] = to_margin
             changed = True
+    if not matched and isinstance(entries, list) and (ats is not None or to_margin is not None):
+        new_entry: Dict[str, Any] = {"season": season, "week": week}
+        if ats is not None:
+            new_entry["ats"] = ats
+        if to_margin is not None:
+            new_entry["to_margin"] = to_margin
+        entries.append(new_entry)
+        changed = True
+    return changed
     return changed
 
 def _sidecar_needs_ats(entries: Iterable[dict], season: int, week: int) -> bool:
