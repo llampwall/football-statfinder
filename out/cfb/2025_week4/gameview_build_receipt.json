@@ -1,0 +1,95 @@
+{
+  "fbs_rows": 50,
+  "joined_metrics_rows": 50,
+  "joined_odds_rows": 0,
+  "joined_sagarin_rows": 49,
+  "output_rows": 50,
+  "odds_games": 0,
+  "sagarin_games": 49,
+  "coverage_metrics": 1.0,
+  "notes": [
+    "FBS games: 50",
+    "Metrics coverage: 50/50",
+    "Odds coverage: 0/50",
+    "Sagarin coverage: 49/50"
+  ],
+  "samples": {
+    "missing_odds": [
+      {
+        "game_key": "20250918_2330_rice_charlotte",
+        "home": "Charlotte",
+        "away": "Rice",
+        "kickoff_iso_utc": "2025-09-18T23:30:00Z"
+      },
+      {
+        "game_key": "20250919_2330_tulsa_oklahoma_state",
+        "home": "Oklahoma State",
+        "away": "Tulsa",
+        "kickoff_iso_utc": "2025-09-19T23:30:00Z"
+      },
+      {
+        "game_key": "20250920_0000_iowa_rutgers",
+        "home": "Rutgers",
+        "away": "Iowa",
+        "kickoff_iso_utc": "2025-09-20T00:00:00Z"
+      },
+      {
+        "game_key": "20250920_1600_arkansas_memphis",
+        "home": "Memphis",
+        "away": "Arkansas",
+        "kickoff_iso_utc": "2025-09-20T16:00:00Z"
+      },
+      {
+        "game_key": "20250920_1600_texas_tech_utah",
+        "home": "Utah",
+        "away": "Texas Tech",
+        "kickoff_iso_utc": "2025-09-20T16:00:00Z"
+      },
+      {
+        "game_key": "20250920_1600_maryland_wisconsin",
+        "home": "Wisconsin",
+        "away": "Maryland",
+        "kickoff_iso_utc": "2025-09-20T16:00:00Z"
+      },
+      {
+        "game_key": "20250920_1600_syracuse_clemson_tigers",
+        "home": "Clemson Tigers",
+        "away": "Syracuse",
+        "kickoff_iso_utc": "2025-09-20T16:00:00Z"
+      },
+      {
+        "game_key": "20250920_1600_bowling_green_louisville",
+        "home": "Louisville",
+        "away": "Bowling Green",
+        "kickoff_iso_utc": "2025-09-20T16:00:00Z"
+      },
+      {
+        "game_key": "20250920_1600_unlv_miami_oh",
+        "home": "Miami (oh)",
+        "away": "Unlv",
+        "kickoff_iso_utc": "2025-09-20T16:00:00Z"
+      },
+      {
+        "game_key": "20250920_1600_north_texas_army",
+        "home": "Army",
+        "away": "North Texas",
+        "kickoff_iso_utc": "2025-09-20T16:00:00Z"
+      }
+    ],
+    "missing_sagarin": [
+      {
+        "game_key": "20250920_2200_delaware_florida_international",
+        "home": "Florida International",
+        "away": "Delaware",
+        "kickoff_iso_utc": "2025-09-20T22:00:00Z"
+      }
+    ],
+    "metrics_gaps": []
+  },
+  "ratings": {
+    "eligible": 0,
+    "edges_count": 0,
+    "rvo_count": 0
+  },
+  "failures": []
+}
