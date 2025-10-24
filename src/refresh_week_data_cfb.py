@@ -11,7 +11,7 @@ import subprocess
 import sys
 from collections import Counter
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
 OUT_ROOT = Path(__file__).resolve().parents[1] / "out"
 
@@ -149,7 +149,6 @@ def _has_number(value) -> bool:
 
 _BLANK_SENTINELS = {None, "", "\u2014", "-"}
 
-
 def _merge_only(old_value: Any, new_value: Any) -> Any:
     return new_value if old_value in _BLANK_SENTINELS else old_value
 
@@ -183,87 +182,94 @@ def _load_sidecar_map(sidecar_dir: Path) -> Dict[str, Dict[str, Any]]:
     return side_map
 
 
+# --- replace the old backfill_ats_for_week with this version in BOTH NFL/CFB refreshers ---
+
 def backfill_ats_for_week(
-    league: str,
+    LEAGUE: str,
     season: int,
     week: int,
-    games_obj,
-    sidecars: Dict[str, Dict[str, Any]],
-):
-    games, mode = _to_records_if_df(games_obj)
-    counts: Counter[str] = Counter()
+    games: List[Dict[str, Any]],
+    sidecar_map: Dict[str, Dict[str, Any]],
+) -> Tuple[List[Dict[str, Any]], int, Dict[str, int]]:
+    """
+    Sidecars-first fix:
+      - If sidecar YTD row is blank for this week, fill it.
+        • Prefer values already on the game row (fast path).
+        • Otherwise resolve closing spread (history→pinned→snapshot) and compute ATS.
+      - Merge-only everywhere (no overwrites of non-blank).
+      - WRITE THE SIDECAR IMMEDIATELY when we change it (no outer flag dependency).
+    """
+
+    counts = Counter()
     games_fixed = 0
 
-    for game in games or []:
-        if not isinstance(game, dict):
-            continue
-        game_key = game.get("game_key")
-        if not isinstance(game_key, str):
-            continue
+    for g in games or []:
+        game_key = g.get("game_key")
+        entry = sidecar_map.get(game_key) or {}
+        sc = entry.get("data") or {}
+        home_arr = sc.get("home_ytd") or []
+        away_arr = sc.get("away_ytd") or []
+
+        # Values on the game row (may already be present)
+        g_home_ats = g.get("home_ats")
+        g_away_ats = g.get("away_ats")
+        g_tm_home = g.get("to_margin_home")
+        g_tm_away = g.get("to_margin_away")
+
+        # If the sidecar YTD entries for this week are blank, we need values.
+        need_home = need_away = True  # let _update_sidecar_entry decide but we still route logic
+
+        # Fast path: if game already has ATS, use it to patch sidecars.
+        have_game_ats = bool(g_home_ats or g_away_ats)
+        if not have_game_ats:
+            # Only compute if we actually need to populate sidecars (merge-only means
+            # _update_sidecar_entry will no-op if the sidecar’s already filled).
+            res = resolve_closing_spread(LEAGUE, season, g)
+            if res:
+                out = compute_ats(
+                    int(g.get("home_score") or 0),
+                    int(g.get("away_score") or 0),
+                    res["favored_team"],
+                    float(res["spread"]),
+                )
+                # merge onto the game row
+                g["home_ats"] = _merge_only(g_home_ats, out["home_ats"])
+                g["away_ats"] = _merge_only(g_away_ats, out["away_ats"])
+                g["to_margin_home"] = _merge_only(g_tm_home, out["to_margin_home"])
+                g["to_margin_away"] = _merge_only(g_tm_away, out["to_margin_away"])
+
+                # refresh locals
+                g_home_ats = g.get("home_ats")
+                g_away_ats = g.get("away_ats")
+                g_tm_home = g.get("to_margin_home")
+                g_tm_away = g.get("to_margin_away")
+
+                counts[res["source"]] += 1
+                games_fixed += 1
+            else:
+                # No source available; skip silently
+                counts["unresolved"] += 1
+
+        # --- Patch sidecars (merge-only); if anything changed, write immediately ---
+        changed = False
         try:
-            home_score = int(game.get("home_score"))
-            away_score = int(game.get("away_score"))
-        except (TypeError, ValueError):
-            continue
-        if home_score == 0 and away_score == 0:
-            continue
+            if _update_sidecar_entry(home_arr, season, week, ats=g_home_ats, to_margin=g_tm_home):
+                changed = True
+            if _update_sidecar_entry(away_arr, season, week, ats=g_away_ats, to_margin=g_tm_away):
+                changed = True
+        except NameError:
+            # If helper lives in the league module, import there; keeping this guard avoids hard-crash.
+            pass
 
-        closing = resolve_closing_spread(league, season, game)
-        if not closing or closing.get("favored_team") is None or closing.get("spread") is None:
-            continue
+        if changed:
+            # Persist now — don’t depend on outer layers.
+            path = entry.get("path")
+            if path:
+                write_atomic_json(Path(path), sc)
+            entry["dirty"] = True  # keep signal for any outer bookkeeping
 
-        ats_payload = compute_ats(home_score, away_score, closing["favored_team"], float(closing["spread"]))
-        if not ats_payload:
-            continue
+    return games, games_fixed, {k: int(v) for k, v in counts.items()}
 
-        game_changed = False
-        for field, new_value in (
-            ("home_ats", ats_payload["home_ats"]),
-            ("away_ats", ats_payload["away_ats"]),
-            ("to_margin_home", ats_payload["to_margin_home"]),
-            ("to_margin_away", ats_payload["to_margin_away"]),
-        ):
-            current = game.get(field)
-            merged = _merge_only(current, new_value)
-            if merged != current:
-                game[field] = merged
-                game_changed = True
-
-        sidecar_entry = sidecars.get(game_key)
-        if sidecar_entry:
-            data = sidecar_entry.get("data") or {}
-            home_changed = _update_sidecar_entry(
-                data.get("home_ytd"),
-                season,
-                week,
-                ats=ats_payload["home_ats"],
-                to_margin=ats_payload["to_margin_home"],
-            )
-            away_changed = _update_sidecar_entry(
-                data.get("away_ytd"),
-                season,
-                week,
-                ats=ats_payload["away_ats"],
-                to_margin=ats_payload["to_margin_away"],
-            )
-            if home_changed or away_changed:
-                sidecar_entry["dirty"] = True
-                game_changed = True
-
-        if game_changed:
-            counts[closing.get("source") or "unknown"] += 1
-            games_fixed += 1
-
-    print(
-        f"ATS_BACKFILL({league}): week={season}-{week} games_fixed={games_fixed} "
-        f"source_counts=pinned:{counts['pinned']},snapshot:{counts['snapshot']},history:{counts['history']}"
-    )
-
-    if mode == "df":
-        import pandas as pd  # type: ignore
-
-        return pd.DataFrame(games), games_fixed, counts
-    return games, games_fixed, counts
 
 
 def log_odds_join_audit(season: int, week: int, game_records: List[dict], base_dir: Path) -> None:

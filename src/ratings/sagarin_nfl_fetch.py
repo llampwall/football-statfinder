@@ -255,7 +255,7 @@ def run_nfl_sagarin_staging(
     latest_records, latest_ts = _select_latest_by_team(staging_records)
 
     weekly_df = _normalize_weekly_snapshot(latest_records, week_from_state)
-    base_dir = OUT_ROOT / "nfl" / f"{season_from_state}_week{week_from_state}"
+    base_dir = OUT_ROOT / f"{season_from_state}_week{week_from_state}"
     base_dir.mkdir(parents=True, exist_ok=True)
     base_path = base_dir / WEEKLY_TEMPLATE.format(season=season_from_state, week=week_from_state)
     write_atomic_csv(base_path.with_suffix(".csv"), weekly_df)
