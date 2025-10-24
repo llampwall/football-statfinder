@@ -90,33 +90,33 @@ def _load_pinned_index(league: str, season: int) -> Dict[str, dict]:
     return idx
 
 
-# def load_pinned_index(idx: dict,
-#                       league: str,
-#                       season: int,
-#                       game_key: str,
-#                       rec: dict) -> dict:
-#     """
-#     Insert/replace the pinned odds record for a game_key.
+def load_pinned_index(idx: dict,
+                      league: str,
+                      season: int,
+                      game_key: str,
+                      rec: dict) -> dict:
+    """
+    Insert/replace the pinned odds record for a game_key.
 
-#     Replace if:
-#       - there is no existing record, OR
-#       - existing record has no fetch_ts, OR
-#       - new rec.fetch_ts is newer than existing fetch_ts
-#     """
-#     g = idx.setdefault((league, season), {})
-#     cur = g.get(game_key)
-#     def _to_dt(x):
-#         if not x: return None
-#         if isinstance(x, (int, float)):
-#             return datetime.fromtimestamp(float(x), tz=timezone.utc)
-#         return datetime.fromisoformat(str(x).replace("Z", "+00:00"))
+    Replace if:
+      - there is no existing record, OR
+      - existing record has no fetch_ts, OR
+      - new rec.fetch_ts is newer than existing fetch_ts
+    """
+    g = idx.setdefault((league, season), {})
+    cur = g.get(game_key)
+    def _to_dt(x):
+        if not x: return None
+        if isinstance(x, (int, float)):
+            return datetime.fromtimestamp(float(x), tz=timezone.utc)
+        return datetime.fromisoformat(str(x).replace("Z", "+00:00"))
 
-#     new_when = _to_dt(rec.get("fetch_ts"))
-#     cur_when = _to_dt(cur.get("fetch_ts") if isinstance(cur, dict) else None)
+    new_when = _to_dt(rec.get("fetch_ts"))
+    cur_when = _to_dt(cur.get("fetch_ts") if isinstance(cur, dict) else None)
 
-#     if (cur is None) or (cur_when is None) or (new_when and cur_when and new_when > cur_when):
-#         g[game_key] = rec
-#     return idx
+    if (cur is None) or (cur_when is None) or (new_when and cur_when and new_when > cur_when):
+        g[game_key] = rec
+    return idx
 
 
 def _load_snapshots(league: str, season: int, week: int) -> List[dict]:
