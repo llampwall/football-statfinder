@@ -21,7 +21,7 @@ Log contract:
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 import math
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -318,8 +318,92 @@ def get_current_spread(
         return None
 
 
+def find_event_id(
+    league: str,
+    kickoff_utc: datetime,
+    home_name: str,
+    away_name: str,
+) -> Optional[str]:
+    """
+    Resolve an Odds API event identifier by querying the events endpoint within a window.
+
+    Args:
+        league: League identifier ('nfl' or 'cfb').
+        kickoff_utc: Kickoff timestamp in UTC.
+        home_name: Home team name from the schedule.
+        away_name: Away team name from the schedule.
+
+    Returns:
+        The matching event_id string when found; otherwise None.
+    """
+    api_key = getenv("THE_ODDS_API_KEY")
+    sport = _sport_key(league)
+    if not api_key or not sport or kickoff_utc is None:
+        return None
+
+    kickoff = kickoff_utc.astimezone(timezone.utc)
+    window_start = kickoff - timedelta(minutes=30)
+    window_end = kickoff + timedelta(minutes=30)
+
+    try:
+        response = requests.get(
+            f"{_THE_ODDS_BASE}/sports/{sport}/events",
+            params={
+                "apiKey": api_key,
+                "regions": "us",
+                "commenceTimeFrom": window_start.isoformat(),
+                "commenceTimeTo": window_end.isoformat(),
+            },
+            timeout=20,
+        )
+        _update_usage(response)
+        response.raise_for_status()
+        payload = response.json()
+    except requests.RequestException:
+        return None
+
+    if not isinstance(payload, list):
+        return None
+
+    normalizer = _normalize(league)
+    home_token = normalizer(home_name or "")
+    away_token = normalizer(away_name or "")
+    if not home_token or not away_token:
+        return None
+
+    matches: List[Tuple[float, Dict[str, Any]]] = []
+    for event in payload:
+        if not isinstance(event, dict):
+            continue
+        commence_time = event.get("commence_time")
+        event_dt = _parse_ts(commence_time)
+        if not event_dt:
+            continue
+
+        tokens = set()
+        for key in ("home_team", "away_team"):
+            value = event.get(key)
+            if isinstance(value, str):
+                tokens.add(normalizer(value))
+        for participant in event.get("teams") or []:
+            tokens.add(normalizer(str(participant or "")))
+
+        if {home_token, away_token}.issubset(tokens):
+            delta = abs((event_dt - kickoff).total_seconds())
+            matches.append((delta, event))
+
+    if not matches:
+        return None
+
+    matches.sort(key=lambda item: item[0])
+    chosen = matches[0][1]
+    event_id = chosen.get("id")
+    return str(event_id) if isinstance(event_id, (str, int)) and str(event_id).strip() else None
+
+
 __all__ = [
     "ODDS_API_USAGE",
     "get_historical_spread",
     "get_current_spread",
+    "find_event_id",
 ]

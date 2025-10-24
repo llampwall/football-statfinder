@@ -20,10 +20,13 @@ Log contract:
 
 from __future__ import annotations
 
+import json
 from datetime import datetime, timezone
-from typing import Any, Dict, Optional
+from pathlib import Path
+from typing import Any, Dict, Optional, Tuple
 
-from src.odds.odds_api_client import get_current_spread, get_historical_spread
+from src.common.io_utils import ensure_out_dir
+from src.odds.odds_api_client import find_event_id, get_current_spread, get_historical_spread
 
 
 def compute_ats(home_score: int, away_score: int, favored: str, spread: float) -> Optional[Dict[str, Any]]:
@@ -66,6 +69,35 @@ def compute_ats(home_score: int, away_score: int, favored: str, spread: float) -
     }
 
 
+def load_pinned_event_index(league: str, season: int) -> Dict[str, str]:
+    """Return game_key -> event_id mapping from the pinned spreads index."""
+    root = ensure_out_dir() / "staging" / "odds_pinned" / league.lower()
+    path = root / f"{season}.jsonl"
+    mapping: Dict[str, str] = {}
+    if not path.exists():
+        return mapping
+    try:
+        text = path.read_text(encoding="utf-8")
+    except OSError:
+        return mapping
+
+    for line in text.splitlines():
+        entry = line.strip()
+        if not entry:
+            continue
+        try:
+            record = json.loads(entry)
+        except json.JSONDecodeError:
+            continue
+        if record.get("market") != "spreads":
+            continue
+        game_key = record.get("game_key")
+        event_id = (record.get("raw_event") or {}).get("event_id")
+        if isinstance(game_key, str) and isinstance(event_id, str):
+            mapping[game_key] = event_id
+    return mapping
+
+
 def _normalize_kickoff(kickoff: Optional[datetime], kickoff_iso: Optional[str]) -> Optional[str]:
     if kickoff is not None:
         if kickoff.tzinfo is None:
@@ -85,47 +117,77 @@ def select_closing_spread(
     *,
     season: Optional[int] = None,
     kickoff: Optional[datetime] = None,
-    resolver: Optional[str] = None,
-) -> Optional[Dict[str, Any]]:
+    game_key: Optional[str] = None,
+    pinned_index: Optional[Dict[str, str]] = None,
+) -> Tuple[Optional[Dict[str, Any]], str, Optional[str]]:
     """Resolve a closing spread snapshot using historical odds first, then current odds.
 
     Args:
         league: League identifier ('nfl' or 'cfb').
-        event_id: Odds API event identifier.
+        event_id: Pre-resolved event identifier (optional).
         kickoff_iso: Kickoff ISO8601 timestamp (UTC).
         home_name: Home team schedule label.
         away_name: Away team schedule label.
-        season: Included for parity with higher-level helpers (unused placeholder).
+        season: Season year (used when lazily loading the pinned map).
         kickoff: Kickoff datetime (UTC expected); overrides kickoff_iso when provided.
+        game_key: Schedule game_key for pinned map lookup.
+        pinned_index: Optional preloaded pinned event map.
 
     Returns:
-        Dictionary containing spread payload augmented with a 'source' key, or None.
+        Tuple of (spread_payload_or_none, resolver, resolved_event_id).
     """
-    if not event_id:
-        return None
-
     kickoff_value = _normalize_kickoff(kickoff, kickoff_iso)
+    kickoff_dt = kickoff
+    if kickoff_dt is None and kickoff_value:
+        try:
+            kickoff_dt = datetime.fromisoformat(kickoff_value.replace("Z", "+00:00"))
+        except Exception:
+            kickoff_dt = None
+
+    if pinned_index is None and season is not None:
+        pinned_index = load_pinned_event_index(league, season)
+
+    resolved_event_id = event_id if isinstance(event_id, str) and event_id.strip() else None
+    resolver_used = "pinned" if resolved_event_id else "failed"
+
+    if not resolved_event_id and pinned_index and game_key:
+        candidate = pinned_index.get(game_key)
+        if candidate:
+            resolved_event_id = candidate
+            resolver_used = "pinned"
+
+    if not resolved_event_id and kickoff_dt and home_name is not None and away_name is not None:
+        candidate = find_event_id(league, kickoff_dt, home_name, away_name)
+        if candidate:
+            resolved_event_id = candidate
+            resolver_used = "events"
+
+    if not resolved_event_id:
+        return None, "failed", None
+
     if not kickoff_value:
-        return None
+        kickoff_value = kickoff_dt.isoformat() if kickoff_dt else None
+    if not kickoff_value:
+        return None, resolver_used, resolved_event_id
 
     home_label = home_name or ""
     away_label = away_name or ""
 
-    historical = get_historical_spread(league, event_id, kickoff_value, home_label, away_label)
+    historical = get_historical_spread(league, resolved_event_id, kickoff_value, home_label, away_label)
     if historical:
         historical["source"] = "history"
-        if resolver:
-            historical["resolver"] = resolver
-        return historical
+        historical["resolver"] = resolver_used
+        historical["event_id"] = resolved_event_id
+        return historical, resolver_used, resolved_event_id
 
-    current = get_current_spread(league, event_id, kickoff_value, home_label, away_label)
+    current = get_current_spread(league, resolved_event_id, kickoff_value, home_label, away_label)
     if current:
         current["source"] = "current"
-        if resolver:
-            current["resolver"] = resolver
-        return current
+        current["resolver"] = resolver_used
+        current["event_id"] = resolved_event_id
+        return current, resolver_used, resolved_event_id
 
-    return None
+    return None, resolver_used, resolved_event_id
 
 
 def resolve_event_id(league: str, season: int, game_row: Dict[str, Any]) -> Optional[str]:
@@ -146,4 +208,4 @@ def resolve_event_id(league: str, season: int, game_row: Dict[str, Any]) -> Opti
     return event_id if isinstance(event_id, str) and event_id else None
 
 
-__all__ = ["compute_ats", "select_closing_spread", "resolve_event_id"]
+__all__ = ["compute_ats", "load_pinned_event_index", "select_closing_spread", "resolve_event_id"]

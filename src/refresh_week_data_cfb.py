@@ -12,7 +12,7 @@ import sys
 from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Set
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 OUT_ROOT = Path(__file__).resolve().parents[1] / "out"
 
@@ -24,7 +24,12 @@ from src.common.io_utils import write_csv, write_jsonl, getenv, write_atomic_jso
 from src.odds.cfb_ingest import ingest_cfb_odds_raw
 from src.odds.cfb_pin_to_schedule import pin_cfb_odds
 from src.odds.cfb_promote_week import promote_week_odds, diff_game_rows
-from src.odds.ats_backfill_api import compute_ats, resolve_event_id, select_closing_spread
+from src.odds.ats_backfill_api import (
+    compute_ats,
+    load_pinned_event_index,
+    resolve_event_id,
+    select_closing_spread,
+)
 from src.odds.odds_api_client import ODDS_API_USAGE
 from src.ratings.sagarin_cfb_fetch import run_cfb_sagarin_staging
 from src.scores.cfb_backfill import backfill_cfb_scores
@@ -75,31 +80,6 @@ def _week_sidecar_dir(season: int, week: int) -> Path:
     return OUT_ROOT / "cfb" / f"{season}_week{week}" / "game_schedules"
 
 
-def _load_pinned_index(league: str, season: int) -> Dict[str, str]:
-    path = OUT_ROOT / "staging" / "odds_pinned" / league.lower() / f"{season}.jsonl"
-    mapping: Dict[str, str] = {}
-    if not path.exists():
-        return mapping
-    try:
-        text = path.read_text(encoding="utf-8")
-    except OSError:
-        return mapping
-    for line in text.splitlines():
-        if not line.strip():
-            continue
-        try:
-            record = json.loads(line)
-        except json.JSONDecodeError:
-            continue
-        if record.get("market") != "spreads":
-            continue
-        game_key = record.get("game_key")
-        event_id = (record.get("raw_event") or {}).get("event_id")
-        if isinstance(game_key, str) and isinstance(event_id, str):
-            mapping[game_key] = event_id
-    return mapping
-
-
 def _load_sidecar_map(season: int, week: int) -> Dict[str, Dict[str, Any]]:
     side_dir = _week_sidecar_dir(season, week)
     mapping: Dict[str, Dict[str, Any]] = {}
@@ -147,7 +127,7 @@ def _ats_backfill_api(
         return {"games_fixed": 0, "week_dirty": False, "sidecar_dirty": set()}
 
     debug_enabled = ATS_DEBUG
-    pinned_index = _load_pinned_index(league, season)
+    pinned_index = load_pinned_event_index(league, season)
     source_counts: Counter[str] = Counter()
     resolver_counts: Counter[str] = Counter()
     counters: Counter[str] = Counter()
@@ -196,7 +176,9 @@ def _ats_backfill_api(
             continue
 
         kickoff_dt = _parse_kickoff(game)
-        kickoff_iso = kickoff_dt.isoformat() if kickoff_dt else None
+        kickoff_iso = kickoff_dt.isoformat() if kickoff_dt else (
+            game.get("kickoff_iso_utc") or game.get("kickoff_iso")
+        )
         _atsdbg(
             debug_enabled,
             f"ATSDBG({league_tag}): week={season}-{week} game={game_key} step=kickoff parsed={kickoff_iso or '-'}",
@@ -206,40 +188,34 @@ def _ats_backfill_api(
         if kickoff_dt is None:
             counters["no_kickoff"] += 1
 
-        resolver_used = "failed"
-        event_id = pinned_index.get(game_key)
-        if event_id:
-            resolver_used = "pinned"
-        else:
-            fallback_id = resolve_event_id(league, season, game)
-            if fallback_id:
-                event_id = fallback_id
-                resolver_used = "events"
+        existing_event_id = resolve_event_id(league, season, game)
+        selection, resolver_used, resolved_event_id = select_closing_spread(
+            league=league,
+            season=season,
+            event_id=existing_event_id,
+            home_name=game.get("home_team_norm") or game.get("home_team_raw"),
+            away_name=game.get("away_team_norm") or game.get("away_team_raw"),
+            kickoff=kickoff_dt,
+            kickoff_iso=kickoff_iso,
+            game_key=game_key,
+            pinned_index=pinned_index,
+        )
         resolver_counts[resolver_used] += 1
         _atsdbg(
             debug_enabled,
-            f"ATSDBG({league_tag}): week={season}-{week} game={game_key} step=resolve resolver={resolver_used} event_id={event_id or '-'}",
+            f"ATSDBG({league_tag}): week={season}-{week} game={game_key} step=resolve resolver={resolver_used} event_id={resolved_event_id or '-'}",
         )
         if debug_enabled:
             debug_entry["resolver"] = resolver_used  # type: ignore[index]
-            debug_entry["event_id"] = event_id  # type: ignore[index]
+            debug_entry["event_id"] = resolved_event_id  # type: ignore[index]
 
-        if not event_id:
+        if resolved_event_id is None:
             counters["resolve_failed"] += 1
             if debug_enabled:
                 debug_entry["reason"] = "resolve_failed"  # type: ignore[index]
                 debug_rows.append(debug_entry)  # type: ignore[arg-type]
             continue
 
-        selection = select_closing_spread(
-            league=league,
-            season=season,
-            event_id=event_id,
-            home_name=game.get("home_team_norm") or game.get("home_team_raw"),
-            away_name=game.get("away_team_norm") or game.get("away_team_raw"),
-            kickoff=kickoff_dt,
-            resolver=resolver_used,
-        )
         if not selection:
             counters["api_none"] += 1
             reason = "no_kickoff" if kickoff_dt is None else "api_none"
