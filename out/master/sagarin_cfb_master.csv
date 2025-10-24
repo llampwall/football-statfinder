@@ -5810,52 +5810,56 @@ CFB,2025,5,Wyoming,Wyoming,60.55,98,62.53,104
 CFB,2025,5,Yale,Yale,56.8,136,41.76,261
 CFB,2025,5,Youngstown State,Youngstown State,57.76,130,51.07,215
 CFB,2025,6,Abilene Christian,Abilene Christian,54.53,151,56.87,148
-CFB,2025,6,Air Force,Air Force,59.0,119,63.48,88
-CFB,2025,6,Akron,Akron,52.07,163,60.24,116
+CFB,2025,6,Air Force,Air Force,60.0,101,63.94,86
+CFB,2025,6,Akron,Akron,50.21,128,60.51,117
 CFB,2025,6,Alabama,Alabama,90.87,3,76.29,4
 CFB,2025,6,Alabama A&M,Alabama A&M,41.66,232,50.26,210
+CFB,2025,6,Alabama Crimson Tide,Alabama,91.34,4,78.01,3
 CFB,2025,6,Alabama State,Alabama State,53.51,154,46.96,243
 CFB,2025,6,Albany-NY,Albany-NY,39.91,245,47.91,239
 CFB,2025,6,Alcorn State,Alcorn State,36.97,255,44.08,257
-CFB,2025,6,Appalachian State,Appalachian State,58.09,126,58.86,128
-CFB,2025,6,Arizona,Arizona,71.61,65,60.53,113
-CFB,2025,6,Arizona State,Arizona State,78.63,33,70.44,25
+CFB,2025,6,Appalachian State,Appalachian State,57.88,114,56.92,140
+CFB,2025,6,Arizona,Arizona,71.42,61,67.23,61
+CFB,2025,6,Arizona State,Arizona State,77.67,36,73.94,17
 CFB,2025,6,Ark.-Pine Bluff,Ark.-Pine Bluff,34.77,260,52.4,192
-CFB,2025,6,Arkansas,Arkansas,76.27,41,74.11,9
-CFB,2025,6,Arkansas State,Arkansas State,58.6,121,64.1,82
-CFB,2025,6,Army West Point,Army West Point,66.46,83,68.56,38
-CFB,2025,6,Auburn,Auburn,82.67,20,74.94,7
+CFB,2025,6,Arkansas,Arkansas,77.33,37,78.35,2
+CFB,2025,6,Arkansas State,Arkansas State,59.72,107,63.75,88
+CFB,2025,6,Army West Point,Army West Point,65.9,83,67.34,59
+CFB,2025,6,Auburn,Auburn,80.15,28,78.0,4
 CFB,2025,6,Austin Peay,Austin Peay,60.65,110,52.09,196
 CFB,2025,6,BYU,BYU,78.45,35,63.36,89
-CFB,2025,6,Ball State,Ball State,55.66,142,67.6,50
-CFB,2025,6,Baylor,Baylor,74.55,47,68.89,33
+CFB,2025,6,Ball State,Ball State,53.4,122,64.91,73
+CFB,2025,6,Baylor,Baylor,74.35,49,71.13,41
 CFB,2025,6,Bethune-Cookman,Bethune-Cookman,42.49,228,56.78,149
-CFB,2025,6,Boise State,Boise State,74.76,45,65.61,66
-CFB,2025,6,Boston College,Boston College,65.7,87,67.65,49
-CFB,2025,6,Bowling Green,Bowling Green,61.5,105,68.34,40
+CFB,2025,6,Boise State,Boise State,76.6,43,63.86,87
+CFB,2025,6,Boston College,Boston College,61.88,95,68.65,51
+CFB,2025,6,Bowling Green,Bowling Green,59.92,103,65.61,70
 CFB,2025,6,Brown,Brown,48.18,189,49.16,228
 CFB,2025,6,Bryant,Bryant,40.52,239,47.39,240
 CFB,2025,6,Bucknell,Bucknell,43.3,224,44.7,255
-CFB,2025,6,Buffalo,Buffalo,58.42,122,54.72,174
+CFB,2025,6,Buffalo,Buffalo,57.96,113,54.45,152
 CFB,2025,6,Butler,Butler,45.09,210,49.04,230
+CFB,2025,6,Byu,BYU,80.14,29,67.97,55
 CFB,2025,6,Cal Poly-SLO,Cal Poly-SLO,49.6,179,61.21,108
-CFB,2025,6,California,California,68.01,74,66.07,61
+CFB,2025,6,California,California,67.74,72,64.97,72
 CFB,2025,6,Campbell,Campbell,40.81,237,55.39,162
 CFB,2025,6,Central Arkansas,Central Arkansas,47.47,193,55.65,159
 CFB,2025,6,Central Connecticut,Central Connecticut,43.76,219,45.78,251
 CFB,2025,6,Central Florida(UCF),Central Florida(UCF),69.34,71,60.86,110
-CFB,2025,6,Central Michigan,Central Michigan,56.29,134,62.57,98
+CFB,2025,6,Central Florida(ucf),Central Florida(UCF),72.17,57,64.13,82
+CFB,2025,6,Central Michigan,Central Michigan,59.63,108,62.28,106
 CFB,2025,6,Charleston Southern,Charleston Southern,43.62,221,55.42,161
-CFB,2025,6,Charlotte,Charlotte,48.08,190,57.47,143
+CFB,2025,6,Charlotte,Charlotte,45.86,131,60.17,120
 CFB,2025,6,Chattanooga,Chattanooga,48.77,185,55.05,171
-CFB,2025,6,Cincinnati,Cincinnati,77.17,39,67.83,45
+CFB,2025,6,Cincinnati,Cincinnati,77.79,35,64.89,74
 CFB,2025,6,Clemson,Clemson,80.55,27,72.77,13
-CFB,2025,6,Coastal Carolina,Coastal Carolina,56.81,132,68.72,36
+CFB,2025,6,Clemson Tigers,Clemson,80.11,30,72.45,23
+CFB,2025,6,Coastal Carolina,Coastal Carolina,59.25,111,62.67,102
 CFB,2025,6,Colgate,Colgate,47.91,191,53.04,190
-CFB,2025,6,Colorado,Colorado,70.94,68,70.45,24
-CFB,2025,6,Colorado State,Colorado State,56.83,131,63.18,91
+CFB,2025,6,Colorado,Colorado,72.69,55,71.56,33
+CFB,2025,6,Colorado State,Colorado State,59.98,102,63.59,91
 CFB,2025,6,Columbia,Columbia,44.97,213,48.1,238
-CFB,2025,6,Connecticut,Connecticut,67.58,77,57.11,146
+CFB,2025,6,Connecticut,Connecticut,69.23,68,58.46,132
 CFB,2025,6,Cornell,Cornell,40.46,240,48.17,236
 CFB,2025,6,Dartmouth,Dartmouth,51.53,166,49.66,220
 CFB,2025,6,Davidson,Davidson,33.22,263,49.35,225
@@ -5863,86 +5867,92 @@ CFB,2025,6,Dayton,Dayton,44.55,215,40.54,263
 CFB,2025,6,Delaware,Delaware,60.43,111,59.63,123
 CFB,2025,6,Delaware State,Delaware State,44.53,216,49.57,222
 CFB,2025,6,Drake,Drake,48.81,184,58.33,133
-CFB,2025,6,Duke,Duke,78.67,32,71.69,19
+CFB,2025,6,Duke,Duke,76.74,42,71.88,29
 CFB,2025,6,Duquesne,Duquesne,44.97,212,49.91,214
-CFB,2025,6,East Carolina,East Carolina,71.04,67,63.9,85
+CFB,2025,6,East Carolina,East Carolina,69.34,66,64.3,79
 CFB,2025,6,East Tennessee State,East Tennessee State,50.7,171,56.0,156
 CFB,2025,6,East Texas A&M,East Texas A&M,45.26,207,57.35,145
 CFB,2025,6,Eastern Illinois,Eastern Illinois,46.12,201,43.45,258
 CFB,2025,6,Eastern Kentucky,Eastern Kentucky,49.74,178,57.36,144
-CFB,2025,6,Eastern Michigan,Eastern Michigan,53.11,155,62.07,99
+CFB,2025,6,Eastern Michigan,Eastern Michigan,53.52,120,61.06,112
 CFB,2025,6,Eastern Washington,Eastern Washington,48.61,186,56.42,153
 CFB,2025,6,Elon,Elon,56.03,138,51.08,206
-CFB,2025,6,Fla. International,Fla. International,52.87,158,60.01,119
-CFB,2025,6,Florida,Florida,82.84,17,78.84,1
+CFB,2025,6,Fla. International,Fla. International,56.57,115,61.17,110
+CFB,2025,6,Florida,Florida,81.05,24,80.4,1
 CFB,2025,6,Florida A&M,Florida A&M,42.38,230,51.96,201
-CFB,2025,6,Florida Atlantic,Florida Atlantic,56.16,137,61.9,102
-CFB,2025,6,Florida State,Florida State,81.17,23,71.99,15
+CFB,2025,6,Florida Atlantic,Florida Atlantic,56.24,116,61.96,107
+CFB,2025,6,Florida State,Florida State,77.2,38,72.19,25
 CFB,2025,6,Fordham,Fordham,39.58,246,53.3,186
-CFB,2025,6,Fresno State,Fresno State,67.02,80,59.54,124
+CFB,2025,6,Fresno State,Fresno State,62.66,94,60.2,119
 CFB,2025,6,Furman,Furman,52.95,157,45.97,247
 CFB,2025,6,Gardner-Webb,Gardner-Webb,50.91,169,56.7,152
 CFB,2025,6,Georgetown,Georgetown,40.17,243,41.98,262
 CFB,2025,6,Georgia,Georgia,88.0,8,70.56,23
-CFB,2025,6,Georgia Southern,Georgia Southern,61.3,107,67.32,52
-CFB,2025,6,Georgia State,Georgia State,53.05,156,73.86,11
-CFB,2025,6,Georgia Tech,Georgia Tech,78.7,31,66.39,58
+CFB,2025,6,Georgia Bulldogs,Georgia,89.6,6,75.77,11
+CFB,2025,6,Georgia Southern,Georgia Southern,60.73,97,61.78,108
+CFB,2025,6,Georgia State,Georgia State,49.33,129,68.29,53
+CFB,2025,6,Georgia Tech,Georgia Tech,81.07,23,68.93,48
 CFB,2025,6,Grambling State,Grambling State,42.35,231,53.07,189
 CFB,2025,6,Hampton,Hampton,40.11,244,49.82,216
 CFB,2025,6,Harvard,Harvard,63.64,97,43.29,260
-CFB,2025,6,Hawai'i,Hawai'i,62.59,102,57.7,140
+CFB,2025,6,Hawai'i,Hawai'i,66.24,80,58.57,131
 CFB,2025,6,Holy Cross,Holy Cross,45.1,209,53.91,178
-CFB,2025,6,Houston,Houston,72.16,62,64.36,78
+CFB,2025,6,Houston,Houston,73.04,53,63.7,90
 CFB,2025,6,Houston Christian,Houston Christian,40.44,241,55.31,166
 CFB,2025,6,Howard,Howard,46.88,195,49.45,223
 CFB,2025,6,Idaho,Idaho,58.27,123,58.58,131
 CFB,2025,6,Idaho State,Idaho State,50.36,173,61.23,107
-CFB,2025,6,Illinois,Illinois,80.82,25,71.73,18
+CFB,2025,6,Illinois,Illinois,80.53,26,75.56,12
 CFB,2025,6,Illinois State,Illinois State,55.96,139,53.87,180
 CFB,2025,6,Incarnate Word,Incarnate Word,54.25,152,54.42,177
-CFB,2025,6,Indiana,Indiana,87.95,9,65.09,72
+CFB,2025,6,Indiana,Indiana,90.22,5,68.76,49
 CFB,2025,6,Indiana State,Indiana State,44.13,218,67.83,46
-CFB,2025,6,Iowa,Iowa,78.43,37,67.75,48
-CFB,2025,6,Iowa State,Iowa State,78.45,36,68.86,34
+CFB,2025,6,Iowa,Iowa,81.2,22,70.74,45
+CFB,2025,6,Iowa State,Iowa State,76.87,41,71.32,38
 CFB,2025,6,Jackson State,Jackson State,57.28,129,45.9,248
-CFB,2025,6,Jacksonville State,Jacksonville State,58.87,120,61.0,109
-CFB,2025,6,James Madison,James Madison,71.9,64,60.61,112
-CFB,2025,6,Kansas,Kansas,76.09,43,66.88,54
-CFB,2025,6,Kansas State,Kansas State,73.82,50,70.25,28
-CFB,2025,6,Kennesaw State,Kennesaw State,54.08,153,57.73,139
-CFB,2025,6,Kent State,Kent State,43.64,220,75.34,5
-CFB,2025,6,Kentucky,Kentucky,72.37,58,77.24,3
+CFB,2025,6,Jacksonville State,Jacksonville State,59.88,106,58.06,134
+CFB,2025,6,James Madison,James Madison,74.42,47,59.5,125
+CFB,2025,6,Kansas,Kansas,74.4,48,70.1,46
+CFB,2025,6,Kansas State,Kansas State,76.1,44,71.2,39
+CFB,2025,6,Kennesaw State,Kennesaw State,58.59,112,58.92,128
+CFB,2025,6,Kent State,Kent State,45.63,132,68.36,52
+CFB,2025,6,Kentucky,Kentucky,73.08,52,77.7,5
 CFB,2025,6,LIU Post,LIU Post,40.94,235,53.25,187
 CFB,2025,6,LSU,LSU,88.02,7,75.24,6
 CFB,2025,6,Lafayette,Lafayette,48.5,188,44.73,253
 CFB,2025,6,Lamar,Lamar,51.02,168,50.15,212
 CFB,2025,6,Lehigh,Lehigh,56.73,133,45.89,250
-CFB,2025,6,Liberty,Liberty,59.54,117,64.57,74
+CFB,2025,6,Liberty,Liberty,59.58,109,60.57,116
 CFB,2025,6,Lindenwood,Lindenwood,46.54,199,52.27,194
-CFB,2025,6,Louisiana Tech,Louisiana Tech,67.54,78,59.72,121
+CFB,2025,6,Louisiana Tech,Louisiana Tech,63.26,91,60.96,114
 CFB,2025,6,Louisiana-Lafayette,Louisiana-Lafayette,59.94,115,55.96,157
+CFB,2025,6,Louisiana-lafayette,Louisiana-Lafayette,59.36,110,60.98,113
 CFB,2025,6,LouisianaMonroe(ULM),LouisianaMonroe(ULM),57.29,128,62.02,101
-CFB,2025,6,Louisville,Louisville,80.58,26,65.66,65
+CFB,2025,6,Louisianamonroe(ulm),LouisianaMonroe(ULM),53.47,121,63.07,100
+CFB,2025,6,Louisville,Louisville,83.17,19,71.0,42
+CFB,2025,6,Lsu,LSU,86.31,10,76.24,7
 CFB,2025,6,Maine,Maine,45.9,202,49.86,215
 CFB,2025,6,Marist,Marist,40.73,238,40.32,264
-CFB,2025,6,Marshall,Marshall,61.52,104,58.65,130
-CFB,2025,6,Maryland,Maryland,73.12,53,59.17,126
-CFB,2025,6,Massachusetts,Massachusetts,44.85,214,64.33,79
+CFB,2025,6,Marshall,Marshall,65.59,85,60.14,121
+CFB,2025,6,Maryland,Maryland,71.69,59,63.97,83
+CFB,2025,6,Massachusetts,Massachusetts,42.09,134,60.34,118
 CFB,2025,6,McNeese State,McNeese State,41.24,234,59.7,122
-CFB,2025,6,Memphis,Memphis,77.64,38,58.66,129
+CFB,2025,6,Memphis,Memphis,74.09,50,58.62,130
 CFB,2025,6,Mercer,Mercer,58.14,124,46.13,246
 CFB,2025,6,Mercyhurst,Mercyhurst,44.99,211,59.29,125
 CFB,2025,6,Merrimack,Merrimack,42.49,229,47.01,242
 CFB,2025,6,Miami-Florida,Miami-Florida,90.3,5,74.8,8
 CFB,2025,6,Miami-Ohio,Miami-Ohio,64.11,95,65.57,67
-CFB,2025,6,Michigan,Michigan,83.02,16,69.38,30
-CFB,2025,6,Michigan State,Michigan State,73.04,54,67.91,44
-CFB,2025,6,Middle Tennessee,Middle Tennessee,49.22,181,60.85,111
-CFB,2025,6,Minnesota,Minnesota,72.7,56,65.04,73
+CFB,2025,6,Miami-florida,Miami-Florida,88.29,8,75.95,9
+CFB,2025,6,Miami-ohio,Miami-Ohio,63.59,90,58.72,129
+CFB,2025,6,Michigan,Michigan,82.85,20,73.33,18
+CFB,2025,6,Michigan State,Michigan State,69.34,67,71.14,40
+CFB,2025,6,Middle Tennessee,Middle Tennessee,48.8,130,59.34,127
+CFB,2025,6,Minnesota,Minnesota,75.17,45,64.84,75
 CFB,2025,6,Miss. Valley State,Miss. Valley State,33.1,264,52.04,199
-CFB,2025,6,Mississippi,Mississippi,87.63,10,70.85,22
-CFB,2025,6,Mississippi State,Mississippi State,74.09,48,68.34,41
-CFB,2025,6,Missouri,Missouri,82.68,19,56.73,150
+CFB,2025,6,Mississippi,Mississippi,85.5,11,72.64,22
+CFB,2025,6,Mississippi State,Mississippi State,74.65,46,71.54,34
+CFB,2025,6,Missouri,Missouri,84.32,14,66.03,68
 CFB,2025,6,Missouri State,Missouri State,56.2,136,65.79,63
 CFB,2025,6,Monmouth-NJ,Monmouth-NJ,55.22,146,48.49,234
 CFB,2025,6,Montana,Montana,65.05,91,52.71,191
@@ -5953,47 +5963,51 @@ CFB,2025,6,Murray State,Murray State,37.29,254,58.25,136
 CFB,2025,6,NC A&T,NC A&T,38.9,247,50.07,213
 CFB,2025,6,NC Central,NC Central,52.44,161,49.08,229
 CFB,2025,6,NC State,NC State,73.88,49,68.22,42
-CFB,2025,6,Navy,Navy,67.3,79,49.72,219
-CFB,2025,6,Nebraska,Nebraska,79.84,30,63.3,90
-CFB,2025,6,Nevada,Nevada,54.68,149,65.17,71
+CFB,2025,6,Navy,Navy,67.26,77,52.16,173
+CFB,2025,6,Nc State,NC State,73.47,51,71.36,37
+CFB,2025,6,Nebraska,Nebraska,76.88,40,68.17,54
+CFB,2025,6,Nevada,Nevada,52.3,125,62.95,101
 CFB,2025,6,New Hampshire,New Hampshire,50.03,175,50.84,208
 CFB,2025,6,New Haven,New Haven,37.33,253,47.28,241
-CFB,2025,6,New Mexico,New Mexico,60.99,109,64.16,81
-CFB,2025,6,New Mexico State,New Mexico State,52.32,162,52.09,197
+CFB,2025,6,New Mexico,New Mexico,60.22,99,64.17,81
+CFB,2025,6,New Mexico State,New Mexico State,52.2,126,53.82,155
 CFB,2025,6,Nicholls State,Nicholls State,46.87,196,58.25,135
 CFB,2025,6,Norfolk State,Norfolk State,36.84,256,46.37,245
 CFB,2025,6,North Alabama,North Alabama,43.28,225,59.88,120
-CFB,2025,6,North Carolina,North Carolina,65.18,89,65.38,70
+CFB,2025,6,North Carolina,North Carolina,65.28,86,66.73,65
 CFB,2025,6,North Dakota,North Dakota,65.64,88,53.79,181
 CFB,2025,6,North Dakota State,North Dakota State,76.08,44,49.36,224
-CFB,2025,6,North Texas,North Texas,72.18,61,60.32,115
+CFB,2025,6,North Texas,North Texas,72.3,56,63.53,92
 CFB,2025,6,Northern Arizona,Northern Arizona,55.66,144,56.02,155
 CFB,2025,6,Northern Colorado,Northern Colorado,44.4,217,53.17,188
-CFB,2025,6,Northern Illinois,Northern Illinois,55.7,141,63.98,84
+CFB,2025,6,Northern Illinois,Northern Illinois,53.02,123,64.56,78
 CFB,2025,6,Northern Iowa,Northern Iowa,48.58,187,51.78,202
-CFB,2025,6,Northwestern,Northwestern,68.03,73,63.8,86
+CFB,2025,6,Northwestern,Northwestern,72.09,58,67.46,57
 CFB,2025,6,Northwestern State,Northwestern State,33.96,262,53.77,182
 CFB,2025,6,Notre Dame,Notre Dame,90.82,4,78.18,2
-CFB,2025,6,Ohio,Ohio,66.19,84,64.53,75
+CFB,2025,6,Notre Dame Fighting Irish,Notre Dame,91.65,3,77.43,6
+CFB,2025,6,Ohio,Ohio,66.74,79,59.87,123
 CFB,2025,6,Ohio State,Ohio State,95.12,1,68.66,37
-CFB,2025,6,Oklahoma,Oklahoma,83.97,15,63.65,87
-CFB,2025,6,Oklahoma State,Oklahoma State,56.22,135,66.46,57
-CFB,2025,6,Old Dominion,Old Dominion,74.68,46,61.7,104
+CFB,2025,6,Ohio State Buckeyes,Ohio State,96.38,1,73.12,20
+CFB,2025,6,Oklahoma,Oklahoma,84.37,13,70.95,44
+CFB,2025,6,Oklahoma State,Oklahoma State,53.94,119,68.71,50
+CFB,2025,6,Old Dominion,Old Dominion,68.16,70,67.15,63
 CFB,2025,6,Oregon,Oregon,93.71,2,66.32,59
-CFB,2025,6,Oregon State,Oregon State,60.07,113,71.82,17
-CFB,2025,6,Penn State,Penn State,85.21,12,60.19,117
+CFB,2025,6,Oregon Ducks,Oregon,93.74,2,71.53,35
+CFB,2025,6,Oregon State,Oregon State,59.91,104,67.24,60
+CFB,2025,6,Penn State,Penn State,83.77,16,67.5,56
 CFB,2025,6,Pennsylvania,Pennsylvania,50.74,170,50.18,211
-CFB,2025,6,Pittsburgh,Pittsburgh,76.18,42,60.47,114
+CFB,2025,6,Pittsburgh,Pittsburgh,79.99,31,66.54,66
 CFB,2025,6,Portland State,Portland State,43.38,223,64.2,80
 CFB,2025,6,Prairie View A&M,Prairie View A&M,43.22,226,43.32,259
 CFB,2025,6,Presbyterian College,Presbyterian College,51.64,165,52.32,193
 CFB,2025,6,Princeton,Princeton,49.26,180,44.49,256
-CFB,2025,6,Purdue,Purdue,65.01,92,71.48,20
+CFB,2025,6,Purdue,Purdue,63.86,89,74.23,15
 CFB,2025,6,Rhode Island,Rhode Island,51.32,167,49.58,221
-CFB,2025,6,Rice,Rice,54.92,148,58.25,137
+CFB,2025,6,Rice,Rice,51.38,127,60.03,122
 CFB,2025,6,Richmond,Richmond,48.89,183,50.37,209
 CFB,2025,6,Robert Morris,Robert Morris,37.83,252,55.16,168
-CFB,2025,6,Rutgers,Rutgers,72.36,59,62.87,95
+CFB,2025,6,Rutgers,Rutgers,69.58,65,71.83,30
 CFB,2025,6,SC State,SC State,46.6,197,55.16,167
 CFB,2025,6,SE Louisiana,SE Louisiana,59.05,118,49.79,217
 CFB,2025,6,SE Missouri State,SE Missouri State,45.88,203,57.55,141
@@ -6001,46 +6015,50 @@ CFB,2025,6,SMU,SMU,76.77,40,65.5,68
 CFB,2025,6,Sacramento State,Sacramento State,55.66,143,51.25,204
 CFB,2025,6,Sacred Heart,Sacred Heart,43.46,222,44.7,254
 CFB,2025,6,Saint Francis-Pa.,Saint Francis-Pa.,35.94,257,52.14,195
-CFB,2025,6,Sam Houston State,Sam Houston State,47.16,194,68.95,32
+CFB,2025,6,Sam Houston State,Sam Houston State,45.49,133,63.13,98
 CFB,2025,6,Samford,Samford,40.9,236,55.04,172
 CFB,2025,6,San Diego,San Diego,45.3,205,49.79,218
-CFB,2025,6,San Diego State,San Diego State,65.11,90,58.09,138
-CFB,2025,6,San Jose State,San Jose State,62.91,101,62.05,100
-CFB,2025,6,South Alabama,South Alabama,61.17,108,66.47,56
-CFB,2025,6,South Carolina,South Carolina,80.36,28,70.21,29
+CFB,2025,6,San Diego State,San Diego State,67.53,74,58.06,133
+CFB,2025,6,San Jose State,San Jose State,61.26,96,63.72,89
+CFB,2025,6,Smu,SMU,80.17,27,67.15,62
+CFB,2025,6,South Alabama,South Alabama,60.02,100,65.05,71
+CFB,2025,6,South Carolina,South Carolina,78.3,33,75.78,10
 CFB,2025,6,South Dakota,South Dakota,55.81,140,53.64,183
 CFB,2025,6,South Dakota State,South Dakota State,73.57,51,53.88,179
-CFB,2025,6,South Florida,South Florida,73.48,52,68.42,39
-CFB,2025,6,Southern California,Southern California,82.27,21,65.96,62
+CFB,2025,6,South Florida,South Florida,77.87,34,67.05,64
+CFB,2025,6,Southern California,Southern California,84.21,15,71.0,43
 CFB,2025,6,Southern Illinois,Southern Illinois,61.7,103,51.96,200
-CFB,2025,6,Southern Miss,Southern Miss,62.95,100,60.02,118
+CFB,2025,6,Southern Miss,Southern Miss,64.8,87,61.17,111
 CFB,2025,6,Southern U.,Southern U.,40.17,242,52.09,198
 CFB,2025,6,Southern Utah,Southern Utah,51.93,164,54.89,173
 CFB,2025,6,St. Thomas-Mn.,St. Thomas-Mn.,45.61,204,48.27,235
-CFB,2025,6,Stanford,Stanford,64.07,96,70.44,26
+CFB,2025,6,Stanford,Stanford,66.19,81,73.23,19
 CFB,2025,6,Stephen F. Austin,Stephen F. Austin,57.54,127,55.08,170
 CFB,2025,6,Stetson,Stetson,31.91,265,48.77,232
 CFB,2025,6,Stonehill College,Stonehill College,38.81,248,45.9,249
 CFB,2025,6,Stony Brook,Stony Brook,50.2,174,46.48,244
-CFB,2025,6,Syracuse,Syracuse,72.61,57,73.98,10
+CFB,2025,6,Syracuse,Syracuse,70.97,62,74.41,13
 CFB,2025,6,TCU,TCU,78.51,34,68.77,35
 CFB,2025,6,Tarleton State,Tarleton State,66.83,81,48.14,237
-CFB,2025,6,Temple,Temple,61.4,106,62.89,94
-CFB,2025,6,Tennessee,Tennessee,84.52,14,67.33,51
+CFB,2025,6,Tcu,TCU,76.96,39,71.64,32
+CFB,2025,6,Temple,Temple,62.85,93,59.82,124
+CFB,2025,6,Tennessee,Tennessee,83.24,18,72.66,21
 CFB,2025,6,Tennessee State,Tennessee State,38.54,249,49.29,226
 CFB,2025,6,Tennessee Tech,Tennessee Tech,60.3,112,37.5,265
 CFB,2025,6,Tennessee-Martin,Tennessee-Martin,46.21,200,55.61,160
 CFB,2025,6,Texas,Texas,86.08,11,64.46,77
 CFB,2025,6,Texas A&M,Texas A&M,88.13,6,71.86,16
+CFB,2025,6,Texas Aandm,Texas A&M,88.88,7,74.18,16
+CFB,2025,6,Texas Longhorns,Texas,87.49,9,71.93,28
 CFB,2025,6,Texas Southern,Texas Southern,43.02,227,42.84,261
-CFB,2025,6,Texas State,Texas State,69.63,70,61.54,106
-CFB,2025,6,Texas Tech,Texas Tech,84.81,13,56.73,151
+CFB,2025,6,Texas State,Texas State,66.82,78,63.36,93
+CFB,2025,6,Texas Tech,Texas Tech,84.67,12,65.71,69
 CFB,2025,6,The Citadel,The Citadel,46.6,198,55.35,163
-CFB,2025,6,Toledo,Toledo,72.09,63,58.37,132
+CFB,2025,6,Toledo,Toledo,70.06,64,55.69,144
 CFB,2025,6,Towson,Towson,49.19,182,50.96,207
-CFB,2025,6,Troy,Troy,64.23,94,64.01,83
-CFB,2025,6,Tulane,Tulane,72.99,55,69.33,31
-CFB,2025,6,Tulsa,Tulsa,52.64,160,62.94,93
+CFB,2025,6,Troy,Troy,67.42,75,63.12,99
+CFB,2025,6,Tulane,Tulane,72.91,54,67.45,58
+CFB,2025,6,Tulsa,Tulsa,52.86,124,63.96,85
 CFB,2025,6,UAB,UAB,54.61,150,62.67,97
 CFB,2025,6,UC Davis,UC Davis,60.06,114,53.59,184
 CFB,2025,6,UCLA,UCLA,67.71,76,72.99,12
@@ -6048,30 +6066,35 @@ CFB,2025,6,UNLV,UNLV,70.7,69,59.08,127
 CFB,2025,6,UTEP,UTEP,55.22,145,62.76,96
 CFB,2025,6,UTRGV,UTRGV,47.6,192,48.83,231
 CFB,2025,6,UTSA,UTSA,66.08,85,65.38,69
-CFB,2025,6,Utah,Utah,81.12,24,67.81,47
-CFB,2025,6,Utah State,Utah State,65.82,86,61.72,103
+CFB,2025,6,Uab,UAB,55.44,117,63.28,95
+CFB,2025,6,Ucla,UCLA,71.44,60,72.31,24
+CFB,2025,6,Unlv,UNLV,67.32,76,61.54,109
+CFB,2025,6,Utah,Utah,82.74,21,71.37,36
+CFB,2025,6,Utah State,Utah State,63.15,92,63.17,97
 CFB,2025,6,Utah Tech,Utah Tech,45.29,206,56.88,147
+CFB,2025,6,Utep,UTEP,54.7,118,57.37,137
+CFB,2025,6,Utsa,UTSA,65.95,82,64.64,77
 CFB,2025,6,VMI,VMI,38.05,251,53.36,185
 CFB,2025,6,Valparaiso,Valparaiso,34.54,261,55.12,169
-CFB,2025,6,Vanderbilt,Vanderbilt,82.75,18,67.06,53
+CFB,2025,6,Vanderbilt,Vanderbilt,83.66,17,69.15,47
 CFB,2025,6,Villanova,Villanova,57.04,130,55.88,158
-CFB,2025,6,Virginia,Virginia,79.89,29,66.57,55
-CFB,2025,6,Virginia Tech,Virginia Tech,68.56,72,70.41,27
+CFB,2025,6,Virginia,Virginia,78.32,32,66.32,67
+CFB,2025,6,Virginia Tech,Virginia Tech,67.99,71,72.08,27
 CFB,2025,6,Wagner,Wagner,35.66,259,48.66,233
-CFB,2025,6,Wake Forest,Wake Forest,67.72,75,63.12,92
-CFB,2025,6,Washington,Washington,81.67,22,68.2,43
-CFB,2025,6,Washington State,Washington State,63.31,99,65.67,64
+CFB,2025,6,Wake Forest,Wake Forest,70.38,63,64.7,76
+CFB,2025,6,Washington,Washington,80.8,25,71.81,31
+CFB,2025,6,Washington State,Washington State,67.67,73,72.19,26
 CFB,2025,6,Weber State,Weber State,49.98,176,61.62,105
 CFB,2025,6,West Georgia,West Georgia,55.11,147,51.31,203
-CFB,2025,6,West Virginia,West Virginia,66.49,82,72.72,14
+CFB,2025,6,West Virginia,West Virginia,63.9,88,74.3,14
 CFB,2025,6,Western Carolina,Western Carolina,49.78,177,49.27,227
 CFB,2025,6,Western Illinois,Western Illinois,38.42,250,58.29,134
-CFB,2025,6,Western Kentucky,Western Kentucky,64.65,93,55.33,165
-CFB,2025,6,Western Michigan,Western Michigan,63.57,98,66.14,60
+CFB,2025,6,Western Kentucky,Western Kentucky,59.88,105,53.68,158
+CFB,2025,6,Western Michigan,Western Michigan,65.69,84,62.37,105
 CFB,2025,6,William & Mary,William & Mary,50.44,172,51.23,205
-CFB,2025,6,Wisconsin,Wisconsin,72.35,60,70.92,21
+CFB,2025,6,Wisconsin,Wisconsin,68.33,69,76.01,8
 CFB,2025,6,Wofford,Wofford,45.18,208,54.6,175
-CFB,2025,6,Wyoming,Wyoming,59.82,116,64.49,76
+CFB,2025,6,Wyoming,Wyoming,60.55,98,62.53,104
 CFB,2025,6,Yale,Yale,52.85,159,44.87,252
 CFB,2025,6,Youngstown State,Youngstown State,58.12,125,54.5,176
 CFB,2025,7,Abilene Christian,Abilene Christian,56.71,133,55.97,154
