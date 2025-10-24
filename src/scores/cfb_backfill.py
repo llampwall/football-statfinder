@@ -134,6 +134,9 @@ def _is_truthy(value: str) -> bool:
 def _align_columns(df: pd.DataFrame, columns: Sequence[str]) -> pd.DataFrame:
     ordered = [col for col in columns if col in df.columns]
     remainder = [col for col in df.columns if col not in ordered]
+    if not ordered:
+        return df
+    return df[ordered + remainder]
 
 
 def _is_finite_number(value: object) -> bool:

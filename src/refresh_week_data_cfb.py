@@ -10,18 +10,22 @@ import os
 import subprocess
 import sys
 from collections import Counter
+from datetime import datetime, timezone
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional, Set
 
 OUT_ROOT = Path(__file__).resolve().parents[1] / "out"
 
 from src.fetch_games_cfb import load_games, filter_week_reg
-from src.cfb_ats import apply_ats_to_week, build_team_ats
+from src.ats.cfb_ats import apply_ats_to_week, build_team_ats
 from src.common.current_week_service import get_current_week
+from src.common.io_atomic import write_atomic_text
 from src.common.io_utils import write_csv, write_jsonl, getenv
 from src.odds.cfb_ingest import ingest_cfb_odds_raw
 from src.odds.cfb_pin_to_schedule import pin_cfb_odds
 from src.odds.cfb_promote_week import promote_week_odds, diff_game_rows
+from src.odds.ats_backfill_api import compute_ats, resolve_event_id, select_closing_spread
+from src.odds.odds_api_client import ODDS_API_USAGE
 from src.ratings.sagarin_cfb_fetch import run_cfb_sagarin_staging
 from src.scores.cfb_backfill import backfill_cfb_scores
 from src.schedule_master_cfb import (
@@ -31,6 +35,240 @@ from src.schedule_master_cfb import (
 
 LEAGUE_MIN_TEAMS_ABS = 100
 LEAGUE_MIN_TEAMS_FRAC = 0.70
+
+_BLANK_SENTINELS = {None, "", "-", "\u2014"}
+
+
+def _is_blank(value: Any) -> bool:
+    if value in _BLANK_SENTINELS:
+        return True
+    if isinstance(value, float):
+        return math.isnan(value)
+    return False
+
+
+def _merge_only(old: Any, new: Any) -> Any:
+    return new if _is_blank(old) else old
+
+
+def _parse_kickoff(game: Dict[str, Any]) -> Optional[datetime]:
+    value = game.get("kickoff_ts") or (
+        game.get("raw_sources", {}).get("schedule_row", {}).get("commence_time")
+    )
+    if not value:
+        value = game.get("kickoff_iso_utc") or game.get("kickoff_iso")
+    if not value:
+        return None
+    try:
+        return datetime.fromisoformat(str(value).replace("Z", "+00:00")).astimezone(timezone.utc)
+    except Exception:
+        return None
+
+
+def _week_sidecar_dir(season: int, week: int) -> Path:
+    return OUT_ROOT / "cfb" / f"{season}_week{week}" / "game_schedules"
+
+
+def _load_pinned_index(league: str, season: int) -> Dict[str, str]:
+    path = OUT_ROOT / "staging" / "odds_pinned" / league.lower() / f"{season}.jsonl"
+    mapping: Dict[str, str] = {}
+    if not path.exists():
+        return mapping
+    try:
+        text = path.read_text(encoding="utf-8")
+    except OSError:
+        return mapping
+    for line in text.splitlines():
+        if not line.strip():
+            continue
+        try:
+            record = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if record.get("market") != "spreads":
+            continue
+        game_key = record.get("game_key")
+        event_id = (record.get("raw_event") or {}).get("event_id")
+        if isinstance(game_key, str) and isinstance(event_id, str):
+            mapping[game_key] = event_id
+    return mapping
+
+
+def _load_sidecar_map(season: int, week: int) -> Dict[str, Dict[str, Any]]:
+    side_dir = _week_sidecar_dir(season, week)
+    mapping: Dict[str, Dict[str, Any]] = {}
+    if not side_dir.exists():
+        return mapping
+    for path in side_dir.glob("*.json"):
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        if not isinstance(payload, dict):
+            continue
+        game_key = payload.get("game_key")
+        if isinstance(game_key, str):
+            mapping[game_key] = payload
+    return mapping
+
+
+def _write_sidecar_files(
+    season: int, week: int, sidecar_map: Dict[str, Dict[str, Any]], dirty_keys: Set[str]
+) -> None:
+    if not dirty_keys:
+        return
+    side_dir = _week_sidecar_dir(season, week)
+    side_dir.mkdir(parents=True, exist_ok=True)
+    for game_key in dirty_keys:
+        payload = sidecar_map.get(game_key)
+        if not isinstance(payload, dict):
+            continue
+        serialized = json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
+        write_atomic_text(side_dir / f"{game_key}.json", serialized)
+
+
+def _ats_backfill_api(
+    league: str,
+    season: int,
+    week: int,
+    games: Optional[List[Dict[str, Any]]],
+    sidecar_map: Dict[str, Dict[str, Any]],
+) -> Dict[str, Any]:
+    enabled = (os.getenv("ATS_BACKFILL_ENABLED", "0") == "1") or (
+        os.getenv("ATS_BACKFILL_SOURCE", "") == "api"
+    )
+    if not enabled:
+        return {"games_fixed": 0, "week_dirty": False, "sidecar_dirty": set()}
+
+    pinned_index = _load_pinned_index(league, season)
+    counts: Counter[str] = Counter()
+    games_fixed = 0
+    week_dirty = False
+    sidecar_dirty: Set[str] = set()
+
+    for game in games or []:
+        if not isinstance(game, dict):
+            continue
+        game_key = str(game.get("game_key") or "")
+        if not game_key:
+            continue
+
+        existing = (
+            game.get("home_ats"),
+            game.get("away_ats"),
+            game.get("to_margin_home"),
+            game.get("to_margin_away"),
+        )
+        if any(not _is_blank(field) for field in existing):
+            continue
+
+        kickoff_dt = _parse_kickoff(game)
+        event_id = pinned_index.get(game_key) or resolve_event_id(league, season, game)
+        selection = select_closing_spread(
+            league=league,
+            season=season,
+            event_id=event_id,
+            home_name=game.get("home_team_norm") or game.get("home_team_raw"),
+            away_name=game.get("away_team_norm") or game.get("away_team_raw"),
+            kickoff=kickoff_dt,
+        )
+        if not selection:
+            continue
+
+        favored = selection.get("favored_team")
+        try:
+            spread = float(selection["spread"])
+        except (KeyError, TypeError, ValueError):
+            continue
+
+        home_score = game.get("home_score")
+        away_score = game.get("away_score")
+        if _is_blank(home_score) or _is_blank(away_score):
+            schedule_row = (game.get("raw_sources") or {}).get("schedule_row") or {}
+            if _is_blank(home_score):
+                home_score = schedule_row.get("home_score")
+            if _is_blank(away_score):
+                away_score = schedule_row.get("away_score")
+        try:
+            home_score_int = int(home_score)
+            away_score_int = int(away_score)
+        except Exception:
+            continue
+
+        ats_payload = compute_ats(home_score_int, away_score_int, str(favored or ""), spread)
+        if not ats_payload:
+            continue
+
+        row_changed = False
+        for field in ("home_ats", "away_ats", "to_margin_home", "to_margin_away"):
+            merged = _merge_only(game.get(field), ats_payload[field])
+            if merged != game.get(field):
+                game[field] = merged
+                row_changed = True
+
+        sidecar_record = sidecar_map.get(game_key)
+
+        def _patch_side(side: str, ats_value: Any, margin_value: Any) -> bool:
+            if not isinstance(sidecar_record, dict):
+                return False
+            key = f"{side}_ytd"
+            rows = sidecar_record.get(key)
+            if not isinstance(rows, list):
+                if rows not in (None, []):
+                    return False
+                rows = []
+                sidecar_record[key] = rows
+            target = None
+            for entry in rows:
+                if not isinstance(entry, dict):
+                    continue
+                try:
+                    if int(entry.get("season")) == season and int(entry.get("week")) == week:
+                        target = entry
+                        break
+                except Exception:
+                    continue
+            created = False
+            if target is None:
+                target = {"season": season, "week": week, "ats": None, "to_margin": None}
+                rows.append(target)
+                created = True
+            updated = False
+            if ats_value is not None and _is_blank(target.get("ats")):
+                target["ats"] = ats_value
+                updated = True
+            if margin_value is not None and _is_blank(target.get("to_margin")):
+                try:
+                    target["to_margin"] = float(margin_value)
+                except Exception:
+                    target["to_margin"] = margin_value
+                updated = True
+            return created or updated
+
+        if _patch_side("home", ats_payload["home_ats"], ats_payload["to_margin_home"]):
+            sidecar_dirty.add(game_key)
+        if _patch_side("away", ats_payload["away_ats"], ats_payload["to_margin_away"]):
+            sidecar_dirty.add(game_key)
+
+        if row_changed:
+            games_fixed += 1
+            week_dirty = True
+
+        counts[selection.get("source", "api")] += 1
+
+    used = ODDS_API_USAGE.get("used")
+    remaining = ODDS_API_USAGE.get("remaining")
+    print(
+        f"ATS_BACKFILL(API {league.upper()}): week={season}-{week} "
+        f"games_fixed={games_fixed} source_counts={dict(counts)} "
+        f"usage=used:{used},remaining:{remaining}"
+    )
+
+    return {
+        "games_fixed": games_fixed,
+        "week_dirty": week_dirty,
+        "sidecar_dirty": sidecar_dirty,
+    }
 
 
 def run_module(
@@ -575,6 +813,15 @@ def main() -> int:
     if missing_favorite_fields:
         print(f"FAIL: CFB Game View missing fields: {', '.join(missing_favorite_fields)}")
         return 1
+
+    sidecar_map = _load_sidecar_map(season, week)
+    ats_state = _ats_backfill_api("cfb", season, week, gv_records, sidecar_map)
+    if ats_state["week_dirty"]:
+        write_jsonl(gv_records, gv_jsonl)
+        write_csv(gv_records, gv_csv)
+        gv_records = read_jsonl(gv_jsonl)
+    if ats_state["sidecar_dirty"]:
+        _write_sidecar_files(season, week, sidecar_map, ats_state["sidecar_dirty"])
 
     legacy_rows = None
     legacy_flag = getenv("ODDS_LEGACY_JOIN_ENABLE", "0").strip().lower() not in {"0", "false", "off", "disabled"}
