@@ -25,11 +25,11 @@ import os
 import sys
 from collections import Counter
 from datetime import datetime, timezone
-from typing import Any, Dict, Optional, Set
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 from src.common.current_week_service import get_current_week
 from src.common.io_atomic import write_atomic_text
-from src.common.io_utils import ensure_out_dir, getenv
+from src.common.io_utils import ensure_out_dir, getenv, write_atomic_json
 from src.odds.nfl_ingest import ingest_nfl_odds_raw
 from src.odds.nfl_pin_to_schedule import pin_nfl_odds
 from src.odds.nfl_promote_week import (
@@ -45,6 +45,12 @@ from src.scores.nfl_backfill import backfill_nfl_scores
 from src.ats.nfl_ats import build_team_ats, apply_ats_to_week
 
 _BLANK_SENTINELS = {None, "", "-", "\u2014"}
+ATS_DEBUG = getenv("ATS_DEBUG", "0") == "1"
+
+
+def _atsdbg(enabled: bool, msg: str) -> None:
+    if enabled:
+        print(msg)
 
 
 def _is_blank(value: Any) -> bool:
@@ -153,13 +159,18 @@ def _ats_backfill_api(
     if not enable:
         return {"games_fixed": 0, "week_dirty": False, "sidecar_dirty": set()}
 
+    debug_enabled = ATS_DEBUG
     pinned_index = _load_pinned_index(league, season)
-    counts: Counter[str] = Counter()
+    source_counts: Counter[str] = Counter()
+    resolver_counts: Counter[str] = Counter()
+    counters: Counter[str] = Counter()
     games_fixed = 0
     week_dirty = False
     sidecar_dirty: Set[str] = set()
 
+    league_tag = league.upper()
     games_iter = games or []
+    debug_rows: List[Dict[str, Any]] = [] if debug_enabled else []
 
     for game in games_iter:
         if not isinstance(game, dict):
@@ -168,6 +179,24 @@ def _ats_backfill_api(
         if not game_key:
             continue
 
+        debug_entry: Optional[Dict[str, Any]] = None
+        if debug_enabled:
+            debug_entry = {
+                "game_key": game_key,
+                "resolver": None,
+                "event_id": None,
+                "endpoint": None,
+                "book": None,
+                "favored_team": None,
+                "spread": None,
+                "kickoff": None,
+                "scores": {"home": None, "away": None},
+                "computed": None,
+                "merged_week_fields": [],
+                "patched_sidecar": {"home": False, "away": False},
+                "reason": None,
+            }
+
         week_fields = (
             game.get("home_ats"),
             game.get("away_ats"),
@@ -175,10 +204,48 @@ def _ats_backfill_api(
             game.get("to_margin_away"),
         )
         if any(not _is_blank(field) for field in week_fields):
+            counters["already_populated"] += 1
+            if debug_enabled:
+                debug_entry["reason"] = "already_populated"  # type: ignore[index]
+                debug_rows.append(debug_entry)  # type: ignore[arg-type]
             continue
 
         kickoff_dt = _parse_kickoff(game)
-        event_id = pinned_index.get(game_key) or resolve_event_id(league, season, game)
+        kickoff_iso = kickoff_dt.isoformat() if kickoff_dt else None
+        _atsdbg(
+            debug_enabled,
+            f"ATSDBG({league_tag}): week={season}-{week} game={game_key} step=kickoff parsed={kickoff_iso or '-'}",
+        )
+        if debug_enabled:
+            debug_entry["kickoff"] = kickoff_iso  # type: ignore[index]
+        if kickoff_dt is None:
+            counters["no_kickoff"] += 1
+
+        resolver_used = "failed"
+        event_id = pinned_index.get(game_key)
+        if event_id:
+            resolver_used = "pinned"
+        else:
+            fallback_id = resolve_event_id(league, season, game)
+            if fallback_id:
+                event_id = fallback_id
+                resolver_used = "events"
+        resolver_counts[resolver_used] += 1
+        _atsdbg(
+            debug_enabled,
+            f"ATSDBG({league_tag}): week={season}-{week} game={game_key} step=resolve resolver={resolver_used} event_id={event_id or '-'}",
+        )
+        if debug_enabled:
+            debug_entry["resolver"] = resolver_used  # type: ignore[index]
+            debug_entry["event_id"] = event_id  # type: ignore[index]
+
+        if not event_id:
+            counters["resolve_failed"] += 1
+            if debug_enabled:
+                debug_entry["reason"] = "resolve_failed"  # type: ignore[index]
+                debug_rows.append(debug_entry)  # type: ignore[arg-type]
+            continue
+
         selection = select_closing_spread(
             league=league,
             season=season,
@@ -186,14 +253,46 @@ def _ats_backfill_api(
             home_name=game.get("home_team_norm") or game.get("home_team_raw"),
             away_name=game.get("away_team_norm") or game.get("away_team_raw"),
             kickoff=kickoff_dt,
+            resolver=resolver_used,
         )
         if not selection:
+            counters["api_none"] += 1
+            reason = "no_kickoff" if kickoff_dt is None else "api_none"
+            if debug_enabled:
+                debug_entry["reason"] = reason  # type: ignore[index]
+                debug_rows.append(debug_entry)  # type: ignore[arg-type]
             continue
+
+        source_counts[selection.get("source", "api")] += 1
+        _atsdbg(
+            debug_enabled,
+            "ATSDBG({tag}): week={season}-{week} game={game} step=api endpoint={endpoint} "
+            "book={book} favored={favored} spread={spread} ts={ts}".format(
+                tag=league_tag,
+                season=season,
+                week=week,
+                game=game_key,
+                endpoint=selection.get("source"),
+                book=selection.get("book"),
+                favored=selection.get("favored_team"),
+                spread=selection.get("spread"),
+                ts=selection.get("fetched_ts"),
+            ),
+        )
+        if debug_enabled:
+            debug_entry["endpoint"] = selection.get("source")  # type: ignore[index]
+            debug_entry["book"] = selection.get("book")  # type: ignore[index]
+            debug_entry["favored_team"] = selection.get("favored_team")  # type: ignore[index]
+            debug_entry["spread"] = selection.get("spread")  # type: ignore[index]
 
         favored = selection.get("favored_team")
         try:
             spread = float(selection["spread"])
         except (KeyError, TypeError, ValueError):
+            counters["api_none"] += 1
+            if debug_enabled:
+                debug_entry["reason"] = "invalid_spread"  # type: ignore[index]
+                debug_rows.append(debug_entry)  # type: ignore[arg-type]
             continue
 
         home_score = game.get("home_score")
@@ -205,32 +304,78 @@ def _ats_backfill_api(
             if _is_blank(away_score):
                 away_score = schedule_row.get("away_score")
         try:
-            home_score_int = int(home_score)
-            away_score_int = int(away_score)
+            hs = int(home_score)
+            as_ = int(away_score)
         except Exception:
+            counters["no_scores"] += 1
+            if debug_enabled:
+                debug_entry["scores"] = {"home": home_score, "away": away_score}  # type: ignore[index]
+                debug_entry["reason"] = "no_scores"  # type: ignore[index]
+                debug_rows.append(debug_entry)  # type: ignore[arg-type]
             continue
 
-        ats_payload = compute_ats(home_score_int, away_score_int, str(favored or ""), spread)
+        _atsdbg(
+            debug_enabled,
+            f"ATSDBG({league_tag}): week={season}-{week} game={game_key} step=scores home={hs} away={as_}",
+        )
+        if debug_enabled:
+            debug_entry["scores"] = {"home": hs, "away": as_}  # type: ignore[index]
+
+        ats_payload = compute_ats(hs, as_, str(favored or ""), spread)
         if not ats_payload:
+            counters["no_scores"] += 1
+            if debug_enabled:
+                debug_entry["reason"] = "compute_failed"  # type: ignore[index]
+                debug_rows.append(debug_entry)  # type: ignore[arg-type]
             continue
+
+        _atsdbg(
+            debug_enabled,
+            "ATSDBG({tag}): week={season}-{week} game={game} step=compute home_ats={home_ats} "
+            "away_ats={away_ats} tm_home={tm_home} tm_away={tm_away}".format(
+                tag=league_tag,
+                season=season,
+                week=week,
+                game=game_key,
+                home_ats=ats_payload["home_ats"],
+                away_ats=ats_payload["away_ats"],
+                tm_home=ats_payload["to_margin_home"],
+                tm_away=ats_payload["to_margin_away"],
+            ),
+        )
+        if debug_enabled:
+            debug_entry["computed"] = ats_payload  # type: ignore[index]
 
         row_changed = False
+        changed_fields: List[str] = []
         for field in ("home_ats", "away_ats", "to_margin_home", "to_margin_away"):
             merged = _merge_only(game.get(field), ats_payload[field])
             if merged != game.get(field):
                 game[field] = merged
                 row_changed = True
+                changed_fields.append(field)
+
+        _atsdbg(
+            debug_enabled,
+            f"ATSDBG({league_tag}): week={season}-{week} game={game_key} step=merge_week changed={changed_fields}",
+        )
+        if row_changed:
+            games_fixed += 1
+            week_dirty = True
+            counters["merged_week"] += 1
+        if debug_enabled:
+            debug_entry["merged_week_fields"] = changed_fields  # type: ignore[index]
 
         sidecar_record = sidecar_map.get(game_key)
 
-        def _patch_side(side: str, ats_value: Any, margin_value: Any) -> bool:
+        def _patch_side(side: str, ats_value: Any, margin_value: Any) -> Tuple[bool, Optional[str]]:
             if not isinstance(sidecar_record, dict):
-                return False
+                return False, "missing_sidecar_record"
             key = f"{side}_ytd"
             rows = sidecar_record.get(key)
             if not isinstance(rows, list):
                 if rows not in (None, []):
-                    return False
+                    return False, "invalid_ytd_container"
                 rows = []
                 sidecar_record[key] = rows
             target = None
@@ -258,26 +403,59 @@ def _ats_backfill_api(
                 except Exception:
                     target["to_margin"] = margin_value
                 updated = True
-            return created or updated
+            if updated:
+                return True, None
+            if created:
+                return False, "skeleton_created"
+            return False, "already_filled"
 
-        if _patch_side("home", ats_payload["home_ats"], ats_payload["to_margin_home"]):
+        home_updated, home_reason = _patch_side(
+            "home", ats_payload["home_ats"], ats_payload["to_margin_home"]
+        )
+        away_updated, away_reason = _patch_side(
+            "away", ats_payload["away_ats"], ats_payload["to_margin_away"]
+        )
+        if home_updated:
             sidecar_dirty.add(game_key)
-        if _patch_side("away", ats_payload["away_ats"], ats_payload["to_margin_away"]):
+            counters["patched_sidecar"] += 1
+        if away_updated:
             sidecar_dirty.add(game_key)
+            counters["patched_sidecar"] += 1
 
-        if row_changed:
-            games_fixed += 1
-            week_dirty = True
-
-        counts[selection.get("source", "api")] += 1
+        _atsdbg(
+            debug_enabled,
+            f"ATSDBG({league_tag}): week={season}-{week} game={game_key} step=sidecar team=home updated={int(home_updated)}"
+            + (f" reason={home_reason}" if home_reason else ""),
+        )
+        _atsdbg(
+            debug_enabled,
+            f"ATSDBG({league_tag}): week={season}-{week} game={game_key} step=sidecar team=away updated={int(away_updated)}"
+            + (f" reason={away_reason}" if away_reason else ""),
+        )
+        if debug_enabled:
+            debug_entry["patched_sidecar"] = {  # type: ignore[index]
+                "home": bool(home_updated),
+                "away": bool(away_updated),
+            }
+            debug_rows.append(debug_entry)  # type: ignore[arg-type]
 
     used = ODDS_API_USAGE.get("used")
     remaining = ODDS_API_USAGE.get("remaining")
-    print(
-        f"ATS_BACKFILL(API {league.upper()}): week={season}-{week} "
-        f"games_fixed={games_fixed} source_counts={dict(counts)} "
+    summary_line = (
+        f"ATS_BACKFILL(API {league_tag}): week={season}-{week} games_fixed={games_fixed} "
+        f"sources={{history:{source_counts.get('history', 0)},current:{source_counts.get('current', 0)}}} "
+        f"resolve={{pinned:{resolver_counts.get('pinned', 0)},events:{resolver_counts.get('events', 0)},failed:{resolver_counts.get('failed', 0)}}} "
+        f"skips={{already_populated:{counters.get('already_populated', 0)},no_kickoff:{counters.get('no_kickoff', 0)},resolve_failed:{counters.get('resolve_failed', 0)},api_none:{counters.get('api_none', 0)},no_scores:{counters.get('no_scores', 0)}}} "
+        f"writes={{merged_week:{counters.get('merged_week', 0)},patched_sidecar:{counters.get('patched_sidecar', 0)}}} "
         f"usage=used:{used},remaining:{remaining}"
     )
+    print(summary_line)
+
+    if debug_enabled:
+        debug_root = ensure_out_dir() / "debug" / "ats_backfill" / league.lower()
+        debug_root.mkdir(parents=True, exist_ok=True)
+        debug_path = debug_root / f"{season}_week{week}.json"
+        write_atomic_json(debug_path, debug_rows)
 
     return {
         "games_fixed": games_fixed,

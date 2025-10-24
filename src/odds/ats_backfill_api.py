@@ -85,6 +85,7 @@ def select_closing_spread(
     *,
     season: Optional[int] = None,
     kickoff: Optional[datetime] = None,
+    resolver: Optional[str] = None,
 ) -> Optional[Dict[str, Any]]:
     """Resolve a closing spread snapshot using historical odds first, then current odds.
 
@@ -113,11 +114,15 @@ def select_closing_spread(
     historical = get_historical_spread(league, event_id, kickoff_value, home_label, away_label)
     if historical:
         historical["source"] = "history"
+        if resolver:
+            historical["resolver"] = resolver
         return historical
 
     current = get_current_spread(league, event_id, kickoff_value, home_label, away_label)
     if current:
         current["source"] = "current"
+        if resolver:
+            current["resolver"] = resolver
         return current
 
     return None
