@@ -1,0 +1,101 @@
+{
+  "fbs_rows": 50,
+  "joined_metrics_rows": 50,
+  "joined_odds_rows": 0,
+  "joined_sagarin_rows": 48,
+  "output_rows": 50,
+  "odds_games": 0,
+  "sagarin_games": 48,
+  "coverage_metrics": 1.0,
+  "notes": [
+    "FBS games: 50",
+    "Metrics coverage: 50/50",
+    "Odds coverage: 0/50",
+    "Sagarin coverage: 48/50"
+  ],
+  "samples": {
+    "missing_odds": [
+      {
+        "game_key": "20250905_2300_james_madison_louisville",
+        "home": "Louisville",
+        "away": "James Madison",
+        "kickoff_iso_utc": "2025-09-05T23:00:00Z"
+      },
+      {
+        "game_key": "20250905_2330_northern_illinois_maryland",
+        "home": "Maryland",
+        "away": "Northern Illinois",
+        "kickoff_iso_utc": "2025-09-05T23:30:00Z"
+      },
+      {
+        "game_key": "20250906_1600_kennesaw_state_indiana",
+        "home": "Indiana",
+        "away": "Kennesaw State",
+        "kickoff_iso_utc": "2025-09-06T16:00:00Z"
+      },
+      {
+        "game_key": "20250906_1600_illinois_duke",
+        "home": "Duke",
+        "away": "Illinois",
+        "kickoff_iso_utc": "2025-09-06T16:00:00Z"
+      },
+      {
+        "game_key": "20250906_1600_liberty_jacksonville_state",
+        "home": "Jacksonville State",
+        "away": "Liberty",
+        "kickoff_iso_utc": "2025-09-06T16:00:00Z"
+      },
+      {
+        "game_key": "20250906_1600_central_michigan_pittsburgh",
+        "home": "Pittsburgh",
+        "away": "Central Michigan",
+        "kickoff_iso_utc": "2025-09-06T16:00:00Z"
+      },
+      {
+        "game_key": "20250906_1600_baylor_smu",
+        "home": "Smu",
+        "away": "Baylor",
+        "kickoff_iso_utc": "2025-09-06T16:00:00Z"
+      },
+      {
+        "game_key": "20250906_1600_uconn_syracuse",
+        "home": "Syracuse",
+        "away": "Uconn",
+        "kickoff_iso_utc": "2025-09-06T16:00:00Z"
+      },
+      {
+        "game_key": "20250906_1600_iowa_iowa_state",
+        "home": "Iowa State",
+        "away": "Iowa",
+        "kickoff_iso_utc": "2025-09-06T16:00:00Z"
+      },
+      {
+        "game_key": "20250906_1600_kent_state_texas_tech",
+        "home": "Texas Tech",
+        "away": "Kent State",
+        "kickoff_iso_utc": "2025-09-06T16:00:00Z"
+      }
+    ],
+    "missing_sagarin": [
+      {
+        "game_key": "20250906_1930_delaware_colorado",
+        "home": "Colorado",
+        "away": "Delaware",
+        "kickoff_iso_utc": "2025-09-06T19:30:00Z"
+      },
+      {
+        "game_key": "20250906_2200_missouri_state_marshall",
+        "home": "Marshall",
+        "away": "Missouri State",
+        "kickoff_iso_utc": "2025-09-06T22:00:00Z"
+      }
+    ],
+    "metrics_gaps": []
+  },
+  "ratings": {
+    "eligible": 0,
+    "edges_count": 0,
+    "rvo_count": 0
+  },
+  "failures": []
+}
