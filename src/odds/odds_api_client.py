@@ -38,6 +38,13 @@ _SPORT_KEYS = {"nfl": "americanfootball_nfl", "cfb": "americanfootball_ncaaf"}
 ODDS_API_USAGE: Dict[str, Optional[str]] = {"remaining": None, "used": None}
 
 
+def _to_iso_z(dt: datetime) -> str:
+    """Return ISO8601 UTC with a trailing 'Z'."""
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=timezone.utc)
+    return dt.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
 def _log_api_error(message: str) -> None:
     """Emit API errors in red to satisfy diagnostics guardrails."""
     red = "\033[91m"
@@ -180,7 +187,8 @@ def get_historical_spread(
     if not api_key or not sport or not event_id:
         return None
 
-    kickoff = _parse_ts(kickoff_iso) or datetime.min.replace(tzinfo=timezone.utc)
+    kickoff_dt = _parse_ts(kickoff_iso) or datetime.min.replace(tzinfo=timezone.utc)
+    kickoff_iso_z = _to_iso_z(kickoff_dt)
 
     try:
         response = requests.get(
@@ -190,7 +198,7 @@ def get_historical_spread(
                 "regions": "us",
                 "markets": "spreads",
                 "oddsFormat": "american",
-                "date": kickoff_iso,
+                "date": kickoff_iso_z,
             },
             timeout=20,
         )
@@ -198,7 +206,7 @@ def get_historical_spread(
         response.raise_for_status()
         payload = response.json()
         bookmakers = payload.get("bookmakers") if isinstance(payload, dict) else payload
-        selection = _pick_book_pre_kick(bookmakers or [], kickoff)
+        selection = _pick_book_pre_kick(bookmakers or [], kickoff_dt)
         if not selection:
             return None
         book, market = selection
@@ -206,7 +214,7 @@ def get_historical_spread(
         if not normalized:
             return None
         favored, spread = normalized
-        timestamp = market.get("__ts__") or kickoff
+        timestamp = market.get("__ts__") or kickoff_dt
         return {
             "favored_team": favored,
             "spread": float(spread),
@@ -320,22 +328,29 @@ def get_participants(league: str) -> Optional[List[str]]:
 
 def get_historical_events(
     league: str,
-    snapshot_iso: str,
+    snapshot_dt: datetime,
     *,
-    commence_from: Optional[str] = None,
-    commence_to: Optional[str] = None,
+    commence_from: Optional[datetime] = None,
+    commence_to: Optional[datetime] = None,
+    event_ids: Optional[List[str]] = None,
 ) -> Optional[List[dict]]:
-    """GET /v4/historical/sports/{sport}/events?apiKey=...&date={snapshot_iso}"""
+    """Fetch historical events snapshot for the league."""
     api_key = getenv("THE_ODDS_API_KEY")
     sport = _sport_key(league)
     if not api_key or not sport:
         return None
 
-    params: Dict[str, str] = {"apiKey": api_key, "date": snapshot_iso}
-    if commence_from:
-        params["commenceTimeFrom"] = commence_from
-    if commence_to:
-        params["commenceTimeTo"] = commence_to
+    params: Dict[str, str] = {
+        "apiKey": api_key,
+        "date": _to_iso_z(snapshot_dt),
+        "dateFormat": "iso",
+    }
+    if commence_from is not None:
+        params["commenceTimeFrom"] = _to_iso_z(commence_from)
+    if commence_to is not None:
+        params["commenceTimeTo"] = _to_iso_z(commence_to)
+    if event_ids:
+        params["eventIds"] = ",".join(event_ids[:1000])
 
     try:
         response = requests.get(
@@ -352,7 +367,9 @@ def get_historical_events(
             f"ODDS_API_PAYLOAD_ERROR(get_historical_events): expected list, got {type(payload).__name__}"
         )
     except requests.RequestException as exc:
-        _log_api_error(f"ODDS_API_ERROR(get_historical_events): league={league} error={exc}")
+        _log_api_error(
+            f"ODDS_API_ERROR(get_historical_events): league={league} status={getattr(locals().get('response', None), 'status_code', None)} error={exc}"
+        )
     return None
 
 

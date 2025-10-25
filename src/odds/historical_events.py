@@ -24,10 +24,8 @@ from datetime import datetime, timezone, timedelta
 from typing import Dict, List, Tuple
 
 from src.odds.odds_api_client import get_historical_events
-from src.odds.participants_cache import canonical_equals
 
 _EVENT_CACHE: Dict[Tuple[str, str], List[dict]] = {}
-_TIME_GUARD_SECONDS = 90 * 60  # temporary widened guard
 
 
 def list_week_events(
@@ -36,21 +34,24 @@ def list_week_events(
     week_end_utc: datetime,
 ) -> List[dict]:
     """Return historical events for the league within [week_start, week_end]."""
-    start = week_start_utc.astimezone(timezone.utc)
-    end = week_end_utc.astimezone(timezone.utc)
-    snapshot = end.replace(hour=23, minute=59, second=59, microsecond=0)
-    snapshot_iso = snapshot.isoformat()
-    cache_key = (league.lower(), snapshot_iso)
+    week_start = week_start_utc.astimezone(timezone.utc).replace(
+        hour=0, minute=0, second=0, microsecond=0
+    )
+    week_end = week_end_utc.astimezone(timezone.utc).replace(
+        hour=23, minute=59, second=59, microsecond=0
+    )
+    snapshot = week_end
+    cache_key = (league.lower(), snapshot.isoformat())
 
     if cache_key not in _EVENT_CACHE:
         events = get_historical_events(
             league,
-            snapshot_iso,
-            commence_from=start.isoformat(),
-            commence_to=(end + timedelta(seconds=1)).isoformat(),
+            snapshot_dt=snapshot,
+            commence_from=week_start,
+            commence_to=week_end,
         ) or []
         print(
-            f"ATSDBG(HIST-EVENTS): league={league} snapshot={snapshot_iso} fetched={len(events)} window=[{start.isoformat()}→{end.isoformat()}]",
+            f"ATSDBG(HIST-EVENTS): league={league} snapshot={snapshot.isoformat()} fetched={len(events)} window=[{week_start.isoformat()}->{week_end.isoformat()}]",
             flush=True,
         )
         filtered: List[dict] = []
@@ -58,7 +59,7 @@ def list_week_events(
             commence_dt = _parse_ts(event.get("commence_time"))
             if not commence_dt:
                 continue
-            if start <= commence_dt <= end:
+            if week_start <= commence_dt <= week_end:
                 filtered.append(event)
         print(
             f"ATSDBG(HIST-EVENTS): league={league} filtered={len(filtered)}",

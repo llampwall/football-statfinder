@@ -1,0 +1,12 @@
+*** Begin Patch
+*** Update File: src/odds/odds_api_client.py
+@@
+-ODDS_API_USAGE: Dict[str, Optional[str]] = { \\\ remaining\\\: None, \\\used\\\: None}
++ODDS_API_USAGE: Dict[str, Optional[str]] = {\\\remaining\\\: None, \\\used\\\: None}
++
++def _to_iso_z(dt: datetime) -> str:
++    \\\\\\\\\Return ISO8601 UTC with Z suffix.\\\\\\\\\
++    if dt.tzinfo is None:
++        dt = dt.replace(tzinfo=timezone.utc)
++    return dt.astimezone(timezone.utc).strftime(\\\%Y-%m-%dT%H:%M:%SZ\\\)
+*** End Patch
