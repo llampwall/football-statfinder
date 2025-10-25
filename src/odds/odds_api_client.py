@@ -317,13 +317,13 @@ def get_current_spread(
         return None
 
 
-def get_participants(league: str) -> Optional[List[str]]:
+def get_participants(league: str) -> Optional[List[Dict[str, str]]]:
     """
     Fetch participant names for a league from The Odds API participants endpoint.
-    Returns a normalized List[str]. Tolerates payloads:
+    Returns a normalized List[{"name": str, "id": Optional[str]}]. Tolerates payloads:
       - list[str]
-      - list[dict{name:str}]
-      - dict with 'participants' or 'data' arrays.
+      - list[dict{name|full_name|fullName|team:str, id?:str}]
+      - dict with 'participants' or 'data' arrays containing either of the above.
     """
     api_key = getenv("THE_ODDS_API_KEY")
     sport = _sport_key(league)
@@ -353,18 +353,28 @@ def get_participants(league: str) -> Optional[List[str]]:
         else:
             seq = None
 
-        names: List[str] = []
+        entries: List[Dict[str, str]] = []
         if isinstance(seq, list):
             for entry in seq:
                 if isinstance(entry, str):
                     token = entry.strip()
                     if token:
-                        names.append(token)
+                        entries.append({"name": token})
                 elif isinstance(entry, dict):
-                    token = (entry.get("name") or "").strip()
+                    token = (
+                        entry.get("name")
+                        or entry.get("full_name")
+                        or entry.get("fullName")
+                        or entry.get("team")
+                        or ""
+                    ).strip()
                     if token:
-                        names.append(token)
-            return names
+                        record: Dict[str, str] = {"name": token}
+                        participant_id = entry.get("id") or entry.get("participant_id") or entry.get("par_id")
+                        if isinstance(participant_id, str) and participant_id.strip():
+                            record["id"] = participant_id.strip()
+                        entries.append(record)
+            return entries
         _log_api_error(
             f"ODDS_API_PAYLOAD_ERROR(get_participants): url={url} unexpected shape {type(payload).__name__}"
         )
@@ -393,8 +403,6 @@ def get_historical_events(
         "apiKey": api_key,
         "date": _to_iso_z(snapshot_dt),
         "dateFormat": "iso",
-        "commenceTimeFrom": _to_iso_z(commence_from) if commence_from is not None else None,
-        "commenceTimeTo": _to_iso_z(commence_to) if commence_to is not None else None,
         "eventIds": ",".join(event_ids[:1000]) if event_ids else None,
     }
     url = _build_url(f"/historical/sports/{sport}/events", params)

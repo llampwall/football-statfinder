@@ -27,7 +27,7 @@ from typing import Dict, List, Optional
 from src.common.io_utils import ensure_out_dir
 from src.odds.odds_api_client import get_participants as _api_get_participants
 
-_PARTICIPANT_LIST: Dict[str, List[str]] = {}
+_PARTICIPANT_LIST: Dict[str, List[Dict[str, str]]] = {}
 _NORMALIZED_MAP: Dict[str, Dict[str, str]] = {}
 _EMPTY_NOTIFIED: set[str] = set()
 
@@ -65,20 +65,41 @@ def _cache_path(league: str) -> Path:
     return _CACHE_DIR / f"{league.lower()}.json"
 
 
-def _load_from_disk(league: str) -> Optional[List[str]]:
+def _load_from_disk(league: str) -> Optional[List[Dict[str, str]]]:
     path = _cache_path(league)
     if not path.exists():
         return None
     try:
         data = json.loads(path.read_text(encoding="utf-8"))
         if isinstance(data, list):
-            return [str(item) for item in data if isinstance(item, str)]
+            normalized: List[Dict[str, str]] = []
+            for entry in data:
+                if isinstance(entry, dict):
+                    name = str(
+                        entry.get("name")
+                        or entry.get("full_name")
+                        or entry.get("fullName")
+                        or entry.get("team")
+                        or ""
+                    ).strip()
+                    if not name:
+                        continue
+                    record: Dict[str, str] = {"name": name}
+                    participant_id = entry.get("id") or entry.get("participant_id") or entry.get("par_id")
+                    if isinstance(participant_id, str) and participant_id.strip():
+                        record["id"] = participant_id.strip()
+                    normalized.append(record)
+                elif isinstance(entry, str):
+                    token = entry.strip()
+                    if token:
+                        normalized.append({"name": token})
+            return normalized
     except (json.JSONDecodeError, OSError):
         return None
     return None
 
 
-def _save_to_disk(league: str, participants: List[str]) -> None:
+def _save_to_disk(league: str, participants: List[Dict[str, str]]) -> None:
     path = _cache_path(league)
     try:
         path.write_text(json.dumps(participants, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -86,8 +107,8 @@ def _save_to_disk(league: str, participants: List[str]) -> None:
         pass
 
 
-def get_participants(league: str) -> Optional[List[str]]:
-    """Return the list of participant names for the league (cached per run)."""
+def get_participants(league: str) -> Optional[List[Dict[str, str]]]:
+    """Return the list of participant records (name/id) for the league (cached per run)."""
     league_key = league.lower()
     if league_key in _PARTICIPANT_LIST:
         return _PARTICIPANT_LIST[league_key]
@@ -103,7 +124,8 @@ def get_participants(league: str) -> Optional[List[str]]:
 
     if league_key not in _EMPTY_NOTIFIED:
         count = len(_PARTICIPANT_LIST[league_key])
-        sample = ", ".join(_PARTICIPANT_LIST[league_key][:3])
+        sample_names = [entry.get("name", "") for entry in _PARTICIPANT_LIST[league_key][:3]]
+        sample = ", ".join(sample_names)
         freshness = "fresh" if net_new else "cache"
         print(
             f"ATSDBG(PARTICIPANTS): league={league_key} count={count} ({freshness}) sample=[{sample}]",
@@ -116,12 +138,15 @@ def get_participants(league: str) -> Optional[List[str]]:
     return _PARTICIPANT_LIST[league_key]
 
 
-def _build_normalized_map(league: str, participants: List[str]) -> None:
+def _build_normalized_map(league: str, participants: List[Dict[str, str]]) -> None:
     normalizer = _normalizer(league)
     alias_map = _CFB_ALIAS_TOKENS if league == "cfb" else {}
 
     token_to_name: Dict[str, str] = {}
-    for name in participants:
+    for record in participants:
+        name = record.get("name")
+        if not isinstance(name, str) or not name:
+            continue
         token = normalizer(name)
         if not token:
             continue
