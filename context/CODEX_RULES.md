@@ -62,8 +62,13 @@ When in doubt
 
 - NEVER claim a command was run unless you executed it in the terminal.
 - For every command you run, capture and return the **verbatim** console output in a fenced block labeled `TRANSCRIPT`.
-- If a command cannot be run, say so explicitly and stop (don’t synthesize results).
+- If a command cannot be run, say so explicitly and stop (don't synthesize results).
 - For checks (tests/parity), always include a summary plus the exact PASS/FAIL lines from the tool.
+
+**API ERROR HANDLING (MANDATORY)**
+
+- Surface every HTTP error code and message immediately in the console using RED text (ANSI 91) and mirror the payload in relevant debug artifacts.
+- When integrating a new API call, include a minimal “hello world” / smoke invocation in acceptance to prove the request path works before deeper wiring.
 
 **NOTIFY POLICY**
 

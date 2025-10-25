@@ -1,0 +1,1115 @@
+[
+  {
+    "game_key": "20251021_2300_kennesaw_state_florida_international",
+    "resolver": "failed",
+    "event_id": null,
+    "endpoint": null,
+    "book": null,
+    "favored_team": null,
+    "spread": null,
+    "kickoff": "2025-10-21T23:00:00+00:00",
+    "scores": {
+      "home": null,
+      "away": null
+    },
+    "computed": null,
+    "merged_week_fields": [],
+    "patched_sidecar": {
+      "home": false,
+      "away": false
+    },
+    "reason": "resolve_failed"
+  },
+  {
+    "game_key": "20251021_2330_western_kentucky_louisiana_tech",
+    "resolver": "failed",
+    "event_id": null,
+    "endpoint": null,
+    "book": null,
+    "favored_team": null,
+    "spread": null,
+    "kickoff": "2025-10-21T23:30:00+00:00",
+    "scores": {
+      "home": null,
+      "away": null
+    },
+    "computed": null,
+    "merged_week_fields": [],
+    "patched_sidecar": {
+      "home": false,
+      "away": false
+    },
+    "reason": "resolve_failed"
+  },
+  {
+    "game_key": "20251022_2330_middle_tennessee_delaware",
+    "resolver": "failed",
+    "event_id": null,
+    "endpoint": null,
+    "book": null,
+    "favored_team": null,
+    "spread": null,
+    "kickoff": "2025-10-22T23:30:00+00:00",
+    "scores": {
+      "home": null,
+      "away": null
+    },
+    "computed": null,
+    "merged_week_fields": [],
+    "patched_sidecar": {
+      "home": false,
+      "away": false
+    },
+    "reason": "resolve_failed"
+  },
+  {
+    "game_key": "20251023_0100_missouri_state_new_mexico_state",
+    "resolver": "failed",
+    "event_id": null,
+    "endpoint": null,
+    "book": null,
+    "favored_team": null,
+    "spread": null,
+    "kickoff": "2025-10-23T01:00:00+00:00",
+    "scores": {
+      "home": null,
+      "away": null
+    },
+    "computed": null,
+    "merged_week_fields": [],
+    "patched_sidecar": {
+      "home": false,
+      "away": false
+    },
+    "reason": "resolve_failed"
+  },
+  {
+    "game_key": "20251023_2330_south_alabama_georgia_state",
+    "resolver": "failed",
+    "event_id": null,
+    "endpoint": null,
+    "book": null,
+    "favored_team": null,
+    "spread": null,
+    "kickoff": "2025-10-23T23:30:00+00:00",
+    "scores": {
+      "home": null,
+      "away": null
+    },
+    "computed": null,
+    "merged_week_fields": [],
+    "patched_sidecar": {
+      "home": false,
+      "away": false
+    },
+    "reason": "resolve_failed"
+  },
+  {
+    "game_key": "20251024_2300_north_texas_charlotte",
+    "resolver": "failed",
+    "event_id": null,
+    "endpoint": null,
+    "book": null,
+    "favored_team": null,
+    "spread": null,
+    "kickoff": "2025-10-24T23:00:00+00:00",
+    "scores": {
+      "home": null,
+      "away": null
+    },
+    "computed": null,
+    "merged_week_fields": [],
+    "patched_sidecar": {
+      "home": false,
+      "away": false
+    },
+    "reason": "resolve_failed"
+  },
+  {
+    "game_key": "20251024_2330_california_virginia_tech",
+    "resolver": "failed",
+    "event_id": null,
+    "endpoint": null,
+    "book": null,
+    "favored_team": null,
+    "spread": null,
+    "kickoff": "2025-10-24T23:30:00+00:00",
+    "scores": {
+      "home": null,
+      "away": null
+    },
+    "computed": null,
+    "merged_week_fields": [],
+    "patched_sidecar": {
+      "home": false,
+      "away": false
+    },
+    "reason": "resolve_failed"
+  },
+  {
+    "game_key": "20251025_0200_boise_state_nevada",
+    "resolver": "failed",
+    "event_id": null,
+    "endpoint": null,
+    "book": null,
+    "favored_team": null,
+    "spread": null,
+    "kickoff": "2025-10-25T02:00:00+00:00",
+    "scores": {
+      "home": null,
+      "away": null
+    },
+    "computed": null,
+    "merged_week_fields": [],
+    "patched_sidecar": {
+      "home": false,
+      "away": false
+    },
+    "reason": "resolve_failed"
+  },
+  {
+    "game_key": "20251025_1600_app_state_old_dominion",
+    "resolver": "failed",
+    "event_id": null,
+    "endpoint": null,
+    "book": null,
+    "favored_team": null,
+    "spread": null,
+    "kickoff": "2025-10-25T16:00:00+00:00",
+    "scores": {
+      "home": null,
+      "away": null
+    },
+    "computed": null,
+    "merged_week_fields": [],
+    "patched_sidecar": {
+      "home": false,
+      "away": false
+    },
+    "reason": "resolve_failed"
+  },
+  {
+    "game_key": "20251025_1600_bowling_green_kent_state",
+    "resolver": "failed",
+    "event_id": null,
+    "endpoint": null,
+    "book": null,
+    "favored_team": null,
+    "spread": null,
+    "kickoff": "2025-10-25T16:00:00+00:00",
+    "scores": {
+      "home": null,
+      "away": null
+    },
+    "computed": null,
+    "merged_week_fields": [],
+    "patched_sidecar": {
+      "home": false,
+      "away": false
+    },
+    "reason": "resolve_failed"
+  },
+  {
+    "game_key": "20251025_1600_kansas_state_kansas",
+    "resolver": "failed",
+    "event_id": null,
+    "endpoint": null,
+    "book": null,
+    "favored_team": null,
+    "spread": null,
+    "kickoff": "2025-10-25T16:00:00+00:00",
+    "scores": {
+      "home": null,
+      "away": null
+    },
+    "computed": null,
+    "merged_week_fields": [],
+    "patched_sidecar": {
+      "home": false,
+      "away": false
+    },
+    "reason": "resolve_failed"
+  },
+  {
+    "game_key": "20251025_1600_northwestern_nebraska",
+    "resolver": "pinned",
+    "event_id": "567f88999397ec54c373f5384f76510e",
+    "endpoint": null,
+    "book": null,
+    "favored_team": null,
+    "spread": null,
+    "kickoff": "2025-10-25T16:00:00+00:00",
+    "scores": {
+      "home": null,
+      "away": null
+    },
+    "computed": null,
+    "merged_week_fields": [],
+    "patched_sidecar": {
+      "home": false,
+      "away": false
+    },
+    "reason": "api_none"
+  },
+  {
+    "game_key": "20251025_1600_ohio_eastern_michigan",
+    "resolver": "failed",
+    "event_id": null,
+    "endpoint": null,
+    "book": null,
+    "favored_team": null,
+    "spread": null,
+    "kickoff": "2025-10-25T16:00:00+00:00",
+    "scores": {
+      "home": null,
+      "away": null
+    },
+    "computed": null,
+    "merged_week_fields": [],
+    "patched_sidecar": {
+      "home": false,
+      "away": false
+    },
+    "reason": "resolve_failed"
+  },
+  {
+    "game_key": "20251025_1600_ole_miss_oklahoma",
+    "resolver": "failed",
+    "event_id": null,
+    "endpoint": null,
+    "book": null,
+    "favored_team": null,
+    "spread": null,
+    "kickoff": "2025-10-25T16:00:00+00:00",
+    "scores": {
+      "home": null,
+      "away": null
+    },
+    "computed": null,
+    "merged_week_fields": [],
+    "patched_sidecar": {
+      "home": false,
+      "away": false
+    },
+    "reason": "resolve_failed"
+  },
+  {
+    "game_key": "20251025_1600_rutgers_purdue",
+    "resolver": "pinned",
+    "event_id": "2dbca87cd64d7ed47c15502789993291",
+    "endpoint": null,
+    "book": null,
+    "favored_team": null,
+    "spread": null,
+    "kickoff": "2025-10-25T16:00:00+00:00",
+    "scores": {
+      "home": null,
+      "away": null
+    },
+    "computed": null,
+    "merged_week_fields": [],
+    "patched_sidecar": {
+      "home": false,
+      "away": false
+    },
+    "reason": "api_none"
+  },
+  {
+    "game_key": "20251025_1600_smu_wake_forest",
+    "resolver": "failed",
+    "event_id": null,
+    "endpoint": null,
+    "book": null,
+    "favored_team": null,
+    "spread": null,
+    "kickoff": "2025-10-25T16:00:00+00:00",
+    "scores": {
+      "home": null,
+      "away": null
+    },
+    "computed": null,
+    "merged_week_fields": [],
+    "patched_sidecar": {
+      "home": false,
+      "away": false
+    },
+    "reason": "resolve_failed"
+  },
+  {
+    "game_key": "20251025_1600_south_florida_memphis",
+    "resolver": "failed",
+    "event_id": null,
+    "endpoint": null,
+    "book": null,
+    "favored_team": null,
+    "spread": null,
+    "kickoff": "2025-10-25T16:00:00+00:00",
+    "scores": {
+      "home": null,
+      "away": null
+    },
+    "computed": null,
+    "merged_week_fields": [],
+    "patched_sidecar": {
+      "home": false,
+      "away": false
+    },
+    "reason": "resolve_failed"
+  },
+  {
+    "game_key": "20251025_1600_syracuse_georgia_tech",
+    "resolver": "failed",
+    "event_id": null,
+    "endpoint": null,
+    "book": null,
+    "favored_team": null,
+    "spread": null,
+    "kickoff": "2025-10-25T16:00:00+00:00",
+    "scores": {
+      "home": null,
+      "away": null
+    },
+    "computed": null,
+    "merged_week_fields": [],
+    "patched_sidecar": {
+      "home": false,
+      "away": false
+    },
+    "reason": "resolve_failed"
+  },
+  {
+    "game_key": "20251025_1600_ucla_indiana",
+    "resolver": "pinned",
+    "event_id": "43bc24c6358317da3648cedea890e3b3",
+    "endpoint": null,
+    "book": null,
+    "favored_team": null,
+    "spread": null,
+    "kickoff": "2025-10-25T16:00:00+00:00",
+    "scores": {
+      "home": null,
+      "away": null
+    },
+    "computed": null,
+    "merged_week_fields": [],
+    "patched_sidecar": {
+      "home": false,
+      "away": false
+    },
+    "reason": "api_none"
+  },
+  {
+    "game_key": "20251025_1600_virginia_north_carolina",
+    "resolver": "failed",
+    "event_id": null,
+    "endpoint": null,
+    "book": null,
+    "favored_team": null,
+    "spread": null,
+    "kickoff": "2025-10-25T16:00:00+00:00",
+    "scores": {
+      "home": null,
+      "away": null
+    },
+    "computed": null,
+    "merged_week_fields": [],
+    "patched_sidecar": {
+      "home": false,
+      "away": false
+    },
+    "reason": "resolve_failed"
+  },
+  {
+    "game_key": "20251025_1645_auburn_arkansas",
+    "resolver": "pinned",
+    "event_id": "37c6546256bb2bb144539c81dc931806",
+    "endpoint": null,
+    "book": null,
+    "favored_team": null,
+    "spread": null,
+    "kickoff": "2025-10-25T16:45:00+00:00",
+    "scores": {
+      "home": null,
+      "away": null
+    },
+    "computed": null,
+    "merged_week_fields": [],
+    "patched_sidecar": {
+      "home": false,
+      "away": false
+    },
+    "reason": "api_none"
+  },
+  {
+    "game_key": "20251025_1700_akron_buffalo",
+    "resolver": "pinned",
+    "event_id": "6541b290fae8de6d5a2710e00f827b1a",
+    "endpoint": null,
+    "book": null,
+    "favored_team": null,
+    "spread": null,
+    "kickoff": "2025-10-25T17:00:00+00:00",
+    "scores": {
+      "home": null,
+      "away": null
+    },
+    "computed": null,
+    "merged_week_fields": [],
+    "patched_sidecar": {
+      "home": false,
+      "away": false
+    },
+    "reason": "api_none"
+  },
+  {
+    "game_key": "20251025_1900_uconn_rice",
+    "resolver": "pinned",
+    "event_id": "ca0bb13499fcb91539c0cf821a0576d7",
+    "endpoint": null,
+    "book": null,
+    "favored_team": null,
+    "spread": null,
+    "kickoff": "2025-10-25T19:00:00+00:00",
+    "scores": {
+      "home": null,
+      "away": null
+    },
+    "computed": null,
+    "merged_week_fields": [],
+    "patched_sidecar": {
+      "home": false,
+      "away": false
+    },
+    "reason": "api_none"
+  },
+  {
+    "game_key": "20251025_1900_utah_state_new_mexico",
+    "resolver": "failed",
+    "event_id": null,
+    "endpoint": null,
+    "book": null,
+    "favored_team": null,
+    "spread": null,
+    "kickoff": "2025-10-25T19:00:00+00:00",
+    "scores": {
+      "home": null,
+      "away": null
+    },
+    "computed": null,
+    "merged_week_fields": [],
+    "patched_sidecar": {
+      "home": false,
+      "away": false
+    },
+    "reason": "resolve_failed"
+  },
+  {
+    "game_key": "20251025_1930_alabama_crimson_tide_south_carolina",
+    "resolver": "failed",
+    "event_id": null,
+    "endpoint": null,
+    "book": null,
+    "favored_team": null,
+    "spread": null,
+    "kickoff": "2025-10-25T19:30:00+00:00",
+    "scores": {
+      "home": null,
+      "away": null
+    },
+    "computed": null,
+    "merged_week_fields": [],
+    "patched_sidecar": {
+      "home": false,
+      "away": false
+    },
+    "reason": "resolve_failed"
+  },
+  {
+    "game_key": "20251025_1930_ball_state_northern_illinois",
+    "resolver": "failed",
+    "event_id": null,
+    "endpoint": null,
+    "book": null,
+    "favored_team": null,
+    "spread": null,
+    "kickoff": "2025-10-25T19:30:00+00:00",
+    "scores": {
+      "home": null,
+      "away": null
+    },
+    "computed": null,
+    "merged_week_fields": [],
+    "patched_sidecar": {
+      "home": false,
+      "away": false
+    },
+    "reason": "resolve_failed"
+  },
+  {
+    "game_key": "20251025_1930_byu_iowa_state",
+    "resolver": "failed",
+    "event_id": null,
+    "endpoint": null,
+    "book": null,
+    "favored_team": null,
+    "spread": null,
+    "kickoff": "2025-10-25T19:30:00+00:00",
+    "scores": {
+      "home": null,
+      "away": null
+    },
+    "computed": null,
+    "merged_week_fields": [],
+    "patched_sidecar": {
+      "home": false,
+      "away": false
+    },
+    "reason": "resolve_failed"
+  },
+  {
+    "game_key": "20251025_1930_florida_atlantic_navy",
+    "resolver": "failed",
+    "event_id": null,
+    "endpoint": null,
+    "book": null,
+    "favored_team": null,
+    "spread": null,
+    "kickoff": "2025-10-25T19:30:00+00:00",
+    "scores": {
+      "home": null,
+      "away": null
+    },
+    "computed": null,
+    "merged_week_fields": [],
+    "patched_sidecar": {
+      "home": false,
+      "away": false
+    },
+    "reason": "resolve_failed"
+  },
+  {
+    "game_key": "20251025_1930_illinois_washington",
+    "resolver": "pinned",
+    "event_id": "6ba41f5aec285de1cc47eebd40516dde",
+    "endpoint": null,
+    "book": null,
+    "favored_team": null,
+    "spread": null,
+    "kickoff": "2025-10-25T19:30:00+00:00",
+    "scores": {
+      "home": null,
+      "away": null
+    },
+    "computed": null,
+    "merged_week_fields": [],
+    "patched_sidecar": {
+      "home": false,
+      "away": false
+    },
+    "reason": "api_none"
+  },
+  {
+    "game_key": "20251025_1930_massachusetts_central_michigan",
+    "resolver": "failed",
+    "event_id": null,
+    "endpoint": null,
+    "book": null,
+    "favored_team": null,
+    "spread": null,
+    "kickoff": "2025-10-25T19:30:00+00:00",
+    "scores": {
+      "home": null,
+      "away": null
+    },
+    "computed": null,
+    "merged_week_fields": [],
+    "patched_sidecar": {
+      "home": false,
+      "away": false
+    },
+    "reason": "resolve_failed"
+  },
+  {
+    "game_key": "20251025_1930_minnesota_iowa",
+    "resolver": "pinned",
+    "event_id": "3758bd67c5316c1bbfb1233631178e37",
+    "endpoint": null,
+    "book": null,
+    "favored_team": null,
+    "spread": null,
+    "kickoff": "2025-10-25T19:30:00+00:00",
+    "scores": {
+      "home": null,
+      "away": null
+    },
+    "computed": null,
+    "merged_week_fields": [],
+    "patched_sidecar": {
+      "home": false,
+      "away": false
+    },
+    "reason": "api_none"
+  },
+  {
+    "game_key": "20251025_1930_missouri_vanderbilt",
+    "resolver": "pinned",
+    "event_id": "cc91d8692c5fd56b32deabaf55bbfa47",
+    "endpoint": null,
+    "book": null,
+    "favored_team": null,
+    "spread": null,
+    "kickoff": "2025-10-25T19:30:00+00:00",
+    "scores": {
+      "home": null,
+      "away": null
+    },
+    "computed": null,
+    "merged_week_fields": [],
+    "patched_sidecar": {
+      "home": false,
+      "away": false
+    },
+    "reason": "api_none"
+  },
+  {
+    "game_key": "20251025_1930_nc_state_pittsburgh",
+    "resolver": "failed",
+    "event_id": null,
+    "endpoint": null,
+    "book": null,
+    "favored_team": null,
+    "spread": null,
+    "kickoff": "2025-10-25T19:30:00+00:00",
+    "scores": {
+      "home": null,
+      "away": null
+    },
+    "computed": null,
+    "merged_week_fields": [],
+    "patched_sidecar": {
+      "home": false,
+      "away": false
+    },
+    "reason": "resolve_failed"
+  },
+  {
+    "game_key": "20251025_1930_san_diego_state_fresno_state",
+    "resolver": "failed",
+    "event_id": null,
+    "endpoint": null,
+    "book": null,
+    "favored_team": null,
+    "spread": null,
+    "kickoff": "2025-10-25T19:30:00+00:00",
+    "scores": {
+      "home": null,
+      "away": null
+    },
+    "computed": null,
+    "merged_week_fields": [],
+    "patched_sidecar": {
+      "home": false,
+      "away": false
+    },
+    "reason": "resolve_failed"
+  },
+  {
+    "game_key": "20251025_1930_temple_tulsa",
+    "resolver": "failed",
+    "event_id": null,
+    "endpoint": null,
+    "book": null,
+    "favored_team": null,
+    "spread": null,
+    "kickoff": "2025-10-25T19:30:00+00:00",
+    "scores": {
+      "home": null,
+      "away": null
+    },
+    "computed": null,
+    "merged_week_fields": [],
+    "patched_sidecar": {
+      "home": false,
+      "away": false
+    },
+    "reason": "resolve_failed"
+  },
+  {
+    "game_key": "20251025_1930_toledo_washington_state",
+    "resolver": "failed",
+    "event_id": null,
+    "endpoint": null,
+    "book": null,
+    "favored_team": null,
+    "spread": null,
+    "kickoff": "2025-10-25T19:30:00+00:00",
+    "scores": {
+      "home": null,
+      "away": null
+    },
+    "computed": null,
+    "merged_week_fields": [],
+    "patched_sidecar": {
+      "home": false,
+      "away": false
+    },
+    "reason": "resolve_failed"
+  },
+  {
+    "game_key": "20251025_1930_ul_monroe_southern_miss",
+    "resolver": "failed",
+    "event_id": null,
+    "endpoint": null,
+    "book": null,
+    "favored_team": null,
+    "spread": null,
+    "kickoff": "2025-10-25T19:30:00+00:00",
+    "scores": {
+      "home": null,
+      "away": null
+    },
+    "computed": null,
+    "merged_week_fields": [],
+    "patched_sidecar": {
+      "home": false,
+      "away": false
+    },
+    "reason": "resolve_failed"
+  },
+  {
+    "game_key": "20251025_1930_western_michigan_miami_oh",
+    "resolver": "failed",
+    "event_id": null,
+    "endpoint": null,
+    "book": null,
+    "favored_team": null,
+    "spread": null,
+    "kickoff": "2025-10-25T19:30:00+00:00",
+    "scores": {
+      "home": null,
+      "away": null
+    },
+    "computed": null,
+    "merged_week_fields": [],
+    "patched_sidecar": {
+      "home": false,
+      "away": false
+    },
+    "reason": "resolve_failed"
+  },
+  {
+    "game_key": "20251025_2000_baylor_cincinnati",
+    "resolver": "pinned",
+    "event_id": "99a767848857d6a003492e414c23cfd2",
+    "endpoint": null,
+    "book": null,
+    "favored_team": null,
+    "spread": null,
+    "kickoff": "2025-10-25T20:00:00+00:00",
+    "scores": {
+      "home": null,
+      "away": null
+    },
+    "computed": null,
+    "merged_week_fields": [],
+    "patched_sidecar": {
+      "home": false,
+      "away": false
+    },
+    "reason": "api_none"
+  },
+  {
+    "game_key": "20251025_2000_oklahoma_state_texas_tech",
+    "resolver": "failed",
+    "event_id": null,
+    "endpoint": null,
+    "book": null,
+    "favored_team": null,
+    "spread": null,
+    "kickoff": "2025-10-25T20:00:00+00:00",
+    "scores": {
+      "home": null,
+      "away": null
+    },
+    "computed": null,
+    "merged_week_fields": [],
+    "patched_sidecar": {
+      "home": false,
+      "away": false
+    },
+    "reason": "resolve_failed"
+  },
+  {
+    "game_key": "20251025_2015_texas_longhorns_mississippi_state",
+    "resolver": "failed",
+    "event_id": null,
+    "endpoint": null,
+    "book": null,
+    "favored_team": null,
+    "spread": null,
+    "kickoff": "2025-10-25T20:15:00+00:00",
+    "scores": {
+      "home": null,
+      "away": null
+    },
+    "computed": null,
+    "merged_week_fields": [],
+    "patched_sidecar": {
+      "home": false,
+      "away": false
+    },
+    "reason": "resolve_failed"
+  },
+  {
+    "game_key": "20251025_2200_tcu_west_virginia",
+    "resolver": "failed",
+    "event_id": null,
+    "endpoint": null,
+    "book": null,
+    "favored_team": null,
+    "spread": null,
+    "kickoff": "2025-10-25T22:00:00+00:00",
+    "scores": {
+      "home": null,
+      "away": null
+    },
+    "computed": null,
+    "merged_week_fields": [],
+    "patched_sidecar": {
+      "home": false,
+      "away": false
+    },
+    "reason": "resolve_failed"
+  },
+  {
+    "game_key": "20251025_2300_georgia_southern_arkansas_state",
+    "resolver": "failed",
+    "event_id": null,
+    "endpoint": null,
+    "book": null,
+    "favored_team": null,
+    "spread": null,
+    "kickoff": "2025-10-25T23:00:00+00:00",
+    "scores": {
+      "home": null,
+      "away": null
+    },
+    "computed": null,
+    "merged_week_fields": [],
+    "patched_sidecar": {
+      "home": false,
+      "away": false
+    },
+    "reason": "resolve_failed"
+  },
+  {
+    "game_key": "20251025_2300_louisiana_troy",
+    "resolver": "pinned",
+    "event_id": "ab90efbe36ace5f60feeb6f1bc5c8a63",
+    "endpoint": null,
+    "book": null,
+    "favored_team": null,
+    "spread": null,
+    "kickoff": "2025-10-25T23:00:00+00:00",
+    "scores": {
+      "home": null,
+      "away": null
+    },
+    "computed": null,
+    "merged_week_fields": [],
+    "patched_sidecar": {
+      "home": false,
+      "away": false
+    },
+    "reason": "api_none"
+  },
+  {
+    "game_key": "20251025_2300_stanford_miami",
+    "resolver": "pinned",
+    "event_id": "ea34e43ecca5cdceabb78a1e669f61c0",
+    "endpoint": null,
+    "book": null,
+    "favored_team": null,
+    "spread": null,
+    "kickoff": "2025-10-25T23:00:00+00:00",
+    "scores": {
+      "home": null,
+      "away": null
+    },
+    "computed": null,
+    "merged_week_fields": [],
+    "patched_sidecar": {
+      "home": false,
+      "away": false
+    },
+    "reason": "api_none"
+  },
+  {
+    "game_key": "20251025_2300_wisconsin_oregon_ducks",
+    "resolver": "failed",
+    "event_id": null,
+    "endpoint": null,
+    "book": null,
+    "favored_team": null,
+    "spread": null,
+    "kickoff": "2025-10-25T23:00:00+00:00",
+    "scores": {
+      "home": null,
+      "away": null
+    },
+    "computed": null,
+    "merged_week_fields": [],
+    "patched_sidecar": {
+      "home": false,
+      "away": false
+    },
+    "reason": "resolve_failed"
+  },
+  {
+    "game_key": "20251025_2330_boston_college_louisville",
+    "resolver": "failed",
+    "event_id": null,
+    "endpoint": null,
+    "book": null,
+    "favored_team": null,
+    "spread": null,
+    "kickoff": "2025-10-25T23:30:00+00:00",
+    "scores": {
+      "home": null,
+      "away": null
+    },
+    "computed": null,
+    "merged_week_fields": [],
+    "patched_sidecar": {
+      "home": false,
+      "away": false
+    },
+    "reason": "resolve_failed"
+  },
+  {
+    "game_key": "20251025_2330_colorado_state_wyoming",
+    "resolver": "failed",
+    "event_id": null,
+    "endpoint": null,
+    "book": null,
+    "favored_team": null,
+    "spread": null,
+    "kickoff": "2025-10-25T23:30:00+00:00",
+    "scores": {
+      "home": null,
+      "away": null
+    },
+    "computed": null,
+    "merged_week_fields": [],
+    "patched_sidecar": {
+      "home": false,
+      "away": false
+    },
+    "reason": "resolve_failed"
+  },
+  {
+    "game_key": "20251025_2330_michigan_michigan_state",
+    "resolver": "failed",
+    "event_id": null,
+    "endpoint": null,
+    "book": null,
+    "favored_team": null,
+    "spread": null,
+    "kickoff": "2025-10-25T23:30:00+00:00",
+    "scores": {
+      "home": null,
+      "away": null
+    },
+    "computed": null,
+    "merged_week_fields": [],
+    "patched_sidecar": {
+      "home": false,
+      "away": false
+    },
+    "reason": "resolve_failed"
+  },
+  {
+    "game_key": "20251025_2330_texas_aandm_lsu",
+    "resolver": "failed",
+    "event_id": null,
+    "endpoint": null,
+    "book": null,
+    "favored_team": null,
+    "spread": null,
+    "kickoff": "2025-10-25T23:30:00+00:00",
+    "scores": {
+      "home": null,
+      "away": null
+    },
+    "computed": null,
+    "merged_week_fields": [],
+    "patched_sidecar": {
+      "home": false,
+      "away": false
+    },
+    "reason": "resolve_failed"
+  },
+  {
+    "game_key": "20251025_2345_tennessee_kentucky",
+    "resolver": "pinned",
+    "event_id": "997d540a1f3e018bb3fc40d4d6789463",
+    "endpoint": null,
+    "book": null,
+    "favored_team": null,
+    "spread": null,
+    "kickoff": "2025-10-25T23:45:00+00:00",
+    "scores": {
+      "home": null,
+      "away": null
+    },
+    "computed": null,
+    "merged_week_fields": [],
+    "patched_sidecar": {
+      "home": false,
+      "away": false
+    },
+    "reason": "api_none"
+  },
+  {
+    "game_key": "20251026_0000_houston_arizona_state",
+    "resolver": "failed",
+    "event_id": null,
+    "endpoint": null,
+    "book": null,
+    "favored_team": null,
+    "spread": null,
+    "kickoff": "2025-10-26T00:00:00+00:00",
+    "scores": {
+      "home": null,
+      "away": null
+    },
+    "computed": null,
+    "merged_week_fields": [],
+    "patched_sidecar": {
+      "home": false,
+      "away": false
+    },
+    "reason": "resolve_failed"
+  },
+  {
+    "game_key": "20251026_0215_colorado_utah",
+    "resolver": "pinned",
+    "event_id": "e18c1f37c95bf989baf40bc9692ad742",
+    "endpoint": null,
+    "book": null,
+    "favored_team": null,
+    "spread": null,
+    "kickoff": "2025-10-26T02:15:00+00:00",
+    "scores": {
+      "home": null,
+      "away": null
+    },
+    "computed": null,
+    "merged_week_fields": [],
+    "patched_sidecar": {
+      "home": false,
+      "away": false
+    },
+    "reason": "api_none"
+  }
+]

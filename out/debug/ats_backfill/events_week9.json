@@ -1,0 +1,587 @@
+[
+  {
+    "league": "cfb",
+    "league_week": "2025-9",
+    "game_key": "20251021_2300_kennesaw_state_florida_international",
+    "kickoff": "2025-10-21T23:00:00+00:00",
+    "window_minutes": 120,
+    "params": {
+      "apiKey": "aca1711a7cbd26f1e651e6e8084714e0",
+      "commenceTimeFrom": "2025-10-21T21:00:00+00:00",
+      "commenceTimeTo": "2025-10-22T01:00:00+00:00"
+    },
+    "home_name": "Florida International",
+    "away_name": "Kennesaw State",
+    "error": "422 Client Error: Unprocessable Entity for url: https://api.the-odds-api.com/v4/sports/americanfootball_ncaaf/events?apiKey=aca1711a7cbd26f1e651e6e8084714e0&commenceTimeFrom=2025-10-21T21%3A00%3A00%2B00%3A00&commenceTimeTo=2025-10-22T01%3A00%3A00%2B00%3A00"
+  },
+  {
+    "league": "cfb",
+    "league_week": "2025-9",
+    "game_key": "20251021_2330_western_kentucky_louisiana_tech",
+    "kickoff": "2025-10-21T23:30:00+00:00",
+    "window_minutes": 120,
+    "params": {
+      "apiKey": "aca1711a7cbd26f1e651e6e8084714e0",
+      "commenceTimeFrom": "2025-10-21T21:30:00+00:00",
+      "commenceTimeTo": "2025-10-22T01:30:00+00:00"
+    },
+    "home_name": "Louisiana Tech",
+    "away_name": "Western Kentucky",
+    "error": "422 Client Error: Unprocessable Entity for url: https://api.the-odds-api.com/v4/sports/americanfootball_ncaaf/events?apiKey=aca1711a7cbd26f1e651e6e8084714e0&commenceTimeFrom=2025-10-21T21%3A30%3A00%2B00%3A00&commenceTimeTo=2025-10-22T01%3A30%3A00%2B00%3A00"
+  },
+  {
+    "league": "cfb",
+    "league_week": "2025-9",
+    "game_key": "20251022_2330_middle_tennessee_delaware",
+    "kickoff": "2025-10-22T23:30:00+00:00",
+    "window_minutes": 120,
+    "params": {
+      "apiKey": "aca1711a7cbd26f1e651e6e8084714e0",
+      "commenceTimeFrom": "2025-10-22T21:30:00+00:00",
+      "commenceTimeTo": "2025-10-23T01:30:00+00:00"
+    },
+    "home_name": "Delaware",
+    "away_name": "Middle Tennessee",
+    "error": "422 Client Error: Unprocessable Entity for url: https://api.the-odds-api.com/v4/sports/americanfootball_ncaaf/events?apiKey=aca1711a7cbd26f1e651e6e8084714e0&commenceTimeFrom=2025-10-22T21%3A30%3A00%2B00%3A00&commenceTimeTo=2025-10-23T01%3A30%3A00%2B00%3A00"
+  },
+  {
+    "league": "cfb",
+    "league_week": "2025-9",
+    "game_key": "20251023_0100_missouri_state_new_mexico_state",
+    "kickoff": "2025-10-23T01:00:00+00:00",
+    "window_minutes": 120,
+    "params": {
+      "apiKey": "aca1711a7cbd26f1e651e6e8084714e0",
+      "commenceTimeFrom": "2025-10-22T23:00:00+00:00",
+      "commenceTimeTo": "2025-10-23T03:00:00+00:00"
+    },
+    "home_name": "New Mexico State",
+    "away_name": "Missouri State",
+    "error": "422 Client Error: Unprocessable Entity for url: https://api.the-odds-api.com/v4/sports/americanfootball_ncaaf/events?apiKey=aca1711a7cbd26f1e651e6e8084714e0&commenceTimeFrom=2025-10-22T23%3A00%3A00%2B00%3A00&commenceTimeTo=2025-10-23T03%3A00%3A00%2B00%3A00"
+  },
+  {
+    "league": "cfb",
+    "league_week": "2025-9",
+    "game_key": "20251023_2330_south_alabama_georgia_state",
+    "kickoff": "2025-10-23T23:30:00+00:00",
+    "window_minutes": 120,
+    "params": {
+      "apiKey": "aca1711a7cbd26f1e651e6e8084714e0",
+      "commenceTimeFrom": "2025-10-23T21:30:00+00:00",
+      "commenceTimeTo": "2025-10-24T01:30:00+00:00"
+    },
+    "home_name": "Georgia State",
+    "away_name": "South Alabama",
+    "error": "422 Client Error: Unprocessable Entity for url: https://api.the-odds-api.com/v4/sports/americanfootball_ncaaf/events?apiKey=aca1711a7cbd26f1e651e6e8084714e0&commenceTimeFrom=2025-10-23T21%3A30%3A00%2B00%3A00&commenceTimeTo=2025-10-24T01%3A30%3A00%2B00%3A00"
+  },
+  {
+    "league": "cfb",
+    "league_week": "2025-9",
+    "game_key": "20251024_2300_north_texas_charlotte",
+    "kickoff": "2025-10-24T23:00:00+00:00",
+    "window_minutes": 120,
+    "params": {
+      "apiKey": "aca1711a7cbd26f1e651e6e8084714e0",
+      "commenceTimeFrom": "2025-10-24T21:00:00+00:00",
+      "commenceTimeTo": "2025-10-25T01:00:00+00:00"
+    },
+    "home_name": "Charlotte",
+    "away_name": "North Texas",
+    "error": "422 Client Error: Unprocessable Entity for url: https://api.the-odds-api.com/v4/sports/americanfootball_ncaaf/events?apiKey=aca1711a7cbd26f1e651e6e8084714e0&commenceTimeFrom=2025-10-24T21%3A00%3A00%2B00%3A00&commenceTimeTo=2025-10-25T01%3A00%3A00%2B00%3A00"
+  },
+  {
+    "league": "cfb",
+    "league_week": "2025-9",
+    "game_key": "20251024_2330_california_virginia_tech",
+    "kickoff": "2025-10-24T23:30:00+00:00",
+    "window_minutes": 120,
+    "params": {
+      "apiKey": "aca1711a7cbd26f1e651e6e8084714e0",
+      "commenceTimeFrom": "2025-10-24T21:30:00+00:00",
+      "commenceTimeTo": "2025-10-25T01:30:00+00:00"
+    },
+    "home_name": "Virginia Tech",
+    "away_name": "California",
+    "error": "422 Client Error: Unprocessable Entity for url: https://api.the-odds-api.com/v4/sports/americanfootball_ncaaf/events?apiKey=aca1711a7cbd26f1e651e6e8084714e0&commenceTimeFrom=2025-10-24T21%3A30%3A00%2B00%3A00&commenceTimeTo=2025-10-25T01%3A30%3A00%2B00%3A00"
+  },
+  {
+    "league": "cfb",
+    "league_week": "2025-9",
+    "game_key": "20251025_0200_boise_state_nevada",
+    "kickoff": "2025-10-25T02:00:00+00:00",
+    "window_minutes": 120,
+    "params": {
+      "apiKey": "aca1711a7cbd26f1e651e6e8084714e0",
+      "commenceTimeFrom": "2025-10-25T00:00:00+00:00",
+      "commenceTimeTo": "2025-10-25T04:00:00+00:00"
+    },
+    "home_name": "Nevada",
+    "away_name": "Boise State",
+    "error": "422 Client Error: Unprocessable Entity for url: https://api.the-odds-api.com/v4/sports/americanfootball_ncaaf/events?apiKey=aca1711a7cbd26f1e651e6e8084714e0&commenceTimeFrom=2025-10-25T00%3A00%3A00%2B00%3A00&commenceTimeTo=2025-10-25T04%3A00%3A00%2B00%3A00"
+  },
+  {
+    "league": "cfb",
+    "league_week": "2025-9",
+    "game_key": "20251025_1600_app_state_old_dominion",
+    "kickoff": "2025-10-25T16:00:00+00:00",
+    "window_minutes": 120,
+    "params": {
+      "apiKey": "aca1711a7cbd26f1e651e6e8084714e0",
+      "commenceTimeFrom": "2025-10-25T14:00:00+00:00",
+      "commenceTimeTo": "2025-10-25T18:00:00+00:00"
+    },
+    "home_name": "Old Dominion",
+    "away_name": "App State",
+    "error": "422 Client Error: Unprocessable Entity for url: https://api.the-odds-api.com/v4/sports/americanfootball_ncaaf/events?apiKey=aca1711a7cbd26f1e651e6e8084714e0&commenceTimeFrom=2025-10-25T14%3A00%3A00%2B00%3A00&commenceTimeTo=2025-10-25T18%3A00%3A00%2B00%3A00"
+  },
+  {
+    "league": "cfb",
+    "league_week": "2025-9",
+    "game_key": "20251025_1600_bowling_green_kent_state",
+    "kickoff": "2025-10-25T16:00:00+00:00",
+    "window_minutes": 120,
+    "params": {
+      "apiKey": "aca1711a7cbd26f1e651e6e8084714e0",
+      "commenceTimeFrom": "2025-10-25T14:00:00+00:00",
+      "commenceTimeTo": "2025-10-25T18:00:00+00:00"
+    },
+    "home_name": "Kent State",
+    "away_name": "Bowling Green",
+    "error": "422 Client Error: Unprocessable Entity for url: https://api.the-odds-api.com/v4/sports/americanfootball_ncaaf/events?apiKey=aca1711a7cbd26f1e651e6e8084714e0&commenceTimeFrom=2025-10-25T14%3A00%3A00%2B00%3A00&commenceTimeTo=2025-10-25T18%3A00%3A00%2B00%3A00"
+  },
+  {
+    "league": "cfb",
+    "league_week": "2025-9",
+    "game_key": "20251025_1600_kansas_state_kansas",
+    "kickoff": "2025-10-25T16:00:00+00:00",
+    "window_minutes": 120,
+    "params": {
+      "apiKey": "aca1711a7cbd26f1e651e6e8084714e0",
+      "commenceTimeFrom": "2025-10-25T14:00:00+00:00",
+      "commenceTimeTo": "2025-10-25T18:00:00+00:00"
+    },
+    "home_name": "Kansas",
+    "away_name": "Kansas State",
+    "error": "422 Client Error: Unprocessable Entity for url: https://api.the-odds-api.com/v4/sports/americanfootball_ncaaf/events?apiKey=aca1711a7cbd26f1e651e6e8084714e0&commenceTimeFrom=2025-10-25T14%3A00%3A00%2B00%3A00&commenceTimeTo=2025-10-25T18%3A00%3A00%2B00%3A00"
+  },
+  {
+    "league": "cfb",
+    "league_week": "2025-9",
+    "game_key": "20251025_1600_ohio_eastern_michigan",
+    "kickoff": "2025-10-25T16:00:00+00:00",
+    "window_minutes": 120,
+    "params": {
+      "apiKey": "aca1711a7cbd26f1e651e6e8084714e0",
+      "commenceTimeFrom": "2025-10-25T14:00:00+00:00",
+      "commenceTimeTo": "2025-10-25T18:00:00+00:00"
+    },
+    "home_name": "Eastern Michigan",
+    "away_name": "Ohio",
+    "error": "422 Client Error: Unprocessable Entity for url: https://api.the-odds-api.com/v4/sports/americanfootball_ncaaf/events?apiKey=aca1711a7cbd26f1e651e6e8084714e0&commenceTimeFrom=2025-10-25T14%3A00%3A00%2B00%3A00&commenceTimeTo=2025-10-25T18%3A00%3A00%2B00%3A00"
+  },
+  {
+    "league": "cfb",
+    "league_week": "2025-9",
+    "game_key": "20251025_1600_ole_miss_oklahoma",
+    "kickoff": "2025-10-25T16:00:00+00:00",
+    "window_minutes": 120,
+    "params": {
+      "apiKey": "aca1711a7cbd26f1e651e6e8084714e0",
+      "commenceTimeFrom": "2025-10-25T14:00:00+00:00",
+      "commenceTimeTo": "2025-10-25T18:00:00+00:00"
+    },
+    "home_name": "Oklahoma",
+    "away_name": "Ole Miss",
+    "error": "422 Client Error: Unprocessable Entity for url: https://api.the-odds-api.com/v4/sports/americanfootball_ncaaf/events?apiKey=aca1711a7cbd26f1e651e6e8084714e0&commenceTimeFrom=2025-10-25T14%3A00%3A00%2B00%3A00&commenceTimeTo=2025-10-25T18%3A00%3A00%2B00%3A00"
+  },
+  {
+    "league": "cfb",
+    "league_week": "2025-9",
+    "game_key": "20251025_1600_smu_wake_forest",
+    "kickoff": "2025-10-25T16:00:00+00:00",
+    "window_minutes": 120,
+    "params": {
+      "apiKey": "aca1711a7cbd26f1e651e6e8084714e0",
+      "commenceTimeFrom": "2025-10-25T14:00:00+00:00",
+      "commenceTimeTo": "2025-10-25T18:00:00+00:00"
+    },
+    "home_name": "Wake Forest",
+    "away_name": "Smu",
+    "error": "422 Client Error: Unprocessable Entity for url: https://api.the-odds-api.com/v4/sports/americanfootball_ncaaf/events?apiKey=aca1711a7cbd26f1e651e6e8084714e0&commenceTimeFrom=2025-10-25T14%3A00%3A00%2B00%3A00&commenceTimeTo=2025-10-25T18%3A00%3A00%2B00%3A00"
+  },
+  {
+    "league": "cfb",
+    "league_week": "2025-9",
+    "game_key": "20251025_1600_south_florida_memphis",
+    "kickoff": "2025-10-25T16:00:00+00:00",
+    "window_minutes": 120,
+    "params": {
+      "apiKey": "aca1711a7cbd26f1e651e6e8084714e0",
+      "commenceTimeFrom": "2025-10-25T14:00:00+00:00",
+      "commenceTimeTo": "2025-10-25T18:00:00+00:00"
+    },
+    "home_name": "Memphis",
+    "away_name": "South Florida",
+    "error": "422 Client Error: Unprocessable Entity for url: https://api.the-odds-api.com/v4/sports/americanfootball_ncaaf/events?apiKey=aca1711a7cbd26f1e651e6e8084714e0&commenceTimeFrom=2025-10-25T14%3A00%3A00%2B00%3A00&commenceTimeTo=2025-10-25T18%3A00%3A00%2B00%3A00"
+  },
+  {
+    "league": "cfb",
+    "league_week": "2025-9",
+    "game_key": "20251025_1600_syracuse_georgia_tech",
+    "kickoff": "2025-10-25T16:00:00+00:00",
+    "window_minutes": 120,
+    "params": {
+      "apiKey": "aca1711a7cbd26f1e651e6e8084714e0",
+      "commenceTimeFrom": "2025-10-25T14:00:00+00:00",
+      "commenceTimeTo": "2025-10-25T18:00:00+00:00"
+    },
+    "home_name": "Georgia Tech",
+    "away_name": "Syracuse",
+    "error": "422 Client Error: Unprocessable Entity for url: https://api.the-odds-api.com/v4/sports/americanfootball_ncaaf/events?apiKey=aca1711a7cbd26f1e651e6e8084714e0&commenceTimeFrom=2025-10-25T14%3A00%3A00%2B00%3A00&commenceTimeTo=2025-10-25T18%3A00%3A00%2B00%3A00"
+  },
+  {
+    "league": "cfb",
+    "league_week": "2025-9",
+    "game_key": "20251025_1600_virginia_north_carolina",
+    "kickoff": "2025-10-25T16:00:00+00:00",
+    "window_minutes": 120,
+    "params": {
+      "apiKey": "aca1711a7cbd26f1e651e6e8084714e0",
+      "commenceTimeFrom": "2025-10-25T14:00:00+00:00",
+      "commenceTimeTo": "2025-10-25T18:00:00+00:00"
+    },
+    "home_name": "North Carolina",
+    "away_name": "Virginia",
+    "error": "422 Client Error: Unprocessable Entity for url: https://api.the-odds-api.com/v4/sports/americanfootball_ncaaf/events?apiKey=aca1711a7cbd26f1e651e6e8084714e0&commenceTimeFrom=2025-10-25T14%3A00%3A00%2B00%3A00&commenceTimeTo=2025-10-25T18%3A00%3A00%2B00%3A00"
+  },
+  {
+    "league": "cfb",
+    "league_week": "2025-9",
+    "game_key": "20251025_1900_utah_state_new_mexico",
+    "kickoff": "2025-10-25T19:00:00+00:00",
+    "window_minutes": 120,
+    "params": {
+      "apiKey": "aca1711a7cbd26f1e651e6e8084714e0",
+      "commenceTimeFrom": "2025-10-25T17:00:00+00:00",
+      "commenceTimeTo": "2025-10-25T21:00:00+00:00"
+    },
+    "home_name": "New Mexico",
+    "away_name": "Utah State",
+    "error": "422 Client Error: Unprocessable Entity for url: https://api.the-odds-api.com/v4/sports/americanfootball_ncaaf/events?apiKey=aca1711a7cbd26f1e651e6e8084714e0&commenceTimeFrom=2025-10-25T17%3A00%3A00%2B00%3A00&commenceTimeTo=2025-10-25T21%3A00%3A00%2B00%3A00"
+  },
+  {
+    "league": "cfb",
+    "league_week": "2025-9",
+    "game_key": "20251025_1930_alabama_crimson_tide_south_carolina",
+    "kickoff": "2025-10-25T19:30:00+00:00",
+    "window_minutes": 120,
+    "params": {
+      "apiKey": "aca1711a7cbd26f1e651e6e8084714e0",
+      "commenceTimeFrom": "2025-10-25T17:30:00+00:00",
+      "commenceTimeTo": "2025-10-25T21:30:00+00:00"
+    },
+    "home_name": "South Carolina",
+    "away_name": "Alabama Crimson Tide",
+    "error": "422 Client Error: Unprocessable Entity for url: https://api.the-odds-api.com/v4/sports/americanfootball_ncaaf/events?apiKey=aca1711a7cbd26f1e651e6e8084714e0&commenceTimeFrom=2025-10-25T17%3A30%3A00%2B00%3A00&commenceTimeTo=2025-10-25T21%3A30%3A00%2B00%3A00"
+  },
+  {
+    "league": "cfb",
+    "league_week": "2025-9",
+    "game_key": "20251025_1930_ball_state_northern_illinois",
+    "kickoff": "2025-10-25T19:30:00+00:00",
+    "window_minutes": 120,
+    "params": {
+      "apiKey": "aca1711a7cbd26f1e651e6e8084714e0",
+      "commenceTimeFrom": "2025-10-25T17:30:00+00:00",
+      "commenceTimeTo": "2025-10-25T21:30:00+00:00"
+    },
+    "home_name": "Northern Illinois",
+    "away_name": "Ball State",
+    "error": "422 Client Error: Unprocessable Entity for url: https://api.the-odds-api.com/v4/sports/americanfootball_ncaaf/events?apiKey=aca1711a7cbd26f1e651e6e8084714e0&commenceTimeFrom=2025-10-25T17%3A30%3A00%2B00%3A00&commenceTimeTo=2025-10-25T21%3A30%3A00%2B00%3A00"
+  },
+  {
+    "league": "cfb",
+    "league_week": "2025-9",
+    "game_key": "20251025_1930_byu_iowa_state",
+    "kickoff": "2025-10-25T19:30:00+00:00",
+    "window_minutes": 120,
+    "params": {
+      "apiKey": "aca1711a7cbd26f1e651e6e8084714e0",
+      "commenceTimeFrom": "2025-10-25T17:30:00+00:00",
+      "commenceTimeTo": "2025-10-25T21:30:00+00:00"
+    },
+    "home_name": "Iowa State",
+    "away_name": "Byu",
+    "error": "422 Client Error: Unprocessable Entity for url: https://api.the-odds-api.com/v4/sports/americanfootball_ncaaf/events?apiKey=aca1711a7cbd26f1e651e6e8084714e0&commenceTimeFrom=2025-10-25T17%3A30%3A00%2B00%3A00&commenceTimeTo=2025-10-25T21%3A30%3A00%2B00%3A00"
+  },
+  {
+    "league": "cfb",
+    "league_week": "2025-9",
+    "game_key": "20251025_1930_florida_atlantic_navy",
+    "kickoff": "2025-10-25T19:30:00+00:00",
+    "window_minutes": 120,
+    "params": {
+      "apiKey": "aca1711a7cbd26f1e651e6e8084714e0",
+      "commenceTimeFrom": "2025-10-25T17:30:00+00:00",
+      "commenceTimeTo": "2025-10-25T21:30:00+00:00"
+    },
+    "home_name": "Navy",
+    "away_name": "Florida Atlantic",
+    "error": "422 Client Error: Unprocessable Entity for url: https://api.the-odds-api.com/v4/sports/americanfootball_ncaaf/events?apiKey=aca1711a7cbd26f1e651e6e8084714e0&commenceTimeFrom=2025-10-25T17%3A30%3A00%2B00%3A00&commenceTimeTo=2025-10-25T21%3A30%3A00%2B00%3A00"
+  },
+  {
+    "league": "cfb",
+    "league_week": "2025-9",
+    "game_key": "20251025_1930_massachusetts_central_michigan",
+    "kickoff": "2025-10-25T19:30:00+00:00",
+    "window_minutes": 120,
+    "params": {
+      "apiKey": "aca1711a7cbd26f1e651e6e8084714e0",
+      "commenceTimeFrom": "2025-10-25T17:30:00+00:00",
+      "commenceTimeTo": "2025-10-25T21:30:00+00:00"
+    },
+    "home_name": "Central Michigan",
+    "away_name": "Massachusetts",
+    "error": "422 Client Error: Unprocessable Entity for url: https://api.the-odds-api.com/v4/sports/americanfootball_ncaaf/events?apiKey=aca1711a7cbd26f1e651e6e8084714e0&commenceTimeFrom=2025-10-25T17%3A30%3A00%2B00%3A00&commenceTimeTo=2025-10-25T21%3A30%3A00%2B00%3A00"
+  },
+  {
+    "league": "cfb",
+    "league_week": "2025-9",
+    "game_key": "20251025_1930_nc_state_pittsburgh",
+    "kickoff": "2025-10-25T19:30:00+00:00",
+    "window_minutes": 120,
+    "params": {
+      "apiKey": "aca1711a7cbd26f1e651e6e8084714e0",
+      "commenceTimeFrom": "2025-10-25T17:30:00+00:00",
+      "commenceTimeTo": "2025-10-25T21:30:00+00:00"
+    },
+    "home_name": "Pittsburgh",
+    "away_name": "Nc State",
+    "error": "422 Client Error: Unprocessable Entity for url: https://api.the-odds-api.com/v4/sports/americanfootball_ncaaf/events?apiKey=aca1711a7cbd26f1e651e6e8084714e0&commenceTimeFrom=2025-10-25T17%3A30%3A00%2B00%3A00&commenceTimeTo=2025-10-25T21%3A30%3A00%2B00%3A00"
+  },
+  {
+    "league": "cfb",
+    "league_week": "2025-9",
+    "game_key": "20251025_1930_san_diego_state_fresno_state",
+    "kickoff": "2025-10-25T19:30:00+00:00",
+    "window_minutes": 120,
+    "params": {
+      "apiKey": "aca1711a7cbd26f1e651e6e8084714e0",
+      "commenceTimeFrom": "2025-10-25T17:30:00+00:00",
+      "commenceTimeTo": "2025-10-25T21:30:00+00:00"
+    },
+    "home_name": "Fresno State",
+    "away_name": "San Diego State",
+    "error": "422 Client Error: Unprocessable Entity for url: https://api.the-odds-api.com/v4/sports/americanfootball_ncaaf/events?apiKey=aca1711a7cbd26f1e651e6e8084714e0&commenceTimeFrom=2025-10-25T17%3A30%3A00%2B00%3A00&commenceTimeTo=2025-10-25T21%3A30%3A00%2B00%3A00"
+  },
+  {
+    "league": "cfb",
+    "league_week": "2025-9",
+    "game_key": "20251025_1930_temple_tulsa",
+    "kickoff": "2025-10-25T19:30:00+00:00",
+    "window_minutes": 120,
+    "params": {
+      "apiKey": "aca1711a7cbd26f1e651e6e8084714e0",
+      "commenceTimeFrom": "2025-10-25T17:30:00+00:00",
+      "commenceTimeTo": "2025-10-25T21:30:00+00:00"
+    },
+    "home_name": "Tulsa",
+    "away_name": "Temple",
+    "error": "422 Client Error: Unprocessable Entity for url: https://api.the-odds-api.com/v4/sports/americanfootball_ncaaf/events?apiKey=aca1711a7cbd26f1e651e6e8084714e0&commenceTimeFrom=2025-10-25T17%3A30%3A00%2B00%3A00&commenceTimeTo=2025-10-25T21%3A30%3A00%2B00%3A00"
+  },
+  {
+    "league": "cfb",
+    "league_week": "2025-9",
+    "game_key": "20251025_1930_toledo_washington_state",
+    "kickoff": "2025-10-25T19:30:00+00:00",
+    "window_minutes": 120,
+    "params": {
+      "apiKey": "aca1711a7cbd26f1e651e6e8084714e0",
+      "commenceTimeFrom": "2025-10-25T17:30:00+00:00",
+      "commenceTimeTo": "2025-10-25T21:30:00+00:00"
+    },
+    "home_name": "Washington State",
+    "away_name": "Toledo",
+    "error": "422 Client Error: Unprocessable Entity for url: https://api.the-odds-api.com/v4/sports/americanfootball_ncaaf/events?apiKey=aca1711a7cbd26f1e651e6e8084714e0&commenceTimeFrom=2025-10-25T17%3A30%3A00%2B00%3A00&commenceTimeTo=2025-10-25T21%3A30%3A00%2B00%3A00"
+  },
+  {
+    "league": "cfb",
+    "league_week": "2025-9",
+    "game_key": "20251025_1930_ul_monroe_southern_miss",
+    "kickoff": "2025-10-25T19:30:00+00:00",
+    "window_minutes": 120,
+    "params": {
+      "apiKey": "aca1711a7cbd26f1e651e6e8084714e0",
+      "commenceTimeFrom": "2025-10-25T17:30:00+00:00",
+      "commenceTimeTo": "2025-10-25T21:30:00+00:00"
+    },
+    "home_name": "Southern Miss",
+    "away_name": "Ul Monroe",
+    "error": "422 Client Error: Unprocessable Entity for url: https://api.the-odds-api.com/v4/sports/americanfootball_ncaaf/events?apiKey=aca1711a7cbd26f1e651e6e8084714e0&commenceTimeFrom=2025-10-25T17%3A30%3A00%2B00%3A00&commenceTimeTo=2025-10-25T21%3A30%3A00%2B00%3A00"
+  },
+  {
+    "league": "cfb",
+    "league_week": "2025-9",
+    "game_key": "20251025_1930_western_michigan_miami_oh",
+    "kickoff": "2025-10-25T19:30:00+00:00",
+    "window_minutes": 120,
+    "params": {
+      "apiKey": "aca1711a7cbd26f1e651e6e8084714e0",
+      "commenceTimeFrom": "2025-10-25T17:30:00+00:00",
+      "commenceTimeTo": "2025-10-25T21:30:00+00:00"
+    },
+    "home_name": "Miami (oh)",
+    "away_name": "Western Michigan",
+    "error": "422 Client Error: Unprocessable Entity for url: https://api.the-odds-api.com/v4/sports/americanfootball_ncaaf/events?apiKey=aca1711a7cbd26f1e651e6e8084714e0&commenceTimeFrom=2025-10-25T17%3A30%3A00%2B00%3A00&commenceTimeTo=2025-10-25T21%3A30%3A00%2B00%3A00"
+  },
+  {
+    "league": "cfb",
+    "league_week": "2025-9",
+    "game_key": "20251025_2000_oklahoma_state_texas_tech",
+    "kickoff": "2025-10-25T20:00:00+00:00",
+    "window_minutes": 120,
+    "params": {
+      "apiKey": "aca1711a7cbd26f1e651e6e8084714e0",
+      "commenceTimeFrom": "2025-10-25T18:00:00+00:00",
+      "commenceTimeTo": "2025-10-25T22:00:00+00:00"
+    },
+    "home_name": "Texas Tech",
+    "away_name": "Oklahoma State",
+    "error": "422 Client Error: Unprocessable Entity for url: https://api.the-odds-api.com/v4/sports/americanfootball_ncaaf/events?apiKey=aca1711a7cbd26f1e651e6e8084714e0&commenceTimeFrom=2025-10-25T18%3A00%3A00%2B00%3A00&commenceTimeTo=2025-10-25T22%3A00%3A00%2B00%3A00"
+  },
+  {
+    "league": "cfb",
+    "league_week": "2025-9",
+    "game_key": "20251025_2015_texas_longhorns_mississippi_state",
+    "kickoff": "2025-10-25T20:15:00+00:00",
+    "window_minutes": 120,
+    "params": {
+      "apiKey": "aca1711a7cbd26f1e651e6e8084714e0",
+      "commenceTimeFrom": "2025-10-25T18:15:00+00:00",
+      "commenceTimeTo": "2025-10-25T22:15:00+00:00"
+    },
+    "home_name": "Mississippi State",
+    "away_name": "Texas Longhorns",
+    "error": "422 Client Error: Unprocessable Entity for url: https://api.the-odds-api.com/v4/sports/americanfootball_ncaaf/events?apiKey=aca1711a7cbd26f1e651e6e8084714e0&commenceTimeFrom=2025-10-25T18%3A15%3A00%2B00%3A00&commenceTimeTo=2025-10-25T22%3A15%3A00%2B00%3A00"
+  },
+  {
+    "league": "cfb",
+    "league_week": "2025-9",
+    "game_key": "20251025_2200_tcu_west_virginia",
+    "kickoff": "2025-10-25T22:00:00+00:00",
+    "window_minutes": 120,
+    "params": {
+      "apiKey": "aca1711a7cbd26f1e651e6e8084714e0",
+      "commenceTimeFrom": "2025-10-25T20:00:00+00:00",
+      "commenceTimeTo": "2025-10-26T00:00:00+00:00"
+    },
+    "home_name": "West Virginia",
+    "away_name": "Tcu",
+    "error": "422 Client Error: Unprocessable Entity for url: https://api.the-odds-api.com/v4/sports/americanfootball_ncaaf/events?apiKey=aca1711a7cbd26f1e651e6e8084714e0&commenceTimeFrom=2025-10-25T20%3A00%3A00%2B00%3A00&commenceTimeTo=2025-10-26T00%3A00%3A00%2B00%3A00"
+  },
+  {
+    "league": "cfb",
+    "league_week": "2025-9",
+    "game_key": "20251025_2300_georgia_southern_arkansas_state",
+    "kickoff": "2025-10-25T23:00:00+00:00",
+    "window_minutes": 120,
+    "params": {
+      "apiKey": "aca1711a7cbd26f1e651e6e8084714e0",
+      "commenceTimeFrom": "2025-10-25T21:00:00+00:00",
+      "commenceTimeTo": "2025-10-26T01:00:00+00:00"
+    },
+    "home_name": "Arkansas State",
+    "away_name": "Georgia Southern",
+    "error": "422 Client Error: Unprocessable Entity for url: https://api.the-odds-api.com/v4/sports/americanfootball_ncaaf/events?apiKey=aca1711a7cbd26f1e651e6e8084714e0&commenceTimeFrom=2025-10-25T21%3A00%3A00%2B00%3A00&commenceTimeTo=2025-10-26T01%3A00%3A00%2B00%3A00"
+  },
+  {
+    "league": "cfb",
+    "league_week": "2025-9",
+    "game_key": "20251025_2300_wisconsin_oregon_ducks",
+    "kickoff": "2025-10-25T23:00:00+00:00",
+    "window_minutes": 120,
+    "params": {
+      "apiKey": "aca1711a7cbd26f1e651e6e8084714e0",
+      "commenceTimeFrom": "2025-10-25T21:00:00+00:00",
+      "commenceTimeTo": "2025-10-26T01:00:00+00:00"
+    },
+    "home_name": "Oregon Ducks",
+    "away_name": "Wisconsin",
+    "error": "422 Client Error: Unprocessable Entity for url: https://api.the-odds-api.com/v4/sports/americanfootball_ncaaf/events?apiKey=aca1711a7cbd26f1e651e6e8084714e0&commenceTimeFrom=2025-10-25T21%3A00%3A00%2B00%3A00&commenceTimeTo=2025-10-26T01%3A00%3A00%2B00%3A00"
+  },
+  {
+    "league": "cfb",
+    "league_week": "2025-9",
+    "game_key": "20251025_2330_boston_college_louisville",
+    "kickoff": "2025-10-25T23:30:00+00:00",
+    "window_minutes": 120,
+    "params": {
+      "apiKey": "aca1711a7cbd26f1e651e6e8084714e0",
+      "commenceTimeFrom": "2025-10-25T21:30:00+00:00",
+      "commenceTimeTo": "2025-10-26T01:30:00+00:00"
+    },
+    "home_name": "Louisville",
+    "away_name": "Boston College",
+    "error": "422 Client Error: Unprocessable Entity for url: https://api.the-odds-api.com/v4/sports/americanfootball_ncaaf/events?apiKey=aca1711a7cbd26f1e651e6e8084714e0&commenceTimeFrom=2025-10-25T21%3A30%3A00%2B00%3A00&commenceTimeTo=2025-10-26T01%3A30%3A00%2B00%3A00"
+  },
+  {
+    "league": "cfb",
+    "league_week": "2025-9",
+    "game_key": "20251025_2330_colorado_state_wyoming",
+    "kickoff": "2025-10-25T23:30:00+00:00",
+    "window_minutes": 120,
+    "params": {
+      "apiKey": "aca1711a7cbd26f1e651e6e8084714e0",
+      "commenceTimeFrom": "2025-10-25T21:30:00+00:00",
+      "commenceTimeTo": "2025-10-26T01:30:00+00:00"
+    },
+    "home_name": "Wyoming",
+    "away_name": "Colorado State",
+    "error": "422 Client Error: Unprocessable Entity for url: https://api.the-odds-api.com/v4/sports/americanfootball_ncaaf/events?apiKey=aca1711a7cbd26f1e651e6e8084714e0&commenceTimeFrom=2025-10-25T21%3A30%3A00%2B00%3A00&commenceTimeTo=2025-10-26T01%3A30%3A00%2B00%3A00"
+  },
+  {
+    "league": "cfb",
+    "league_week": "2025-9",
+    "game_key": "20251025_2330_michigan_michigan_state",
+    "kickoff": "2025-10-25T23:30:00+00:00",
+    "window_minutes": 120,
+    "params": {
+      "apiKey": "aca1711a7cbd26f1e651e6e8084714e0",
+      "commenceTimeFrom": "2025-10-25T21:30:00+00:00",
+      "commenceTimeTo": "2025-10-26T01:30:00+00:00"
+    },
+    "home_name": "Michigan State",
+    "away_name": "Michigan",
+    "error": "422 Client Error: Unprocessable Entity for url: https://api.the-odds-api.com/v4/sports/americanfootball_ncaaf/events?apiKey=aca1711a7cbd26f1e651e6e8084714e0&commenceTimeFrom=2025-10-25T21%3A30%3A00%2B00%3A00&commenceTimeTo=2025-10-26T01%3A30%3A00%2B00%3A00"
+  },
+  {
+    "league": "cfb",
+    "league_week": "2025-9",
+    "game_key": "20251025_2330_texas_aandm_lsu",
+    "kickoff": "2025-10-25T23:30:00+00:00",
+    "window_minutes": 120,
+    "params": {
+      "apiKey": "aca1711a7cbd26f1e651e6e8084714e0",
+      "commenceTimeFrom": "2025-10-25T21:30:00+00:00",
+      "commenceTimeTo": "2025-10-26T01:30:00+00:00"
+    },
+    "home_name": "Lsu",
+    "away_name": "Texas Aandm",
+    "error": "422 Client Error: Unprocessable Entity for url: https://api.the-odds-api.com/v4/sports/americanfootball_ncaaf/events?apiKey=aca1711a7cbd26f1e651e6e8084714e0&commenceTimeFrom=2025-10-25T21%3A30%3A00%2B00%3A00&commenceTimeTo=2025-10-26T01%3A30%3A00%2B00%3A00"
+  },
+  {
+    "league": "cfb",
+    "league_week": "2025-9",
+    "game_key": "20251026_0000_houston_arizona_state",
+    "kickoff": "2025-10-26T00:00:00+00:00",
+    "window_minutes": 120,
+    "params": {
+      "apiKey": "aca1711a7cbd26f1e651e6e8084714e0",
+      "commenceTimeFrom": "2025-10-25T22:00:00+00:00",
+      "commenceTimeTo": "2025-10-26T02:00:00+00:00"
+    },
+    "home_name": "Arizona State",
+    "away_name": "Houston",
+    "error": "422 Client Error: Unprocessable Entity for url: https://api.the-odds-api.com/v4/sports/americanfootball_ncaaf/events?apiKey=aca1711a7cbd26f1e651e6e8084714e0&commenceTimeFrom=2025-10-25T22%3A00%3A00%2B00%3A00&commenceTimeTo=2025-10-26T02%3A00%3A00%2B00%3A00"
+  }
+]

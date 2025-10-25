@@ -188,43 +188,44 @@ def _ats_backfill_api(
         if kickoff_dt is None:
             counters["no_kickoff"] += 1
 
-        existing_event_id = resolve_event_id(league, season, game)
-        selection, resolver_used, resolved_event_id = select_closing_spread(
-            league=league,
-            season=season,
-            event_id=existing_event_id,
-            home_name=game.get("home_team_norm") or game.get("home_team_raw"),
-            away_name=game.get("away_team_norm") or game.get("away_team_raw"),
-            kickoff=kickoff_dt,
-            kickoff_iso=kickoff_iso,
-            game_key=game_key,
+        event_id, resolver_used = resolve_event_id(
+            league,
+            season,
+            week,
+            game,
             pinned_index=pinned_index,
         )
         resolver_counts[resolver_used] += 1
         _atsdbg(
             debug_enabled,
-            f"ATSDBG({league_tag}): week={season}-{week} game={game_key} step=resolve resolver={resolver_used} event_id={resolved_event_id or '-'}",
+            f"ATSDBG({league_tag}): week={season}-{week} game={game_key} step=resolve resolver={resolver_used} event_id={event_id or '-'}",
         )
         if debug_enabled:
             debug_entry["resolver"] = resolver_used  # type: ignore[index]
-            debug_entry["event_id"] = resolved_event_id  # type: ignore[index]
+            debug_entry["event_id"] = event_id  # type: ignore[index]
 
-        if resolved_event_id is None:
+        if not event_id:
             counters["resolve_failed"] += 1
             if debug_enabled:
                 debug_entry["reason"] = "resolve_failed"  # type: ignore[index]
                 debug_rows.append(debug_entry)  # type: ignore[arg-type]
             continue
 
+        selection = select_closing_spread(
+            league=league,
+            event_id=event_id,
+            kickoff_iso=kickoff_iso or "",
+            home_name=game.get("home_team_norm") or game.get("home_team_raw") or "",
+            away_name=game.get("away_team_norm") or game.get("away_team_raw") or "",
+        )
         if not selection:
             counters["api_none"] += 1
-            reason = "no_kickoff" if kickoff_dt is None else "api_none"
             if debug_enabled:
-                debug_entry["reason"] = reason  # type: ignore[index]
+                debug_entry["reason"] = "api_none"  # type: ignore[index]
                 debug_rows.append(debug_entry)  # type: ignore[arg-type]
             continue
 
-        source_counts[selection.get("source", "api")] += 1
+        source_counts[selection.get("source", "history")] += 1
         _atsdbg(
             debug_enabled,
             "ATSDBG({tag}): week={season}-{week} game={game} step=api endpoint={endpoint} "

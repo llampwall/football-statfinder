@@ -2,45 +2,40 @@
 ATS backfill primitives (helpers only; no I/O).
 
 Purpose:
-    Provide pure helpers to compute ATS outputs and select closing spreads via the Odds API.
+    Provide ATS computation, event resolution, and historical odds selection
+    helpers that operate purely in-memory for the weekly refresh pipelines.
 Spec anchors:
     - /context/ats_api_backfill_spec.md
     - /context/global_week_and_provider_decoupling.md
 Invariants:
-    - Functions are idempotent and side-effect free (no file or network writes).
-    - Inputs and outputs remain UTC-aware where timestamps apply.
-    - Merge-only semantics are enforced by callers; helpers never mutate passed objects.
+    - All datetime values handled in UTC.
+    - Event lookups favour pinned maps, then historical participants/events.
+    - Historical odds queries use pre-kick snapshots with Pinnacle priority.
 Side effects:
-    - None. Pure computation or HTTP reads via odds_api_client.
+    - None; HTTP requests delegated to odds_api_client.
 Do not:
-    - Perform file I/O or orchestrator wiring (reserved for later tasks).
+    - Perform file I/O or orchestrator wiring (reserved for refresh modules).
 Log contract:
-    - None; higher-level orchestrators handle provenance logging.
+    - No direct logging; callers capture diagnostics via ATS_DEBUG paths.
 """
 
 from __future__ import annotations
 
 import json
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Dict, Optional, Tuple
 
 from src.common.io_utils import ensure_out_dir
-from src.odds.odds_api_client import find_event_id, get_current_spread, get_historical_spread
+from src.odds.historical_events import list_week_events
+from src.odds.odds_api_client import get_current_spread, get_historical_spread
+from src.odds.participants_cache import match_team_name, canonical_equals
+
+_WEEK_WINDOW_CACHE: Dict[Tuple[str, int, int], Tuple[datetime, datetime]] = {}
 
 
 def compute_ats(home_score: int, away_score: int, favored: str, spread: float) -> Optional[Dict[str, Any]]:
-    """Compute ATS outcomes and margin deltas for a completed game.
-
-    Args:
-        home_score: Home team final score.
-        away_score: Away team final score.
-        favored: Which side was favored ('HOME', 'AWAY', 'PICK').
-        spread: Absolute spread number (non-negative).
-
-    Returns:
-        Dictionary containing ATS letters and margin values, or None if inputs are invalid.
-    """
+    """Compute ATS outcomes and margin deltas for a completed game."""
     try:
         spread_val = float(spread)
         home_val = int(home_score)
@@ -80,7 +75,6 @@ def load_pinned_event_index(league: str, season: int) -> Dict[str, str]:
         text = path.read_text(encoding="utf-8")
     except OSError:
         return mapping
-
     for line in text.splitlines():
         entry = line.strip()
         if not entry:
@@ -98,6 +92,107 @@ def load_pinned_event_index(league: str, season: int) -> Dict[str, str]:
     return mapping
 
 
+def resolve_event_id(
+    league: str,
+    season: int,
+    week: int,
+    game_row: Dict[str, Any],
+    *,
+    pinned_index: Optional[Dict[str, str]] = None,
+) -> Tuple[Optional[str], str]:
+    """Resolve the Odds API event id for a game via pinned map or historical events."""
+    game_key = str(game_row.get("game_key") or "")
+    if pinned_index and game_key:
+        pinned = pinned_index.get(game_key)
+        if isinstance(pinned, str) and pinned:
+            return pinned, "pinned"
+
+    kickoff_dt = _extract_kickoff(game_row)
+    if kickoff_dt is None:
+        return None, "failed"
+
+    home_name = game_row.get("home_team_norm") or game_row.get("home_team_raw")
+    away_name = game_row.get("away_team_norm") or game_row.get("away_team_raw")
+    canonical_home = match_team_name(league, str(home_name or ""))
+    canonical_away = match_team_name(league, str(away_name or ""))
+    print(
+        f"ATSDBG(RESOLVE): league={league} week={season}-{week} game={game_key} "
+        f"h='{home_name}'→'{canonical_home or '-'}' a='{away_name}'→'{canonical_away or '-'}'",
+        flush=True,
+    )
+    if not canonical_home or not canonical_away:
+        return None, "failed"
+
+    week_start, week_end = _week_window(league, season, week, kickoff_dt)
+    events = list_week_events(league, week_start, week_end)
+
+    best_event = None
+    best_delta = None
+    for event in events:
+        event_home_raw = str(event.get("home_team") or "")
+        event_away_raw = str(event.get("away_team") or "")
+        if not canonical_equals(league, canonical_home, event_home_raw) or not canonical_equals(
+            league, canonical_away, event_away_raw
+        ):
+            continue
+        commence = _parse_ts(event.get("commence_time"))
+        if not commence:
+            continue
+        delta_seconds = abs((commence - kickoff_dt).total_seconds())
+        if delta_seconds > 90 * 60:
+            continue
+        if best_delta is None or delta_seconds < best_delta:
+            best_event = event
+            best_delta = delta_seconds
+
+    if best_event is None:
+        return None, "failed"
+
+    event_id = best_event.get("id")
+    return (str(event_id) if isinstance(event_id, (str, int)) else None, "events")
+
+
+def select_closing_spread(
+    league: str,
+    event_id: str,
+    kickoff_iso: str,
+    home_name: str,
+    away_name: str,
+) -> Optional[Dict[str, Any]]:
+    """Fetch historical odds snapshot at kickoff; fall back to current odds if needed."""
+    kickoff_value = _normalize_kickoff(None, kickoff_iso)
+    if not kickoff_value:
+        return None
+
+    historical = get_historical_spread(league, event_id, kickoff_value, home_name, away_name)
+    if historical:
+        return historical
+
+    current = get_current_spread(league, event_id, kickoff_value, home_name, away_name)
+    return current
+
+
+def _extract_kickoff(game: Dict[str, Any]) -> Optional[datetime]:
+    kickoff = (
+        game.get("kickoff_ts")
+        or game.get("kickoff_iso_utc")
+        or game.get("kickoff_iso")
+        or (game.get("raw_sources", {}).get("schedule_row", {}).get("commence_time"))
+    )
+    if not kickoff:
+        return None
+    return _parse_ts(str(kickoff))
+
+
+def _parse_ts(value: Optional[str]) -> Optional[datetime]:
+    if not value:
+        return None
+    try:
+        return datetime.fromisoformat(value.replace("Z", "+00:00")).astimezone(timezone.utc)
+    except Exception:
+        return None
+
+
 def _normalize_kickoff(kickoff: Optional[datetime], kickoff_iso: Optional[str]) -> Optional[str]:
     if kickoff is not None:
         if kickoff.tzinfo is None:
@@ -108,104 +203,27 @@ def _normalize_kickoff(kickoff: Optional[datetime], kickoff_iso: Optional[str]) 
     return kickoff_iso
 
 
-def select_closing_spread(
+def _week_window(
     league: str,
-    event_id: Optional[str] = None,
-    kickoff_iso: Optional[str] = None,
-    home_name: Optional[str] = None,
-    away_name: Optional[str] = None,
-    *,
-    season: Optional[int] = None,
-    kickoff: Optional[datetime] = None,
-    game_key: Optional[str] = None,
-    pinned_index: Optional[Dict[str, str]] = None,
-) -> Tuple[Optional[Dict[str, Any]], str, Optional[str]]:
-    """Resolve a closing spread snapshot using historical odds first, then current odds.
+    season: int,
+    week: int,
+    reference_dt: datetime,
+) -> Tuple[datetime, datetime]:
+    key = (league.lower(), season, week)
+    if key in _WEEK_WINDOW_CACHE:
+        return _WEEK_WINDOW_CACHE[key]
 
-    Args:
-        league: League identifier ('nfl' or 'cfb').
-        event_id: Pre-resolved event identifier (optional).
-        kickoff_iso: Kickoff ISO8601 timestamp (UTC).
-        home_name: Home team schedule label.
-        away_name: Away team schedule label.
-        season: Season year (used when lazily loading the pinned map).
-        kickoff: Kickoff datetime (UTC expected); overrides kickoff_iso when provided.
-        game_key: Schedule game_key for pinned map lookup.
-        pinned_index: Optional preloaded pinned event map.
-
-    Returns:
-        Tuple of (spread_payload_or_none, resolver, resolved_event_id).
-    """
-    kickoff_value = _normalize_kickoff(kickoff, kickoff_iso)
-    kickoff_dt = kickoff
-    if kickoff_dt is None and kickoff_value:
-        try:
-            kickoff_dt = datetime.fromisoformat(kickoff_value.replace("Z", "+00:00"))
-        except Exception:
-            kickoff_dt = None
-
-    if pinned_index is None and season is not None:
-        pinned_index = load_pinned_event_index(league, season)
-
-    resolved_event_id = event_id if isinstance(event_id, str) and event_id.strip() else None
-    resolver_used = "pinned" if resolved_event_id else "failed"
-
-    if not resolved_event_id and pinned_index and game_key:
-        candidate = pinned_index.get(game_key)
-        if candidate:
-            resolved_event_id = candidate
-            resolver_used = "pinned"
-
-    if not resolved_event_id and kickoff_dt and home_name is not None and away_name is not None:
-        candidate = find_event_id(league, kickoff_dt, home_name, away_name)
-        if candidate:
-            resolved_event_id = candidate
-            resolver_used = "events"
-
-    if not resolved_event_id:
-        return None, "failed", None
-
-    if not kickoff_value:
-        kickoff_value = kickoff_dt.isoformat() if kickoff_dt else None
-    if not kickoff_value:
-        return None, resolver_used, resolved_event_id
-
-    home_label = home_name or ""
-    away_label = away_name or ""
-
-    historical = get_historical_spread(league, resolved_event_id, kickoff_value, home_label, away_label)
-    if historical:
-        historical["source"] = "history"
-        historical["resolver"] = resolver_used
-        historical["event_id"] = resolved_event_id
-        return historical, resolver_used, resolved_event_id
-
-    current = get_current_spread(league, resolved_event_id, kickoff_value, home_label, away_label)
-    if current:
-        current["source"] = "current"
-        current["resolver"] = resolver_used
-        current["event_id"] = resolved_event_id
-        return current, resolver_used, resolved_event_id
-
-    return None, resolver_used, resolved_event_id
+    dt = reference_dt.astimezone(timezone.utc)
+    monday = dt - timedelta(days=dt.weekday())
+    start = datetime(monday.year, monday.month, monday.day, tzinfo=timezone.utc)
+    end = start + timedelta(days=7) - timedelta(seconds=1)
+    _WEEK_WINDOW_CACHE[key] = (start, end)
+    return start, end
 
 
-def resolve_event_id(league: str, season: int, game_row: Dict[str, Any]) -> Optional[str]:
-    """Placeholder resolver that surfaces the raw event_id when already embedded.
-
-    Args:
-        league: League identifier ('nfl' or 'cfb').
-        season: Season year (unused placeholder for future expansion).
-        game_row: Week row record containing raw_sources metadata.
-
-    Returns:
-        The embedded event_id string when present; otherwise None.
-    """
-    raw_sources = game_row.get("raw_sources") or {}
-    odds_row = raw_sources.get("odds_row") or {}
-    raw_event = odds_row.get("raw_event") or {}
-    event_id = raw_event.get("event_id")
-    return event_id if isinstance(event_id, str) and event_id else None
-
-
-__all__ = ["compute_ats", "load_pinned_event_index", "select_closing_spread", "resolve_event_id"]
+__all__ = [
+    "compute_ats",
+    "load_pinned_event_index",
+    "resolve_event_id",
+    "select_closing_spread",
+]

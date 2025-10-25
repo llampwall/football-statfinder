@@ -1,16 +1,16 @@
 {
   "fbs_rows": 53,
   "joined_metrics_rows": 53,
-  "joined_odds_rows": 41,
+  "joined_odds_rows": 38,
   "joined_sagarin_rows": 51,
   "output_rows": 53,
-  "odds_games": 41,
+  "odds_games": 38,
   "sagarin_games": 51,
   "coverage_metrics": 1.0,
   "notes": [
     "FBS games: 53",
     "Metrics coverage: 53/53",
-    "Odds coverage: 41/53",
+    "Odds coverage: 38/53",
     "Sagarin coverage: 51/53"
   ],
   "samples": {
@@ -46,28 +46,28 @@
         "kickoff_iso_utc": "2025-10-23T23:30:00Z"
       },
       {
+        "game_key": "20251024_2300_north_texas_charlotte",
+        "home": "Charlotte",
+        "away": "North Texas",
+        "kickoff_iso_utc": "2025-10-24T23:00:00Z"
+      },
+      {
+        "game_key": "20251024_2330_california_virginia_tech",
+        "home": "Virginia Tech",
+        "away": "California",
+        "kickoff_iso_utc": "2025-10-24T23:30:00Z"
+      },
+      {
+        "game_key": "20251025_0200_boise_state_nevada",
+        "home": "Nevada",
+        "away": "Boise State",
+        "kickoff_iso_utc": "2025-10-25T02:00:00Z"
+      },
+      {
         "game_key": "20251025_1600_app_state_old_dominion",
         "home": "Old Dominion",
         "away": "App State",
         "kickoff_iso_utc": "2025-10-25T16:00:00Z"
-      },
-      {
-        "game_key": "20251025_1930_massachusetts_central_michigan",
-        "home": "Central Michigan",
-        "away": "Massachusetts",
-        "kickoff_iso_utc": "2025-10-25T19:30:00Z"
-      },
-      {
-        "game_key": "20251025_1930_san_diego_state_fresno_state",
-        "home": "Fresno State",
-        "away": "San Diego State",
-        "kickoff_iso_utc": "2025-10-25T19:30:00Z"
-      },
-      {
-        "game_key": "20251025_1930_temple_tulsa",
-        "home": "Tulsa",
-        "away": "Temple",
-        "kickoff_iso_utc": "2025-10-25T19:30:00Z"
       },
       {
         "game_key": "20251025_1930_ul_monroe_southern_miss",
@@ -93,9 +93,9 @@
     "metrics_gaps": []
   },
   "ratings": {
-    "eligible": 41,
-    "edges_count": 41,
-    "rvo_count": 41
+    "eligible": 38,
+    "edges_count": 38,
+    "rvo_count": 38
   },
   "failures": []
 }

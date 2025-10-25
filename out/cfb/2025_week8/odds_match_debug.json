@@ -3,40 +3,16 @@
   "week": 8,
   "window": "2025-10-08T23:00:00Z -> 2025-10-25T18:00:00Z",
   "stats": {
-    "events_total": 61,
+    "events_total": 60,
     "events_after_window_filter": 0,
     "events_in_window": 0,
     "matched": 0,
-    "unmatched": 61,
+    "unmatched": 60,
     "eligible_unmatched": 0
   },
   "samples": {
     "matched": [],
     "unmatched": [
-      {
-        "event_home": "Charlotte 49ers",
-        "event_away": "North Texas Mean Green",
-        "event_time": "2025-10-24T23:00:00Z",
-        "home_norm": "charlotte",
-        "away_norm": "northtexas",
-        "why": "future_week"
-      },
-      {
-        "event_home": "Virginia Tech Hokies",
-        "event_away": "California Golden Bears",
-        "event_time": "2025-10-24T23:30:00Z",
-        "home_norm": "virginiatech",
-        "away_norm": "california",
-        "why": "future_week"
-      },
-      {
-        "event_home": "Nevada Wolf Pack",
-        "event_away": "Boise State Broncos",
-        "event_time": "2025-10-25T02:00:00Z",
-        "home_norm": "nevada",
-        "away_norm": "boisestate",
-        "why": "future_week"
-      },
       {
         "event_home": "Old Dominion Monarchs",
         "event_away": "Appalachian State Mountaineers",
@@ -252,15 +228,39 @@
         "home_norm": "pittsburgh",
         "away_norm": "ncstate",
         "why": "future_week"
+      },
+      {
+        "event_home": "Southern Mississippi Golden Eagles",
+        "event_away": "UL Monroe Warhawks",
+        "event_time": "2025-10-25T19:30:00Z",
+        "home_norm": "southernmississippi",
+        "away_norm": "ulmonroe",
+        "why": "future_week"
+      },
+      {
+        "event_home": "Tulsa Golden Hurricane",
+        "event_away": "Temple Owls",
+        "event_time": "2025-10-25T19:30:00Z",
+        "home_norm": "tulsagoldenhurricane",
+        "away_norm": "temple",
+        "why": "future_week"
+      },
+      {
+        "event_home": "Washington State Cougars",
+        "event_away": "Toledo Rockets",
+        "event_time": "2025-10-25T19:30:00Z",
+        "home_norm": "washingtonstate",
+        "away_norm": "toledo",
+        "why": "future_week"
       }
     ]
   },
   "reason_counts": {
-    "future_week": 61
+    "future_week": 60
   },
   "reason_buckets": {
     "outside_window": 0,
     "no_schedule_candidate": 0,
-    "other": 61
+    "other": 60
   }
 }
