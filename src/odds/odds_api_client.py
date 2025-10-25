@@ -361,14 +361,36 @@ def get_historical_events(
         _update_usage(response)
         response.raise_for_status()
         payload = response.json()
+
+        if isinstance(payload, dict):
+            if isinstance(payload.get("events"), list):
+                payload = payload["events"]
+            elif isinstance(payload.get("data"), list):
+                payload = payload["data"]
+
         if isinstance(payload, list):
+            if not payload:
+                _log_api_error(
+                    f"ODDS_API_EMPTY(get_historical_events): url={response.url} "
+                    f"status={response.status_code} body={response.text}"
+                )
             return [event for event in payload if isinstance(event, dict)]
+
+        preview = payload
+        try:
+            preview = json.dumps(payload, ensure_ascii=False)
+        except Exception:
+            preview = str(payload)
         _log_api_error(
-            f"ODDS_API_PAYLOAD_ERROR(get_historical_events): expected list, got {type(payload).__name__}"
+            f"ODDS_API_PAYLOAD_ERROR(get_historical_events): url={getattr(response, 'url', None)} "
+            f"status={getattr(response, 'status_code', None)} payload={preview}"
         )
     except requests.RequestException as exc:
+        body = getattr(locals().get("response", None), "text", None)
+        url = getattr(locals().get("response", None), "url", None)
+        status = getattr(locals().get("response", None), "status_code", None)
         _log_api_error(
-            f"ODDS_API_ERROR(get_historical_events): league={league} status={getattr(locals().get('response', None), 'status_code', None)} error={exc}"
+            f"ODDS_API_ERROR(get_historical_events): league={league} url={url} status={status} error={exc} body={body}"
         )
     return None
 
