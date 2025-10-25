@@ -21,11 +21,12 @@ Log contract:
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
 import json
 import math
 import sys
+from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional, Tuple
+from urllib.parse import urlencode
 
 import requests
 
@@ -179,6 +180,37 @@ def _update_usage(resp: requests.Response) -> None:
         pass
 
 
+def _build_url(path: str, params: Dict[str, Any]) -> str:
+    query_items: List[Tuple[str, str]] = []
+    for key, value in params.items():
+        if value is None:
+            continue
+        if isinstance(value, datetime):
+            # Normalise datetimes defensively in case callers pass them directly.
+            value = _to_iso_z(value)
+        query_items.append((key, str(value)))
+    query = urlencode(query_items, doseq=True, safe=":+,")
+    base = f"{_THE_ODDS_BASE}{path}"
+    return f"{base}?{query}" if query else base
+
+
+def _log_http_problem(context: str, response: Optional[requests.Response], url: str) -> None:
+    status = getattr(response, "status_code", "n/a")
+    try:
+        body = response.text if response is not None else ""
+    except Exception:
+        body = "<unavailable>"
+    request_url = getattr(getattr(response, "request", None), "url", None)
+    full_url = request_url or url
+    _log_api_error(
+        f"ODDS_API_HTTP_ERROR({context}): url={full_url} status={status} body={body}"
+    )
+
+
+def _log_request_exception(context: str, url: str, error: Exception) -> None:
+    _log_api_error(f"ODDS_API_ERROR({context}): url={url} error={error}")
+
+
 def get_historical_spread(
     league: str, event_id: str, kickoff_iso: str, home_name: str, away_name: str
 ) -> Optional[Dict[str, Any]]:
@@ -190,20 +222,23 @@ def get_historical_spread(
     kickoff_dt = _parse_ts(kickoff_iso) or datetime.min.replace(tzinfo=timezone.utc)
     kickoff_iso_z = _to_iso_z(kickoff_dt)
 
+    url = _build_url(
+        f"/historical/sports/{sport}/events/{event_id}/odds",
+        {
+            "apiKey": api_key,
+            "regions": "us",
+            "markets": "spreads",
+            "oddsFormat": "american",
+            "date": kickoff_iso_z,
+        },
+    )
+
     try:
-        response = requests.get(
-            f"{_THE_ODDS_BASE}/historical/sports/{sport}/events/{event_id}/odds",
-            params={
-                "apiKey": api_key,
-                "regions": "us",
-                "markets": "spreads",
-                "oddsFormat": "american",
-                "date": kickoff_iso_z,
-            },
-            timeout=20,
-        )
+        response = requests.get(url, timeout=20)
         _update_usage(response)
-        response.raise_for_status()
+        if response.status_code >= 400:
+            _log_http_problem("get_historical_spread", response, url)
+            return None
         payload = response.json()
         bookmakers = payload.get("bookmakers") if isinstance(payload, dict) else payload
         selection = _pick_book_pre_kick(bookmakers or [], kickoff_dt)
@@ -223,7 +258,10 @@ def get_historical_spread(
             "source": "history",
         }
     except requests.RequestException as exc:
-        _log_api_error(f"ODDS_API_ERROR(get_historical_spread): league={league} error={exc}")
+        _log_request_exception("get_historical_spread", url, exc)
+        return None
+    except ValueError:
+        _log_http_problem("get_historical_spread - decode", response, url)
         return None
 
 
@@ -237,19 +275,22 @@ def get_current_spread(
 
     kickoff = _parse_ts(kickoff_iso) or datetime.min.replace(tzinfo=timezone.utc)
 
+    url = _build_url(
+        f"/sports/{sport}/events/{event_id}/odds",
+        {
+            "apiKey": api_key,
+            "regions": "us",
+            "markets": "spreads",
+            "oddsFormat": "american",
+        },
+    )
+
     try:
-        response = requests.get(
-            f"{_THE_ODDS_BASE}/sports/{sport}/events/{event_id}/odds",
-            params={
-                "apiKey": api_key,
-                "regions": "us",
-                "markets": "spreads",
-                "oddsFormat": "american",
-            },
-            timeout=20,
-        )
+        response = requests.get(url, timeout=20)
         _update_usage(response)
-        response.raise_for_status()
+        if response.status_code >= 400:
+            _log_http_problem("get_current_spread", response, url)
+            return None
         payload = response.json()
         bookmakers = payload.get("bookmakers") if isinstance(payload, dict) else payload
         selection = _pick_book_pre_kick(bookmakers or [], kickoff)
@@ -269,7 +310,10 @@ def get_current_spread(
             "source": "current",
         }
     except requests.RequestException as exc:
-        _log_api_error(f"ODDS_API_ERROR(get_current_spread): league={league} error={exc}")
+        _log_request_exception("get_current_spread", url, exc)
+        return None
+    except ValueError:
+        _log_http_problem("get_current_spread - decode", response, url)
         return None
 
 
@@ -285,14 +329,17 @@ def get_participants(league: str) -> Optional[List[str]]:
     sport = _sport_key(league)
     if not api_key or not sport:
         return None
+
+    url = _build_url(
+        f"/sports/{sport}/participants",
+        {"apiKey": api_key},
+    )
     try:
-        response = requests.get(
-            f"{_THE_ODDS_BASE}/sports/{sport}/participants",
-            params={"apiKey": api_key},
-            timeout=20,
-        )
+        response = requests.get(url, timeout=20)
         _update_usage(response)
-        response.raise_for_status()
+        if response.status_code >= 400:
+            _log_http_problem("get_participants", response, url)
+            return None
         payload = response.json()
         if isinstance(payload, list):
             seq = payload
@@ -319,10 +366,12 @@ def get_participants(league: str) -> Optional[List[str]]:
                         names.append(token)
             return names
         _log_api_error(
-            f"ODDS_API_PAYLOAD_ERROR(get_participants): unexpected shape {type(payload).__name__}"
+            f"ODDS_API_PAYLOAD_ERROR(get_participants): url={url} unexpected shape {type(payload).__name__}"
         )
     except requests.RequestException as exc:
-        _log_api_error(f"ODDS_API_ERROR(get_participants): league={league} error={exc}")
+        _log_request_exception("get_participants", url, exc)
+    except ValueError:
+        _log_http_problem("get_participants - decode", response, url)
     return None
 
 
@@ -340,26 +389,22 @@ def get_historical_events(
     if not api_key or not sport:
         return None
 
-    params: Dict[str, str] = {
+    params: Dict[str, Any] = {
         "apiKey": api_key,
         "date": _to_iso_z(snapshot_dt),
         "dateFormat": "iso",
+        "commenceTimeFrom": _to_iso_z(commence_from) if commence_from is not None else None,
+        "commenceTimeTo": _to_iso_z(commence_to) if commence_to is not None else None,
+        "eventIds": ",".join(event_ids[:1000]) if event_ids else None,
     }
-    if commence_from is not None:
-        params["commenceTimeFrom"] = _to_iso_z(commence_from)
-    if commence_to is not None:
-        params["commenceTimeTo"] = _to_iso_z(commence_to)
-    if event_ids:
-        params["eventIds"] = ",".join(event_ids[:1000])
+    url = _build_url(f"/historical/sports/{sport}/events", params)
 
     try:
-        response = requests.get(
-            f"{_THE_ODDS_BASE}/historical/sports/{sport}/events",
-            params=params,
-            timeout=20,
-        )
+        response = requests.get(url, timeout=20)
         _update_usage(response)
-        response.raise_for_status()
+        if response.status_code >= 400:
+            _log_http_problem("get_historical_events", response, url)
+            return None
         payload = response.json()
 
         if isinstance(payload, dict):
@@ -371,7 +416,7 @@ def get_historical_events(
         if isinstance(payload, list):
             if not payload:
                 _log_api_error(
-                    f"ODDS_API_EMPTY(get_historical_events): url={response.url} "
+                    f"ODDS_API_EMPTY(get_historical_events): url={response.request.url} "
                     f"status={response.status_code} body={response.text}"
                 )
             return [event for event in payload if isinstance(event, dict)]
@@ -382,16 +427,13 @@ def get_historical_events(
         except Exception:
             preview = str(payload)
         _log_api_error(
-            f"ODDS_API_PAYLOAD_ERROR(get_historical_events): url={getattr(response, 'url', None)} "
-            f"status={getattr(response, 'status_code', None)} payload={preview}"
+            f"ODDS_API_PAYLOAD_ERROR(get_historical_events): url={response.request.url} "
+            f"status={response.status_code} payload={preview}"
         )
     except requests.RequestException as exc:
-        body = getattr(locals().get("response", None), "text", None)
-        url = getattr(locals().get("response", None), "url", None)
-        status = getattr(locals().get("response", None), "status_code", None)
-        _log_api_error(
-            f"ODDS_API_ERROR(get_historical_events): league={league} url={url} status={status} error={exc} body={body}"
-        )
+        _log_request_exception("get_historical_events", url, exc)
+    except ValueError:
+        _log_http_problem("get_historical_events - decode", response, url)
     return None
 
 
