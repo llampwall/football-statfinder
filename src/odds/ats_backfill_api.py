@@ -30,7 +30,7 @@ from src.common.io_utils import ensure_out_dir
 from src.common.team_names import team_merge_key
 from src.common.team_names_cfb import team_merge_key_cfb
 from src.odds.historical_events import list_week_events
-from src.odds.odds_api_client import get_current_spread, get_historical_spread
+from src.odds.odds_api_client import get_historical_spread
 from src.odds.participants_cache import match_team_name, canonical_equals
 
 _WEEK_WINDOW_CACHE: Dict[Tuple[str, int, int], Tuple[datetime, datetime]] = {}
@@ -104,26 +104,43 @@ def resolve_event_id(
 ) -> Tuple[Optional[str], str]:
     """Resolve the Odds API event id for a game via pinned map or historical events."""
     game_key = str(game_row.get("game_key") or "")
-    if pinned_index and game_key:
-        pinned = pinned_index.get(game_key)
-        if isinstance(pinned, str) and pinned:
-            return pinned, "pinned"
 
     kickoff_dt = _extract_kickoff(game_row)
-    if kickoff_dt is None:
-        return None, "failed"
-
     home_name = game_row.get("home_team_norm") or game_row.get("home_team_raw")
     away_name = game_row.get("away_team_norm") or game_row.get("away_team_raw")
     canonical_home = match_team_name(league, str(home_name or ""))
     canonical_away = match_team_name(league, str(away_name or ""))
-    print(
-        f"ATSDBG(RESOLVE): league={league} week={season}-{week} game={game_key} h='{home_name}'->'{canonical_home or '-'}' a='{away_name}'->'{canonical_away or '-'}'",
-        flush=True,
+    mapping = (
+        f"h='{home_name}'->'{canonical_home or '-'}' "
+        f"a='{away_name}'->'{canonical_away or '-'}'"
     )
+
+    if pinned_index and game_key:
+        pinned = pinned_index.get(game_key)
+        if isinstance(pinned, str) and pinned:
+            print(
+                f"ATSDBG(RESOLVE): league={league} week={season}-{week} game={game_key} "
+                f"{mapping} resolver=pinned event_id={pinned}",
+                flush=True,
+            )
+            return pinned, "pinned"
+
+    if kickoff_dt is None:
+        print(
+            f"ATSDBG(RESOLVE): league={league} week={season}-{week} game={game_key} "
+            f"{mapping} resolver=failed reason=no_kickoff event_id=-",
+            flush=True,
+        )
+        return None, "failed"
+
     compare_home = canonical_home or str(home_name or "")
     compare_away = canonical_away or str(away_name or "")
     if not _team_token(league, compare_home) or not _team_token(league, compare_away):
+        print(
+            f"ATSDBG(RESOLVE): league={league} week={season}-{week} game={game_key} "
+            f"{mapping} resolver=failed reason=unmatched_tokens event_id=-",
+            flush=True,
+        )
         return None, "failed"
 
     week_start, week_end = _week_window(league, season, week, kickoff_dt)
@@ -149,11 +166,27 @@ def resolve_event_id(
             best_delta = delta_seconds
 
     if best_event is None:
+        print(
+            f"ATSDBG(RESOLVE): league={league} week={season}-{week} game={game_key} "
+            f"{mapping} resolver=failed reason=no_event_match event_id=-",
+            flush=True,
+        )
         return None, "failed"
 
     event_id = best_event.get("id")
     if isinstance(event_id, (str, int)):
-        return str(event_id), "events"
+        resolved_id = str(event_id)
+        print(
+            f"ATSDBG(RESOLVE): league={league} week={season}-{week} game={game_key} "
+            f"{mapping} resolver=events event_id={resolved_id}",
+            flush=True,
+        )
+        return resolved_id, "events"
+    print(
+        f"ATSDBG(RESOLVE): league={league} week={season}-{week} game={game_key} "
+        f"{mapping} resolver=failed reason=invalid_event_id event_id=-",
+        flush=True,
+    )
     return None, "failed"
 
 
@@ -169,12 +202,7 @@ def select_closing_spread(
     if not kickoff_value:
         return None
 
-    historical = get_historical_spread(league, event_id, kickoff_value, home_name, away_name)
-    if historical:
-        return historical
-
-    current = get_current_spread(league, event_id, kickoff_value, home_name, away_name)
-    return current
+    return get_historical_spread(league, event_id, kickoff_value, home_name, away_name)
 
 
 def _extract_kickoff(game: Dict[str, Any]) -> Optional[datetime]:

@@ -3,11 +3,11 @@
   "week": 8,
   "window": "2025-10-08T23:00:00Z -> 2025-10-25T18:00:00Z",
   "stats": {
-    "events_total": 40,
+    "events_total": 45,
     "events_after_window_filter": 0,
     "events_in_window": 0,
     "matched": 0,
-    "unmatched": 40,
+    "unmatched": 45,
     "eligible_unmatched": 0
   },
   "samples": {
@@ -230,6 +230,14 @@
         "why": "future_week"
       },
       {
+        "event_home": "UConn Huskies",
+        "event_away": "UAB Blazers",
+        "event_time": "2025-11-01T16:00:00Z",
+        "home_norm": "uconn",
+        "away_norm": "uab",
+        "why": "future_week"
+      },
+      {
         "event_home": "Temple Owls",
         "event_away": "East Carolina Pirates",
         "event_time": "2025-11-01T18:00:00Z",
@@ -244,23 +252,15 @@
         "home_norm": "florida",
         "away_norm": "georgiabulldogs",
         "why": "future_week"
-      },
-      {
-        "event_home": "Maryland Terrapins",
-        "event_away": "Indiana Hoosiers",
-        "event_time": "2025-11-01T19:30:00Z",
-        "home_norm": "maryland",
-        "away_norm": "indiana",
-        "why": "future_week"
       }
     ]
   },
   "reason_counts": {
-    "future_week": 40
+    "future_week": 45
   },
   "reason_buckets": {
     "outside_window": 0,
     "no_schedule_candidate": 0,
-    "other": 40
+    "other": 45
   }
 }
