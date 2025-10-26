@@ -8,7 +8,7 @@ Spec anchors:
     - /context/ats_api_backfill_spec.md
     - /context/global_week_and_provider_decoupling.md
 Invariants:
-    - Snapshot timestamp chosen at the end of the week (23:59:59Z).
+    - Snapshot timestamp chosen inside the active week (Tuesday 12:00Z).
     - Returned events are limited to the supplied week window.
 Side effects:
     - None; results cached in-memory per run.
@@ -34,14 +34,10 @@ def list_week_events(
     week_end_utc: datetime,
 ) -> List[dict]:
     """Return historical events for the league within [week_start, week_end]."""
-    week_start = week_start_utc.astimezone(timezone.utc).replace(
-        hour=0, minute=0, second=0, microsecond=0
-    )
-    week_end = week_end_utc.astimezone(timezone.utc).replace(
-        hour=23, minute=59, second=59, microsecond=0
-    )
-    snapshot = week_end
-    cache_key = (league.lower(), snapshot.isoformat())
+    week_start = week_start_utc.astimezone(timezone.utc).replace(hour=0, minute=0, second=0, microsecond=0)
+    week_end = week_end_utc.astimezone(timezone.utc).replace(hour=23, minute=59, second=59, microsecond=0)
+    snapshot = week_start + timedelta(days=1, hours=12)
+    cache_key = (league.lower(), week_start.isoformat())
 
     if cache_key not in _EVENT_CACHE:
         events = get_historical_events(
@@ -51,7 +47,7 @@ def list_week_events(
             commence_to=week_end,
         ) or []
         print(
-            f"ATSDBG(HIST-EVENTS): league={league} snapshot={snapshot.isoformat()} fetched={len(events)} window=[{week_start.isoformat()}->{week_end.isoformat()}]",
+            f"ATSDBG(HIST-EVENTS): league={league} snapshot={snapshot.isoformat()} fetched={len(events)}",
             flush=True,
         )
         filtered: List[dict] = []
@@ -62,7 +58,7 @@ def list_week_events(
             if week_start <= commence_dt <= week_end:
                 filtered.append(event)
         print(
-            f"ATSDBG(HIST-EVENTS): league={league} filtered={len(filtered)}",
+            f"ATSDBG(HIST-EVENTS): league={league} filtered={len(filtered)} window=[{week_start.isoformat()}->{week_end.isoformat()}]",
             flush=True,
         )
         _EVENT_CACHE[cache_key] = filtered

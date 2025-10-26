@@ -405,12 +405,19 @@ def get_historical_events(
         "dateFormat": "iso",
         "eventIds": ",".join(event_ids[:1000]) if event_ids else None,
     }
+    if commence_from is not None:
+        params["commenceTimeFrom"] = _to_iso_z(commence_from)
+    if commence_to is not None:
+        params["commenceTimeTo"] = _to_iso_z(commence_to)
     url = _build_url(f"/historical/sports/{sport}/events", params)
 
     try:
         response = requests.get(url, timeout=20)
         _update_usage(response)
         if response.status_code >= 400:
+            _log_api_error(
+                f"ODDS_API_ERROR(get_historical_events): league={league} status={response.status_code}"
+            )
             _log_http_problem("get_historical_events", response, url)
             return None
         payload = response.json()

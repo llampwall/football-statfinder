@@ -27,6 +27,8 @@ from pathlib import Path
 from typing import Any, Dict, Optional, Tuple
 
 from src.common.io_utils import ensure_out_dir
+from src.common.team_names import team_merge_key
+from src.common.team_names_cfb import team_merge_key_cfb
 from src.odds.historical_events import list_week_events
 from src.odds.odds_api_client import get_current_spread, get_historical_spread
 from src.odds.participants_cache import match_team_name, canonical_equals
@@ -116,23 +118,24 @@ def resolve_event_id(
     canonical_home = match_team_name(league, str(home_name or ""))
     canonical_away = match_team_name(league, str(away_name or ""))
     print(
-        f"ATSDBG(RESOLVE): league={league} week={season}-{week} game={game_key} "
-        f"h='{home_name}'→'{canonical_home or '-'}' a='{away_name}'→'{canonical_away or '-'}'",
+        f"ATSDBG(RESOLVE): league={league} week={season}-{week} game={game_key} h='{home_name}'->'{canonical_home or '-'}' a='{away_name}'->'{canonical_away or '-'}'",
         flush=True,
     )
-    if not canonical_home or not canonical_away:
+    compare_home = canonical_home or str(home_name or "")
+    compare_away = canonical_away or str(away_name or "")
+    if not _team_token(league, compare_home) or not _team_token(league, compare_away):
         return None, "failed"
 
     week_start, week_end = _week_window(league, season, week, kickoff_dt)
     events = list_week_events(league, week_start, week_end)
 
     best_event = None
-    best_delta = None
+    best_delta: Optional[float] = None
     for event in events:
         event_home_raw = str(event.get("home_team") or "")
         event_away_raw = str(event.get("away_team") or "")
-        if not canonical_equals(league, canonical_home, event_home_raw) or not canonical_equals(
-            league, canonical_away, event_away_raw
+        if not canonical_equals(league, compare_home, event_home_raw) or not canonical_equals(
+            league, compare_away, event_away_raw
         ):
             continue
         commence = _parse_ts(event.get("commence_time"))
@@ -149,7 +152,9 @@ def resolve_event_id(
         return None, "failed"
 
     event_id = best_event.get("id")
-    return (str(event_id) if isinstance(event_id, (str, int)) else None, "events")
+    if isinstance(event_id, (str, int)):
+        return str(event_id), "events"
+    return None, "failed"
 
 
 def select_closing_spread(
@@ -199,7 +204,13 @@ def _normalize_kickoff(kickoff: Optional[datetime], kickoff_iso: Optional[str]) 
             kickoff = kickoff.replace(tzinfo=timezone.utc)
         else:
             kickoff = kickoff.astimezone(timezone.utc)
-        return kickoff.isoformat()
+        return kickoff.strftime("%Y-%m-%dT%H:%M:%SZ")
+    if kickoff_iso:
+        parsed = _parse_ts(str(kickoff_iso))
+        if parsed:
+            return parsed.strftime("%Y-%m-%dT%H:%M:%SZ")
+        if isinstance(kickoff_iso, str) and kickoff_iso.endswith("+00:00"):
+            return kickoff_iso.replace("+00:00", "Z")
     return kickoff_iso
 
 
@@ -219,6 +230,15 @@ def _week_window(
     end = start + timedelta(days=7) - timedelta(seconds=1)
     _WEEK_WINDOW_CACHE[key] = (start, end)
     return start, end
+
+
+def _team_token(league: str, name: str) -> str:
+    func = team_merge_key_cfb if league.lower() == "cfb" else team_merge_key
+    try:
+        token = func(name or "")
+    except Exception:
+        token = ""
+    return token or ""
 
 
 __all__ = [
