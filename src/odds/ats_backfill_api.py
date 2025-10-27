@@ -24,14 +24,12 @@ from __future__ import annotations
 import json
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from typing import Any, Dict, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 from src.common.io_utils import ensure_out_dir
-from src.common.team_names import team_merge_key
-from src.common.team_names_cfb import team_merge_key_cfb
 from src.odds.historical_events import list_week_events
 from src.odds.odds_api_client import get_historical_spread
-from src.odds.participants_cache import match_team_name, canonical_equals
+from src.odds.participants_cache import provider_name_for, provider_token
 
 _WEEK_WINDOW_CACHE: Dict[Tuple[str, int, int], Tuple[datetime, datetime]] = {}
 
@@ -105,15 +103,11 @@ def resolve_event_id(
     """Resolve the Odds API event id for a game via pinned map or historical events."""
     game_key = str(game_row.get("game_key") or "")
 
-    kickoff_dt = _extract_kickoff(game_row)
     home_name = game_row.get("home_team_norm") or game_row.get("home_team_raw")
     away_name = game_row.get("away_team_norm") or game_row.get("away_team_raw")
-    canonical_home = match_team_name(league, str(home_name or ""))
-    canonical_away = match_team_name(league, str(away_name or ""))
-    mapping = (
-        f"h='{home_name}'->'{canonical_home or '-'}' "
-        f"a='{away_name}'->'{canonical_away or '-'}'"
-    )
+    provider_home, home_status = provider_name_for(league, str(home_name or ""))
+    provider_away, away_status = provider_name_for(league, str(away_name or ""))
+    mapping = f"h='{home_name}'->'{provider_home or '?'}' a='{away_name}'->'{provider_away or '?'}'"
 
     if pinned_index and game_key:
         pinned = pinned_index.get(game_key)
@@ -125,6 +119,7 @@ def resolve_event_id(
             )
             return pinned, "pinned"
 
+    kickoff_dt = _extract_kickoff(game_row)
     if kickoff_dt is None:
         print(
             f"ATSDBG(RESOLVE): league={league} week={season}-{week} game={game_key} "
@@ -133,26 +128,30 @@ def resolve_event_id(
         )
         return None, "failed"
 
-    compare_home = canonical_home or str(home_name or "")
-    compare_away = canonical_away or str(away_name or "")
-    if not _team_token(league, compare_home) or not _team_token(league, compare_away):
+    if home_status != "mapped" or away_status != "mapped":
+        reason = "ambiguous_provider" if "ambiguous" in {home_status, away_status} else "no_provider_map"
         print(
             f"ATSDBG(RESOLVE): league={league} week={season}-{week} game={game_key} "
-            f"{mapping} resolver=failed reason=unmatched_tokens event_id=-",
+            f"{mapping} resolver=failed reason={reason} event_id=-",
             flush=True,
         )
         return None, "failed"
+
+    target_home_token = provider_token(league, provider_home or "")
+    target_away_token = provider_token(league, provider_away or "")
 
     week_start, week_end = _week_window(league, season, week, kickoff_dt)
     events = list_week_events(league, week_start, week_end)
 
     best_event = None
     best_delta: Optional[float] = None
+    guard_violation = False
     for event in events:
         event_home_raw = str(event.get("home_team") or "")
         event_away_raw = str(event.get("away_team") or "")
-        if not canonical_equals(league, compare_home, event_home_raw) or not canonical_equals(
-            league, compare_away, event_away_raw
+        if (
+            provider_token(league, event_home_raw) != target_home_token
+            or provider_token(league, event_away_raw) != target_away_token
         ):
             continue
         commence = _parse_ts(event.get("commence_time"))
@@ -160,15 +159,17 @@ def resolve_event_id(
             continue
         delta_seconds = abs((commence - kickoff_dt).total_seconds())
         if delta_seconds > 90 * 60:
+            guard_violation = True
             continue
         if best_delta is None or delta_seconds < best_delta:
             best_event = event
             best_delta = delta_seconds
 
     if best_event is None:
+        reason = "time_guard_miss" if guard_violation else "no_event_match"
         print(
             f"ATSDBG(RESOLVE): league={league} week={season}-{week} game={game_key} "
-            f"{mapping} resolver=failed reason=no_event_match event_id=-",
+            f"{mapping} resolver=failed reason={reason} event_id=-",
             flush=True,
         )
         return None, "failed"
@@ -182,12 +183,14 @@ def resolve_event_id(
             flush=True,
         )
         return resolved_id, "events"
+
     print(
         f"ATSDBG(RESOLVE): league={league} week={season}-{week} game={game_key} "
         f"{mapping} resolver=failed reason=invalid_event_id event_id=-",
         flush=True,
     )
     return None, "failed"
+
 
 
 def select_closing_spread(
@@ -197,12 +200,36 @@ def select_closing_spread(
     home_name: str,
     away_name: str,
 ) -> Optional[Dict[str, Any]]:
-    """Fetch historical odds snapshot at kickoff; fall back to current odds if needed."""
-    kickoff_value = _normalize_kickoff(None, kickoff_iso)
-    if not kickoff_value:
+    """Fetch historical odds snapshot at kickoff."""
+    kickoff_dt = _parse_ts(kickoff_iso)
+    if not kickoff_dt:
         return None
 
-    return get_historical_spread(league, event_id, kickoff_value, home_name, away_name)
+    attempts: List[datetime] = []
+    attempts.append(kickoff_dt - timedelta(seconds=60))
+    attempts.append(kickoff_dt)
+    attempts.append(kickoff_dt - timedelta(minutes=15))
+
+    seen: set[str] = set()
+    for attempt_dt in attempts:
+        if attempt_dt is None:
+            continue
+        snapshot_iso = attempt_dt.strftime("%Y-%m-%dT%H:%M:%SZ")
+        if snapshot_iso in seen:
+            continue
+        seen.add(snapshot_iso)
+        result = get_historical_spread(
+            league,
+            event_id,
+            snapshot_iso,
+            home_name,
+            away_name,
+            kickoff_dt,
+        )
+        if result:
+            result.setdefault("snapshot_date", snapshot_iso)
+            return result
+    return None
 
 
 def _extract_kickoff(game: Dict[str, Any]) -> Optional[datetime]:
@@ -259,14 +286,6 @@ def _week_window(
     _WEEK_WINDOW_CACHE[key] = (start, end)
     return start, end
 
-
-def _team_token(league: str, name: str) -> str:
-    func = team_merge_key_cfb if league.lower() == "cfb" else team_merge_key
-    try:
-        token = func(name or "")
-    except Exception:
-        token = ""
-    return token or ""
 
 
 __all__ = [

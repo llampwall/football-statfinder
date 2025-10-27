@@ -30,6 +30,7 @@ from src.odds.ats_backfill_api import (
     resolve_event_id,
     select_closing_spread,
 )
+from src.odds.participants_cache import build_provider_map
 from src.odds.odds_api_client import ODDS_API_USAGE
 from src.ratings.sagarin_cfb_fetch import run_cfb_sagarin_staging
 from src.scores.cfb_backfill import backfill_cfb_scores
@@ -137,6 +138,27 @@ def _ats_backfill_api(
     league_tag = league.upper()
     debug_rows: List[Dict[str, Any]] = [] if debug_enabled else []
 
+    team_labels: List[str] = []
+    for candidate in games or []:
+        if not isinstance(candidate, dict):
+            continue
+        team_labels.append(candidate.get("home_team_norm") or candidate.get("home_team_raw") or "")
+        team_labels.append(candidate.get("away_team_norm") or candidate.get("away_team_raw") or "")
+    provider_summary = build_provider_map(league, team_labels)
+    print(
+        "ATSDBG(PROVIDER-MAP): league={league} week={season}-{week} total={total} mapped={mapped} "
+        "ambiguous={ambiguous} unknown={unknown}".format(
+            league=league,
+            season=season,
+            week=week,
+            total=provider_summary["total"],
+            mapped=provider_summary["mapped"],
+            ambiguous=provider_summary["ambiguous"],
+            unknown=provider_summary["unknown"],
+        ),
+        flush=True,
+    )
+
     for game in games or []:
         if not isinstance(game, dict):
             continue
@@ -219,39 +241,43 @@ def _ats_backfill_api(
             away_name=game.get("away_team_norm") or game.get("away_team_raw") or "",
         )
         if not selection:
-            counters["api_none"] += 1
+            counters["hist_odds_none"] += 1
             if debug_enabled:
-                debug_entry["reason"] = "api_none"  # type: ignore[index]
+                debug_entry["reason"] = "hist_odds_none"  # type: ignore[index]
                 debug_rows.append(debug_entry)  # type: ignore[arg-type]
             continue
 
         source_counts[selection.get("source", "history")] += 1
+        endpoint_name = "historical_event_odds"
+        snapshot_date = selection.get("snapshot_date")
         _atsdbg(
             debug_enabled,
             "ATSDBG({tag}): week={season}-{week} game={game} step=api endpoint={endpoint} "
-            "book={book} favored={favored} spread={spread} ts={ts}".format(
+            "book={book} favored={favored} spread={spread} ts={ts} snapshot={snapshot}".format(
                 tag=league_tag,
                 season=season,
                 week=week,
                 game=game_key,
-                endpoint=selection.get("source"),
+                endpoint=endpoint_name,
                 book=selection.get("book"),
                 favored=selection.get("favored_team"),
                 spread=selection.get("spread"),
                 ts=selection.get("fetched_ts"),
+                snapshot=snapshot_date,
             ),
         )
         if debug_enabled:
-            debug_entry["endpoint"] = selection.get("source")  # type: ignore[index]
+            debug_entry["endpoint"] = endpoint_name  # type: ignore[index]
             debug_entry["book"] = selection.get("book")  # type: ignore[index]
             debug_entry["favored_team"] = selection.get("favored_team")  # type: ignore[index]
             debug_entry["spread"] = selection.get("spread")  # type: ignore[index]
+            debug_entry["snapshot_date"] = snapshot_date  # type: ignore[index]
 
         favored = selection.get("favored_team")
         try:
             spread = float(selection["spread"])
         except (KeyError, TypeError, ValueError):
-            counters["api_none"] += 1
+            counters["invalid_spread"] += 1
             if debug_enabled:
                 debug_entry["reason"] = "invalid_spread"  # type: ignore[index]
                 debug_rows.append(debug_entry)  # type: ignore[arg-type]
@@ -407,7 +433,7 @@ def _ats_backfill_api(
         f"ATS_BACKFILL(API {league_tag}): week={season}-{week} games_fixed={games_fixed} "
         f"sources={{history:{source_counts.get('history', 0)},current:{source_counts.get('current', 0)}}} "
         f"resolve={{pinned:{resolver_counts.get('pinned', 0)},events:{resolver_counts.get('events', 0)},failed:{resolver_counts.get('failed', 0)}}} "
-        f"skips={{already_populated:{counters.get('already_populated', 0)},no_kickoff:{counters.get('no_kickoff', 0)},resolve_failed:{counters.get('resolve_failed', 0)},api_none:{counters.get('api_none', 0)},no_scores:{counters.get('no_scores', 0)}}} "
+        f"skips={{already_populated:{counters.get('already_populated', 0)},no_kickoff:{counters.get('no_kickoff', 0)},resolve_failed:{counters.get('resolve_failed', 0)},hist_odds_none:{counters.get('hist_odds_none', 0)},invalid_spread:{counters.get('invalid_spread', 0)},no_scores:{counters.get('no_scores', 0)}}} "
         f"writes={{merged_week:{counters.get('merged_week', 0)},patched_sidecar:{counters.get('patched_sidecar', 0)}}} "
         f"usage=used:{used},remaining:{remaining}"
     )

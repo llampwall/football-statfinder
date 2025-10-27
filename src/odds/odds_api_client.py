@@ -211,16 +211,13 @@ def _log_request_exception(context: str, url: str, error: Exception) -> None:
     _log_api_error(f"ODDS_API_ERROR({context}): url={url} error={error}")
 
 
-def get_historical_spread(
-    league: str, event_id: str, kickoff_iso: str, home_name: str, away_name: str
-) -> Optional[Dict[str, Any]]:
+def get_historical_event_odds(
+    league: str, event_id: str, snapshot_iso: str
+) -> Optional[List[Dict[str, Any]]]:
     api_key = getenv("THE_ODDS_API_KEY")
     sport = _sport_key(league)
     if not api_key or not sport or not event_id:
         return None
-
-    kickoff_dt = _parse_ts(kickoff_iso) or datetime.min.replace(tzinfo=timezone.utc)
-    kickoff_iso_z = _to_iso_z(kickoff_dt)
 
     url = _build_url(
         f"/historical/sports/{sport}/events/{event_id}/odds",
@@ -229,7 +226,7 @@ def get_historical_spread(
             "regions": "us",
             "markets": "spreads",
             "oddsFormat": "american",
-            "date": kickoff_iso_z,
+            "date": snapshot_iso,
         },
     )
 
@@ -237,32 +234,66 @@ def get_historical_spread(
         response = requests.get(url, timeout=20)
         _update_usage(response)
         if response.status_code >= 400:
-            _log_http_problem("get_historical_spread", response, url)
+            _log_http_problem("get_historical_event_odds", response, url)
             return None
         payload = response.json()
         bookmakers = payload.get("bookmakers") if isinstance(payload, dict) else payload
-        selection = _pick_book_pre_kick(bookmakers or [], kickoff_dt)
-        if not selection:
-            return None
-        book, market = selection
-        normalized = _extract_spread_from_market(league, market, home_name, away_name)
-        if not normalized:
-            return None
-        favored, spread = normalized
-        timestamp = market.get("__ts__") or kickoff_dt
-        return {
-            "favored_team": favored,
-            "spread": float(spread),
-            "book": (book.get("key") or book.get("title") or ""),
-            "fetched_ts": timestamp.isoformat(),
-            "source": "history",
-        }
+        if isinstance(bookmakers, list):
+            return [book for book in bookmakers if isinstance(book, dict)]
     except requests.RequestException as exc:
-        _log_request_exception("get_historical_spread", url, exc)
-        return None
+        _log_request_exception("get_historical_event_odds", url, exc)
     except ValueError:
-        _log_http_problem("get_historical_spread - decode", response, url)
+        _log_http_problem("get_historical_event_odds - decode", locals().get("response"), url)
+    return None
+
+
+def get_historical_spread(
+    league: str,
+    event_id: str,
+    snapshot_iso: str,
+    home_name: str,
+    away_name: str,
+    kickoff_dt: datetime,
+) -> Optional[Dict[str, Any]]:
+    bookmakers = get_historical_event_odds(league, event_id, snapshot_iso)
+    books_available = [
+        (book.get("key") or book.get("title") or "").strip()
+        for book in (bookmakers or [])
+        if isinstance(book, dict)
+    ]
+    selection = _pick_book_pre_kick(bookmakers or [], kickoff_dt)
+    if not selection:
+        print(
+            f"ATSDBG(HIST-ODDS): league={league} event={event_id} date={snapshot_iso} "
+            f"books={books_available} chosen=- spread=- favored=-",
+            flush=True,
+        )
         return None
+    book, market = selection
+    normalized = _extract_spread_from_market(league, market, home_name, away_name)
+    if not normalized:
+        print(
+            f"ATSDBG(HIST-ODDS): league={league} event={event_id} date={snapshot_iso} "
+            f"books={books_available} chosen={(book.get('key') or book.get('title') or '-')} spread=- favored=-",
+            flush=True,
+        )
+        return None
+    favored, spread = normalized
+    timestamp = market.get("__ts__") or kickoff_dt
+    book_key = (book.get("key") or book.get("title") or "").strip()
+    print(
+        f"ATSDBG(HIST-ODDS): league={league} event={event_id} date={snapshot_iso} "
+        f"books={books_available} chosen={book_key or '-'} spread={spread} favored={favored}",
+        flush=True,
+    )
+    return {
+        "favored_team": favored,
+        "spread": float(spread),
+        "book": book_key,
+        "fetched_ts": timestamp.isoformat(),
+        "source": "history",
+        "snapshot_date": snapshot_iso,
+    }
 
 
 def get_current_spread(
@@ -454,6 +485,7 @@ def get_historical_events(
 
 __all__ = [
     "ODDS_API_USAGE",
+    "get_historical_event_odds",
     "get_historical_spread",
     "get_current_spread",
     "get_participants",

@@ -3,11 +3,11 @@
   "week": 8,
   "window": "2025-10-08T23:00:00Z -> 2025-10-25T18:00:00Z",
   "stats": {
-    "events_total": 45,
+    "events_total": 52,
     "events_after_window_filter": 0,
     "events_in_window": 0,
     "matched": 0,
-    "unmatched": 45,
+    "unmatched": 52,
     "eligible_unmatched": 0
   },
   "samples": {
@@ -166,6 +166,14 @@
         "why": "future_week"
       },
       {
+        "event_home": "Bowling Green Falcons",
+        "event_away": "Buffalo Bulls",
+        "event_time": "2025-11-01T16:00:00Z",
+        "home_norm": "bowlinggreen",
+        "away_norm": "buffalo",
+        "why": "future_week"
+      },
+      {
         "event_home": "Clemson Tigers",
         "event_away": "Duke Blue Devils",
         "event_time": "2025-11-01T16:00:00Z",
@@ -174,11 +182,11 @@
         "why": "future_week"
       },
       {
-        "event_home": "NC State Wolfpack",
-        "event_away": "Georgia Tech Yellow Jackets",
+        "event_home": "Illinois Fighting Illini",
+        "event_away": "Rutgers Scarlet Knights",
         "event_time": "2025-11-01T16:00:00Z",
-        "home_norm": "ncstate",
-        "away_norm": "georgiatech",
+        "home_norm": "illinois",
+        "away_norm": "rutgers",
         "why": "future_week"
       },
       {
@@ -244,23 +252,15 @@
         "home_norm": "temple",
         "away_norm": "eastcarolinapirates",
         "why": "future_week"
-      },
-      {
-        "event_home": "Florida Gators",
-        "event_away": "Georgia Bulldogs",
-        "event_time": "2025-11-01T19:30:00Z",
-        "home_norm": "florida",
-        "away_norm": "georgiabulldogs",
-        "why": "future_week"
       }
     ]
   },
   "reason_counts": {
-    "future_week": 45
+    "future_week": 52
   },
   "reason_buckets": {
     "outside_window": 0,
     "no_schedule_candidate": 0,
-    "other": 45
+    "other": 52
   }
 }

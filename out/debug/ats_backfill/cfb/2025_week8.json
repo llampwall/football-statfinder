@@ -22,8 +22,8 @@
   },
   {
     "game_key": "20251014_2330_arkansas_state_south_alabama",
-    "resolver": "events",
-    "event_id": "c2d428cbf0b787ee8c1fe0402266ea6c",
+    "resolver": "failed",
+    "event_id": null,
     "endpoint": null,
     "book": null,
     "favored_team": null,
@@ -39,12 +39,12 @@
       "home": false,
       "away": false
     },
-    "reason": "api_none"
+    "reason": "resolve_failed"
   },
   {
     "game_key": "20251015_0000_florida_international_western_kentucky",
-    "resolver": "failed",
-    "event_id": null,
+    "resolver": "events",
+    "event_id": "195edecefe4d9e28b6370f4cca6696c9",
     "endpoint": null,
     "book": null,
     "favored_team": null,
@@ -60,10 +60,31 @@
       "home": false,
       "away": false
     },
-    "reason": "resolve_failed"
+    "reason": "api_none"
   },
   {
     "game_key": "20251015_2300_delaware_jacksonville_state",
+    "resolver": "events",
+    "event_id": "0d244c0f45b386c4306834705afb971f",
+    "endpoint": null,
+    "book": null,
+    "favored_team": null,
+    "spread": null,
+    "kickoff": "2025-10-15T23:00:00+00:00",
+    "scores": {
+      "home": null,
+      "away": null
+    },
+    "computed": null,
+    "merged_week_fields": [],
+    "patched_sidecar": {
+      "home": false,
+      "away": false
+    },
+    "reason": "api_none"
+  },
+  {
+    "game_key": "20251015_2300_utep_sam_houston",
     "resolver": "failed",
     "event_id": null,
     "endpoint": null,
@@ -84,30 +105,9 @@
     "reason": "resolve_failed"
   },
   {
-    "game_key": "20251015_2300_utep_sam_houston",
-    "resolver": "events",
-    "event_id": "36ef3598137923f8a1f12dc61fabddf5",
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
-    "kickoff": "2025-10-15T23:00:00+00:00",
-    "scores": {
-      "home": null,
-      "away": null
-    },
-    "computed": null,
-    "merged_week_fields": [],
-    "patched_sidecar": {
-      "home": false,
-      "away": false
-    },
-    "reason": "api_none"
-  },
-  {
     "game_key": "20251016_2330_tulsa_east_carolina",
-    "resolver": "events",
-    "event_id": "9d110dc5627ec6c7593c880dcb906fa9",
+    "resolver": "failed",
+    "event_id": null,
     "endpoint": null,
     "book": null,
     "favored_team": null,
@@ -123,7 +123,7 @@
       "home": false,
       "away": false
     },
-    "reason": "api_none"
+    "reason": "resolve_failed"
   },
   {
     "game_key": "20251017_2300_louisville_miami",
@@ -190,8 +190,8 @@
   },
   {
     "game_key": "20251018_0230_north_carolina_california",
-    "resolver": "failed",
-    "event_id": null,
+    "resolver": "events",
+    "event_id": "078a33fd428923f0d673fd35a79edc42",
     "endpoint": null,
     "book": null,
     "favored_team": null,
@@ -207,7 +207,7 @@
       "home": false,
       "away": false
     },
-    "reason": "resolve_failed"
+    "reason": "api_none"
   },
   {
     "game_key": "20251018_1600_arizona_houston",
@@ -295,8 +295,8 @@
   },
   {
     "game_key": "20251018_1600_eastern_michigan_miami_oh",
-    "resolver": "failed",
-    "event_id": null,
+    "resolver": "events",
+    "event_id": "9ae9257ec6ad7304073eab4e09b08569",
     "endpoint": null,
     "book": null,
     "favored_team": null,
@@ -312,7 +312,7 @@
       "home": false,
       "away": false
     },
-    "reason": "resolve_failed"
+    "reason": "api_none"
   },
   {
     "game_key": "20251018_1600_georgia_tech_duke",
@@ -421,8 +421,8 @@
   },
   {
     "game_key": "20251018_1700_west_virginia_ucf",
-    "resolver": "failed",
-    "event_id": null,
+    "resolver": "events",
+    "event_id": "b4f42c88b4d5eb45150b23ab3b186d0a",
     "endpoint": null,
     "book": null,
     "favored_team": null,
@@ -438,7 +438,7 @@
       "home": false,
       "away": false
     },
-    "reason": "resolve_failed"
+    "reason": "api_none"
   },
   {
     "game_key": "20251018_1800_kent_state_toledo",
@@ -484,8 +484,8 @@
   },
   {
     "game_key": "20251018_1900_purdue_northwestern",
-    "resolver": "failed",
-    "event_id": null,
+    "resolver": "events",
+    "event_id": "b90c1e699a3f75f21ca7e436584b6add",
     "endpoint": null,
     "book": null,
     "favored_team": null,
@@ -501,7 +501,7 @@
       "home": false,
       "away": false
     },
-    "reason": "resolve_failed"
+    "reason": "api_none"
   },
   {
     "game_key": "20251018_1900_troy_ul_monroe",
@@ -589,8 +589,8 @@
   },
   {
     "game_key": "20251018_1930_northern_illinois_ohio",
-    "resolver": "failed",
-    "event_id": null,
+    "resolver": "events",
+    "event_id": "2073cfebcfc3368e22b436a6edf10cef",
     "endpoint": null,
     "book": null,
     "favored_team": null,
@@ -606,7 +606,7 @@
       "home": false,
       "away": false
     },
-    "reason": "resolve_failed"
+    "reason": "api_none"
   },
   {
     "game_key": "20251018_1930_ohio_state_buckeyes_wisconsin",
@@ -652,8 +652,8 @@
   },
   {
     "game_key": "20251018_1930_ole_miss_georgia_bulldogs",
-    "resolver": "failed",
-    "event_id": null,
+    "resolver": "events",
+    "event_id": "55f5ab2c82d0f2993231587e63a6b782",
     "endpoint": null,
     "book": null,
     "favored_team": null,
@@ -669,7 +669,7 @@
       "home": false,
       "away": false
     },
-    "reason": "resolve_failed"
+    "reason": "api_none"
   },
   {
     "game_key": "20251018_1930_smu_clemson_tigers",
@@ -778,8 +778,8 @@
   },
   {
     "game_key": "20251018_1930_utsa_north_texas",
-    "resolver": "failed",
-    "event_id": null,
+    "resolver": "events",
+    "event_id": "2648046a739ad39505d834b82d62e13b",
     "endpoint": null,
     "book": null,
     "favored_team": null,
@@ -795,7 +795,7 @@
       "home": false,
       "away": false
     },
-    "reason": "resolve_failed"
+    "reason": "api_none"
   },
   {
     "game_key": "20251018_1930_wyoming_air_force",
@@ -988,8 +988,8 @@
   },
   {
     "game_key": "20251018_2300_maryland_ucla",
-    "resolver": "failed",
-    "event_id": null,
+    "resolver": "events",
+    "event_id": "b0b386c767a0ce6a0a239fb9f79c3e7a",
     "endpoint": null,
     "book": null,
     "favored_team": null,
@@ -1005,7 +1005,7 @@
       "home": false,
       "away": false
     },
-    "reason": "resolve_failed"
+    "reason": "api_none"
   },
   {
     "game_key": "20251018_2300_penn_state_iowa",
@@ -1030,8 +1030,8 @@
   },
   {
     "game_key": "20251018_2300_texas_longhorns_kentucky",
-    "resolver": "failed",
-    "event_id": null,
+    "resolver": "events",
+    "event_id": "5866b06f9fe4c1e8ae23a581602b0fe9",
     "endpoint": null,
     "book": null,
     "favored_team": null,
@@ -1047,7 +1047,7 @@
       "home": false,
       "away": false
     },
-    "reason": "resolve_failed"
+    "reason": "api_none"
   },
   {
     "game_key": "20251018_2330_florida_atlantic_south_florida",
@@ -1177,8 +1177,8 @@
   },
   {
     "game_key": "20251019_0000_utah_byu",
-    "resolver": "failed",
-    "event_id": null,
+    "resolver": "events",
+    "event_id": "4db5e24ddb0d1e1e5aa7d9e508670e0f",
     "endpoint": null,
     "book": null,
     "favored_team": null,
@@ -1194,7 +1194,7 @@
       "home": false,
       "away": false
     },
-    "reason": "resolve_failed"
+    "reason": "api_none"
   },
   {
     "game_key": "20251019_0145_nevada_new_mexico",
@@ -1219,8 +1219,8 @@
   },
   {
     "game_key": "20251019_0230_florida_state_stanford",
-    "resolver": "failed",
-    "event_id": null,
+    "resolver": "events",
+    "event_id": "75cd206b980e4155e21e3785bb9503f8",
     "endpoint": null,
     "book": null,
     "favored_team": null,
@@ -1236,6 +1236,6 @@
       "home": false,
       "away": false
     },
-    "reason": "resolve_failed"
+    "reason": "api_none"
   }
 ]
