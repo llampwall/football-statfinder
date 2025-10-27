@@ -26,6 +26,7 @@ from typing import Dict, List, Tuple
 from src.odds.odds_api_client import get_historical_events
 
 _EVENT_CACHE: Dict[Tuple[str, str], List[dict]] = {}
+_LAST_SNAPSHOT: Dict[str, datetime] = {}
 
 
 def list_week_events(
@@ -37,6 +38,8 @@ def list_week_events(
     week_start = week_start_utc.astimezone(timezone.utc).replace(hour=0, minute=0, second=0, microsecond=0)
     week_end = week_end_utc.astimezone(timezone.utc).replace(hour=23, minute=59, second=59, microsecond=0)
     snapshot = week_start + timedelta(days=1, hours=12)
+    global _LAST_SNAPSHOT
+    _LAST_SNAPSHOT[league.lower()] = snapshot
     cache_key = (league.lower(), week_start.isoformat())
 
     if cache_key not in _EVENT_CACHE:
@@ -75,4 +78,8 @@ def _parse_ts(value: str | None) -> datetime | None:
         return None
 
 
-__all__ = ["list_week_events"]
+def get_last_snapshot(league: str) -> datetime | None:
+    return _LAST_SNAPSHOT.get((league or "").lower())
+
+
+__all__ = ["list_week_events", "get_last_snapshot"]

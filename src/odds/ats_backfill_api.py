@@ -27,7 +27,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 from src.common.io_utils import ensure_out_dir
-from src.odds.historical_events import list_week_events
+from src.odds.historical_events import list_week_events, get_last_snapshot
 from src.odds.odds_api_client import get_historical_spread
 from src.odds.participants_cache import provider_name_for, provider_token
 
@@ -200,36 +200,33 @@ def select_closing_spread(
     home_name: str,
     away_name: str,
 ) -> Optional[Dict[str, Any]]:
-    """Fetch historical odds snapshot at kickoff."""
+    """Fetch historical odds snapshot aligned with the historical events snapshot."""
     kickoff_dt = _parse_ts(kickoff_iso)
-    if not kickoff_dt:
-        return None
+    snapshot_dt = get_last_snapshot(league)
+    if kickoff_dt is None and snapshot_dt is None:
+        return {"status": "hist_odds_none", "raw_book_count": 0, "kept_book_count": 0, "kept_book_names": [], "source": "history"}
 
-    attempts: List[datetime] = []
-    attempts.append(kickoff_dt - timedelta(seconds=60))
-    attempts.append(kickoff_dt)
-    attempts.append(kickoff_dt - timedelta(minutes=15))
+    if kickoff_dt is None and snapshot_dt is not None:
+        kickoff_dt = snapshot_dt
 
-    seen: set[str] = set()
-    for attempt_dt in attempts:
-        if attempt_dt is None:
-            continue
-        snapshot_iso = attempt_dt.strftime("%Y-%m-%dT%H:%M:%SZ")
-        if snapshot_iso in seen:
-            continue
-        seen.add(snapshot_iso)
-        result = get_historical_spread(
-            league,
-            event_id,
-            snapshot_iso,
-            home_name,
-            away_name,
-            kickoff_dt,
-        )
-        if result:
-            result.setdefault("snapshot_date", snapshot_iso)
-            return result
-    return None
+    if snapshot_dt is not None:
+        snapshot_iso = snapshot_dt.strftime("%Y-%m-%dT%H:%M:%SZ")
+    else:
+        snapshot_iso = _normalize_kickoff(None, kickoff_iso)
+
+    if not kickoff_dt or not snapshot_iso:
+        return {"status": "hist_odds_none", "raw_book_count": 0, "kept_book_count": 0, "kept_book_names": [], "source": "history"}
+
+    result = get_historical_spread(
+        league,
+        event_id,
+        snapshot_iso,
+        home_name,
+        away_name,
+        kickoff_dt,
+    )
+    result.setdefault("snapshot_date", snapshot_iso)
+    return result
 
 
 def _extract_kickoff(game: Dict[str, Any]) -> Optional[datetime]:

@@ -39,6 +39,24 @@ _EMPTY_NOTIFIED: set[str] = set()
 _CACHE_DIR = ensure_out_dir() / "cache" / "participants"
 _CACHE_DIR.mkdir(parents=True, exist_ok=True)
 
+_MANUAL_PROVIDER_OVERRIDES: Dict[str, Dict[str, str]] = {
+    "cfb": {
+        "arkansasstate": "Arkansas State Red Wolves",
+        "samhouston": "Sam Houston Bearkats",
+        "samhoustonstate": "Sam Houston Bearkats",
+        "tulsa": "Tulsa Golden Hurricane",
+        "sanjosestate": "San Jose State Spartans",
+        "massachusetts": "Massachusetts Minutemen",
+        "umass": "Massachusetts Minutemen",
+        "appalachianstate": "Appalachian State Mountaineers",
+        "southernmiss": "Southern Mississippi Golden Eagles",
+        "southernmississippi": "Southern Mississippi Golden Eagles",
+        "kennesawstate": "Kennesaw State Owls",
+        "utep": "UTEP Miners",
+        "texasstate": "Texas State Bobcats",
+    }
+}
+
 
 def _cache_path(league: str) -> Path:
     return _CACHE_DIR / f"{league.lower()}.json"
@@ -187,6 +205,13 @@ def build_provider_map(league: str, team_labels: Iterable[str]) -> Dict[str, int
             unknown.add(token)
         else:
             ambiguous.add(token)
+
+    overrides = _MANUAL_PROVIDER_OVERRIDES.get(league_key, {})
+    for token, provider_name in overrides.items():
+        if token in observed and token not in mapped:
+            mapped[token] = provider_name
+            ambiguous.discard(token)
+            unknown.discard(token)
 
     _PROVIDER_MAP[league_key] = mapped
     _PROVIDER_AMBIGUOUS[league_key] = ambiguous

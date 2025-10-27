@@ -18,7 +18,7 @@
       "home": false,
       "away": false
     },
-    "reason": "api_none"
+    "reason": "hist_odds_none"
   },
   {
     "game_key": "20251014_2330_arkansas_state_south_alabama",
@@ -60,7 +60,7 @@
       "home": false,
       "away": false
     },
-    "reason": "api_none"
+    "reason": "hist_odds_none"
   },
   {
     "game_key": "20251015_2300_delaware_jacksonville_state",
@@ -81,7 +81,7 @@
       "home": false,
       "away": false
     },
-    "reason": "api_none"
+    "reason": "hist_odds_none"
   },
   {
     "game_key": "20251015_2300_utep_sam_houston",
@@ -144,7 +144,7 @@
       "home": false,
       "away": false
     },
-    "reason": "api_none"
+    "reason": "hist_odds_none"
   },
   {
     "game_key": "20251018_0000_nebraska_minnesota",
@@ -165,7 +165,7 @@
       "home": false,
       "away": false
     },
-    "reason": "api_none"
+    "reason": "hist_odds_none"
   },
   {
     "game_key": "20251018_0100_san_jos_state_utah_state",
@@ -207,7 +207,7 @@
       "home": false,
       "away": false
     },
-    "reason": "api_none"
+    "reason": "hist_odds_none"
   },
   {
     "game_key": "20251018_1600_arizona_houston",
@@ -228,7 +228,7 @@
       "home": false,
       "away": false
     },
-    "reason": "api_none"
+    "reason": "hist_odds_none"
   },
   {
     "game_key": "20251018_1600_army_tulane",
@@ -249,7 +249,7 @@
       "home": false,
       "away": false
     },
-    "reason": "api_none"
+    "reason": "hist_odds_none"
   },
   {
     "game_key": "20251018_1600_baylor_tcu",
@@ -270,7 +270,7 @@
       "home": false,
       "away": false
     },
-    "reason": "api_none"
+    "reason": "hist_odds_none"
   },
   {
     "game_key": "20251018_1600_central_michigan_bowling_green",
@@ -291,7 +291,7 @@
       "home": false,
       "away": false
     },
-    "reason": "api_none"
+    "reason": "hist_odds_none"
   },
   {
     "game_key": "20251018_1600_eastern_michigan_miami_oh",
@@ -312,7 +312,7 @@
       "home": false,
       "away": false
     },
-    "reason": "api_none"
+    "reason": "hist_odds_none"
   },
   {
     "game_key": "20251018_1600_georgia_tech_duke",
@@ -333,7 +333,7 @@
       "home": false,
       "away": false
     },
-    "reason": "api_none"
+    "reason": "hist_odds_none"
   },
   {
     "game_key": "20251018_1600_lsu_vanderbilt",
@@ -354,7 +354,7 @@
       "home": false,
       "away": false
     },
-    "reason": "api_none"
+    "reason": "hist_odds_none"
   },
   {
     "game_key": "20251018_1600_uconn_boston_college",
@@ -375,7 +375,7 @@
       "home": false,
       "away": false
     },
-    "reason": "api_none"
+    "reason": "hist_odds_none"
   },
   {
     "game_key": "20251018_1600_washington_michigan",
@@ -396,7 +396,7 @@
       "home": false,
       "away": false
     },
-    "reason": "api_none"
+    "reason": "hist_odds_none"
   },
   {
     "game_key": "20251018_1645_oklahoma_south_carolina",
@@ -417,7 +417,7 @@
       "home": false,
       "away": false
     },
-    "reason": "api_none"
+    "reason": "hist_odds_none"
   },
   {
     "game_key": "20251018_1700_west_virginia_ucf",
@@ -438,7 +438,7 @@
       "home": false,
       "away": false
     },
-    "reason": "api_none"
+    "reason": "hist_odds_none"
   },
   {
     "game_key": "20251018_1800_kent_state_toledo",
@@ -459,7 +459,7 @@
       "home": false,
       "away": false
     },
-    "reason": "api_none"
+    "reason": "hist_odds_none"
   },
   {
     "game_key": "20251018_1830_buffalo_massachusetts",
@@ -501,7 +501,7 @@
       "home": false,
       "away": false
     },
-    "reason": "api_none"
+    "reason": "hist_odds_none"
   },
   {
     "game_key": "20251018_1900_troy_ul_monroe",
@@ -522,7 +522,7 @@
       "home": false,
       "away": false
     },
-    "reason": "api_none"
+    "reason": "hist_odds_none"
   },
   {
     "game_key": "20251018_1930_akron_ball_state",
@@ -543,7 +543,7 @@
       "home": false,
       "away": false
     },
-    "reason": "api_none"
+    "reason": "hist_odds_none"
   },
   {
     "game_key": "20251018_1930_coastal_carolina_app_state",
@@ -585,7 +585,7 @@
       "home": false,
       "away": false
     },
-    "reason": "api_none"
+    "reason": "hist_odds_none"
   },
   {
     "game_key": "20251018_1930_northern_illinois_ohio",
@@ -606,7 +606,7 @@
       "home": false,
       "away": false
     },
-    "reason": "api_none"
+    "reason": "hist_odds_none"
   },
   {
     "game_key": "20251018_1930_ohio_state_buckeyes_wisconsin",
@@ -627,7 +627,7 @@
       "home": false,
       "away": false
     },
-    "reason": "api_none"
+    "reason": "hist_odds_none"
   },
   {
     "game_key": "20251018_1930_old_dominion_james_madison",
@@ -648,7 +648,7 @@
       "home": false,
       "away": false
     },
-    "reason": "api_none"
+    "reason": "hist_odds_none"
   },
   {
     "game_key": "20251018_1930_ole_miss_georgia_bulldogs",
@@ -669,7 +669,7 @@
       "home": false,
       "away": false
     },
-    "reason": "api_none"
+    "reason": "hist_odds_none"
   },
   {
     "game_key": "20251018_1930_smu_clemson_tigers",
@@ -690,7 +690,7 @@
       "home": false,
       "away": false
     },
-    "reason": "api_none"
+    "reason": "hist_odds_none"
   },
   {
     "game_key": "20251018_1930_temple_charlotte",
@@ -711,7 +711,7 @@
       "home": false,
       "away": false
     },
-    "reason": "api_none"
+    "reason": "hist_odds_none"
   },
   {
     "game_key": "20251018_1930_texas_aandm_arkansas",
@@ -732,7 +732,7 @@
       "home": false,
       "away": false
     },
-    "reason": "api_none"
+    "reason": "hist_odds_none"
   },
   {
     "game_key": "20251018_1930_texas_state_marshall",
@@ -753,7 +753,7 @@
       "home": false,
       "away": false
     },
-    "reason": "api_none"
+    "reason": "hist_odds_none"
   },
   {
     "game_key": "20251018_1930_unlv_boise_state",
@@ -774,7 +774,7 @@
       "home": false,
       "away": false
     },
-    "reason": "api_none"
+    "reason": "hist_odds_none"
   },
   {
     "game_key": "20251018_1930_utsa_north_texas",
@@ -795,7 +795,7 @@
       "home": false,
       "away": false
     },
-    "reason": "api_none"
+    "reason": "hist_odds_none"
   },
   {
     "game_key": "20251018_1930_wyoming_air_force",
@@ -816,7 +816,7 @@
       "home": false,
       "away": false
     },
-    "reason": "api_none"
+    "reason": "hist_odds_none"
   },
   {
     "game_key": "20251018_2000_memphis_uab",
@@ -837,7 +837,7 @@
       "home": false,
       "away": false
     },
-    "reason": "api_none"
+    "reason": "hist_odds_none"
   },
   {
     "game_key": "20251018_2000_texas_tech_arizona_state",
@@ -858,7 +858,7 @@
       "home": false,
       "away": false
     },
-    "reason": "api_none"
+    "reason": "hist_odds_none"
   },
   {
     "game_key": "20251018_2015_mississippi_state_florida",
@@ -879,7 +879,7 @@
       "home": false,
       "away": false
     },
-    "reason": "api_none"
+    "reason": "hist_odds_none"
   },
   {
     "game_key": "20251018_2100_southern_miss_louisiana",
@@ -921,7 +921,7 @@
       "home": false,
       "away": false
     },
-    "reason": "api_none"
+    "reason": "hist_odds_none"
   },
   {
     "game_key": "20251018_2230_washington_state_virginia",
@@ -942,7 +942,7 @@
       "home": false,
       "away": false
     },
-    "reason": "api_none"
+    "reason": "hist_odds_none"
   },
   {
     "game_key": "20251018_2300_georgia_state_georgia_southern",
@@ -963,7 +963,7 @@
       "home": false,
       "away": false
     },
-    "reason": "api_none"
+    "reason": "hist_odds_none"
   },
   {
     "game_key": "20251018_2300_hawai_i_colorado_state",
@@ -984,7 +984,7 @@
       "home": false,
       "away": false
     },
-    "reason": "api_none"
+    "reason": "hist_odds_none"
   },
   {
     "game_key": "20251018_2300_maryland_ucla",
@@ -1005,7 +1005,7 @@
       "home": false,
       "away": false
     },
-    "reason": "api_none"
+    "reason": "hist_odds_none"
   },
   {
     "game_key": "20251018_2300_penn_state_iowa",
@@ -1026,7 +1026,7 @@
       "home": false,
       "away": false
     },
-    "reason": "api_none"
+    "reason": "hist_odds_none"
   },
   {
     "game_key": "20251018_2300_texas_longhorns_kentucky",
@@ -1047,7 +1047,7 @@
       "home": false,
       "away": false
     },
-    "reason": "api_none"
+    "reason": "hist_odds_none"
   },
   {
     "game_key": "20251018_2330_florida_atlantic_south_florida",
@@ -1068,7 +1068,7 @@
       "home": false,
       "away": false
     },
-    "reason": "api_none"
+    "reason": "hist_odds_none"
   },
   {
     "game_key": "20251018_2330_pittsburgh_syracuse",
@@ -1089,7 +1089,7 @@
       "home": false,
       "away": false
     },
-    "reason": "api_none"
+    "reason": "hist_odds_none"
   },
   {
     "game_key": "20251018_2330_tennessee_alabama_crimson_tide",
@@ -1110,7 +1110,7 @@
       "home": false,
       "away": false
     },
-    "reason": "api_none"
+    "reason": "hist_odds_none"
   },
   {
     "game_key": "20251018_2330_usc_trojans_notre_dame_fighting_irish",
@@ -1131,7 +1131,7 @@
       "home": false,
       "away": false
     },
-    "reason": "api_none"
+    "reason": "hist_odds_none"
   },
   {
     "game_key": "20251018_2345_missouri_auburn",
@@ -1152,7 +1152,7 @@
       "home": false,
       "away": false
     },
-    "reason": "api_none"
+    "reason": "hist_odds_none"
   },
   {
     "game_key": "20251019_0000_cincinnati_oklahoma_state",
@@ -1173,7 +1173,7 @@
       "home": false,
       "away": false
     },
-    "reason": "api_none"
+    "reason": "hist_odds_none"
   },
   {
     "game_key": "20251019_0000_utah_byu",
@@ -1194,7 +1194,7 @@
       "home": false,
       "away": false
     },
-    "reason": "api_none"
+    "reason": "hist_odds_none"
   },
   {
     "game_key": "20251019_0145_nevada_new_mexico",
@@ -1215,7 +1215,7 @@
       "home": false,
       "away": false
     },
-    "reason": "api_none"
+    "reason": "hist_odds_none"
   },
   {
     "game_key": "20251019_0230_florida_state_stanford",
@@ -1236,6 +1236,6 @@
       "home": false,
       "away": false
     },
-    "reason": "api_none"
+    "reason": "hist_odds_none"
   }
 ]

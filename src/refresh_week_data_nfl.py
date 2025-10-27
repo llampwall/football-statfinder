@@ -254,10 +254,17 @@ def _ats_backfill_api(
             home_name=game.get("home_team_norm") or game.get("home_team_raw") or "",
             away_name=game.get("away_team_norm") or game.get("away_team_raw") or "",
         )
-        if not selection:
-            counters["hist_odds_none"] += 1
+        selection = selection or {}
+        status = selection.get("status", "hist_odds_none")
+        if status != "ok":
+            counters[status] += 1
             if debug_enabled:
-                debug_entry["reason"] = "hist_odds_none"  # type: ignore[index]
+                debug_entry["reason"] = status  # type: ignore[index]
+                debug_entry["books"] = {  # type: ignore[index]
+                    "raw": selection.get("raw_book_count", 0),
+                    "kept": selection.get("kept_book_count", 0),
+                    "names": selection.get("kept_book_names", []),
+                }
                 debug_rows.append(debug_entry)  # type: ignore[arg-type]
             continue
 
@@ -267,7 +274,7 @@ def _ats_backfill_api(
         _atsdbg(
             debug_enabled,
             "ATSDBG({tag}): week={season}-{week} game={game} step=api endpoint={endpoint} "
-            "book={book} favored={favored} spread={spread} ts={ts} snapshot={snapshot}".format(
+            "book={book} favored={favored} spread={spread} ts={ts} snapshot={snapshot} raw_books={raw} kept_books={kept}".format(
                 tag=league_tag,
                 season=season,
                 week=week,
@@ -278,6 +285,8 @@ def _ats_backfill_api(
                 spread=selection.get("spread"),
                 ts=selection.get("fetched_ts"),
                 snapshot=snapshot_date,
+                raw=selection.get("raw_book_count", 0),
+                kept=selection.get("kept_book_count", 0),
             ),
         )
         if debug_enabled:
@@ -286,6 +295,11 @@ def _ats_backfill_api(
             debug_entry["favored_team"] = selection.get("favored_team")  # type: ignore[index]
             debug_entry["spread"] = selection.get("spread")  # type: ignore[index]
             debug_entry["snapshot_date"] = snapshot_date  # type: ignore[index]
+            debug_entry["books"] = {
+                "raw": selection.get("raw_book_count", 0),
+                "kept": selection.get("kept_book_count", 0),
+                "names": selection.get("kept_book_names", []),
+            }  # type: ignore[index]
 
         favored = selection.get("favored_team")
         try:
@@ -447,7 +461,7 @@ def _ats_backfill_api(
         f"ATS_BACKFILL(API {league_tag}): week={season}-{week} games_fixed={games_fixed} "
         f"sources={{history:{source_counts.get('history', 0)},current:{source_counts.get('current', 0)}}} "
         f"resolve={{pinned:{resolver_counts.get('pinned', 0)},events:{resolver_counts.get('events', 0)},failed:{resolver_counts.get('failed', 0)}}} "
-        f"skips={{already_populated:{counters.get('already_populated', 0)},no_kickoff:{counters.get('no_kickoff', 0)},resolve_failed:{counters.get('resolve_failed', 0)},hist_odds_none:{counters.get('hist_odds_none', 0)},invalid_spread:{counters.get('invalid_spread', 0)},no_scores:{counters.get('no_scores', 0)}}} "
+        f"skips={{already_populated:{counters.get('already_populated', 0)},no_kickoff:{counters.get('no_kickoff', 0)},resolve_failed:{counters.get('resolve_failed', 0)},hist_odds_none:{counters.get('hist_odds_none', 0)},hist_odds_filtered:{counters.get('hist_odds_filtered', 0)},invalid_spread:{counters.get('invalid_spread', 0)},no_scores:{counters.get('no_scores', 0)}}} "
         f"writes={{merged_week:{counters.get('merged_week', 0)},patched_sidecar:{counters.get('patched_sidecar', 0)}}} "
         f"usage=used:{used},remaining:{remaining}"
     )
