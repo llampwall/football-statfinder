@@ -38,7 +38,8 @@
         "betus",
         "bovada"
       ]
-    }
+    },
+    "score_source": null
   },
   {
     "game_key": "20251014_2330_arkansas_state_south_alabama",
@@ -79,7 +80,8 @@
         "betus",
         "bovada"
       ]
-    }
+    },
+    "score_source": null
   },
   {
     "game_key": "20251015_0000_florida_international_western_kentucky",
@@ -120,7 +122,8 @@
         "betus",
         "bovada"
       ]
-    }
+    },
+    "score_source": null
   },
   {
     "game_key": "20251015_2300_delaware_jacksonville_state",
@@ -161,7 +164,8 @@
         "betus",
         "bovada"
       ]
-    }
+    },
+    "score_source": null
   },
   {
     "game_key": "20251015_2300_utep_sam_houston",
@@ -188,12 +192,12 @@
   },
   {
     "game_key": "20251016_2330_tulsa_east_carolina",
-    "resolver": "failed",
-    "event_id": null,
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
+    "resolver": "events",
+    "event_id": "9d110dc5627ec6c7593c880dcb906fa9",
+    "endpoint": "historical_event_odds",
+    "book": "fanduel",
+    "favored_team": "HOME",
+    "spread": 16.5,
     "kickoff": "2025-10-16T23:30:00+00:00",
     "scores": {
       "home": null,
@@ -205,9 +209,28 @@
       "home": false,
       "away": false
     },
-    "reason": "no_provider_map",
-    "probe_steps": 0,
-    "resolver_reason": "no_provider_map"
+    "reason": "no_scores",
+    "probe_steps": 1,
+    "snapshot_date": "2025-10-14T12:00:00Z",
+    "snapshot_used": "2025-10-14T12:00:00Z",
+    "books": {
+      "raw": 11,
+      "kept": 11,
+      "names": [
+        "fanduel",
+        "fanatics",
+        "mybookieag",
+        "draftkings",
+        "betrivers",
+        "betmgm",
+        "betonlineag",
+        "williamhill_us",
+        "lowvig",
+        "bovada",
+        "betus"
+      ]
+    },
+    "score_source": null
   },
   {
     "game_key": "20251017_2300_louisville_miami",
@@ -248,7 +271,8 @@
         "bovada",
         "betus"
       ]
-    }
+    },
+    "score_source": null
   },
   {
     "game_key": "20251018_0000_nebraska_minnesota",
@@ -289,16 +313,17 @@
         "bovada",
         "betus"
       ]
-    }
+    },
+    "score_source": null
   },
   {
     "game_key": "20251018_0100_san_jos_state_utah_state",
-    "resolver": "failed",
-    "event_id": null,
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
+    "resolver": "events",
+    "event_id": "fabf700114de9a665c40478e8dceccc9",
+    "endpoint": "historical_event_odds",
+    "book": "fanduel",
+    "favored_team": "HOME",
+    "spread": 3.5,
     "kickoff": "2025-10-18T01:00:00+00:00",
     "scores": {
       "home": null,
@@ -310,9 +335,28 @@
       "home": false,
       "away": false
     },
-    "reason": "no_provider_map",
-    "probe_steps": 0,
-    "resolver_reason": "no_provider_map"
+    "reason": "no_scores",
+    "probe_steps": 1,
+    "snapshot_date": "2025-10-14T12:00:00Z",
+    "snapshot_used": "2025-10-14T12:00:00Z",
+    "books": {
+      "raw": 11,
+      "kept": 11,
+      "names": [
+        "draftkings",
+        "williamhill_us",
+        "lowvig",
+        "betonlineag",
+        "mybookieag",
+        "fanatics",
+        "fanduel",
+        "betmgm",
+        "bovada",
+        "betrivers",
+        "betus"
+      ]
+    },
+    "score_source": null
   },
   {
     "game_key": "20251018_0230_north_carolina_california",
@@ -353,7 +397,8 @@
         "betrivers",
         "betus"
       ]
-    }
+    },
+    "score_source": null
   },
   {
     "game_key": "20251018_1600_arizona_houston",
@@ -394,7 +439,8 @@
         "betus",
         "betrivers"
       ]
-    }
+    },
+    "score_source": null
   },
   {
     "game_key": "20251018_1600_army_tulane",
@@ -435,7 +481,8 @@
         "betus",
         "betrivers"
       ]
-    }
+    },
+    "score_source": null
   },
   {
     "game_key": "20251018_1600_baylor_tcu",
@@ -476,7 +523,8 @@
         "betmgm",
         "betus"
       ]
-    }
+    },
+    "score_source": null
   },
   {
     "game_key": "20251018_1600_central_michigan_bowling_green",
@@ -517,7 +565,8 @@
         "betus",
         "betrivers"
       ]
-    }
+    },
+    "score_source": null
   },
   {
     "game_key": "20251018_1600_eastern_michigan_miami_oh",
@@ -557,7 +606,8 @@
         "betrivers",
         "fanatics"
       ]
-    }
+    },
+    "score_source": null
   },
   {
     "game_key": "20251018_1600_georgia_tech_duke",
@@ -597,7 +647,8 @@
         "bovada",
         "betus"
       ]
-    }
+    },
+    "score_source": null
   },
   {
     "game_key": "20251018_1600_lsu_vanderbilt",
@@ -637,7 +688,8 @@
         "betus",
         "fanatics"
       ]
-    }
+    },
+    "score_source": null
   },
   {
     "game_key": "20251018_1600_uconn_boston_college",
@@ -678,7 +730,8 @@
         "betus",
         "betrivers"
       ]
-    }
+    },
+    "score_source": null
   },
   {
     "game_key": "20251018_1600_washington_michigan",
@@ -718,7 +771,8 @@
         "betrivers",
         "betus"
       ]
-    }
+    },
+    "score_source": null
   },
   {
     "game_key": "20251018_1645_oklahoma_south_carolina",
@@ -759,7 +813,8 @@
         "betus",
         "fanatics"
       ]
-    }
+    },
+    "score_source": null
   },
   {
     "game_key": "20251018_1700_west_virginia_ucf",
@@ -800,7 +855,8 @@
         "betus",
         "betrivers"
       ]
-    }
+    },
+    "score_source": null
   },
   {
     "game_key": "20251018_1800_kent_state_toledo",
@@ -841,7 +897,8 @@
         "betus",
         "betrivers"
       ]
-    }
+    },
+    "score_source": null
   },
   {
     "game_key": "20251018_1830_buffalo_massachusetts",
@@ -905,7 +962,8 @@
         "betus",
         "betrivers"
       ]
-    }
+    },
+    "score_source": null
   },
   {
     "game_key": "20251018_1900_troy_ul_monroe",
@@ -946,7 +1004,8 @@
         "betrivers",
         "fanatics"
       ]
-    }
+    },
+    "score_source": null
   },
   {
     "game_key": "20251018_1930_akron_ball_state",
@@ -987,16 +1046,17 @@
         "betmgm",
         "betrivers"
       ]
-    }
+    },
+    "score_source": null
   },
   {
     "game_key": "20251018_1930_coastal_carolina_app_state",
-    "resolver": "failed",
-    "event_id": null,
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
+    "resolver": "events",
+    "event_id": "140129cd7d0dc8e98b52a47a682134ec",
+    "endpoint": "historical_event_odds",
+    "book": "fanduel",
+    "favored_team": "HOME",
+    "spread": 10.5,
     "kickoff": "2025-10-18T19:30:00+00:00",
     "scores": {
       "home": null,
@@ -1008,9 +1068,28 @@
       "home": false,
       "away": false
     },
-    "reason": "no_provider_map",
-    "probe_steps": 0,
-    "resolver_reason": "no_provider_map"
+    "reason": "no_scores",
+    "probe_steps": 1,
+    "snapshot_date": "2025-10-14T12:00:00Z",
+    "snapshot_used": "2025-10-14T12:00:00Z",
+    "books": {
+      "raw": 11,
+      "kept": 11,
+      "names": [
+        "draftkings",
+        "williamhill_us",
+        "betonlineag",
+        "lowvig",
+        "fanatics",
+        "fanduel",
+        "bovada",
+        "mybookieag",
+        "betmgm",
+        "betus",
+        "betrivers"
+      ]
+    },
+    "score_source": null
   },
   {
     "game_key": "20251018_1930_michigan_state_indiana",
@@ -1051,7 +1130,8 @@
         "betus",
         "betmgm"
       ]
-    }
+    },
+    "score_source": null
   },
   {
     "game_key": "20251018_1930_northern_illinois_ohio",
@@ -1092,7 +1172,8 @@
         "betus",
         "betrivers"
       ]
-    }
+    },
+    "score_source": null
   },
   {
     "game_key": "20251018_1930_ohio_state_buckeyes_wisconsin",
@@ -1133,7 +1214,8 @@
         "betmgm",
         "betus"
       ]
-    }
+    },
+    "score_source": null
   },
   {
     "game_key": "20251018_1930_old_dominion_james_madison",
@@ -1173,7 +1255,8 @@
         "betus",
         "betrivers"
       ]
-    }
+    },
+    "score_source": null
   },
   {
     "game_key": "20251018_1930_ole_miss_georgia_bulldogs",
@@ -1212,7 +1295,8 @@
         "bovada",
         "betus"
       ]
-    }
+    },
+    "score_source": null
   },
   {
     "game_key": "20251018_1930_smu_clemson_tigers",
@@ -1253,7 +1337,8 @@
         "betus",
         "betrivers"
       ]
-    }
+    },
+    "score_source": null
   },
   {
     "game_key": "20251018_1930_temple_charlotte",
@@ -1294,7 +1379,8 @@
         "betus",
         "betrivers"
       ]
-    }
+    },
+    "score_source": null
   },
   {
     "game_key": "20251018_1930_texas_aandm_arkansas",
@@ -1334,7 +1420,8 @@
         "bovada",
         "mybookieag"
       ]
-    }
+    },
+    "score_source": null
   },
   {
     "game_key": "20251018_1930_texas_state_marshall",
@@ -1375,7 +1462,8 @@
         "betrivers",
         "fanatics"
       ]
-    }
+    },
+    "score_source": null
   },
   {
     "game_key": "20251018_1930_unlv_boise_state",
@@ -1416,7 +1504,8 @@
         "betmgm",
         "betrivers"
       ]
-    }
+    },
+    "score_source": null
   },
   {
     "game_key": "20251018_1930_utsa_north_texas",
@@ -1457,7 +1546,8 @@
         "betrivers",
         "fanatics"
       ]
-    }
+    },
+    "score_source": null
   },
   {
     "game_key": "20251018_1930_wyoming_air_force",
@@ -1498,7 +1588,8 @@
         "betrivers",
         "fanatics"
       ]
-    }
+    },
+    "score_source": null
   },
   {
     "game_key": "20251018_2000_memphis_uab",
@@ -1539,7 +1630,8 @@
         "betrivers",
         "fanatics"
       ]
-    }
+    },
+    "score_source": null
   },
   {
     "game_key": "20251018_2000_texas_tech_arizona_state",
@@ -1579,7 +1671,8 @@
         "betus",
         "betrivers"
       ]
-    }
+    },
+    "score_source": null
   },
   {
     "game_key": "20251018_2015_mississippi_state_florida",
@@ -1620,7 +1713,8 @@
         "betus",
         "betrivers"
       ]
-    }
+    },
+    "score_source": null
   },
   {
     "game_key": "20251018_2100_southern_miss_louisiana",
@@ -1661,7 +1755,8 @@
         "betrivers",
         "fanatics"
       ]
-    }
+    },
+    "score_source": null
   },
   {
     "game_key": "20251018_2230_oregon_ducks_rutgers",
@@ -1700,7 +1795,8 @@
         "mybookieag",
         "betrivers"
       ]
-    }
+    },
+    "score_source": null
   },
   {
     "game_key": "20251018_2230_washington_state_virginia",
@@ -1741,7 +1837,8 @@
         "mybookieag",
         "betrivers"
       ]
-    }
+    },
+    "score_source": null
   },
   {
     "game_key": "20251018_2300_georgia_state_georgia_southern",
@@ -1782,7 +1879,8 @@
         "mybookieag",
         "betrivers"
       ]
-    }
+    },
+    "score_source": null
   },
   {
     "game_key": "20251018_2300_hawai_i_colorado_state",
@@ -1823,7 +1921,8 @@
         "betrivers",
         "fanatics"
       ]
-    }
+    },
+    "score_source": null
   },
   {
     "game_key": "20251018_2300_maryland_ucla",
@@ -1864,7 +1963,8 @@
         "mybookieag",
         "betrivers"
       ]
-    }
+    },
+    "score_source": null
   },
   {
     "game_key": "20251018_2300_penn_state_iowa",
@@ -1904,7 +2004,8 @@
         "betmgm",
         "betus"
       ]
-    }
+    },
+    "score_source": null
   },
   {
     "game_key": "20251018_2300_texas_longhorns_kentucky",
@@ -1945,7 +2046,8 @@
         "mybookieag",
         "fanatics"
       ]
-    }
+    },
+    "score_source": null
   },
   {
     "game_key": "20251018_2330_florida_atlantic_south_florida",
@@ -1985,7 +2087,8 @@
         "betrivers",
         "fanatics"
       ]
-    }
+    },
+    "score_source": null
   },
   {
     "game_key": "20251018_2330_pittsburgh_syracuse",
@@ -2025,7 +2128,8 @@
         "mybookieag",
         "betrivers"
       ]
-    }
+    },
+    "score_source": null
   },
   {
     "game_key": "20251018_2330_tennessee_alabama_crimson_tide",
@@ -2064,7 +2168,8 @@
         "bovada",
         "betus"
       ]
-    }
+    },
+    "score_source": null
   },
   {
     "game_key": "20251018_2330_usc_trojans_notre_dame_fighting_irish",
@@ -2104,7 +2209,8 @@
         "bovada",
         "betus"
       ]
-    }
+    },
+    "score_source": null
   },
   {
     "game_key": "20251018_2345_missouri_auburn",
@@ -2144,7 +2250,8 @@
         "mybookieag",
         "fanatics"
       ]
-    }
+    },
+    "score_source": null
   },
   {
     "game_key": "20251019_0000_cincinnati_oklahoma_state",
@@ -2184,7 +2291,8 @@
         "mybookieag",
         "betrivers"
       ]
-    }
+    },
+    "score_source": null
   },
   {
     "game_key": "20251019_0000_utah_byu",
@@ -2223,7 +2331,8 @@
         "betus",
         "betrivers"
       ]
-    }
+    },
+    "score_source": null
   },
   {
     "game_key": "20251019_0145_nevada_new_mexico",
@@ -2263,7 +2372,8 @@
         "betrivers",
         "fanatics"
       ]
-    }
+    },
+    "score_source": null
   },
   {
     "game_key": "20251019_0230_florida_state_stanford",
@@ -2303,6 +2413,7 @@
         "mybookieag",
         "betrivers"
       ]
-    }
+    },
+    "score_source": null
   }
 ]

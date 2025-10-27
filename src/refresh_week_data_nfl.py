@@ -85,6 +85,76 @@ def _parse_kickoff(game: Dict[str, Any]) -> Optional[datetime]:
         return None
 
 
+def _coerce_score_value(value: Any) -> Optional[int]:
+    if _is_blank(value):
+        return None
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        try:
+            return int(float(value))
+        except Exception:
+            return None
+
+
+def _scores_from_sidecar(
+    game_key: str, sidecar_map: Dict[str, Dict[str, Any]], season: int, week: int
+) -> Tuple[Optional[int], Optional[int], Optional[str]]:
+    record = sidecar_map.get(game_key) or {}
+
+    def _scan(entries: Any) -> Tuple[Optional[int], Optional[int]]:
+        for row in entries or []:
+            if not isinstance(row, dict):
+                continue
+            try:
+                if int(row.get("season")) != season or int(row.get("week")) != week:
+                    continue
+            except Exception:
+                continue
+            pf = _coerce_score_value(row.get("pf"))
+            pa = _coerce_score_value(row.get("pa"))
+            if pf is not None and pa is not None:
+                return pf, pa
+        return None, None
+
+    home_pf, home_pa = _scan(record.get("home_ytd"))
+    if home_pf is not None and home_pa is not None:
+        return home_pf, home_pa, "home_ytd"
+
+    away_pf, away_pa = _scan(record.get("away_ytd"))
+    if away_pf is not None and away_pa is not None:
+        return away_pa, away_pf, "away_ytd"
+
+    return None, None, None
+
+
+def _extract_scores(
+    game: Dict[str, Any],
+    sidecar_map: Dict[str, Dict[str, Any]],
+    season: int,
+    week: int,
+) -> Tuple[Optional[int], Optional[int], Optional[str]]:
+    home_score = _coerce_score_value(game.get("home_score"))
+    away_score = _coerce_score_value(game.get("away_score"))
+    if home_score is not None and away_score is not None:
+        return home_score, away_score, "game"
+
+    schedule_row = (game.get("raw_sources") or {}).get("schedule_row") or {}
+    if home_score is None:
+        home_score = _coerce_score_value(schedule_row.get("home_score"))
+    if away_score is None:
+        away_score = _coerce_score_value(schedule_row.get("away_score"))
+    if home_score is not None and away_score is not None:
+        return home_score, away_score, "schedule_row"
+
+    game_key = str(game.get("game_key") or "")
+    sidecar_home, sidecar_away, source = _scores_from_sidecar(game_key, sidecar_map, season, week)
+    if sidecar_home is not None and sidecar_away is not None:
+        return sidecar_home, sidecar_away, source
+
+    return None, None, None
+
+
 def _week_sidecar_dir(league: str, season: int, week: int):
     root = ensure_out_dir()
     league_lower = league.lower()
@@ -335,31 +405,25 @@ def _ats_backfill_api(
                 debug_rows.append(debug_entry)  # type: ignore[arg-type]
             continue
 
-        home_score = game.get("home_score")
-        away_score = game.get("away_score")
-        if _is_blank(home_score) or _is_blank(away_score):
-            schedule_row = (game.get("raw_sources") or {}).get("schedule_row") or {}
-            if _is_blank(home_score):
-                home_score = schedule_row.get("home_score")
-            if _is_blank(away_score):
-                away_score = schedule_row.get("away_score")
-        try:
-            hs = int(home_score)
-            as_ = int(away_score)
-        except Exception:
+        home_score, away_score, score_source = _extract_scores(game, sidecar_map, season, week)
+        if home_score is None or away_score is None:
             counters["no_scores"] += 1
             if debug_enabled:
                 debug_entry["scores"] = {"home": home_score, "away": away_score}  # type: ignore[index]
+                debug_entry["score_source"] = score_source  # type: ignore[index]
                 debug_entry["reason"] = "no_scores"  # type: ignore[index]
                 debug_rows.append(debug_entry)  # type: ignore[arg-type]
             continue
 
+        hs = int(home_score)
+        as_ = int(away_score)
         _atsdbg(
             debug_enabled,
             f"ATSDBG({league_tag}): week={season}-{week} game={game_key} step=scores home={hs} away={as_}",
         )
         if debug_enabled:
             debug_entry["scores"] = {"home": hs, "away": as_}  # type: ignore[index]
+            debug_entry["score_source"] = score_source  # type: ignore[index]
 
         ats_payload = compute_ats(hs, as_, str(favored or ""), spread)
         if not ats_payload:
