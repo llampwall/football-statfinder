@@ -1023,8 +1023,6 @@ def main() -> int:
         master_rows = count_csv_rows(master_csv)
         print(f"PASS: CFB Sagarin rows={sag_rows}; master_total={master_rows}")
         notes.append(f"Sagarin rows={sag_rows}; master={master_rows}")
-    backfill_summary = backfill_cfb_scores(season, week)
-
     # Game view builder
     print("\n>>> Running src.gameview_build_cfb .")
     gameview_rc = run_module("src.gameview_build_cfb", season, week, check=False)
@@ -1033,6 +1031,7 @@ def main() -> int:
     if gameview_rc != 0 or not gv_jsonl.exists() or not gv_csv.exists():
         print("FAIL: CFB Game View build failed.")
         return gameview_rc or 1
+
     gv_records = read_jsonl(gv_jsonl)
     if not gv_records:
         print("FAIL: CFB Game View JSONL is empty.")
@@ -1088,6 +1087,7 @@ def main() -> int:
     if gameview_rc != 0 or not gv_jsonl.exists() or not gv_csv.exists():
         print("FAIL: CFB Game View build failed.")
         return gameview_rc or 1
+    backfill_summary = backfill_cfb_scores(season, week)
     gv_records = read_jsonl(gv_jsonl)
     if not gv_records:
         print("FAIL: CFB Game View JSONL is empty.")

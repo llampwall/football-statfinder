@@ -9,7 +9,7 @@ Spec anchors:
     - /context/global_week_and_provider_decoupling.md (C, E, F, H)
 
 Invariants:
-    * Only prior weeks (bounded by BACKFILL_WEEKS) are mutated.
+    * Only prior weeks plus the current week (when finals exist) are mutated.
     * JSONL/CSV rewrites are atomic (tmp write → replace).
     * Schedule master is treated as the authoritative score source.
 
@@ -18,7 +18,7 @@ Side effects:
       the matching CSV when updates occur.
 
 Do not:
-    * Touch the current week or future weeks.
+    * Touch future weeks beyond the configured window.
     * Overwrite existing scores when schedule master lacks finals.
 """
 
@@ -424,10 +424,15 @@ def backfill_nfl_scores(season: int, week: int) -> Dict[str, object]:
         return {"weeks": [], "updated": 0, "skipped": 0}
 
     include_weeks = int(getenv("BACKFILL_WEEKS", "2") or "2")
-    if include_weeks <= 0 or week <= 1:
-        return {"weeks": [], "updated": 0, "skipped": 0}
+    if include_weeks < 0:
+        include_weeks = 0
 
-    weeks = sorted([w for w in range(week - include_weeks, week) if w >= 1])
+    weeks: List[int] = []
+    if include_weeks > 0:
+        weeks.extend(sorted([w for w in range(week - include_weeks, week) if w >= 1]))
+    if week >= 1:
+        weeks.append(week)
+    weeks = sorted(set(weeks))
     if not weeks:
         return {"weeks": [], "updated": 0, "skipped": 0}
 

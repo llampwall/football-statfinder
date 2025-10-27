@@ -9,7 +9,7 @@ Spec anchors:
     - /context/global_week_and_provider_decoupling.md (D, E, F, I)
 
 Invariants:
-    * Only past weeks are touched; current week is never mutated.
+    * Only prior weeks plus the current week (when finals exist) are mutated.
     * Weekly files are rewritten atomically when updates occur.
     * Schedule master remains the source of truth for authoritative finals.
 
@@ -19,7 +19,7 @@ Side effects:
 
 Do not:
     * Attempt to infer scores when the schedule master lacks both totals.
-    * Modify weeks beyond the configured lookback window.
+    * Modify future weeks or anything beyond the configured lookback window.
 """
 
 from __future__ import annotations
@@ -389,10 +389,15 @@ def backfill_cfb_scores(
     """
     if include_weeks_back is None:
         include_weeks_back = int(getenv("BACKFILL_WEEKS", "2") or "2")
-    if include_weeks_back <= 0 or week <= 1:
-        return {"weeks": [], "updated": 0, "skipped": 0, "files_rewritten": 0}
+    if include_weeks_back < 0:
+        include_weeks_back = 0
 
-    weeks_to_scan = _derive_weeks_to_backfill(week, include_weeks_back)
+    weeks_to_scan: List[int] = []
+    if include_weeks_back > 0:
+        weeks_to_scan.extend(_derive_weeks_to_backfill(week, include_weeks_back))
+    if week >= 1:
+        weeks_to_scan.append(week)
+    weeks_to_scan = sorted(set(weeks_to_scan))
     if not weeks_to_scan:
         return {"weeks": [], "updated": 0, "skipped": 0, "files_rewritten": 0}
 
