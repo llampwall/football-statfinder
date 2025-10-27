@@ -34,15 +34,15 @@
         "kickoff_iso_utc": "2025-10-15T00:00:00Z"
       },
       {
-        "game_key": "20251015_2300_utep_sam_houston",
-        "home": "Sam Houston",
-        "away": "Utep",
-        "kickoff_iso_utc": "2025-10-15T23:00:00Z"
-      },
-      {
         "game_key": "20251015_2300_delaware_jacksonville_state",
         "home": "Jacksonville State",
         "away": "Delaware",
+        "kickoff_iso_utc": "2025-10-15T23:00:00Z"
+      },
+      {
+        "game_key": "20251015_2300_utep_sam_houston",
+        "home": "Sam Houston",
+        "away": "Utep",
         "kickoff_iso_utc": "2025-10-15T23:00:00Z"
       },
       {
