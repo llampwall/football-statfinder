@@ -144,6 +144,8 @@ def _ats_backfill_api(
     source_counts: Counter[str] = Counter()
     resolver_counts: Counter[str] = Counter()
     counters: Counter[str] = Counter()
+    book_counts: Counter[str] = Counter()
+    total_probe_steps = 0
     games_fixed = 0
     week_dirty = False
     sidecar_dirty: Set[str] = set()
@@ -196,6 +198,7 @@ def _ats_backfill_api(
                 "merged_week_fields": [],
                 "patched_sidecar": {"home": False, "away": False},
                 "reason": None,
+                "probe_steps": 0,
             }
 
         week_fields = (
@@ -223,8 +226,12 @@ def _ats_backfill_api(
             debug_entry["kickoff"] = kickoff_iso  # type: ignore[index]
         if kickoff_dt is None:
             counters["no_kickoff"] += 1
+            if debug_enabled:
+                debug_entry["reason"] = "no_kickoff"  # type: ignore[index]
+                debug_rows.append(debug_entry)  # type: ignore[arg-type]
+            continue
 
-        event_id, resolver_used = resolve_event_id(
+        event_id, resolver_used, resolver_reason = resolve_event_id(
             league,
             season,
             week,
@@ -239,11 +246,15 @@ def _ats_backfill_api(
         if debug_enabled:
             debug_entry["resolver"] = resolver_used  # type: ignore[index]
             debug_entry["event_id"] = event_id  # type: ignore[index]
+            if resolver_reason:
+                debug_entry["resolver_reason"] = resolver_reason  # type: ignore[index]
 
         if not event_id:
             counters["resolve_failed"] += 1
+            if resolver_reason:
+                counters[resolver_reason] += 1
             if debug_enabled:
-                debug_entry["reason"] = "resolve_failed"  # type: ignore[index]
+                debug_entry["reason"] = resolver_reason or "resolve_failed"  # type: ignore[index]
                 debug_rows.append(debug_entry)  # type: ignore[arg-type]
             continue
 
@@ -255,11 +266,21 @@ def _ats_backfill_api(
             away_name=game.get("away_team_norm") or game.get("away_team_raw") or "",
         )
         selection = selection or {}
+        try:
+            probe_steps = int(selection.get("probe_steps", 0) or 0)
+        except (TypeError, ValueError):
+            probe_steps = 0
+        total_probe_steps += probe_steps
+        if debug_enabled and debug_entry is not None:
+            debug_entry["probe_steps"] = probe_steps  # type: ignore[index]
         status = selection.get("status", "hist_odds_none")
         if status != "ok":
             counters[status] += 1
+            selection_reason = selection.get("reason")
+            if selection_reason:
+                counters[selection_reason] += 1
             if debug_enabled:
-                debug_entry["reason"] = status  # type: ignore[index]
+                debug_entry["reason"] = selection_reason or status  # type: ignore[index]
                 debug_entry["books"] = {  # type: ignore[index]
                     "raw": selection.get("raw_book_count", 0),
                     "kept": selection.get("kept_book_count", 0),
@@ -295,12 +316,15 @@ def _ats_backfill_api(
             debug_entry["favored_team"] = selection.get("favored_team")  # type: ignore[index]
             debug_entry["spread"] = selection.get("spread")  # type: ignore[index]
             debug_entry["snapshot_date"] = snapshot_date  # type: ignore[index]
+            debug_entry["snapshot_used"] = selection.get("snapshot_used", snapshot_date)  # type: ignore[index]
             debug_entry["books"] = {
                 "raw": selection.get("raw_book_count", 0),
                 "kept": selection.get("kept_book_count", 0),
                 "names": selection.get("kept_book_names", []),
             }  # type: ignore[index]
-
+        book_name = (selection.get("book") or "").strip()
+        if book_name:
+            book_counts[book_name.lower()] += 1
         favored = selection.get("favored_team")
         try:
             spread = float(selection["spread"])
@@ -457,12 +481,18 @@ def _ats_backfill_api(
 
     used = ODDS_API_USAGE.get("used")
     remaining = ODDS_API_USAGE.get("remaining")
+    if book_counts:
+        book_summary_items = ",".join(f"{name}:{book_counts[name]}" for name in sorted(book_counts))
+        book_summary = "{" + book_summary_items + "}"
+    else:
+        book_summary = "{}"
     summary_line = (
         f"ATS_BACKFILL(API {league_tag}): week={season}-{week} games_fixed={games_fixed} "
         f"sources={{history:{source_counts.get('history', 0)},current:{source_counts.get('current', 0)}}} "
         f"resolve={{pinned:{resolver_counts.get('pinned', 0)},events:{resolver_counts.get('events', 0)},failed:{resolver_counts.get('failed', 0)}}} "
-        f"skips={{already_populated:{counters.get('already_populated', 0)},no_kickoff:{counters.get('no_kickoff', 0)},resolve_failed:{counters.get('resolve_failed', 0)},hist_odds_none:{counters.get('hist_odds_none', 0)},hist_odds_filtered:{counters.get('hist_odds_filtered', 0)},invalid_spread:{counters.get('invalid_spread', 0)},no_scores:{counters.get('no_scores', 0)}}} "
+        f"skips={{already_populated:{counters.get('already_populated', 0)},no_kickoff:{counters.get('no_kickoff', 0)},resolve_failed:{counters.get('resolve_failed', 0)},no_provider_map:{counters.get('no_provider_map', 0)},no_event_match:{counters.get('no_event_match', 0)},time_guard_miss:{counters.get('time_guard_miss', 0)},hist_odds_none:{counters.get('hist_odds_none', 0)},hist_odds_filtered:{counters.get('hist_odds_filtered', 0)},invalid_spread:{counters.get('invalid_spread', 0)},no_scores:{counters.get('no_scores', 0)}}} "
         f"writes={{merged_week:{counters.get('merged_week', 0)},patched_sidecar:{counters.get('patched_sidecar', 0)}}} "
+        f"books={book_summary} probes_total={total_probe_steps} "
         f"usage=used:{used},remaining:{remaining}"
     )
     print(summary_line)

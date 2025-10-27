@@ -7,7 +7,7 @@ Ship features and fixes **safely and deterministically** under Policy + Canon.
 All code paths in this repo; prefer surgical patches; never break logging/NOTIFY contracts.
 
 **Must Read Inputs**  
-- Canon: `ats_api_backfill_spec.md`, `context/merge_summary_global_week.md`
+- Canon: `context/ats_api_backfill_spec.md`, `context/ats_backfill_flow.md`, `context/merge_summary_global_week.md`
 - Guidelines: `context/CODEX_RULES.md`
 - (When relevant) SPEC/UI notes
 

@@ -1,0 +1,211 @@
+{
+  "bookmakers": [
+    {
+      "key": "draftkings",
+      "title": "DraftKings",
+      "last_update": "2025-10-14T11:54:38Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:54:38Z",
+          "outcomes": [
+            {
+              "name": "Georgia Bulldogs",
+              "price": -115,
+              "point": -7.0
+            },
+            {
+              "name": "Ole Miss Rebels",
+              "price": -105,
+              "point": 7.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "betonlineag",
+      "title": "BetOnline.ag",
+      "last_update": "2025-10-14T11:55:19Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:55:19Z",
+          "outcomes": [
+            {
+              "name": "Georgia Bulldogs",
+              "price": -117,
+              "point": -7.0
+            },
+            {
+              "name": "Ole Miss Rebels",
+              "price": -103,
+              "point": 7.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "fanduel",
+      "title": "FanDuel",
+      "last_update": "2025-10-14T11:55:10Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:55:10Z",
+          "outcomes": [
+            {
+              "name": "Georgia Bulldogs",
+              "price": -110,
+              "point": -7.5
+            },
+            {
+              "name": "Ole Miss Rebels",
+              "price": -110,
+              "point": 7.5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "betrivers",
+      "title": "BetRivers",
+      "last_update": "2025-10-14T11:53:57Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:53:57Z",
+          "outcomes": [
+            {
+              "name": "Georgia Bulldogs",
+              "price": -117,
+              "point": -7.0
+            },
+            {
+              "name": "Ole Miss Rebels",
+              "price": -107,
+              "point": 7.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "betmgm",
+      "title": "BetMGM",
+      "last_update": "2025-10-14T11:55:20Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:55:19Z",
+          "outcomes": [
+            {
+              "name": "Georgia Bulldogs",
+              "price": -115,
+              "point": -7.0
+            },
+            {
+              "name": "Ole Miss Rebels",
+              "price": -105,
+              "point": 7.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "fanatics",
+      "title": "Fanatics",
+      "last_update": "2025-10-14T11:55:29Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:55:29Z",
+          "outcomes": [
+            {
+              "name": "Georgia Bulldogs",
+              "price": -115,
+              "point": -7.0
+            },
+            {
+              "name": "Ole Miss Rebels",
+              "price": -105,
+              "point": 7.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "williamhill_us",
+      "title": "Caesars",
+      "last_update": "2025-10-14T11:54:53Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:54:53Z",
+          "outcomes": [
+            {
+              "name": "Georgia Bulldogs",
+              "price": -115,
+              "point": -7.0
+            },
+            {
+              "name": "Ole Miss Rebels",
+              "price": -105,
+              "point": 7.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "bovada",
+      "title": "Bovada",
+      "last_update": "2025-10-14T11:55:35Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:55:35Z",
+          "outcomes": [
+            {
+              "name": "Georgia Bulldogs",
+              "price": -120,
+              "point": -7.0
+            },
+            {
+              "name": "Ole Miss Rebels",
+              "price": 100,
+              "point": 7.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "betus",
+      "title": "BetUS",
+      "last_update": "2025-10-14T11:55:20Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:55:20Z",
+          "outcomes": [
+            {
+              "name": "Georgia Bulldogs",
+              "price": -115,
+              "point": -7.0
+            },
+            {
+              "name": "Ole Miss Rebels",
+              "price": -105,
+              "point": 7.0
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

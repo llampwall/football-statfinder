@@ -27,7 +27,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 from src.common.io_utils import ensure_out_dir
-from src.odds.historical_events import list_week_events, get_last_snapshot
+from src.odds.historical_events import get_last_snapshot, list_week_events
 from src.odds.odds_api_client import get_historical_spread
 from src.odds.participants_cache import provider_name_for, provider_token
 
@@ -99,7 +99,7 @@ def resolve_event_id(
     game_row: Dict[str, Any],
     *,
     pinned_index: Optional[Dict[str, str]] = None,
-) -> Tuple[Optional[str], str]:
+) -> Tuple[Optional[str], str, Optional[str]]:
     """Resolve the Odds API event id for a game via pinned map or historical events."""
     game_key = str(game_row.get("game_key") or "")
 
@@ -108,6 +108,8 @@ def resolve_event_id(
     provider_home, home_status = provider_name_for(league, str(home_name or ""))
     provider_away, away_status = provider_name_for(league, str(away_name or ""))
     mapping = f"h='{home_name}'->'{provider_home or '?'}' a='{away_name}'->'{provider_away or '?'}'"
+    provider_issue = any(status != "mapped" for status in (home_status, away_status))
+    provider_reason = "no_provider_map" if provider_issue else None
 
     if pinned_index and game_key:
         pinned = pinned_index.get(game_key)
@@ -117,25 +119,26 @@ def resolve_event_id(
                 f"{mapping} resolver=pinned event_id={pinned}",
                 flush=True,
             )
-            return pinned, "pinned"
+            return pinned, "pinned", None
 
     kickoff_dt = _extract_kickoff(game_row)
     if kickoff_dt is None:
-        print(
-            f"ATSDBG(RESOLVE): league={league} week={season}-{week} game={game_key} "
-            f"{mapping} resolver=failed reason=no_kickoff event_id=-",
-            flush=True,
-        )
-        return None, "failed"
-
-    if home_status != "mapped" or away_status != "mapped":
-        reason = "ambiguous_provider" if "ambiguous" in {home_status, away_status} else "no_provider_map"
+        reason = "no_kickoff"
         print(
             f"ATSDBG(RESOLVE): league={league} week={season}-{week} game={game_key} "
             f"{mapping} resolver=failed reason={reason} event_id=-",
             flush=True,
         )
-        return None, "failed"
+        return None, "failed", reason
+
+    if provider_issue:
+        reason = provider_reason
+        print(
+            f"ATSDBG(RESOLVE): league={league} week={season}-{week} game={game_key} "
+            f"{mapping} resolver=failed reason={reason} event_id=-",
+            flush=True,
+        )
+        return None, "failed", reason
 
     target_home_token = provider_token(league, provider_home or "")
     target_away_token = provider_token(league, provider_away or "")
@@ -172,7 +175,7 @@ def resolve_event_id(
             f"{mapping} resolver=failed reason={reason} event_id=-",
             flush=True,
         )
-        return None, "failed"
+        return None, "failed", reason
 
     event_id = best_event.get("id")
     if isinstance(event_id, (str, int)):
@@ -182,14 +185,14 @@ def resolve_event_id(
             f"{mapping} resolver=events event_id={resolved_id}",
             flush=True,
         )
-        return resolved_id, "events"
+        return resolved_id, "events", None
 
     print(
         f"ATSDBG(RESOLVE): league={league} week={season}-{week} game={game_key} "
         f"{mapping} resolver=failed reason=invalid_event_id event_id=-",
         flush=True,
     )
-    return None, "failed"
+    return None, "failed", "invalid_event_id"
 
 
 
@@ -200,32 +203,43 @@ def select_closing_spread(
     home_name: str,
     away_name: str,
 ) -> Optional[Dict[str, Any]]:
-    """Fetch historical odds snapshot aligned with the historical events snapshot."""
+    """Fetch per-game historical odds snapshot using the weekly historical snapshot."""
     kickoff_dt = _parse_ts(kickoff_iso)
+    if kickoff_dt is None:
+        return {
+            "status": "hist_odds_none",
+            "raw_book_count": 0,
+            "kept_book_count": 0,
+            "kept_book_names": [],
+            "source": "history",
+            "probe_steps": 0,
+            "reason": "no_kickoff",
+        }
+
     snapshot_dt = get_last_snapshot(league)
-    if kickoff_dt is None and snapshot_dt is None:
-        return {"status": "hist_odds_none", "raw_book_count": 0, "kept_book_count": 0, "kept_book_names": [], "source": "history"}
-
-    if kickoff_dt is None and snapshot_dt is not None:
-        kickoff_dt = snapshot_dt
-
     if snapshot_dt is not None:
-        snapshot_iso = snapshot_dt.strftime("%Y-%m-%dT%H:%M:%SZ")
+        snapshot_iso = snapshot_dt.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+        snapshot_reason = None
     else:
-        snapshot_iso = _normalize_kickoff(None, kickoff_iso)
+        snapshot_iso = _normalize_kickoff(kickoff_dt, kickoff_iso)
+        snapshot_reason = "no_snapshot"
 
-    if not kickoff_dt or not snapshot_iso:
-        return {"status": "hist_odds_none", "raw_book_count": 0, "kept_book_count": 0, "kept_book_names": [], "source": "history"}
+    provider_home_name, _ = provider_name_for(league, home_name)
+    provider_away_name, _ = provider_name_for(league, away_name)
 
     result = get_historical_spread(
         league,
         event_id,
         snapshot_iso,
-        home_name,
-        away_name,
+        provider_home_name or home_name,
+        provider_away_name or away_name,
         kickoff_dt,
     )
     result.setdefault("snapshot_date", snapshot_iso)
+    result.setdefault("snapshot_used", snapshot_iso)
+    result.setdefault("probe_steps", 1)
+    if snapshot_reason and "reason" not in result:
+        result["reason"] = snapshot_reason
     return result
 
 

@@ -1,0 +1,257 @@
+{
+  "bookmakers": [
+    {
+      "key": "draftkings",
+      "title": "DraftKings",
+      "last_update": "2025-10-14T11:54:38Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:54:38Z",
+          "outcomes": [
+            {
+              "name": "Charlotte 49ers",
+              "price": -110,
+              "point": 11.5
+            },
+            {
+              "name": "Temple Owls",
+              "price": -110,
+              "point": -11.5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "williamhill_us",
+      "title": "Caesars",
+      "last_update": "2025-10-14T11:54:53Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:54:53Z",
+          "outcomes": [
+            {
+              "name": "Charlotte 49ers",
+              "price": -110,
+              "point": 11.5
+            },
+            {
+              "name": "Temple Owls",
+              "price": -110,
+              "point": -11.5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "betonlineag",
+      "title": "BetOnline.ag",
+      "last_update": "2025-10-14T11:55:19Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:55:19Z",
+          "outcomes": [
+            {
+              "name": "Charlotte 49ers",
+              "price": -105,
+              "point": 10.5
+            },
+            {
+              "name": "Temple Owls",
+              "price": -115,
+              "point": -10.5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "lowvig",
+      "title": "LowVig.ag",
+      "last_update": "2025-10-14T11:55:09Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:55:09Z",
+          "outcomes": [
+            {
+              "name": "Charlotte 49ers",
+              "price": -101,
+              "point": 10.5
+            },
+            {
+              "name": "Temple Owls",
+              "price": -111,
+              "point": -10.5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "fanatics",
+      "title": "Fanatics",
+      "last_update": "2025-10-14T11:55:29Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:55:29Z",
+          "outcomes": [
+            {
+              "name": "Charlotte 49ers",
+              "price": -110,
+              "point": 12.0
+            },
+            {
+              "name": "Temple Owls",
+              "price": -110,
+              "point": -12.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "fanduel",
+      "title": "FanDuel",
+      "last_update": "2025-10-14T11:55:10Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:55:10Z",
+          "outcomes": [
+            {
+              "name": "Charlotte 49ers",
+              "price": -110,
+              "point": 11.5
+            },
+            {
+              "name": "Temple Owls",
+              "price": -110,
+              "point": -11.5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "bovada",
+      "title": "Bovada",
+      "last_update": "2025-10-14T11:55:35Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:55:35Z",
+          "outcomes": [
+            {
+              "name": "Charlotte 49ers",
+              "price": -110,
+              "point": 12.5
+            },
+            {
+              "name": "Temple Owls",
+              "price": -110,
+              "point": -12.5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "mybookieag",
+      "title": "MyBookie.ag",
+      "last_update": "2025-10-14T11:54:59Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:54:59Z",
+          "outcomes": [
+            {
+              "name": "Charlotte 49ers",
+              "price": -110,
+              "point": 11.5
+            },
+            {
+              "name": "Temple Owls",
+              "price": -110,
+              "point": -11.5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "betmgm",
+      "title": "BetMGM",
+      "last_update": "2025-10-14T11:55:20Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:55:19Z",
+          "outcomes": [
+            {
+              "name": "Charlotte 49ers",
+              "price": -110,
+              "point": 11.5
+            },
+            {
+              "name": "Temple Owls",
+              "price": -110,
+              "point": -11.5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "betus",
+      "title": "BetUS",
+      "last_update": "2025-10-14T11:55:20Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:55:20Z",
+          "outcomes": [
+            {
+              "name": "Charlotte 49ers",
+              "price": -105,
+              "point": 10.5
+            },
+            {
+              "name": "Temple Owls",
+              "price": -115,
+              "point": -10.5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "betrivers",
+      "title": "BetRivers",
+      "last_update": "2025-10-14T11:53:57Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:53:57Z",
+          "outcomes": [
+            {
+              "name": "Charlotte 49ers",
+              "price": -112,
+              "point": 11.5
+            },
+            {
+              "name": "Temple Owls",
+              "price": -112,
+              "point": -11.5
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

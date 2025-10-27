@@ -1,0 +1,234 @@
+{
+  "bookmakers": [
+    {
+      "key": "fanduel",
+      "title": "FanDuel",
+      "last_update": "2025-10-14T11:55:10Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:55:10Z",
+          "outcomes": [
+            {
+              "name": "Iowa Hawkeyes",
+              "price": -115,
+              "point": -2.5
+            },
+            {
+              "name": "Penn State Nittany Lions",
+              "price": -105,
+              "point": 2.5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "draftkings",
+      "title": "DraftKings",
+      "last_update": "2025-10-14T11:54:38Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:54:38Z",
+          "outcomes": [
+            {
+              "name": "Iowa Hawkeyes",
+              "price": -105,
+              "point": -3.0
+            },
+            {
+              "name": "Penn State Nittany Lions",
+              "price": -115,
+              "point": 3.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "betrivers",
+      "title": "BetRivers",
+      "last_update": "2025-10-14T11:53:57Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:53:57Z",
+          "outcomes": [
+            {
+              "name": "Iowa Hawkeyes",
+              "price": -104,
+              "point": -3.0
+            },
+            {
+              "name": "Penn State Nittany Lions",
+              "price": -121,
+              "point": 3.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "fanatics",
+      "title": "Fanatics",
+      "last_update": "2025-10-14T11:55:29Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:55:29Z",
+          "outcomes": [
+            {
+              "name": "Iowa Hawkeyes",
+              "price": -105,
+              "point": -3.0
+            },
+            {
+              "name": "Penn State Nittany Lions",
+              "price": -115,
+              "point": 3.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "williamhill_us",
+      "title": "Caesars",
+      "last_update": "2025-10-14T11:54:53Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:54:53Z",
+          "outcomes": [
+            {
+              "name": "Iowa Hawkeyes",
+              "price": -110,
+              "point": -3.0
+            },
+            {
+              "name": "Penn State Nittany Lions",
+              "price": -110,
+              "point": 3.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "lowvig",
+      "title": "LowVig.ag",
+      "last_update": "2025-10-14T11:55:09Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:55:09Z",
+          "outcomes": [
+            {
+              "name": "Iowa Hawkeyes",
+              "price": -106,
+              "point": -3.0
+            },
+            {
+              "name": "Penn State Nittany Lions",
+              "price": -106,
+              "point": 3.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "betonlineag",
+      "title": "BetOnline.ag",
+      "last_update": "2025-10-14T11:55:19Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:55:19Z",
+          "outcomes": [
+            {
+              "name": "Iowa Hawkeyes",
+              "price": -110,
+              "point": -3.0
+            },
+            {
+              "name": "Penn State Nittany Lions",
+              "price": -110,
+              "point": 3.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "bovada",
+      "title": "Bovada",
+      "last_update": "2025-10-14T11:55:35Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:55:35Z",
+          "outcomes": [
+            {
+              "name": "Iowa Hawkeyes",
+              "price": -120,
+              "point": -2.5
+            },
+            {
+              "name": "Penn State Nittany Lions",
+              "price": 100,
+              "point": 2.5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "betmgm",
+      "title": "BetMGM",
+      "last_update": "2025-10-14T11:55:20Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:55:19Z",
+          "outcomes": [
+            {
+              "name": "Iowa Hawkeyes",
+              "price": -110,
+              "point": -3.0
+            },
+            {
+              "name": "Penn State Nittany Lions",
+              "price": -110,
+              "point": 3.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "betus",
+      "title": "BetUS",
+      "last_update": "2025-10-14T11:55:20Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:55:20Z",
+          "outcomes": [
+            {
+              "name": "Iowa Hawkeyes",
+              "price": -105,
+              "point": -3.0
+            },
+            {
+              "name": "Penn State Nittany Lions",
+              "price": -115,
+              "point": 3.0
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

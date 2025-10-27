@@ -3,10 +3,10 @@
     "game_key": "20251014_2300_new_mexico_state_liberty",
     "resolver": "events",
     "event_id": "f63b3ba5fb0084b3b5d735394f10ce43",
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
+    "endpoint": "historical_event_odds",
+    "book": "fanduel",
+    "favored_team": "HOME",
+    "spread": 9.5,
     "kickoff": "2025-10-14T23:00:00+00:00",
     "scores": {
       "home": null,
@@ -18,21 +18,36 @@
       "home": false,
       "away": false
     },
-    "reason": "hist_odds_none",
+    "reason": "no_scores",
+    "probe_steps": 1,
+    "snapshot_date": "2025-10-14T12:00:00Z",
+    "snapshot_used": "2025-10-14T12:00:00Z",
     "books": {
-      "raw": 0,
-      "kept": 0,
-      "names": []
+      "raw": 11,
+      "kept": 11,
+      "names": [
+        "fanduel",
+        "mybookieag",
+        "fanatics",
+        "betrivers",
+        "draftkings",
+        "betmgm",
+        "betonlineag",
+        "williamhill_us",
+        "lowvig",
+        "betus",
+        "bovada"
+      ]
     }
   },
   {
     "game_key": "20251014_2330_arkansas_state_south_alabama",
     "resolver": "events",
     "event_id": "c2d428cbf0b787ee8c1fe0402266ea6c",
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
+    "endpoint": "historical_event_odds",
+    "book": "fanduel",
+    "favored_team": "HOME",
+    "spread": 7.5,
     "kickoff": "2025-10-14T23:30:00+00:00",
     "scores": {
       "home": null,
@@ -44,21 +59,36 @@
       "home": false,
       "away": false
     },
-    "reason": "hist_odds_none",
+    "reason": "no_scores",
+    "probe_steps": 1,
+    "snapshot_date": "2025-10-14T12:00:00Z",
+    "snapshot_used": "2025-10-14T12:00:00Z",
     "books": {
-      "raw": 0,
-      "kept": 0,
-      "names": []
+      "raw": 11,
+      "kept": 11,
+      "names": [
+        "fanduel",
+        "fanatics",
+        "mybookieag",
+        "betrivers",
+        "draftkings",
+        "betmgm",
+        "williamhill_us",
+        "betonlineag",
+        "lowvig",
+        "betus",
+        "bovada"
+      ]
     }
   },
   {
     "game_key": "20251015_0000_florida_international_western_kentucky",
     "resolver": "events",
     "event_id": "195edecefe4d9e28b6370f4cca6696c9",
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
+    "endpoint": "historical_event_odds",
+    "book": "fanduel",
+    "favored_team": "HOME",
+    "spread": 9.5,
     "kickoff": "2025-10-15T00:00:00+00:00",
     "scores": {
       "home": null,
@@ -70,21 +100,36 @@
       "home": false,
       "away": false
     },
-    "reason": "hist_odds_none",
+    "reason": "no_scores",
+    "probe_steps": 1,
+    "snapshot_date": "2025-10-14T12:00:00Z",
+    "snapshot_used": "2025-10-14T12:00:00Z",
     "books": {
-      "raw": 0,
-      "kept": 0,
-      "names": []
+      "raw": 11,
+      "kept": 11,
+      "names": [
+        "fanduel",
+        "fanatics",
+        "draftkings",
+        "mybookieag",
+        "betrivers",
+        "betmgm",
+        "williamhill_us",
+        "betonlineag",
+        "lowvig",
+        "betus",
+        "bovada"
+      ]
     }
   },
   {
     "game_key": "20251015_2300_delaware_jacksonville_state",
     "resolver": "events",
     "event_id": "0d244c0f45b386c4306834705afb971f",
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
+    "endpoint": "historical_event_odds",
+    "book": "fanduel",
+    "favored_team": "AWAY",
+    "spread": 2.5,
     "kickoff": "2025-10-15T23:00:00+00:00",
     "scores": {
       "home": null,
@@ -96,11 +141,26 @@
       "home": false,
       "away": false
     },
-    "reason": "hist_odds_none",
+    "reason": "no_scores",
+    "probe_steps": 1,
+    "snapshot_date": "2025-10-14T12:00:00Z",
+    "snapshot_used": "2025-10-14T12:00:00Z",
     "books": {
-      "raw": 0,
-      "kept": 0,
-      "names": []
+      "raw": 11,
+      "kept": 11,
+      "names": [
+        "fanduel",
+        "mybookieag",
+        "fanatics",
+        "draftkings",
+        "betrivers",
+        "betmgm",
+        "williamhill_us",
+        "betonlineag",
+        "lowvig",
+        "betus",
+        "bovada"
+      ]
     }
   },
   {
@@ -122,7 +182,9 @@
       "home": false,
       "away": false
     },
-    "reason": "resolve_failed"
+    "reason": "no_event_match",
+    "probe_steps": 0,
+    "resolver_reason": "no_event_match"
   },
   {
     "game_key": "20251016_2330_tulsa_east_carolina",
@@ -143,16 +205,18 @@
       "home": false,
       "away": false
     },
-    "reason": "resolve_failed"
+    "reason": "no_provider_map",
+    "probe_steps": 0,
+    "resolver_reason": "no_provider_map"
   },
   {
     "game_key": "20251017_2300_louisville_miami",
     "resolver": "events",
     "event_id": "10a111c1fd81ba0536dae762d6f9f933",
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
+    "endpoint": "historical_event_odds",
+    "book": "fanduel",
+    "favored_team": "HOME",
+    "spread": 13.5,
     "kickoff": "2025-10-17T23:00:00+00:00",
     "scores": {
       "home": null,
@@ -164,21 +228,36 @@
       "home": false,
       "away": false
     },
-    "reason": "hist_odds_none",
+    "reason": "no_scores",
+    "probe_steps": 1,
+    "snapshot_date": "2025-10-14T12:00:00Z",
+    "snapshot_used": "2025-10-14T12:00:00Z",
     "books": {
-      "raw": 0,
-      "kept": 0,
-      "names": []
+      "raw": 11,
+      "kept": 11,
+      "names": [
+        "draftkings",
+        "fanduel",
+        "mybookieag",
+        "fanatics",
+        "betrivers",
+        "betmgm",
+        "williamhill_us",
+        "lowvig",
+        "betonlineag",
+        "bovada",
+        "betus"
+      ]
     }
   },
   {
     "game_key": "20251018_0000_nebraska_minnesota",
     "resolver": "events",
     "event_id": "92964692e49d56868cc78cea5254c061",
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
+    "endpoint": "historical_event_odds",
+    "book": "fanduel",
+    "favored_team": "AWAY",
+    "spread": 9.5,
     "kickoff": "2025-10-18T00:00:00+00:00",
     "scores": {
       "home": null,
@@ -190,11 +269,26 @@
       "home": false,
       "away": false
     },
-    "reason": "hist_odds_none",
+    "reason": "no_scores",
+    "probe_steps": 1,
+    "snapshot_date": "2025-10-14T12:00:00Z",
+    "snapshot_used": "2025-10-14T12:00:00Z",
     "books": {
-      "raw": 0,
-      "kept": 0,
-      "names": []
+      "raw": 11,
+      "kept": 11,
+      "names": [
+        "fanduel",
+        "draftkings",
+        "mybookieag",
+        "fanatics",
+        "betrivers",
+        "betmgm",
+        "williamhill_us",
+        "lowvig",
+        "betonlineag",
+        "bovada",
+        "betus"
+      ]
     }
   },
   {
@@ -216,16 +310,18 @@
       "home": false,
       "away": false
     },
-    "reason": "resolve_failed"
+    "reason": "no_provider_map",
+    "probe_steps": 0,
+    "resolver_reason": "no_provider_map"
   },
   {
     "game_key": "20251018_0230_north_carolina_california",
     "resolver": "events",
     "event_id": "078a33fd428923f0d673fd35a79edc42",
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
+    "endpoint": "historical_event_odds",
+    "book": "fanduel",
+    "favored_team": "HOME",
+    "spread": 9.5,
     "kickoff": "2025-10-18T02:30:00+00:00",
     "scores": {
       "home": null,
@@ -237,21 +333,36 @@
       "home": false,
       "away": false
     },
-    "reason": "hist_odds_none",
+    "reason": "no_scores",
+    "probe_steps": 1,
+    "snapshot_date": "2025-10-14T12:00:00Z",
+    "snapshot_used": "2025-10-14T12:00:00Z",
     "books": {
-      "raw": 0,
-      "kept": 0,
-      "names": []
+      "raw": 11,
+      "kept": 11,
+      "names": [
+        "fanduel",
+        "draftkings",
+        "mybookieag",
+        "fanatics",
+        "williamhill_us",
+        "lowvig",
+        "betonlineag",
+        "betmgm",
+        "bovada",
+        "betrivers",
+        "betus"
+      ]
     }
   },
   {
     "game_key": "20251018_1600_arizona_houston",
     "resolver": "events",
     "event_id": "1719a33bcb26ce3c5119d8dbbe883d08",
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
+    "endpoint": "historical_event_odds",
+    "book": "fanduel",
+    "favored_team": "HOME",
+    "spread": 1.5,
     "kickoff": "2025-10-18T16:00:00+00:00",
     "scores": {
       "home": null,
@@ -263,21 +374,36 @@
       "home": false,
       "away": false
     },
-    "reason": "hist_odds_none",
+    "reason": "no_scores",
+    "probe_steps": 1,
+    "snapshot_date": "2025-10-14T12:00:00Z",
+    "snapshot_used": "2025-10-14T12:00:00Z",
     "books": {
-      "raw": 0,
-      "kept": 0,
-      "names": []
+      "raw": 11,
+      "kept": 11,
+      "names": [
+        "fanduel",
+        "mybookieag",
+        "draftkings",
+        "fanatics",
+        "williamhill_us",
+        "lowvig",
+        "betonlineag",
+        "bovada",
+        "betmgm",
+        "betus",
+        "betrivers"
+      ]
     }
   },
   {
     "game_key": "20251018_1600_army_tulane",
     "resolver": "events",
     "event_id": "aecb861cfa6664f9cbb94adfd16b16f8",
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
+    "endpoint": "historical_event_odds",
+    "book": "fanduel",
+    "favored_team": "HOME",
+    "spread": 9.5,
     "kickoff": "2025-10-18T16:00:00+00:00",
     "scores": {
       "home": null,
@@ -289,21 +415,36 @@
       "home": false,
       "away": false
     },
-    "reason": "hist_odds_none",
+    "reason": "no_scores",
+    "probe_steps": 1,
+    "snapshot_date": "2025-10-14T12:00:00Z",
+    "snapshot_used": "2025-10-14T12:00:00Z",
     "books": {
-      "raw": 0,
-      "kept": 0,
-      "names": []
+      "raw": 11,
+      "kept": 11,
+      "names": [
+        "fanduel",
+        "mybookieag",
+        "draftkings",
+        "fanatics",
+        "williamhill_us",
+        "lowvig",
+        "betonlineag",
+        "bovada",
+        "betmgm",
+        "betus",
+        "betrivers"
+      ]
     }
   },
   {
     "game_key": "20251018_1600_baylor_tcu",
     "resolver": "events",
     "event_id": "f087da86c9f333ede5023b3c5da3e683",
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
+    "endpoint": "historical_event_odds",
+    "book": "fanduel",
+    "favored_team": "HOME",
+    "spread": 2.5,
     "kickoff": "2025-10-18T16:00:00+00:00",
     "scores": {
       "home": null,
@@ -315,21 +456,36 @@
       "home": false,
       "away": false
     },
-    "reason": "hist_odds_none",
+    "reason": "no_scores",
+    "probe_steps": 1,
+    "snapshot_date": "2025-10-14T12:00:00Z",
+    "snapshot_used": "2025-10-14T12:00:00Z",
     "books": {
-      "raw": 0,
-      "kept": 0,
-      "names": []
+      "raw": 11,
+      "kept": 11,
+      "names": [
+        "fanduel",
+        "betrivers",
+        "mybookieag",
+        "draftkings",
+        "fanatics",
+        "williamhill_us",
+        "betonlineag",
+        "lowvig",
+        "bovada",
+        "betmgm",
+        "betus"
+      ]
     }
   },
   {
     "game_key": "20251018_1600_central_michigan_bowling_green",
     "resolver": "events",
     "event_id": "09dc8e89288cf0e0a7b356ecba1368bf",
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
+    "endpoint": "historical_event_odds",
+    "book": "fanduel",
+    "favored_team": "HOME",
+    "spread": 3.5,
     "kickoff": "2025-10-18T16:00:00+00:00",
     "scores": {
       "home": null,
@@ -341,21 +497,36 @@
       "home": false,
       "away": false
     },
-    "reason": "hist_odds_none",
+    "reason": "no_scores",
+    "probe_steps": 1,
+    "snapshot_date": "2025-10-14T12:00:00Z",
+    "snapshot_used": "2025-10-14T12:00:00Z",
     "books": {
-      "raw": 0,
-      "kept": 0,
-      "names": []
+      "raw": 11,
+      "kept": 11,
+      "names": [
+        "draftkings",
+        "williamhill_us",
+        "lowvig",
+        "betonlineag",
+        "mybookieag",
+        "fanatics",
+        "fanduel",
+        "betmgm",
+        "bovada",
+        "betus",
+        "betrivers"
+      ]
     }
   },
   {
     "game_key": "20251018_1600_eastern_michigan_miami_oh",
     "resolver": "events",
     "event_id": "9ae9257ec6ad7304073eab4e09b08569",
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
+    "endpoint": "historical_event_odds",
+    "book": "fanduel",
+    "favored_team": "HOME",
+    "spread": 12.5,
     "kickoff": "2025-10-18T16:00:00+00:00",
     "scores": {
       "home": null,
@@ -367,21 +538,35 @@
       "home": false,
       "away": false
     },
-    "reason": "hist_odds_none",
+    "reason": "no_scores",
+    "probe_steps": 1,
+    "snapshot_date": "2025-10-14T12:00:00Z",
+    "snapshot_used": "2025-10-14T12:00:00Z",
     "books": {
-      "raw": 0,
-      "kept": 0,
-      "names": []
+      "raw": 10,
+      "kept": 10,
+      "names": [
+        "draftkings",
+        "williamhill_us",
+        "betonlineag",
+        "lowvig",
+        "fanduel",
+        "mybookieag",
+        "bovada",
+        "betus",
+        "betrivers",
+        "fanatics"
+      ]
     }
   },
   {
     "game_key": "20251018_1600_georgia_tech_duke",
     "resolver": "events",
     "event_id": "04ec553198d4be4f4c61412514fa3ed6",
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
+    "endpoint": "historical_event_odds",
+    "book": "fanduel",
+    "favored_team": "HOME",
+    "spread": 1.5,
     "kickoff": "2025-10-18T16:00:00+00:00",
     "scores": {
       "home": null,
@@ -393,21 +578,35 @@
       "home": false,
       "away": false
     },
-    "reason": "hist_odds_none",
+    "reason": "no_scores",
+    "probe_steps": 1,
+    "snapshot_date": "2025-10-14T12:00:00Z",
+    "snapshot_used": "2025-10-14T12:00:00Z",
     "books": {
-      "raw": 0,
-      "kept": 0,
-      "names": []
+      "raw": 10,
+      "kept": 10,
+      "names": [
+        "fanduel",
+        "draftkings",
+        "fanatics",
+        "betrivers",
+        "betmgm",
+        "williamhill_us",
+        "lowvig",
+        "betonlineag",
+        "bovada",
+        "betus"
+      ]
     }
   },
   {
     "game_key": "20251018_1600_lsu_vanderbilt",
     "resolver": "events",
     "event_id": "bb18900848211296ea7c10692c3c4f01",
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
+    "endpoint": "historical_event_odds",
+    "book": "fanduel",
+    "favored_team": "HOME",
+    "spread": 2.5,
     "kickoff": "2025-10-18T16:00:00+00:00",
     "scores": {
       "home": null,
@@ -419,21 +618,35 @@
       "home": false,
       "away": false
     },
-    "reason": "hist_odds_none",
+    "reason": "no_scores",
+    "probe_steps": 1,
+    "snapshot_date": "2025-10-14T12:00:00Z",
+    "snapshot_used": "2025-10-14T12:00:00Z",
     "books": {
-      "raw": 0,
-      "kept": 0,
-      "names": []
+      "raw": 10,
+      "kept": 10,
+      "names": [
+        "draftkings",
+        "fanduel",
+        "betrivers",
+        "betmgm",
+        "williamhill_us",
+        "lowvig",
+        "betonlineag",
+        "bovada",
+        "betus",
+        "fanatics"
+      ]
     }
   },
   {
     "game_key": "20251018_1600_uconn_boston_college",
     "resolver": "events",
     "event_id": "00a6974f28c6bc5a62c7dddffe277772",
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
+    "endpoint": "historical_event_odds",
+    "book": "fanduel",
+    "favored_team": "HOME",
+    "spread": 1.5,
     "kickoff": "2025-10-18T16:00:00+00:00",
     "scores": {
       "home": null,
@@ -445,21 +658,36 @@
       "home": false,
       "away": false
     },
-    "reason": "hist_odds_none",
+    "reason": "no_scores",
+    "probe_steps": 1,
+    "snapshot_date": "2025-10-14T12:00:00Z",
+    "snapshot_used": "2025-10-14T12:00:00Z",
     "books": {
-      "raw": 0,
-      "kept": 0,
-      "names": []
+      "raw": 11,
+      "kept": 11,
+      "names": [
+        "fanduel",
+        "mybookieag",
+        "draftkings",
+        "fanatics",
+        "williamhill_us",
+        "betonlineag",
+        "lowvig",
+        "betmgm",
+        "bovada",
+        "betus",
+        "betrivers"
+      ]
     }
   },
   {
     "game_key": "20251018_1600_washington_michigan",
     "resolver": "events",
     "event_id": "e79f6c92e621c517179918e7e1ef4a26",
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
+    "endpoint": "historical_event_odds",
+    "book": "fanduel",
+    "favored_team": "HOME",
+    "spread": 5.5,
     "kickoff": "2025-10-18T16:00:00+00:00",
     "scores": {
       "home": null,
@@ -471,21 +699,35 @@
       "home": false,
       "away": false
     },
-    "reason": "hist_odds_none",
+    "reason": "no_scores",
+    "probe_steps": 1,
+    "snapshot_date": "2025-10-14T12:00:00Z",
+    "snapshot_used": "2025-10-14T12:00:00Z",
     "books": {
-      "raw": 0,
-      "kept": 0,
-      "names": []
+      "raw": 10,
+      "kept": 10,
+      "names": [
+        "draftkings",
+        "fanduel",
+        "fanatics",
+        "betmgm",
+        "williamhill_us",
+        "lowvig",
+        "betonlineag",
+        "bovada",
+        "betrivers",
+        "betus"
+      ]
     }
   },
   {
     "game_key": "20251018_1645_oklahoma_south_carolina",
     "resolver": "events",
     "event_id": "d44075b0d3f4aac36f4761cf1bc2e5ea",
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
+    "endpoint": "historical_event_odds",
+    "book": "fanduel",
+    "favored_team": "AWAY",
+    "spread": 5.5,
     "kickoff": "2025-10-18T16:45:00+00:00",
     "scores": {
       "home": null,
@@ -497,21 +739,36 @@
       "home": false,
       "away": false
     },
-    "reason": "hist_odds_none",
+    "reason": "no_scores",
+    "probe_steps": 1,
+    "snapshot_date": "2025-10-14T12:00:00Z",
+    "snapshot_used": "2025-10-14T12:00:00Z",
     "books": {
-      "raw": 0,
-      "kept": 0,
-      "names": []
+      "raw": 11,
+      "kept": 11,
+      "names": [
+        "fanduel",
+        "draftkings",
+        "betrivers",
+        "betmgm",
+        "mybookieag",
+        "williamhill_us",
+        "betonlineag",
+        "lowvig",
+        "bovada",
+        "betus",
+        "fanatics"
+      ]
     }
   },
   {
     "game_key": "20251018_1700_west_virginia_ucf",
     "resolver": "events",
     "event_id": "b4f42c88b4d5eb45150b23ab3b186d0a",
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
+    "endpoint": "historical_event_odds",
+    "book": "fanduel",
+    "favored_team": "HOME",
+    "spread": 7.5,
     "kickoff": "2025-10-18T17:00:00+00:00",
     "scores": {
       "home": null,
@@ -523,21 +780,36 @@
       "home": false,
       "away": false
     },
-    "reason": "hist_odds_none",
+    "reason": "no_scores",
+    "probe_steps": 1,
+    "snapshot_date": "2025-10-14T12:00:00Z",
+    "snapshot_used": "2025-10-14T12:00:00Z",
     "books": {
-      "raw": 0,
-      "kept": 0,
-      "names": []
+      "raw": 11,
+      "kept": 11,
+      "names": [
+        "fanduel",
+        "draftkings",
+        "mybookieag",
+        "fanatics",
+        "williamhill_us",
+        "betonlineag",
+        "lowvig",
+        "bovada",
+        "betmgm",
+        "betus",
+        "betrivers"
+      ]
     }
   },
   {
     "game_key": "20251018_1800_kent_state_toledo",
     "resolver": "events",
     "event_id": "e4aa139820c2dd11f83027e8cf90077a",
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
+    "endpoint": "historical_event_odds",
+    "book": "fanduel",
+    "favored_team": "HOME",
+    "spread": 26.5,
     "kickoff": "2025-10-18T18:00:00+00:00",
     "scores": {
       "home": null,
@@ -549,11 +821,26 @@
       "home": false,
       "away": false
     },
-    "reason": "hist_odds_none",
+    "reason": "no_scores",
+    "probe_steps": 1,
+    "snapshot_date": "2025-10-14T12:00:00Z",
+    "snapshot_used": "2025-10-14T12:00:00Z",
     "books": {
-      "raw": 0,
-      "kept": 0,
-      "names": []
+      "raw": 11,
+      "kept": 11,
+      "names": [
+        "draftkings",
+        "williamhill_us",
+        "lowvig",
+        "betonlineag",
+        "fanduel",
+        "mybookieag",
+        "fanatics",
+        "bovada",
+        "betmgm",
+        "betus",
+        "betrivers"
+      ]
     }
   },
   {
@@ -575,16 +862,18 @@
       "home": false,
       "away": false
     },
-    "reason": "resolve_failed"
+    "reason": "no_event_match",
+    "probe_steps": 0,
+    "resolver_reason": "no_event_match"
   },
   {
     "game_key": "20251018_1900_purdue_northwestern",
     "resolver": "events",
     "event_id": "b90c1e699a3f75f21ca7e436584b6add",
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
+    "endpoint": "historical_event_odds",
+    "book": "fanduel",
+    "favored_team": "HOME",
+    "spread": 3.5,
     "kickoff": "2025-10-18T19:00:00+00:00",
     "scores": {
       "home": null,
@@ -596,21 +885,36 @@
       "home": false,
       "away": false
     },
-    "reason": "hist_odds_none",
+    "reason": "no_scores",
+    "probe_steps": 1,
+    "snapshot_date": "2025-10-14T12:00:00Z",
+    "snapshot_used": "2025-10-14T12:00:00Z",
     "books": {
-      "raw": 0,
-      "kept": 0,
-      "names": []
+      "raw": 11,
+      "kept": 11,
+      "names": [
+        "fanduel",
+        "draftkings",
+        "fanatics",
+        "williamhill_us",
+        "lowvig",
+        "betonlineag",
+        "mybookieag",
+        "bovada",
+        "betmgm",
+        "betus",
+        "betrivers"
+      ]
     }
   },
   {
     "game_key": "20251018_1900_troy_ul_monroe",
     "resolver": "events",
     "event_id": "4fcd227a8f65146f3f05ef6bf5dbbdee",
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
+    "endpoint": "historical_event_odds",
+    "book": "fanduel",
+    "favored_team": "AWAY",
+    "spread": 5.5,
     "kickoff": "2025-10-18T19:00:00+00:00",
     "scores": {
       "home": null,
@@ -622,21 +926,36 @@
       "home": false,
       "away": false
     },
-    "reason": "hist_odds_none",
+    "reason": "no_scores",
+    "probe_steps": 1,
+    "snapshot_date": "2025-10-14T12:00:00Z",
+    "snapshot_used": "2025-10-14T12:00:00Z",
     "books": {
-      "raw": 0,
-      "kept": 0,
-      "names": []
+      "raw": 11,
+      "kept": 11,
+      "names": [
+        "draftkings",
+        "williamhill_us",
+        "lowvig",
+        "betonlineag",
+        "fanduel",
+        "mybookieag",
+        "bovada",
+        "betmgm",
+        "betus",
+        "betrivers",
+        "fanatics"
+      ]
     }
   },
   {
     "game_key": "20251018_1930_akron_ball_state",
     "resolver": "events",
     "event_id": "79f01f984b254490779e3ed91fae3ab7",
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
+    "endpoint": "historical_event_odds",
+    "book": "fanduel",
+    "favored_team": "HOME",
+    "spread": 1.5,
     "kickoff": "2025-10-18T19:30:00+00:00",
     "scores": {
       "home": null,
@@ -648,11 +967,26 @@
       "home": false,
       "away": false
     },
-    "reason": "hist_odds_none",
+    "reason": "no_scores",
+    "probe_steps": 1,
+    "snapshot_date": "2025-10-14T12:00:00Z",
+    "snapshot_used": "2025-10-14T12:00:00Z",
     "books": {
-      "raw": 0,
-      "kept": 0,
-      "names": []
+      "raw": 11,
+      "kept": 11,
+      "names": [
+        "draftkings",
+        "williamhill_us",
+        "lowvig",
+        "betonlineag",
+        "fanatics",
+        "fanduel",
+        "bovada",
+        "mybookieag",
+        "betus",
+        "betmgm",
+        "betrivers"
+      ]
     }
   },
   {
@@ -674,16 +1008,18 @@
       "home": false,
       "away": false
     },
-    "reason": "resolve_failed"
+    "reason": "no_provider_map",
+    "probe_steps": 0,
+    "resolver_reason": "no_provider_map"
   },
   {
     "game_key": "20251018_1930_michigan_state_indiana",
     "resolver": "events",
     "event_id": "d205e781f229cb68ddac1fc2ad3e24ec",
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
+    "endpoint": "historical_event_odds",
+    "book": "fanduel",
+    "favored_team": "HOME",
+    "spread": 26.5,
     "kickoff": "2025-10-18T19:30:00+00:00",
     "scores": {
       "home": null,
@@ -695,21 +1031,36 @@
       "home": false,
       "away": false
     },
-    "reason": "hist_odds_none",
+    "reason": "no_scores",
+    "probe_steps": 1,
+    "snapshot_date": "2025-10-14T12:00:00Z",
+    "snapshot_used": "2025-10-14T12:00:00Z",
     "books": {
-      "raw": 0,
-      "kept": 0,
-      "names": []
+      "raw": 11,
+      "kept": 11,
+      "names": [
+        "fanduel",
+        "betrivers",
+        "draftkings",
+        "fanatics",
+        "williamhill_us",
+        "lowvig",
+        "betonlineag",
+        "bovada",
+        "mybookieag",
+        "betus",
+        "betmgm"
+      ]
     }
   },
   {
     "game_key": "20251018_1930_northern_illinois_ohio",
     "resolver": "events",
     "event_id": "2073cfebcfc3368e22b436a6edf10cef",
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
+    "endpoint": "historical_event_odds",
+    "book": "fanduel",
+    "favored_team": "HOME",
+    "spread": 11.5,
     "kickoff": "2025-10-18T19:30:00+00:00",
     "scores": {
       "home": null,
@@ -721,21 +1072,36 @@
       "home": false,
       "away": false
     },
-    "reason": "hist_odds_none",
+    "reason": "no_scores",
+    "probe_steps": 1,
+    "snapshot_date": "2025-10-14T12:00:00Z",
+    "snapshot_used": "2025-10-14T12:00:00Z",
     "books": {
-      "raw": 0,
-      "kept": 0,
-      "names": []
+      "raw": 11,
+      "kept": 11,
+      "names": [
+        "draftkings",
+        "williamhill_us",
+        "lowvig",
+        "betonlineag",
+        "fanduel",
+        "fanatics",
+        "bovada",
+        "mybookieag",
+        "betmgm",
+        "betus",
+        "betrivers"
+      ]
     }
   },
   {
     "game_key": "20251018_1930_ohio_state_buckeyes_wisconsin",
     "resolver": "events",
     "event_id": "b40fd4e70194bfdabd7e68dfc269f268",
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
+    "endpoint": "historical_event_odds",
+    "book": "fanduel",
+    "favored_team": "AWAY",
+    "spread": 25.5,
     "kickoff": "2025-10-18T19:30:00+00:00",
     "scores": {
       "home": null,
@@ -747,21 +1113,36 @@
       "home": false,
       "away": false
     },
-    "reason": "hist_odds_none",
+    "reason": "no_scores",
+    "probe_steps": 1,
+    "snapshot_date": "2025-10-14T12:00:00Z",
+    "snapshot_used": "2025-10-14T12:00:00Z",
     "books": {
-      "raw": 0,
-      "kept": 0,
-      "names": []
+      "raw": 11,
+      "kept": 11,
+      "names": [
+        "fanduel",
+        "betrivers",
+        "draftkings",
+        "fanatics",
+        "williamhill_us",
+        "lowvig",
+        "betonlineag",
+        "bovada",
+        "mybookieag",
+        "betmgm",
+        "betus"
+      ]
     }
   },
   {
     "game_key": "20251018_1930_old_dominion_james_madison",
     "resolver": "events",
     "event_id": "8d5ca9cb62b5ab0a5427f363f56d814b",
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
+    "endpoint": "historical_event_odds",
+    "book": "fanduel",
+    "favored_team": "HOME",
+    "spread": 2.5,
     "kickoff": "2025-10-18T19:30:00+00:00",
     "scores": {
       "home": null,
@@ -773,21 +1154,35 @@
       "home": false,
       "away": false
     },
-    "reason": "hist_odds_none",
+    "reason": "no_scores",
+    "probe_steps": 1,
+    "snapshot_date": "2025-10-14T12:00:00Z",
+    "snapshot_used": "2025-10-14T12:00:00Z",
     "books": {
-      "raw": 0,
-      "kept": 0,
-      "names": []
+      "raw": 10,
+      "kept": 10,
+      "names": [
+        "fanduel",
+        "draftkings",
+        "fanatics",
+        "williamhill_us",
+        "betonlineag",
+        "lowvig",
+        "bovada",
+        "betmgm",
+        "betus",
+        "betrivers"
+      ]
     }
   },
   {
     "game_key": "20251018_1930_ole_miss_georgia_bulldogs",
     "resolver": "events",
     "event_id": "55f5ab2c82d0f2993231587e63a6b782",
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
+    "endpoint": "historical_event_odds",
+    "book": "fanduel",
+    "favored_team": "HOME",
+    "spread": 7.5,
     "kickoff": "2025-10-18T19:30:00+00:00",
     "scores": {
       "home": null,
@@ -799,21 +1194,34 @@
       "home": false,
       "away": false
     },
-    "reason": "hist_odds_none",
+    "reason": "no_scores",
+    "probe_steps": 1,
+    "snapshot_date": "2025-10-14T12:00:00Z",
+    "snapshot_used": "2025-10-14T12:00:00Z",
     "books": {
-      "raw": 0,
-      "kept": 0,
-      "names": []
+      "raw": 9,
+      "kept": 9,
+      "names": [
+        "draftkings",
+        "betonlineag",
+        "fanduel",
+        "betrivers",
+        "betmgm",
+        "fanatics",
+        "williamhill_us",
+        "bovada",
+        "betus"
+      ]
     }
   },
   {
     "game_key": "20251018_1930_smu_clemson_tigers",
     "resolver": "events",
     "event_id": "7be66ff7eb8a7b2aaeb7f3d4d2e8806a",
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
+    "endpoint": "historical_event_odds",
+    "book": "fanduel",
+    "favored_team": "HOME",
+    "spread": 9.5,
     "kickoff": "2025-10-18T19:30:00+00:00",
     "scores": {
       "home": null,
@@ -825,21 +1233,36 @@
       "home": false,
       "away": false
     },
-    "reason": "hist_odds_none",
+    "reason": "no_scores",
+    "probe_steps": 1,
+    "snapshot_date": "2025-10-14T12:00:00Z",
+    "snapshot_used": "2025-10-14T12:00:00Z",
     "books": {
-      "raw": 0,
-      "kept": 0,
-      "names": []
+      "raw": 11,
+      "kept": 11,
+      "names": [
+        "draftkings",
+        "fanduel",
+        "fanatics",
+        "williamhill_us",
+        "betonlineag",
+        "lowvig",
+        "bovada",
+        "mybookieag",
+        "betmgm",
+        "betus",
+        "betrivers"
+      ]
     }
   },
   {
     "game_key": "20251018_1930_temple_charlotte",
     "resolver": "events",
     "event_id": "82b43016aa3e0c0a524320b9e9830678",
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
+    "endpoint": "historical_event_odds",
+    "book": "fanduel",
+    "favored_team": "AWAY",
+    "spread": 11.5,
     "kickoff": "2025-10-18T19:30:00+00:00",
     "scores": {
       "home": null,
@@ -851,21 +1274,36 @@
       "home": false,
       "away": false
     },
-    "reason": "hist_odds_none",
+    "reason": "no_scores",
+    "probe_steps": 1,
+    "snapshot_date": "2025-10-14T12:00:00Z",
+    "snapshot_used": "2025-10-14T12:00:00Z",
     "books": {
-      "raw": 0,
-      "kept": 0,
-      "names": []
+      "raw": 11,
+      "kept": 11,
+      "names": [
+        "draftkings",
+        "williamhill_us",
+        "betonlineag",
+        "lowvig",
+        "fanatics",
+        "fanduel",
+        "bovada",
+        "mybookieag",
+        "betmgm",
+        "betus",
+        "betrivers"
+      ]
     }
   },
   {
     "game_key": "20251018_1930_texas_aandm_arkansas",
     "resolver": "events",
     "event_id": "521d005c0199e69e1af5faf379b6bfc7",
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
+    "endpoint": "historical_event_odds",
+    "book": "fanduel",
+    "favored_team": "AWAY",
+    "spread": 7.5,
     "kickoff": "2025-10-18T19:30:00+00:00",
     "scores": {
       "home": null,
@@ -877,21 +1315,35 @@
       "home": false,
       "away": false
     },
-    "reason": "hist_odds_none",
+    "reason": "no_scores",
+    "probe_steps": 1,
+    "snapshot_date": "2025-10-14T12:00:00Z",
+    "snapshot_used": "2025-10-14T12:00:00Z",
     "books": {
-      "raw": 0,
-      "kept": 0,
-      "names": []
+      "raw": 10,
+      "kept": 10,
+      "names": [
+        "fanduel",
+        "draftkings",
+        "betrivers",
+        "betmgm",
+        "fanatics",
+        "williamhill_us",
+        "lowvig",
+        "betonlineag",
+        "bovada",
+        "mybookieag"
+      ]
     }
   },
   {
     "game_key": "20251018_1930_texas_state_marshall",
     "resolver": "events",
     "event_id": "d15fdb8ae860183a48c201265d28b77a",
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
+    "endpoint": "historical_event_odds",
+    "book": "fanduel",
+    "favored_team": "AWAY",
+    "spread": 2.5,
     "kickoff": "2025-10-18T19:30:00+00:00",
     "scores": {
       "home": null,
@@ -903,21 +1355,36 @@
       "home": false,
       "away": false
     },
-    "reason": "hist_odds_none",
+    "reason": "no_scores",
+    "probe_steps": 1,
+    "snapshot_date": "2025-10-14T12:00:00Z",
+    "snapshot_used": "2025-10-14T12:00:00Z",
     "books": {
-      "raw": 0,
-      "kept": 0,
-      "names": []
+      "raw": 11,
+      "kept": 11,
+      "names": [
+        "draftkings",
+        "williamhill_us",
+        "lowvig",
+        "betonlineag",
+        "fanduel",
+        "bovada",
+        "mybookieag",
+        "betus",
+        "betmgm",
+        "betrivers",
+        "fanatics"
+      ]
     }
   },
   {
     "game_key": "20251018_1930_unlv_boise_state",
     "resolver": "events",
     "event_id": "fa2d5dbab5d79c98893ce5b7a23c1d3e",
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
+    "endpoint": "historical_event_odds",
+    "book": "fanduel",
+    "favored_team": "HOME",
+    "spread": 11.5,
     "kickoff": "2025-10-18T19:30:00+00:00",
     "scores": {
       "home": null,
@@ -929,21 +1396,36 @@
       "home": false,
       "away": false
     },
-    "reason": "hist_odds_none",
+    "reason": "no_scores",
+    "probe_steps": 1,
+    "snapshot_date": "2025-10-14T12:00:00Z",
+    "snapshot_used": "2025-10-14T12:00:00Z",
     "books": {
-      "raw": 0,
-      "kept": 0,
-      "names": []
+      "raw": 11,
+      "kept": 11,
+      "names": [
+        "draftkings",
+        "fanduel",
+        "fanatics",
+        "williamhill_us",
+        "lowvig",
+        "betonlineag",
+        "bovada",
+        "mybookieag",
+        "betus",
+        "betmgm",
+        "betrivers"
+      ]
     }
   },
   {
     "game_key": "20251018_1930_utsa_north_texas",
     "resolver": "events",
     "event_id": "2648046a739ad39505d834b82d62e13b",
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
+    "endpoint": "historical_event_odds",
+    "book": "fanduel",
+    "favored_team": "HOME",
+    "spread": 4.5,
     "kickoff": "2025-10-18T19:30:00+00:00",
     "scores": {
       "home": null,
@@ -955,21 +1437,36 @@
       "home": false,
       "away": false
     },
-    "reason": "hist_odds_none",
+    "reason": "no_scores",
+    "probe_steps": 1,
+    "snapshot_date": "2025-10-14T12:00:00Z",
+    "snapshot_used": "2025-10-14T12:00:00Z",
     "books": {
-      "raw": 0,
-      "kept": 0,
-      "names": []
+      "raw": 11,
+      "kept": 11,
+      "names": [
+        "fanduel",
+        "draftkings",
+        "williamhill_us",
+        "lowvig",
+        "betonlineag",
+        "bovada",
+        "mybookieag",
+        "betus",
+        "betmgm",
+        "betrivers",
+        "fanatics"
+      ]
     }
   },
   {
     "game_key": "20251018_1930_wyoming_air_force",
     "resolver": "events",
     "event_id": "27691e5354e5380e613d02c9437e963d",
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
+    "endpoint": "historical_event_odds",
+    "book": "fanduel",
+    "favored_team": "HOME",
+    "spread": 4.5,
     "kickoff": "2025-10-18T19:30:00+00:00",
     "scores": {
       "home": null,
@@ -981,21 +1478,36 @@
       "home": false,
       "away": false
     },
-    "reason": "hist_odds_none",
+    "reason": "no_scores",
+    "probe_steps": 1,
+    "snapshot_date": "2025-10-14T12:00:00Z",
+    "snapshot_used": "2025-10-14T12:00:00Z",
     "books": {
-      "raw": 0,
-      "kept": 0,
-      "names": []
+      "raw": 11,
+      "kept": 11,
+      "names": [
+        "draftkings",
+        "williamhill_us",
+        "lowvig",
+        "betonlineag",
+        "fanduel",
+        "bovada",
+        "mybookieag",
+        "betmgm",
+        "betus",
+        "betrivers",
+        "fanatics"
+      ]
     }
   },
   {
     "game_key": "20251018_2000_memphis_uab",
     "resolver": "events",
     "event_id": "9f7eb2d2b2e7b68f14a18a521765e53b",
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
+    "endpoint": "historical_event_odds",
+    "book": "fanduel",
+    "favored_team": "AWAY",
+    "spread": 21.5,
     "kickoff": "2025-10-18T20:00:00+00:00",
     "scores": {
       "home": null,
@@ -1007,21 +1519,36 @@
       "home": false,
       "away": false
     },
-    "reason": "hist_odds_none",
+    "reason": "no_scores",
+    "probe_steps": 1,
+    "snapshot_date": "2025-10-14T12:00:00Z",
+    "snapshot_used": "2025-10-14T12:00:00Z",
     "books": {
-      "raw": 0,
-      "kept": 0,
-      "names": []
+      "raw": 11,
+      "kept": 11,
+      "names": [
+        "draftkings",
+        "williamhill_us",
+        "lowvig",
+        "betonlineag",
+        "fanduel",
+        "bovada",
+        "mybookieag",
+        "betmgm",
+        "betus",
+        "betrivers",
+        "fanatics"
+      ]
     }
   },
   {
     "game_key": "20251018_2000_texas_tech_arizona_state",
     "resolver": "events",
     "event_id": "970b5191ee6e19666dfdec2eb19954ce",
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
+    "endpoint": "historical_event_odds",
+    "book": "fanduel",
+    "favored_team": "AWAY",
+    "spread": 11.5,
     "kickoff": "2025-10-18T20:00:00+00:00",
     "scores": {
       "home": null,
@@ -1033,21 +1560,35 @@
       "home": false,
       "away": false
     },
-    "reason": "hist_odds_none",
+    "reason": "no_scores",
+    "probe_steps": 1,
+    "snapshot_date": "2025-10-14T12:00:00Z",
+    "snapshot_used": "2025-10-14T12:00:00Z",
     "books": {
-      "raw": 0,
-      "kept": 0,
-      "names": []
+      "raw": 10,
+      "kept": 10,
+      "names": [
+        "draftkings",
+        "fanduel",
+        "fanatics",
+        "williamhill_us",
+        "betonlineag",
+        "lowvig",
+        "bovada",
+        "betmgm",
+        "betus",
+        "betrivers"
+      ]
     }
   },
   {
     "game_key": "20251018_2015_mississippi_state_florida",
     "resolver": "events",
     "event_id": "2c7763e732f47af87d2034549c69f82d",
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
+    "endpoint": "historical_event_odds",
+    "book": "fanduel",
+    "favored_team": "HOME",
+    "spread": 9.5,
     "kickoff": "2025-10-18T20:15:00+00:00",
     "scores": {
       "home": null,
@@ -1059,21 +1600,36 @@
       "home": false,
       "away": false
     },
-    "reason": "hist_odds_none",
+    "reason": "no_scores",
+    "probe_steps": 1,
+    "snapshot_date": "2025-10-14T12:00:00Z",
+    "snapshot_used": "2025-10-14T12:00:00Z",
     "books": {
-      "raw": 0,
-      "kept": 0,
-      "names": []
+      "raw": 11,
+      "kept": 11,
+      "names": [
+        "fanduel",
+        "draftkings",
+        "fanatics",
+        "williamhill_us",
+        "betonlineag",
+        "lowvig",
+        "bovada",
+        "betmgm",
+        "mybookieag",
+        "betus",
+        "betrivers"
+      ]
     }
   },
   {
     "game_key": "20251018_2100_southern_miss_louisiana",
     "resolver": "events",
     "event_id": "5da9ef579c5fd86b10be56e99d1d1c10",
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
+    "endpoint": "historical_event_odds",
+    "book": "fanduel",
+    "favored_team": "AWAY",
+    "spread": 3.5,
     "kickoff": "2025-10-18T21:00:00+00:00",
     "scores": {
       "home": null,
@@ -1085,21 +1641,36 @@
       "home": false,
       "away": false
     },
-    "reason": "hist_odds_none",
+    "reason": "no_scores",
+    "probe_steps": 1,
+    "snapshot_date": "2025-10-14T12:00:00Z",
+    "snapshot_used": "2025-10-14T12:00:00Z",
     "books": {
-      "raw": 0,
-      "kept": 0,
-      "names": []
+      "raw": 11,
+      "kept": 11,
+      "names": [
+        "draftkings",
+        "williamhill_us",
+        "lowvig",
+        "betonlineag",
+        "fanduel",
+        "bovada",
+        "betmgm",
+        "betus",
+        "mybookieag",
+        "betrivers",
+        "fanatics"
+      ]
     }
   },
   {
     "game_key": "20251018_2230_oregon_ducks_rutgers",
     "resolver": "events",
     "event_id": "cd5818a61eb4ec516c371a55c24a240a",
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
+    "endpoint": "historical_event_odds",
+    "book": "draftkings",
+    "favored_team": "AWAY",
+    "spread": 17.5,
     "kickoff": "2025-10-18T22:30:00+00:00",
     "scores": {
       "home": null,
@@ -1111,21 +1682,34 @@
       "home": false,
       "away": false
     },
-    "reason": "hist_odds_none",
+    "reason": "no_scores",
+    "probe_steps": 1,
+    "snapshot_date": "2025-10-14T12:00:00Z",
+    "snapshot_used": "2025-10-14T12:00:00Z",
     "books": {
-      "raw": 0,
-      "kept": 0,
-      "names": []
+      "raw": 9,
+      "kept": 9,
+      "names": [
+        "draftkings",
+        "fanatics",
+        "betonlineag",
+        "lowvig",
+        "bovada",
+        "betmgm",
+        "betus",
+        "mybookieag",
+        "betrivers"
+      ]
     }
   },
   {
     "game_key": "20251018_2230_washington_state_virginia",
     "resolver": "events",
     "event_id": "27566d5b43cf09db1545d28a013b2bc9",
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
+    "endpoint": "historical_event_odds",
+    "book": "fanduel",
+    "favored_team": "HOME",
+    "spread": 17.5,
     "kickoff": "2025-10-18T22:30:00+00:00",
     "scores": {
       "home": null,
@@ -1137,21 +1721,36 @@
       "home": false,
       "away": false
     },
-    "reason": "hist_odds_none",
+    "reason": "no_scores",
+    "probe_steps": 1,
+    "snapshot_date": "2025-10-14T12:00:00Z",
+    "snapshot_used": "2025-10-14T12:00:00Z",
     "books": {
-      "raw": 0,
-      "kept": 0,
-      "names": []
+      "raw": 11,
+      "kept": 11,
+      "names": [
+        "fanduel",
+        "draftkings",
+        "fanatics",
+        "williamhill_us",
+        "betonlineag",
+        "lowvig",
+        "bovada",
+        "betmgm",
+        "betus",
+        "mybookieag",
+        "betrivers"
+      ]
     }
   },
   {
     "game_key": "20251018_2300_georgia_state_georgia_southern",
     "resolver": "events",
     "event_id": "3ca674b081dddf7f8ac3d9862186b8e8",
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
+    "endpoint": "historical_event_odds",
+    "book": "fanduel",
+    "favored_team": "HOME",
+    "spread": 6.5,
     "kickoff": "2025-10-18T23:00:00+00:00",
     "scores": {
       "home": null,
@@ -1163,21 +1762,36 @@
       "home": false,
       "away": false
     },
-    "reason": "hist_odds_none",
+    "reason": "no_scores",
+    "probe_steps": 1,
+    "snapshot_date": "2025-10-14T12:00:00Z",
+    "snapshot_used": "2025-10-14T12:00:00Z",
     "books": {
-      "raw": 0,
-      "kept": 0,
-      "names": []
+      "raw": 11,
+      "kept": 11,
+      "names": [
+        "draftkings",
+        "williamhill_us",
+        "betonlineag",
+        "lowvig",
+        "fanduel",
+        "fanatics",
+        "bovada",
+        "betmgm",
+        "betus",
+        "mybookieag",
+        "betrivers"
+      ]
     }
   },
   {
     "game_key": "20251018_2300_hawai_i_colorado_state",
     "resolver": "events",
     "event_id": "c4df5ac5f03e73a930f280f72caaae43",
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
+    "endpoint": "historical_event_odds",
+    "book": "fanduel",
+    "favored_team": "HOME",
+    "spread": 2.5,
     "kickoff": "2025-10-18T23:00:00+00:00",
     "scores": {
       "home": null,
@@ -1189,21 +1803,36 @@
       "home": false,
       "away": false
     },
-    "reason": "hist_odds_none",
+    "reason": "no_scores",
+    "probe_steps": 1,
+    "snapshot_date": "2025-10-14T12:00:00Z",
+    "snapshot_used": "2025-10-14T12:00:00Z",
     "books": {
-      "raw": 0,
-      "kept": 0,
-      "names": []
+      "raw": 11,
+      "kept": 11,
+      "names": [
+        "draftkings",
+        "williamhill_us",
+        "lowvig",
+        "betonlineag",
+        "fanduel",
+        "bovada",
+        "betmgm",
+        "betus",
+        "mybookieag",
+        "betrivers",
+        "fanatics"
+      ]
     }
   },
   {
     "game_key": "20251018_2300_maryland_ucla",
     "resolver": "events",
     "event_id": "b0b386c767a0ce6a0a239fb9f79c3e7a",
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
+    "endpoint": "historical_event_odds",
+    "book": "fanduel",
+    "favored_team": "HOME",
+    "spread": 3.5,
     "kickoff": "2025-10-18T23:00:00+00:00",
     "scores": {
       "home": null,
@@ -1215,21 +1844,36 @@
       "home": false,
       "away": false
     },
-    "reason": "hist_odds_none",
+    "reason": "no_scores",
+    "probe_steps": 1,
+    "snapshot_date": "2025-10-14T12:00:00Z",
+    "snapshot_used": "2025-10-14T12:00:00Z",
     "books": {
-      "raw": 0,
-      "kept": 0,
-      "names": []
+      "raw": 11,
+      "kept": 11,
+      "names": [
+        "fanduel",
+        "draftkings",
+        "fanatics",
+        "williamhill_us",
+        "lowvig",
+        "betonlineag",
+        "bovada",
+        "betmgm",
+        "betus",
+        "mybookieag",
+        "betrivers"
+      ]
     }
   },
   {
     "game_key": "20251018_2300_penn_state_iowa",
     "resolver": "events",
     "event_id": "7d42c9f08d93cc592f5540348561ddb3",
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
+    "endpoint": "historical_event_odds",
+    "book": "fanduel",
+    "favored_team": "HOME",
+    "spread": 2.5,
     "kickoff": "2025-10-18T23:00:00+00:00",
     "scores": {
       "home": null,
@@ -1241,21 +1885,35 @@
       "home": false,
       "away": false
     },
-    "reason": "hist_odds_none",
+    "reason": "no_scores",
+    "probe_steps": 1,
+    "snapshot_date": "2025-10-14T12:00:00Z",
+    "snapshot_used": "2025-10-14T12:00:00Z",
     "books": {
-      "raw": 0,
-      "kept": 0,
-      "names": []
+      "raw": 10,
+      "kept": 10,
+      "names": [
+        "fanduel",
+        "draftkings",
+        "betrivers",
+        "fanatics",
+        "williamhill_us",
+        "lowvig",
+        "betonlineag",
+        "bovada",
+        "betmgm",
+        "betus"
+      ]
     }
   },
   {
     "game_key": "20251018_2300_texas_longhorns_kentucky",
     "resolver": "events",
     "event_id": "5866b06f9fe4c1e8ae23a581602b0fe9",
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
+    "endpoint": "historical_event_odds",
+    "book": "fanduel",
+    "favored_team": "AWAY",
+    "spread": 12.5,
     "kickoff": "2025-10-18T23:00:00+00:00",
     "scores": {
       "home": null,
@@ -1267,21 +1925,36 @@
       "home": false,
       "away": false
     },
-    "reason": "hist_odds_none",
+    "reason": "no_scores",
+    "probe_steps": 1,
+    "snapshot_date": "2025-10-14T12:00:00Z",
+    "snapshot_used": "2025-10-14T12:00:00Z",
     "books": {
-      "raw": 0,
-      "kept": 0,
-      "names": []
+      "raw": 11,
+      "kept": 11,
+      "names": [
+        "fanduel",
+        "betrivers",
+        "draftkings",
+        "williamhill_us",
+        "betonlineag",
+        "lowvig",
+        "bovada",
+        "betmgm",
+        "betus",
+        "mybookieag",
+        "fanatics"
+      ]
     }
   },
   {
     "game_key": "20251018_2330_florida_atlantic_south_florida",
     "resolver": "events",
     "event_id": "3cde3895b46bdd55cfc55a6fb9a69418",
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
+    "endpoint": "historical_event_odds",
+    "book": "fanduel",
+    "favored_team": "HOME",
+    "spread": 21.5,
     "kickoff": "2025-10-18T23:30:00+00:00",
     "scores": {
       "home": null,
@@ -1293,21 +1966,35 @@
       "home": false,
       "away": false
     },
-    "reason": "hist_odds_none",
+    "reason": "no_scores",
+    "probe_steps": 1,
+    "snapshot_date": "2025-10-14T12:00:00Z",
+    "snapshot_used": "2025-10-14T12:00:00Z",
     "books": {
-      "raw": 0,
-      "kept": 0,
-      "names": []
+      "raw": 10,
+      "kept": 10,
+      "names": [
+        "fanduel",
+        "draftkings",
+        "williamhill_us",
+        "lowvig",
+        "betonlineag",
+        "bovada",
+        "betus",
+        "mybookieag",
+        "betrivers",
+        "fanatics"
+      ]
     }
   },
   {
     "game_key": "20251018_2330_pittsburgh_syracuse",
     "resolver": "events",
     "event_id": "5a12bbdbc2d087e0ed12ba3aa360f9fd",
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
+    "endpoint": "historical_event_odds",
+    "book": "fanduel",
+    "favored_team": "AWAY",
+    "spread": 11.5,
     "kickoff": "2025-10-18T23:30:00+00:00",
     "scores": {
       "home": null,
@@ -1319,21 +2006,35 @@
       "home": false,
       "away": false
     },
-    "reason": "hist_odds_none",
+    "reason": "no_scores",
+    "probe_steps": 1,
+    "snapshot_date": "2025-10-14T12:00:00Z",
+    "snapshot_used": "2025-10-14T12:00:00Z",
     "books": {
-      "raw": 0,
-      "kept": 0,
-      "names": []
+      "raw": 10,
+      "kept": 10,
+      "names": [
+        "fanduel",
+        "draftkings",
+        "fanatics",
+        "williamhill_us",
+        "lowvig",
+        "betonlineag",
+        "bovada",
+        "betus",
+        "mybookieag",
+        "betrivers"
+      ]
     }
   },
   {
     "game_key": "20251018_2330_tennessee_alabama_crimson_tide",
     "resolver": "events",
     "event_id": "7634f8df416fbdbf3f700c4fcaa4b03a",
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
+    "endpoint": "historical_event_odds",
+    "book": "fanduel",
+    "favored_team": "HOME",
+    "spread": 9.5,
     "kickoff": "2025-10-18T23:30:00+00:00",
     "scores": {
       "home": null,
@@ -1345,21 +2046,34 @@
       "home": false,
       "away": false
     },
-    "reason": "hist_odds_none",
+    "reason": "no_scores",
+    "probe_steps": 1,
+    "snapshot_date": "2025-10-14T12:00:00Z",
+    "snapshot_used": "2025-10-14T12:00:00Z",
     "books": {
-      "raw": 0,
-      "kept": 0,
-      "names": []
+      "raw": 9,
+      "kept": 9,
+      "names": [
+        "draftkings",
+        "betonlineag",
+        "lowvig",
+        "fanduel",
+        "betrivers",
+        "fanatics",
+        "williamhill_us",
+        "bovada",
+        "betus"
+      ]
     }
   },
   {
     "game_key": "20251018_2330_usc_trojans_notre_dame_fighting_irish",
     "resolver": "events",
     "event_id": "432e5ee9d4c8297a2460d82e89ec5161",
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
+    "endpoint": "historical_event_odds",
+    "book": "fanduel",
+    "favored_team": "HOME",
+    "spread": 9.5,
     "kickoff": "2025-10-18T23:30:00+00:00",
     "scores": {
       "home": null,
@@ -1371,21 +2085,35 @@
       "home": false,
       "away": false
     },
-    "reason": "hist_odds_none",
+    "reason": "no_scores",
+    "probe_steps": 1,
+    "snapshot_date": "2025-10-14T12:00:00Z",
+    "snapshot_used": "2025-10-14T12:00:00Z",
     "books": {
-      "raw": 0,
-      "kept": 0,
-      "names": []
+      "raw": 10,
+      "kept": 10,
+      "names": [
+        "draftkings",
+        "betonlineag",
+        "lowvig",
+        "fanduel",
+        "mybookieag",
+        "betrivers",
+        "fanatics",
+        "williamhill_us",
+        "bovada",
+        "betus"
+      ]
     }
   },
   {
     "game_key": "20251018_2345_missouri_auburn",
     "resolver": "events",
     "event_id": "6a478f550fac197ca8dd95162c8f7980",
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
+    "endpoint": "historical_event_odds",
+    "book": "fanduel",
+    "favored_team": "AWAY",
+    "spread": 1.5,
     "kickoff": "2025-10-18T23:45:00+00:00",
     "scores": {
       "home": null,
@@ -1397,21 +2125,35 @@
       "home": false,
       "away": false
     },
-    "reason": "hist_odds_none",
+    "reason": "no_scores",
+    "probe_steps": 1,
+    "snapshot_date": "2025-10-14T12:00:00Z",
+    "snapshot_used": "2025-10-14T12:00:00Z",
     "books": {
-      "raw": 0,
-      "kept": 0,
-      "names": []
+      "raw": 10,
+      "kept": 10,
+      "names": [
+        "draftkings",
+        "fanduel",
+        "betrivers",
+        "williamhill_us",
+        "lowvig",
+        "betonlineag",
+        "bovada",
+        "betus",
+        "mybookieag",
+        "fanatics"
+      ]
     }
   },
   {
     "game_key": "20251019_0000_cincinnati_oklahoma_state",
     "resolver": "events",
     "event_id": "ee56fe628302db3edce970e4bf7cc970",
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
+    "endpoint": "historical_event_odds",
+    "book": "fanduel",
+    "favored_team": "AWAY",
+    "spread": 22.5,
     "kickoff": "2025-10-19T00:00:00+00:00",
     "scores": {
       "home": null,
@@ -1423,21 +2165,35 @@
       "home": false,
       "away": false
     },
-    "reason": "hist_odds_none",
+    "reason": "no_scores",
+    "probe_steps": 1,
+    "snapshot_date": "2025-10-14T12:00:00Z",
+    "snapshot_used": "2025-10-14T12:00:00Z",
     "books": {
-      "raw": 0,
-      "kept": 0,
-      "names": []
+      "raw": 10,
+      "kept": 10,
+      "names": [
+        "fanduel",
+        "fanatics",
+        "draftkings",
+        "williamhill_us",
+        "lowvig",
+        "betonlineag",
+        "bovada",
+        "betus",
+        "mybookieag",
+        "betrivers"
+      ]
     }
   },
   {
     "game_key": "20251019_0000_utah_byu",
     "resolver": "events",
     "event_id": "4db5e24ddb0d1e1e5aa7d9e508670e0f",
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
+    "endpoint": "historical_event_odds",
+    "book": "fanduel",
+    "favored_team": "AWAY",
+    "spread": 3.5,
     "kickoff": "2025-10-19T00:00:00+00:00",
     "scores": {
       "home": null,
@@ -1449,21 +2205,34 @@
       "home": false,
       "away": false
     },
-    "reason": "hist_odds_none",
+    "reason": "no_scores",
+    "probe_steps": 1,
+    "snapshot_date": "2025-10-14T12:00:00Z",
+    "snapshot_used": "2025-10-14T12:00:00Z",
     "books": {
-      "raw": 0,
-      "kept": 0,
-      "names": []
+      "raw": 9,
+      "kept": 9,
+      "names": [
+        "draftkings",
+        "fanduel",
+        "mybookieag",
+        "fanatics",
+        "williamhill_us",
+        "betonlineag",
+        "bovada",
+        "betus",
+        "betrivers"
+      ]
     }
   },
   {
     "game_key": "20251019_0145_nevada_new_mexico",
     "resolver": "events",
     "event_id": "065fb6a48a35eda8e711f8b37b9f8562",
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
+    "endpoint": "historical_event_odds",
+    "book": "fanduel",
+    "favored_team": "HOME",
+    "spread": 12.5,
     "kickoff": "2025-10-19T01:45:00+00:00",
     "scores": {
       "home": null,
@@ -1475,21 +2244,35 @@
       "home": false,
       "away": false
     },
-    "reason": "hist_odds_none",
+    "reason": "no_scores",
+    "probe_steps": 1,
+    "snapshot_date": "2025-10-14T12:00:00Z",
+    "snapshot_used": "2025-10-14T12:00:00Z",
     "books": {
-      "raw": 0,
-      "kept": 0,
-      "names": []
+      "raw": 10,
+      "kept": 10,
+      "names": [
+        "draftkings",
+        "williamhill_us",
+        "betonlineag",
+        "lowvig",
+        "fanduel",
+        "bovada",
+        "betus",
+        "mybookieag",
+        "betrivers",
+        "fanatics"
+      ]
     }
   },
   {
     "game_key": "20251019_0230_florida_state_stanford",
     "resolver": "events",
     "event_id": "75cd206b980e4155e21e3785bb9503f8",
-    "endpoint": null,
-    "book": null,
-    "favored_team": null,
-    "spread": null,
+    "endpoint": "historical_event_odds",
+    "book": "fanduel",
+    "favored_team": "AWAY",
+    "spread": 17.5,
     "kickoff": "2025-10-19T02:30:00+00:00",
     "scores": {
       "home": null,
@@ -1501,11 +2284,25 @@
       "home": false,
       "away": false
     },
-    "reason": "hist_odds_none",
+    "reason": "no_scores",
+    "probe_steps": 1,
+    "snapshot_date": "2025-10-14T12:00:00Z",
+    "snapshot_used": "2025-10-14T12:00:00Z",
     "books": {
-      "raw": 0,
-      "kept": 0,
-      "names": []
+      "raw": 10,
+      "kept": 10,
+      "names": [
+        "fanduel",
+        "draftkings",
+        "fanatics",
+        "williamhill_us",
+        "betonlineag",
+        "lowvig",
+        "bovada",
+        "betus",
+        "mybookieag",
+        "betrivers"
+      ]
     }
   }
 ]

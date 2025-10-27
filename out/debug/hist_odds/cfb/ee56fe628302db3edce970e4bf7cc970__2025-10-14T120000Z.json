@@ -1,0 +1,234 @@
+{
+  "bookmakers": [
+    {
+      "key": "fanduel",
+      "title": "FanDuel",
+      "last_update": "2025-10-14T11:55:10Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:55:10Z",
+          "outcomes": [
+            {
+              "name": "Cincinnati Bearcats",
+              "price": -105,
+              "point": -22.5
+            },
+            {
+              "name": "Oklahoma State Cowboys",
+              "price": -115,
+              "point": 22.5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "fanatics",
+      "title": "Fanatics",
+      "last_update": "2025-10-14T11:55:29Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:55:29Z",
+          "outcomes": [
+            {
+              "name": "Cincinnati Bearcats",
+              "price": -110,
+              "point": -22.5
+            },
+            {
+              "name": "Oklahoma State Cowboys",
+              "price": -110,
+              "point": 22.5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "draftkings",
+      "title": "DraftKings",
+      "last_update": "2025-10-14T11:54:38Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:54:38Z",
+          "outcomes": [
+            {
+              "name": "Cincinnati Bearcats",
+              "price": -115,
+              "point": -21.5
+            },
+            {
+              "name": "Oklahoma State Cowboys",
+              "price": -105,
+              "point": 21.5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "williamhill_us",
+      "title": "Caesars",
+      "last_update": "2025-10-14T11:54:53Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:54:53Z",
+          "outcomes": [
+            {
+              "name": "Cincinnati Bearcats",
+              "price": -110,
+              "point": -22.0
+            },
+            {
+              "name": "Oklahoma State Cowboys",
+              "price": -110,
+              "point": 22.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "lowvig",
+      "title": "LowVig.ag",
+      "last_update": "2025-10-14T11:55:09Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:55:09Z",
+          "outcomes": [
+            {
+              "name": "Cincinnati Bearcats",
+              "price": -103,
+              "point": -22.0
+            },
+            {
+              "name": "Oklahoma State Cowboys",
+              "price": -109,
+              "point": 22.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "betonlineag",
+      "title": "BetOnline.ag",
+      "last_update": "2025-10-14T11:55:19Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:55:19Z",
+          "outcomes": [
+            {
+              "name": "Cincinnati Bearcats",
+              "price": -107,
+              "point": -22.0
+            },
+            {
+              "name": "Oklahoma State Cowboys",
+              "price": -113,
+              "point": 22.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "bovada",
+      "title": "Bovada",
+      "last_update": "2025-10-14T11:55:35Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:55:35Z",
+          "outcomes": [
+            {
+              "name": "Cincinnati Bearcats",
+              "price": -110,
+              "point": -22.5
+            },
+            {
+              "name": "Oklahoma State Cowboys",
+              "price": -110,
+              "point": 22.5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "betus",
+      "title": "BetUS",
+      "last_update": "2025-10-14T11:55:20Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:55:20Z",
+          "outcomes": [
+            {
+              "name": "Cincinnati Bearcats",
+              "price": -110,
+              "point": -22.0
+            },
+            {
+              "name": "Oklahoma State Cowboys",
+              "price": -110,
+              "point": 22.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "mybookieag",
+      "title": "MyBookie.ag",
+      "last_update": "2025-10-14T11:54:59Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:54:59Z",
+          "outcomes": [
+            {
+              "name": "Cincinnati Bearcats",
+              "price": -110,
+              "point": -22.0
+            },
+            {
+              "name": "Oklahoma State Cowboys",
+              "price": -110,
+              "point": 22.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "betrivers",
+      "title": "BetRivers",
+      "last_update": "2025-10-14T11:53:57Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:53:57Z",
+          "outcomes": [
+            {
+              "name": "Cincinnati Bearcats",
+              "price": -113,
+              "point": -22.0
+            },
+            {
+              "name": "Oklahoma State Cowboys",
+              "price": -109,
+              "point": 22.0
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

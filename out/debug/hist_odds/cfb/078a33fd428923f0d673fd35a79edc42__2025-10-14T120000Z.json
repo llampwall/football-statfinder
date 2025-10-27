@@ -1,0 +1,257 @@
+{
+  "bookmakers": [
+    {
+      "key": "fanduel",
+      "title": "FanDuel",
+      "last_update": "2025-10-14T11:55:10Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:55:10Z",
+          "outcomes": [
+            {
+              "name": "California Golden Bears",
+              "price": -115,
+              "point": -9.5
+            },
+            {
+              "name": "North Carolina Tar Heels",
+              "price": -105,
+              "point": 9.5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "draftkings",
+      "title": "DraftKings",
+      "last_update": "2025-10-14T11:54:38Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:54:38Z",
+          "outcomes": [
+            {
+              "name": "California Golden Bears",
+              "price": -108,
+              "point": -10.0
+            },
+            {
+              "name": "North Carolina Tar Heels",
+              "price": -112,
+              "point": 10.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "mybookieag",
+      "title": "MyBookie.ag",
+      "last_update": "2025-10-14T11:54:59Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:54:59Z",
+          "outcomes": [
+            {
+              "name": "California Golden Bears",
+              "price": -110,
+              "point": -10.0
+            },
+            {
+              "name": "North Carolina Tar Heels",
+              "price": -110,
+              "point": 10.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "fanatics",
+      "title": "Fanatics",
+      "last_update": "2025-10-14T11:55:29Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:55:29Z",
+          "outcomes": [
+            {
+              "name": "California Golden Bears",
+              "price": -110,
+              "point": -10.0
+            },
+            {
+              "name": "North Carolina Tar Heels",
+              "price": -110,
+              "point": 10.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "williamhill_us",
+      "title": "Caesars",
+      "last_update": "2025-10-14T11:54:53Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:54:53Z",
+          "outcomes": [
+            {
+              "name": "California Golden Bears",
+              "price": -110,
+              "point": -10.0
+            },
+            {
+              "name": "North Carolina Tar Heels",
+              "price": -110,
+              "point": 10.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "lowvig",
+      "title": "LowVig.ag",
+      "last_update": "2025-10-14T11:55:09Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:55:09Z",
+          "outcomes": [
+            {
+              "name": "California Golden Bears",
+              "price": 104,
+              "point": -10.5
+            },
+            {
+              "name": "North Carolina Tar Heels",
+              "price": -116,
+              "point": 10.5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "betonlineag",
+      "title": "BetOnline.ag",
+      "last_update": "2025-10-14T11:55:19Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:55:19Z",
+          "outcomes": [
+            {
+              "name": "California Golden Bears",
+              "price": 100,
+              "point": -10.5
+            },
+            {
+              "name": "North Carolina Tar Heels",
+              "price": -120,
+              "point": 10.5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "betmgm",
+      "title": "BetMGM",
+      "last_update": "2025-10-14T11:55:20Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:55:19Z",
+          "outcomes": [
+            {
+              "name": "California Golden Bears",
+              "price": -110,
+              "point": -10.0
+            },
+            {
+              "name": "North Carolina Tar Heels",
+              "price": -110,
+              "point": 10.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "bovada",
+      "title": "Bovada",
+      "last_update": "2025-10-14T11:55:35Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:55:35Z",
+          "outcomes": [
+            {
+              "name": "California Golden Bears",
+              "price": -105,
+              "point": -10.0
+            },
+            {
+              "name": "North Carolina Tar Heels",
+              "price": -115,
+              "point": 10.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "betrivers",
+      "title": "BetRivers",
+      "last_update": "2025-10-14T11:53:57Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:53:57Z",
+          "outcomes": [
+            {
+              "name": "California Golden Bears",
+              "price": -109,
+              "point": -10.0
+            },
+            {
+              "name": "North Carolina Tar Heels",
+              "price": -115,
+              "point": 10.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "betus",
+      "title": "BetUS",
+      "last_update": "2025-10-14T11:55:20Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:55:20Z",
+          "outcomes": [
+            {
+              "name": "California Golden Bears",
+              "price": -110,
+              "point": -10.0
+            },
+            {
+              "name": "North Carolina Tar Heels",
+              "price": -110,
+              "point": 10.0
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

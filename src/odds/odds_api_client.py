@@ -25,48 +25,25 @@ import json
 import math
 import sys
 from datetime import datetime, timezone
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 from urllib.parse import urlencode
 
 import requests
 
-from src.common.io_utils import getenv
+from src.common.io_utils import ensure_out_dir, getenv, write_atomic_json
 
 _THE_ODDS_BASE = "https://api.the-odds-api.com/v4"
 _SPORT_KEYS = {"nfl": "americanfootball_nfl", "cfb": "americanfootball_ncaaf"}
 
 # One-run usage counters (callers can emit a single summary line).
 ODDS_API_USAGE: Dict[str, Optional[str]] = {"remaining": None, "used": None}
-_HIST_ODDS_SAMPLE_LOGGED: Set[str] = set()
+_ATS_DEBUG = getenv("ATS_DEBUG", "0") == "1"
 
+_BOOK_PREFERENCE: Dict[str, List[str]] = {
+    "nfl": ["pinnacle", "fanduel", "draftkings", "betmgm", "caesars", "betrivers"],
+    "cfb": ["pinnacle", "fanduel", "draftkings", "betmgm", "caesars", "betrivers"],
+}
 
-def _book_allowlist(league: str) -> List[str]:
-    env_key_specific = f"ATS_BOOK_ALLOWLIST_{(league or '').upper()}"
-    specific = getenv(env_key_specific)
-    if specific:
-        return [token.strip().lower() for token in specific.split(",") if token.strip()]
-    generic = getenv("ATS_BOOK_ALLOWLIST")
-    if generic:
-        return [token.strip().lower() for token in generic.split(",") if token.strip()]
-    return []
-
-
-def _filter_bookmakers(league: str, bookmakers: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-    strict = getenv("ATS_BOOK_STRICT", "0") == "1"
-    if league.lower() == "cfb" and not strict:
-        return [book for book in bookmakers or [] if isinstance(book, dict)]
-    allowlist = _book_allowlist(league)
-    if not allowlist:
-        return [book for book in bookmakers or [] if isinstance(book, dict)]
-    allowed = set(allowlist)
-    filtered: List[Dict[str, Any]] = []
-    for book in bookmakers or []:
-        if not isinstance(book, dict):
-            continue
-        name = (book.get("key") or book.get("title") or "").strip().lower()
-        if name in allowed:
-            filtered.append(book)
-    return filtered
 
 
 def _to_iso_z(dt: datetime) -> str:
@@ -110,56 +87,111 @@ def _normalize(league: str):
     return team_merge_key_cfb if (league or "").lower() == "cfb" else team_merge_key
 
 
-def _pick_book_pre_kick(
-    bookmakers: List[Dict[str, Any]], kickoff: datetime
-) -> Optional[Tuple[Dict[str, Any], Dict[str, Any]]]:
-    candidates: List[Tuple[Dict[str, Any], Dict[str, Any]]] = []
+def _select_book_pre_kick(
+    league: str, bookmakers: List[Dict[str, Any]], kickoff: datetime
+) -> Tuple[Optional[Tuple[Dict[str, Any], Dict[str, Any]]], Dict[str, bool]]:
+    """
+    Return the preferred bookmaker snapshot at/before kickoff plus diagnostics.
+    """
+
+    kickoff = kickoff.astimezone(timezone.utc)
+    preference = [token.lower() for token in _BOOK_PREFERENCE.get(league.lower(), [])]
+
+    candidates: Dict[str, Tuple[Dict[str, Any], Dict[str, Any]]] = {}
+    saw_spread_market = False
+    saw_snapshot = False
+    saw_pre = False
+
     for book in bookmakers or []:
-        for market in book.get("markets") or []:
+        if not isinstance(book, dict):
+            continue
+        book_name = (book.get("key") or book.get("title") or "").strip()
+        if not book_name:
+            continue
+        book_key = book_name.lower()
+        markets = book.get("markets") or []
+
+        best_candidate: Optional[Tuple[Dict[str, Any], Dict[str, Any]]] = None
+        best_ts: Optional[datetime] = None
+        local_saw_snapshot = False
+        local_saw_pre = False
+
+        for market in markets:
+            if not isinstance(market, dict):
+                continue
             if market.get("key") != "spreads":
                 continue
+            saw_spread_market = True
             snapshots = market.get("odds")
             if isinstance(snapshots, list) and snapshots:
-                sorted_snaps = sorted(
-                    snapshots,
-                    key=lambda snap: _parse_ts(snap.get("timestamp") or snap.get("last_update"))
-                    or datetime.min.replace(tzinfo=timezone.utc),
-                    reverse=True,
-                )
-                snapshot = next(
-                    (
-                        snap
-                        for snap in sorted_snaps
-                        if (_parse_ts(snap.get("timestamp") or snap.get("last_update")) or datetime.min.replace(tzinfo=timezone.utc))
-                        <= kickoff
-                    ),
-                    None,
-                )
-                if snapshot:
+                for snap in snapshots:
+                    if not isinstance(snap, dict):
+                        continue
+                    ts = _parse_ts(snap.get("timestamp") or snap.get("last_update"))
+                    if not ts:
+                        continue
+                    ts = ts.astimezone(timezone.utc)
+                    local_saw_snapshot = True
+                    saw_snapshot = True
                     market_copy = dict(market)
-                    market_copy["outcomes"] = snapshot.get("outcomes") or []
-                    market_copy["__ts__"] = _parse_ts(snapshot.get("timestamp") or snapshot.get("last_update"))
-                    candidates.append((book, market_copy))
+                    market_copy["outcomes"] = snap.get("outcomes") or []
+                    market_copy["__ts__"] = ts
+                    market_copy["__book_name__"] = book_name
+                    if ts <= kickoff:
+                        local_saw_pre = True
+                        saw_pre = True
+                        if best_ts is None or ts > best_ts:
+                            best_ts = ts
+                            best_candidate = (book, market_copy)
             else:
                 ts = _parse_ts(market.get("last_update"))
-                if ts and ts <= kickoff:
+                if ts:
+                    ts = ts.astimezone(timezone.utc)
+                    local_saw_snapshot = True
+                    saw_snapshot = True
                     market_copy = dict(market)
                     market_copy["outcomes"] = market.get("outcomes") or []
                     market_copy["__ts__"] = ts
-                    candidates.append((book, market_copy))
+                    market_copy["__book_name__"] = book_name
+                    if ts <= kickoff:
+                        local_saw_pre = True
+                        saw_pre = True
+                        if best_ts is None or ts > best_ts:
+                            best_ts = ts
+                            best_candidate = (book, market_copy)
+
+        if best_candidate:
+            candidates[book_key] = best_candidate
+        elif local_saw_snapshot and not local_saw_pre:
+            # ensure time_guard diagnostics reflect books with post-kick only snapshots
+            pass
+
+    candidate_names: List[str] = [
+        candidate[1].get("__book_name__") or (candidate[0].get("key") or candidate[0].get("title") or "").strip()
+        for candidate in candidates.values()
+    ]
+
+    diagnostics = {
+        "saw_spread_market": saw_spread_market,
+        "saw_snapshot": saw_snapshot,
+        "saw_pre": saw_pre,
+        "candidate_names": candidate_names,
+    }
 
     if not candidates:
-        return None
+        return None, diagnostics
 
-    def _sort_key(item: Tuple[Dict[str, Any], Dict[str, Any]]) -> datetime:
-        return item[1].get("__ts__") or datetime.min.replace(tzinfo=timezone.utc)
+    for preferred in preference:
+        candidate = candidates.get(preferred)
+        if candidate:
+            return candidate, diagnostics
 
-    pinnacle = [
-        candidate for candidate in candidates if (candidate[0].get("key") or "").lower() == "pinnacle"
-    ]
-    if pinnacle:
-        return sorted(pinnacle, key=_sort_key, reverse=True)[0]
-    return sorted(candidates, key=_sort_key, reverse=True)[0]
+    # Pick the latest timestamp overall if no preferred book present.
+    latest_candidate = max(
+        candidates.values(),
+        key=lambda item: item[1].get("__ts__") or datetime.min.replace(tzinfo=timezone.utc),
+    )
+    return latest_candidate, diagnostics
 
 
 def _extract_spread_from_market(
@@ -242,12 +274,15 @@ def _log_request_exception(context: str, url: str, error: Exception) -> None:
 
 
 def get_historical_event_odds(
-    league: str, event_id: str, snapshot_iso: str
-) -> Optional[List[Dict[str, Any]]]:
+    league: str,
+    event_id: str,
+    snapshot_iso: str,
+    kickoff_iso: Optional[str],
+) -> Tuple[List[Dict[str, Any]], Optional[Dict[str, Any]]]:
     api_key = getenv("THE_ODDS_API_KEY")
     sport = _sport_key(league)
     if not api_key or not sport or not event_id:
-        return None
+        return [], None
 
     url = _build_url(
         f"/historical/sports/{sport}/events/{event_id}/odds",
@@ -260,28 +295,57 @@ def get_historical_event_odds(
         },
     )
 
+    redacted_url = url.replace(api_key, "<REDACTED>")
+    print(
+        f"HIST-ODDS-URL: league={league} url={redacted_url}",
+        flush=True,
+    )
+    request_log = {
+        "league": league,
+        "event_id": event_id,
+        "date": snapshot_iso,
+        "kickoff_ts": kickoff_iso,
+    }
+    print(f"HIST-ODDS-REQUEST: {json.dumps(request_log, ensure_ascii=False)}", flush=True)
+
+    payload_data: Optional[Any] = None
     try:
         response = requests.get(url, timeout=20)
         _update_usage(response)
-        if league.lower() not in _HIST_ODDS_SAMPLE_LOGGED:
-            redacted_url = url.replace(api_key, "<REDACTED>")
-            print(
-                f"ATSDBG(HIST-ODDS-URL): league={league} status={response.status_code} url={redacted_url}",
-                flush=True,
-            )
-            _HIST_ODDS_SAMPLE_LOGGED.add(league.lower())
         if response.status_code >= 400:
-            _log_http_problem("get_historical_event_odds", response, url)
-            return None
+            detail = ""
+            try:
+                detail = response.text.strip()
+            except Exception:
+                detail = "<unavailable>"
+            _log_api_error(
+                "ODDS_API_ERROR(get_historical_event_odds): status={status} url={url} detail={detail}".format(
+                    status=response.status_code,
+                    url=redacted_url,
+                    detail=detail,
+                )
+            )
+            return [], None
         payload = response.json()
-        bookmakers = payload.get("bookmakers") if isinstance(payload, dict) else payload
+        payload_data = payload
+        if isinstance(payload, dict):
+            if isinstance(payload.get("bookmakers"), list):
+                bookmakers = payload.get("bookmakers")
+            elif isinstance(payload.get("data"), dict):
+                bookmakers = payload.get("data", {}).get("bookmakers")
+            else:
+                bookmakers = None
+        else:
+            bookmakers = payload
         if isinstance(bookmakers, list):
-            return [book for book in bookmakers if isinstance(book, dict)]
+            filtered = [book for book in bookmakers if isinstance(book, dict)]
+            return filtered, payload if _ATS_DEBUG else None
+        return [], payload if _ATS_DEBUG and isinstance(payload, dict) else None
     except requests.RequestException as exc:
         _log_request_exception("get_historical_event_odds", url, exc)
     except ValueError:
         _log_http_problem("get_historical_event_odds - decode", locals().get("response"), url)
-    return None
+    return [], payload_data if (_ATS_DEBUG and isinstance(payload_data, dict)) else None
 
 
 def get_historical_spread(
@@ -292,52 +356,109 @@ def get_historical_spread(
     away_name: str,
     kickoff_dt: datetime,
 ) -> Optional[Dict[str, Any]]:
-    bookmakers = get_historical_event_odds(league, event_id, snapshot_iso)
-    raw_books = len(bookmakers or [])
-    filtered = _filter_bookmakers(league, bookmakers or [])
-    kept_names = [
-        (book.get("key") or book.get("title") or "").strip()
-        for book in filtered
-        if isinstance(book, dict)
-    ]
-    kept_books = len(filtered)
-    print(
-        f"ATSDBG(HIST-ODDS): league={league} event={event_id} snapshot={snapshot_iso} "
-        f"raw_books={raw_books} kept_books={kept_books} kept_names={kept_names}",
-        flush=True,
+    """Fetch a historical spread snapshot at/before kickoff using weekly snapshot date."""
+
+    if kickoff_dt.tzinfo is None:
+        kickoff_dt = kickoff_dt.replace(tzinfo=timezone.utc)
+    else:
+        kickoff_dt = kickoff_dt.astimezone(timezone.utc)
+
+    kickoff_iso = _to_iso_z(kickoff_dt)
+
+    bookmakers, raw_payload = get_historical_event_odds(league, event_id, snapshot_iso, kickoff_iso)
+    raw_books = len(bookmakers)
+
+    selection, diagnostics = _select_book_pre_kick(league, bookmakers, kickoff_dt)
+    kept_names = diagnostics.get("candidate_names", [])
+    kept_books = len(kept_names)
+
+    favored_for_log: Optional[str] = None
+    spread_for_log: Optional[float] = None
+    chosen_book_key: Optional[str] = None
+    fetched_ts: Optional[datetime] = None
+    status = "hist_odds_none" if raw_books == 0 else "hist_odds_filtered"
+    reason = None
+
+    if selection:
+        book, market = selection
+        normalized = _extract_spread_from_market(league, market, home_name, away_name)
+        if normalized:
+            favored_for_log, spread_for_log = normalized
+            fetched_ts = market.get("__ts__") or kickoff_dt
+            chosen_book_key = (market.get("__book_name__") or book.get("key") or book.get("title") or "").strip()
+            status = "ok"
+        else:
+            reason = "outcome_parse"
+    else:
+        if raw_books == 0:
+            reason = "raw_zero"
+        elif diagnostics.get("saw_spread_market") is False:
+            reason = "no_spread_market"
+        elif diagnostics.get("saw_snapshot") and not diagnostics.get("saw_pre"):
+            reason = "time_guard_miss"
+        else:
+            reason = "no_pre_kick_snapshot"
+
+    log_line = (
+        "ATSDBG(HIST-ODDS): league={league} event={event} raw_books={raw} kept_books={kept} "
+        "names={names} snapshot={snapshot} favored={favored} spread={spread} book={book}"
+    ).format(
+        league=league,
+        event=event_id,
+        raw=raw_books,
+        kept=kept_books,
+        names=kept_names,
+        snapshot=snapshot_iso,
+        favored=favored_for_log,
+        spread=spread_for_log,
+        book=chosen_book_key,
     )
+    if reason:
+        log_line += f" reason={reason}"
+    print(log_line, flush=True)
+
+    if _ATS_DEBUG and raw_payload is not None:
+        try:
+            out_root = ensure_out_dir() / "debug" / "hist_odds" / league.lower()
+            out_root.mkdir(parents=True, exist_ok=True)
+            snapshot_token = snapshot_iso.replace(":", "").replace("/", "-")
+            debug_path = out_root / f"{event_id}__{snapshot_token}.json"
+            bookmakers_debug: Any
+            if isinstance(raw_payload, dict):
+                bookmakers_debug = raw_payload.get("bookmakers")
+                if bookmakers_debug is None and isinstance(raw_payload.get("data"), dict):
+                    bookmakers_debug = raw_payload["data"].get("bookmakers")
+            else:
+                bookmakers_debug = raw_payload
+            write_atomic_json(
+                debug_path,
+                {"bookmakers": bookmakers_debug},
+            )
+        except Exception:
+            # Debug writes are best-effort; ignore failures.
+            pass
 
     payload: Dict[str, Any] = {
-        "status": "hist_odds_none" if raw_books == 0 else "hist_odds_filtered",
+        "status": status,
         "raw_book_count": raw_books,
         "kept_book_count": kept_books,
         "kept_book_names": kept_names,
         "source": "history",
         "snapshot_date": snapshot_iso,
+        "probe_steps": 1,
     }
+    if reason:
+        payload["reason"] = reason
 
-    if kept_books == 0:
+    if status != "ok":
         return payload
 
-    selection = _pick_book_pre_kick(filtered, kickoff_dt)
-    if not selection:
-        return payload
-
-    book, market = selection
-    normalized = _extract_spread_from_market(league, market, home_name, away_name)
-    if not normalized:
-        return payload
-
-    favored, spread = normalized
-    timestamp = market.get("__ts__") or kickoff_dt
-    book_key = (book.get("key") or book.get("title") or "").strip()
     payload.update(
         {
-            "status": "ok",
-            "favored_team": favored,
-            "spread": float(spread),
-            "book": book_key,
-            "fetched_ts": timestamp.isoformat(),
+            "favored_team": favored_for_log,
+            "spread": float(spread_for_log or 0.0),
+            "book": chosen_book_key,
+            "fetched_ts": (fetched_ts or kickoff_dt).isoformat(),
         }
     )
     return payload

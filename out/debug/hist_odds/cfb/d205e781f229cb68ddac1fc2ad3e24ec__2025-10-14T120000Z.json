@@ -1,0 +1,257 @@
+{
+  "bookmakers": [
+    {
+      "key": "fanduel",
+      "title": "FanDuel",
+      "last_update": "2025-10-14T11:55:10Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:55:10Z",
+          "outcomes": [
+            {
+              "name": "Indiana Hoosiers",
+              "price": -114,
+              "point": -26.5
+            },
+            {
+              "name": "Michigan State Spartans",
+              "price": -106,
+              "point": 26.5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "betrivers",
+      "title": "BetRivers",
+      "last_update": "2025-10-14T11:53:57Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:53:57Z",
+          "outcomes": [
+            {
+              "name": "Indiana Hoosiers",
+              "price": -112,
+              "point": -27.0
+            },
+            {
+              "name": "Michigan State Spartans",
+              "price": -110,
+              "point": 27.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "draftkings",
+      "title": "DraftKings",
+      "last_update": "2025-10-14T11:54:38Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:54:38Z",
+          "outcomes": [
+            {
+              "name": "Indiana Hoosiers",
+              "price": -105,
+              "point": -27.5
+            },
+            {
+              "name": "Michigan State Spartans",
+              "price": -115,
+              "point": 27.5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "fanatics",
+      "title": "Fanatics",
+      "last_update": "2025-10-14T11:55:29Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:55:29Z",
+          "outcomes": [
+            {
+              "name": "Indiana Hoosiers",
+              "price": -110,
+              "point": -27.0
+            },
+            {
+              "name": "Michigan State Spartans",
+              "price": -110,
+              "point": 27.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "williamhill_us",
+      "title": "Caesars",
+      "last_update": "2025-10-14T11:54:53Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:54:53Z",
+          "outcomes": [
+            {
+              "name": "Indiana Hoosiers",
+              "price": -110,
+              "point": -27.0
+            },
+            {
+              "name": "Michigan State Spartans",
+              "price": -110,
+              "point": 27.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "lowvig",
+      "title": "LowVig.ag",
+      "last_update": "2025-10-14T11:55:09Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:55:09Z",
+          "outcomes": [
+            {
+              "name": "Indiana Hoosiers",
+              "price": -106,
+              "point": -27.0
+            },
+            {
+              "name": "Michigan State Spartans",
+              "price": -106,
+              "point": 27.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "betonlineag",
+      "title": "BetOnline.ag",
+      "last_update": "2025-10-14T11:55:19Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:55:19Z",
+          "outcomes": [
+            {
+              "name": "Indiana Hoosiers",
+              "price": -110,
+              "point": -27.0
+            },
+            {
+              "name": "Michigan State Spartans",
+              "price": -110,
+              "point": 27.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "bovada",
+      "title": "Bovada",
+      "last_update": "2025-10-14T11:55:35Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:55:35Z",
+          "outcomes": [
+            {
+              "name": "Indiana Hoosiers",
+              "price": -105,
+              "point": -27.5
+            },
+            {
+              "name": "Michigan State Spartans",
+              "price": -115,
+              "point": 27.5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "mybookieag",
+      "title": "MyBookie.ag",
+      "last_update": "2025-10-14T11:54:59Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:54:59Z",
+          "outcomes": [
+            {
+              "name": "Indiana Hoosiers",
+              "price": -110,
+              "point": -27.0
+            },
+            {
+              "name": "Michigan State Spartans",
+              "price": -110,
+              "point": 27.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "betus",
+      "title": "BetUS",
+      "last_update": "2025-10-14T11:55:20Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:55:20Z",
+          "outcomes": [
+            {
+              "name": "Indiana Hoosiers",
+              "price": -110,
+              "point": -27.0
+            },
+            {
+              "name": "Michigan State Spartans",
+              "price": -110,
+              "point": 27.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "betmgm",
+      "title": "BetMGM",
+      "last_update": "2025-10-14T11:55:20Z",
+      "markets": [
+        {
+          "key": "spreads",
+          "last_update": "2025-10-14T11:55:19Z",
+          "outcomes": [
+            {
+              "name": "Indiana Hoosiers",
+              "price": -115,
+              "point": -26.5
+            },
+            {
+              "name": "Michigan State Spartans",
+              "price": -105,
+              "point": 26.5
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
