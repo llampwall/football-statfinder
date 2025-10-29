@@ -30,6 +30,8 @@ from urllib.parse import urlencode
 
 import requests
 
+from pathlib import Path
+
 from src.common.io_utils import ensure_out_dir, getenv, write_atomic_json
 
 _THE_ODDS_BASE = "https://api.the-odds-api.com/v4"
@@ -43,6 +45,47 @@ _BOOK_PREFERENCE: Dict[str, List[str]] = {
     "nfl": ["pinnacle", "fanduel", "draftkings", "betmgm", "caesars", "betrivers"],
     "cfb": ["pinnacle", "fanduel", "draftkings", "betmgm", "caesars", "betrivers"],
 }
+
+
+def _is_truthy(value: str) -> bool:
+    return value.strip().lower() in {"1", "true", "yes", "on"}
+
+
+def _cache_only_enabled() -> bool:
+    return _is_truthy(getenv("ODDS_CACHE_ONLY", "0"))
+
+
+def _snapshot_token(snapshot_iso: str) -> str:
+    return snapshot_iso.replace(":", "").replace("/", "-")
+
+
+def _hist_odds_cache_path(league: str, event_id: str, snapshot_iso: str) -> Optional[Path]:
+    if not event_id or not snapshot_iso:
+        return None
+    root = ensure_out_dir() / "debug" / "hist_odds" / league.lower()
+    return root / f"{event_id}__{_snapshot_token(snapshot_iso)}.json"
+
+
+def hist_odds_cache_exists(league: str, event_id: str, snapshot_iso: str) -> bool:
+    path = _hist_odds_cache_path(league, event_id, snapshot_iso)
+    return bool(path and path.exists())
+
+
+def _load_hist_odds_cache(
+    league: str, event_id: str, snapshot_iso: str
+) -> Optional[Tuple[List[Dict[str, Any]], Dict[str, Any]]]:
+    path = _hist_odds_cache_path(league, event_id, snapshot_iso)
+    if not path or not path.exists():
+        return None
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return None
+    bookmakers = payload.get("bookmakers") if isinstance(payload, dict) else None
+    if not isinstance(bookmakers, list):
+        return None
+    filtered = [book for book in bookmakers if isinstance(book, dict)]
+    return filtered, payload  # payload retains original structure for debug paths
 
 
 
@@ -278,11 +321,25 @@ def get_historical_event_odds(
     event_id: str,
     snapshot_iso: str,
     kickoff_iso: Optional[str],
-) -> Tuple[List[Dict[str, Any]], Optional[Dict[str, Any]]]:
-    api_key = getenv("THE_ODDS_API_KEY")
+) -> Optional[Tuple[List[Dict[str, Any]], Optional[Dict[str, Any]]]]:
+    cache_hit = _load_hist_odds_cache(league, event_id, snapshot_iso)
+    if cache_hit is not None:
+        return cache_hit
+
     sport = _sport_key(league)
+    cache_only = _cache_only_enabled()
+    if cache_only:
+        print(
+            f"HIST-ODDS(CACHE-MISS): league={league} event_id={event_id} snapshot={snapshot_iso}",
+            flush=True,
+        )
+        return None
+
+    api_key = getenv("THE_ODDS_API_KEY")
     if not api_key or not sport or not event_id:
         return [], None
+
+    cache_only = _cache_only_enabled()
 
     url = _build_url(
         f"/historical/sports/{sport}/events/{event_id}/odds",
@@ -295,21 +352,21 @@ def get_historical_event_odds(
         },
     )
 
-    redacted_url = url.replace(api_key, "<REDACTED>")
-    print(
-        f"HIST-ODDS-URL: league={league} url={redacted_url}",
-        flush=True,
-    )
-    request_log = {
-        "league": league,
-        "event_id": event_id,
-        "date": snapshot_iso,
-        "kickoff_ts": kickoff_iso,
-    }
-    print(f"HIST-ODDS-REQUEST: {json.dumps(request_log, ensure_ascii=False)}", flush=True)
-
     payload_data: Optional[Any] = None
     try:
+        redacted_url = url.replace(api_key, "<REDACTED>")
+        print(
+            f"HIST-ODDS-URL: league={league} url={redacted_url}",
+            flush=True,
+        )
+        request_log = {
+            "league": league,
+            "event_id": event_id,
+            "date": snapshot_iso,
+            "kickoff_ts": kickoff_iso,
+        }
+        print(f"HIST-ODDS-REQUEST: {json.dumps(request_log, ensure_ascii=False)}", flush=True)
+
         response = requests.get(url, timeout=20)
         _update_usage(response)
         if response.status_code >= 400:
@@ -365,7 +422,15 @@ def get_historical_spread(
 
     kickoff_iso = _to_iso_z(kickoff_dt)
 
-    bookmakers, raw_payload = get_historical_event_odds(league, event_id, snapshot_iso, kickoff_iso)
+    fetch_result = get_historical_event_odds(league, event_id, snapshot_iso, kickoff_iso)
+    cache_only = _cache_only_enabled()
+    cache_miss = False
+    if fetch_result is None:
+        bookmakers = []
+        raw_payload = None
+        cache_miss = cache_only
+    else:
+        bookmakers, raw_payload = fetch_result
     raw_books = len(bookmakers)
 
     selection, diagnostics = _select_book_pre_kick(league, bookmakers, kickoff_dt)
@@ -390,7 +455,9 @@ def get_historical_spread(
         else:
             reason = "outcome_parse"
     else:
-        if raw_books == 0:
+        if cache_miss:
+            reason = "cache_miss"
+        elif raw_books == 0:
             reason = "raw_zero"
         elif diagnostics.get("saw_spread_market") is False:
             reason = "no_spread_market"
@@ -653,6 +720,7 @@ def get_historical_events(
 
 __all__ = [
     "ODDS_API_USAGE",
+    "hist_odds_cache_exists",
     "get_historical_event_odds",
     "get_historical_spread",
     "get_current_spread",

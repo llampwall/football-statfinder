@@ -51,7 +51,6 @@ KEY = [
     "game_type",
     "home_team_key",
     "away_team_key",
-    "kickoff_iso_utc",
 ]
 
 
@@ -70,8 +69,10 @@ def _parse_kickoff(row: pd.Series) -> str | None:
         except Exception:
             pass
     date_val = row.get("start_date") or row.get("gameday")
-    time_val = row.get("start_time") or row.get("kickoff_time") or "00:00"
+    time_val = row.get("start_time") or row.get("kickoff_time")
     if not isinstance(date_val, str) or not date_val.strip():
+        return None
+    if not isinstance(time_val, str) or not time_val.strip():
         return None
     try:
         dt = pd.to_datetime(f"{date_val} {time_val}", utc=False, errors="coerce")
@@ -91,7 +92,13 @@ def _coerce_types(df: pd.DataFrame) -> pd.DataFrame:
     df["week"] = pd.to_numeric(df.get("week"), errors="coerce").astype("Int64")
     if "kickoff_iso_utc" in df.columns:
         kickoff = pd.to_datetime(df["kickoff_iso_utc"], errors="coerce", utc=True)
-        df["kickoff_iso_utc"] = kickoff.dt.strftime("%Y-%m-%dT%H:%M:%S%z").str.replace("+0000", "+00:00")
+        formatted = []
+        for ts in kickoff:
+            if pd.isna(ts):
+                formatted.append(None)
+            else:
+                formatted.append(ts.strftime("%Y-%m-%dT%H:%M:%S%z").replace("+0000", "+00:00"))
+        df["kickoff_iso_utc"] = formatted
     for col in ("home_team_norm", "away_team_norm"):
         values = df.get(col)
         values = values.where(pd.notna(values), None)
@@ -156,11 +163,20 @@ def upsert_rows(df: pd.DataFrame) -> Tuple[int, int]:
     ).astype(int)
     source_priority = {"seed": 0, "cfbd": 1}
     combined["source_priority"] = combined["source"].map(source_priority).fillna(0).astype(int)
+    combined["_kickoff_dt"] = pd.to_datetime(combined.get("kickoff_iso_utc"), errors="coerce", utc=True)
+    combined["_kickoff_rank"] = combined["_kickoff_dt"].apply(
+        lambda ts: 0
+        if pd.notna(ts) and not (ts.hour == 0 and ts.minute == 0 and ts.second == 0)
+        else (1 if pd.notna(ts) else 2)
+    )
+    sort_keys = KEY + ["score_present", "source_priority", "_kickoff_rank", "_kickoff_dt"]
+    ascending = [True] * len(KEY) + [True, True, False, True]
     combined = (
-        combined.sort_values(KEY + ["score_present", "source_priority"])
+        combined.sort_values(sort_keys, ascending=ascending)
         .drop_duplicates(KEY, keep="last")
         .reset_index(drop=True)
     )
+    combined = combined.drop(columns=["_kickoff_dt", "_kickoff_rank"])
     combined = combined.drop(columns=["score_present", "source_priority"])
     before = len(master_df)
     after = len(combined)

@@ -1,0 +1,268 @@
+CFB parity check aborting
+PASS: CFB league metrics teams 136/136; ranks_ok=1.00; wrote C:\Users\Jordan\Documents\Football Project George\NEW PROJECT\football-statfinder\out\cfb\2025_week8\league_metrics_2025_8.csv
+ODDS_FETCH_ERROR(CFB): provider=theoddsapi status=401 reason=Unauthorized
+WARN: CFB odds output empty at C:\Users\Jordan\Documents\Football Project George\NEW PROJECT\football-statfinder\out\cfb\2025_week8\odds_2025_wk8.jsonl; matched=0 (eligible_unmatched=0).
+See C:\Users\Jordan\Documents\Football Project George\NEW PROJECT\football-statfinder\out\cfb\2025_week8\odds_match_debug.json
+Alias debt: C:\Users\Jordan\Documents\Football Project George\NEW PROJECT\football-statfinder\out\cfb\2025_week8\odds_alias_debt.json
+Window: 2025-10-08T23:00:00Z -> 2025-10-25T18:00:00Z | events 0 / in_window 0 / matched 0 / unmatched 0 (total=0) by_why={'outside_window': 0, 'no_schedule_candidate': 0, 'other': 0}
+PASS: CFB odds matched 0; unmatched 0 (total=0); wrote C:\Users\Jordan\Documents\Football Project George\NEW PROJECT\football-statfinder\out\cfb\2025_week8\odds_2025_wk8.jsonl
+Debug: C:\Users\Jordan\Documents\Football Project George\NEW PROJECT\football-statfinder\out\cfb\2025_week8\odds_match_debug.json
+Alias debt: C:\Users\Jordan\Documents\Football Project George\NEW PROJECT\football-statfinder\out\cfb\2025_week8\odds_alias_debt.json
+Ratings check 20251019_0000_cincinnati_oklahoma_state: favored=None spread=None edge=None rvo=None
+PASS: CFB Game View rows=59 (jsonl=C:\Users\Jordan\Documents\Football Project George\NEW PROJECT\football-statfinder\out\cfb\2025_week8\games_week_2025_8.jsonl, csv=C:\Users\Jordan\Documents\Football Project George\NEW PROJECT\football-statfinder\out\cfb\2025_week8\games_week_2025_8.csv, receipt=C:\Users\Jordan\Documents\Football Project George\NEW PROJECT\football-statfinder\out\cfb\2025_week8\gameview_build_receipt.json)
+[schedule_master_cfb] Fetching CFBD schedule for season 2025
+[schedule_master_cfb] Fetching CFBD schedule for season 2024
+[schedule_master_cfb] Upsert complete: before=7506, after=7506, delta=0
+[schedule_master_cfb] ensure_weeks_present seasons=[2025, 2024] -> delta 0
+Sagarin spot check 20251014_2300_new_mexico_state_liberty: Liberty@New Mexico State -> home_ytd[0] pr=64.57 opp_pr=46.94
+SIDEcar_RANKS(CFB): week=2025-8 fixed_pr=0 fixed_opp_pr=191 fixed_sos=0 fixed_opp_sos=191
+PASS: CFB sidecars written -> out/cfb/2025_week8/game_schedules (59/59)
+Ratings check 20251019_0000_cincinnati_oklahoma_state: favored=None spread=None edge=None rvo=None
+PASS: CFB Game View rows=59 (jsonl=C:\Users\Jordan\Documents\Football Project George\NEW PROJECT\football-statfinder\out\cfb\2025_week8\games_week_2025_8.jsonl, csv=C:\Users\Jordan\Documents\Football Project George\NEW PROJECT\football-statfinder\out\cfb\2025_week8\games_week_2025_8.csv, receipt=C:\Users\Jordan\Documents\Football Project George\NEW PROJECT\football-statfinder\out\cfb\2025_week8\gameview_build_receipt.json)
+CurrentWeek(CFB)=2025 W9 computed_at=2025-10-27T16:00:48.055652Z; args=manual
+=== CFB WEEKLY REFRESH ===
+Season 2025 Week 8
+[schedule_master_cfb] Fetching CFBD schedule for season 2025
+[schedule_master_cfb] Fetching CFBD schedule for season 2024
+[schedule_master_cfb] Upsert complete: before=7479, after=7506, delta=27
+[schedule_master_cfb] ensure_weeks_present seasons=[2025, 2024] -> delta 27
+
+>>> Running src.fetch_games_cfb .
+PASS: CFB schedule rows=295
+ODDS_FETCH_ERROR(CFB): provider=theoddsapi status=401 reason=Unauthorized
+CFB ODDS STAGING: raw=0 pinned=0 unmatched=0 new_raw=0 new_pinned=0 markets={} books={} window=+/-3d candidate_sets_zero=0 candidate_sets_multi=0 max_delta=36.0h examples_unmatched=[]
+
+>>> Running src.fetch_year_to_date_stats_cfb .
+PASS: CFB league metrics coverage -> 136/136 teams meeting threshold (required 100); ranks_ok=1.00
+
+>>> Running src.fetch_week_odds_cfb .
+PASS: CFB odds matched 0/0 in-window (total=0); unmatched=0 (C:\Users\Jordan\Documents\Football Project George\NEW PROJECT\football-statfinder\out\cfb\2025_week8\odds_2025_wk8.jsonl)
+      by_why={'outside_window': 0, 'no_schedule_candidate': 0, 'other': 0}
+[schedule_master_cfb] SKIP: no local odds file for season=2025 week=8
+Master enrichment: updated 0/0 rows for season=2025 week=8
+
+>>> Running Sagarin staging flow.
+WARNING: Sagarin page week differs (page=9, requested=8); using requested week for outputs.
+=== CFB SAGARIN ACCEPTANCE ===
+Rows: 134 (expected 120-140)
+pr_rank coverage: 1 .. 134
+Unique team_norm: 134
+Home-field advantage: 4.31
+Sagarin page season/week: 2025 Week 9
+Sagarin(CFB): latest_fetch_ts=2025-10-27T16:01:11.476938Z teams=134 wrote_master_rows=134 selected_for_build=134
+
+>>> Running src.gameview_build_cfb .
+
+>>> Running src.build_team_timelines_cfb .
+PASS: CFB sidecars written -> 296 files (schedule rows=295)
+PASS: Sagarin enrichment rows=1902 (coverage 100%, opp 89%) -> C:\Users\Jordan\Documents\Football Project George\NEW PROJECT\football-statfinder\out\cfb\2025_week8\schedules_sagarin_receipt.json
+
+>>> Running src.gameview_build_cfb .
+ODDS_REPROMOTE(CFB): week=2025-6 promoted=0 source=staging/odds_pinned
+BACKFILL_REPAIR(CFB): week=2025-6 reason=odds_rvo_missing
+ATS_BACKFILL(CFB): week=2025-6 games_fixed=0 source_counts=pinned:0,snapshot:0,history:0
+ODDS_REPROMOTE(CFB): week=2025-7 promoted=0 source=staging/odds_pinned
+BACKFILL_REPAIR(CFB): week=2025-7 reason=odds_rvo_missing
+ATS_BACKFILL(CFB): week=2025-7 games_fixed=0 source_counts=pinned:0,snapshot:0,history:0
+ATS_BACKFILL(CFB): week=2025-8 games_fixed=0 source_counts=pinned:0,snapshot:0,history:0
+BACKFILL_MERGE(CFB): week=2025-8 updated_scores=58 preserved_odds=0 preserved_rvo=0
+ATSDBG(PARTICIPANTS): league=cfb count=275 (cache) sample=[Abilene Christian Wildcats, Air Force Falcons, Akron Zips]
+ATSDBG(PROVIDER-MAP): league=cfb week=2025-8 total=118 mapped=118 ambiguous=0 unknown=0
+ODDS_API_ERROR(get_historical_events): league=cfb status=401
+ODDS_API_HTTP_ERROR(get_historical_events): url=https://api.the-odds-api.com/v4/historical/sports/americanfootball_ncaaf/events?apiKey=aca1711a7cbd26f1e651e6e8084714e0&date=2025-10-14T12:00:00Z&dateFormat=iso&commenceTimeFrom=2025-10-13T00:00:00Z&commenceTimeTo=2025-10-19T23:59:59Z status=401 body={"message":"Usage quota has been reached. See usage plans at https://the-odds-api.com","error_code":"OUT_OF_USAGE_CREDITS","details_url":"https://the-odds-api.com/liveapi/guides/v4/api-error-codes.html#out-of-usage-credits"}
+
+ATSDBG(CFB): week=2025-8 game=20251014_2300_new_mexico_state_liberty step=kickoff parsed=2025-10-14T23:00:00+00:00
+ATSDBG(HIST-EVENTS): league=cfb snapshot=2025-10-14T12:00:00+00:00 fetched=0
+ATSDBG(HIST-EVENTS): league=cfb filtered=0 window=[2025-10-13T00:00:00+00:00->2025-10-19T23:59:59+00:00]
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251014_2300_new_mexico_state_liberty h='Liberty'->'Liberty Flames' a='New Mexico State'->'New Mexico State Aggies' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251014_2300_new_mexico_state_liberty step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251014_2330_arkansas_state_south_alabama step=kickoff parsed=2025-10-14T23:30:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251014_2330_arkansas_state_south_alabama h='South Alabama'->'South Alabama Jaguars' a='Arkansas State'->'Arkansas State Red Wolves' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251014_2330_arkansas_state_south_alabama step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251015_0000_florida_international_western_kentucky step=kickoff parsed=2025-10-15T00:00:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251015_0000_florida_international_western_kentucky h='Western Kentucky'->'Western Kentucky Hilltoppers' a='Florida International'->'Florida International Panthers' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251015_0000_florida_international_western_kentucky step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251015_2300_delaware_jacksonville_state step=kickoff parsed=2025-10-15T23:00:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251015_2300_delaware_jacksonville_state h='Jacksonville State'->'Jacksonville State Gamecocks' a='Delaware'->'Delaware Blue Hens' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251015_2300_delaware_jacksonville_state step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251015_2300_utep_sam_houston step=kickoff parsed=2025-10-15T23:00:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251015_2300_utep_sam_houston h='Sam Houston'->'Sam Houston Bearkats' a='Utep'->'UTEP Miners' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251015_2300_utep_sam_houston step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251016_2330_tulsa_east_carolina step=kickoff parsed=2025-10-16T23:30:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251016_2330_tulsa_east_carolina h='East Carolina'->'East Carolina Pirates' a='Tulsa'->'Tulsa Golden Hurricane' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251016_2330_tulsa_east_carolina step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251017_2300_louisville_miami step=kickoff parsed=2025-10-17T23:00:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251017_2300_louisville_miami h='Miami'->'Miami Hurricanes' a='Louisville'->'Louisville Cardinals' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251017_2300_louisville_miami step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_0000_nebraska_minnesota step=kickoff parsed=2025-10-18T00:00:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_0000_nebraska_minnesota h='Minnesota'->'Minnesota Golden Gophers' a='Nebraska'->'Nebraska Cornhuskers' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_0000_nebraska_minnesota step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_0100_san_jos_state_utah_state step=kickoff parsed=2025-10-18T01:00:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_0100_san_jos_state_utah_state h='Utah State'->'Utah State Aggies' a='San JosΘ State'->'San Jose State Spartans' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_0100_san_jos_state_utah_state step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_0230_north_carolina_california step=kickoff parsed=2025-10-18T02:30:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_0230_north_carolina_california h='California'->'California Golden Bears' a='North Carolina'->'North Carolina Tar Heels' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_0230_north_carolina_california step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1600_arizona_houston step=kickoff parsed=2025-10-18T16:00:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1600_arizona_houston h='Houston'->'Houston Cougars' a='Arizona'->'Arizona Wildcats' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1600_arizona_houston step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1600_army_tulane step=kickoff parsed=2025-10-18T16:00:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1600_army_tulane h='Tulane'->'Tulane Green Wave' a='Army'->'Army Black Knights' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1600_army_tulane step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1600_baylor_tcu step=kickoff parsed=2025-10-18T16:00:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1600_baylor_tcu h='Tcu'->'TCU Horned Frogs' a='Baylor'->'Baylor Bears' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1600_baylor_tcu step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1600_central_michigan_bowling_green step=kickoff parsed=2025-10-18T16:00:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1600_central_michigan_bowling_green h='Bowling Green'->'Bowling Green Falcons' a='Central Michigan'->'Central Michigan Chippewas' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1600_central_michigan_bowling_green step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1600_eastern_michigan_miami_oh step=kickoff parsed=2025-10-18T16:00:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1600_eastern_michigan_miami_oh h='Miami (oh)'->'Miami (OH) RedHawks' a='Eastern Michigan'->'Eastern Michigan Eagles' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1600_eastern_michigan_miami_oh step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1600_georgia_tech_duke step=kickoff parsed=2025-10-18T16:00:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1600_georgia_tech_duke h='Duke'->'Duke Blue Devils' a='Georgia Tech'->'Georgia Tech Yellow Jackets' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1600_georgia_tech_duke step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1600_lsu_vanderbilt step=kickoff parsed=2025-10-18T16:00:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1600_lsu_vanderbilt h='Vanderbilt'->'Vanderbilt Commodores' a='Lsu'->'LSU Tigers' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1600_lsu_vanderbilt step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1600_uconn_boston_college step=kickoff parsed=2025-10-18T16:00:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1600_uconn_boston_college h='Boston College'->'Boston College Eagles' a='Uconn'->'UConn Huskies' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1600_uconn_boston_college step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1600_washington_michigan step=kickoff parsed=2025-10-18T16:00:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1600_washington_michigan h='Michigan'->'Michigan Wolverines' a='Washington'->'Washington Huskies' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1600_washington_michigan step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1645_oklahoma_south_carolina step=kickoff parsed=2025-10-18T16:45:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1645_oklahoma_south_carolina h='South Carolina'->'South Carolina Gamecocks' a='Oklahoma'->'Oklahoma Sooners' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1645_oklahoma_south_carolina step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1700_west_virginia_ucf step=kickoff parsed=2025-10-18T17:00:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1700_west_virginia_ucf h='Ucf'->'UCF Knights' a='West Virginia'->'West Virginia Mountaineers' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1700_west_virginia_ucf step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1800_kent_state_toledo step=kickoff parsed=2025-10-18T18:00:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1800_kent_state_toledo h='Toledo'->'Toledo Rockets' a='Kent State'->'Kent State Golden Flashes' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1800_kent_state_toledo step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1830_buffalo_massachusetts step=kickoff parsed=2025-10-18T18:30:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1830_buffalo_massachusetts h='Massachusetts'->'Massachusetts Minutemen' a='Buffalo'->'Buffalo Bulls' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1830_buffalo_massachusetts step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1900_purdue_northwestern step=kickoff parsed=2025-10-18T19:00:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1900_purdue_northwestern h='Northwestern'->'Northwestern Wildcats' a='Purdue'->'Purdue Boilermakers' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1900_purdue_northwestern step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1900_troy_ul_monroe step=kickoff parsed=2025-10-18T19:00:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1900_troy_ul_monroe h='Ul Monroe'->'UL Monroe Warhawks' a='Troy'->'Troy Trojans' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1900_troy_ul_monroe step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1930_akron_ball_state step=kickoff parsed=2025-10-18T19:30:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1930_akron_ball_state h='Ball State'->'Ball State Cardinals' a='Akron'->'Akron Zips' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1930_akron_ball_state step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1930_coastal_carolina_app_state step=kickoff parsed=2025-10-18T19:30:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1930_coastal_carolina_app_state h='App State'->'Appalachian State Mountaineers' a='Coastal Carolina'->'Coastal Carolina Chanticleers' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1930_coastal_carolina_app_state step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1930_michigan_state_indiana step=kickoff parsed=2025-10-18T19:30:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1930_michigan_state_indiana h='Indiana'->'Indiana Hoosiers' a='Michigan State'->'Michigan State Spartans' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1930_michigan_state_indiana step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1930_northern_illinois_ohio step=kickoff parsed=2025-10-18T19:30:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1930_northern_illinois_ohio h='Ohio'->'Ohio Bobcats' a='Northern Illinois'->'Northern Illinois Huskies' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1930_northern_illinois_ohio step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1930_ohio_state_buckeyes_wisconsin step=kickoff parsed=2025-10-18T19:30:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1930_ohio_state_buckeyes_wisconsin h='Wisconsin'->'Wisconsin Badgers' a='Ohio State Buckeyes'->'Ohio State Buckeyes' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1930_ohio_state_buckeyes_wisconsin step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1930_old_dominion_james_madison step=kickoff parsed=2025-10-18T19:30:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1930_old_dominion_james_madison h='James Madison'->'James Madison Dukes' a='Old Dominion'->'Old Dominion Monarchs' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1930_old_dominion_james_madison step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1930_ole_miss_georgia_bulldogs step=kickoff parsed=2025-10-18T19:30:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1930_ole_miss_georgia_bulldogs h='Georgia Bulldogs'->'Georgia Bulldogs' a='Ole Miss'->'Ole Miss Rebels' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1930_ole_miss_georgia_bulldogs step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1930_smu_clemson_tigers step=kickoff parsed=2025-10-18T19:30:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1930_smu_clemson_tigers h='Clemson Tigers'->'Clemson Tigers' a='Smu'->'SMU Mustangs' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1930_smu_clemson_tigers step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1930_temple_charlotte step=kickoff parsed=2025-10-18T19:30:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1930_temple_charlotte h='Charlotte'->'Charlotte 49ers' a='Temple'->'Temple Owls' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1930_temple_charlotte step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1930_texas_aandm_arkansas step=kickoff parsed=2025-10-18T19:30:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1930_texas_aandm_arkansas h='Arkansas'->'Arkansas Razorbacks' a='Texas Aandm'->'Texas A&M Aggies' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1930_texas_aandm_arkansas step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1930_texas_state_marshall step=kickoff parsed=2025-10-18T19:30:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1930_texas_state_marshall h='Marshall'->'Marshall Thundering Herd' a='Texas State'->'Texas State Bobcats' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1930_texas_state_marshall step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1930_unlv_boise_state step=kickoff parsed=2025-10-18T19:30:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1930_unlv_boise_state h='Boise State'->'Boise State Broncos' a='Unlv'->'UNLV Rebels' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1930_unlv_boise_state step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1930_utsa_north_texas step=kickoff parsed=2025-10-18T19:30:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1930_utsa_north_texas h='North Texas'->'North Texas Mean Green' a='Utsa'->'UTSA Roadrunners' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1930_utsa_north_texas step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1930_wyoming_air_force step=kickoff parsed=2025-10-18T19:30:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1930_wyoming_air_force h='Air Force'->'Air Force Falcons' a='Wyoming'->'Wyoming Cowboys' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_1930_wyoming_air_force step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_2000_memphis_uab step=kickoff parsed=2025-10-18T20:00:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_2000_memphis_uab h='Uab'->'UAB Blazers' a='Memphis'->'Memphis Tigers' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_2000_memphis_uab step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_2000_texas_tech_arizona_state step=kickoff parsed=2025-10-18T20:00:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_2000_texas_tech_arizona_state h='Arizona State'->'Arizona State Sun Devils' a='Texas Tech'->'Texas Tech Red Raiders' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_2000_texas_tech_arizona_state step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_2015_mississippi_state_florida step=kickoff parsed=2025-10-18T20:15:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_2015_mississippi_state_florida h='Florida'->'Florida Gators' a='Mississippi State'->'Mississippi State Bulldogs' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_2015_mississippi_state_florida step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_2100_southern_miss_louisiana step=kickoff parsed=2025-10-18T21:00:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_2100_southern_miss_louisiana h='Louisiana'->'Louisiana Ragin Cajuns' a='Southern Miss'->'Southern Mississippi Golden Eagles' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_2100_southern_miss_louisiana step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_2230_oregon_ducks_rutgers step=kickoff parsed=2025-10-18T22:30:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_2230_oregon_ducks_rutgers h='Rutgers'->'Rutgers Scarlet Knights' a='Oregon Ducks'->'Oregon Ducks' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_2230_oregon_ducks_rutgers step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_2230_washington_state_virginia step=kickoff parsed=2025-10-18T22:30:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_2230_washington_state_virginia h='Virginia'->'Virginia Cavaliers' a='Washington State'->'Washington State Cougars' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_2230_washington_state_virginia step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_2300_georgia_state_georgia_southern step=kickoff parsed=2025-10-18T23:00:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_2300_georgia_state_georgia_southern h='Georgia Southern'->'Georgia Southern Eagles' a='Georgia State'->'Georgia State Panthers' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_2300_georgia_state_georgia_southern step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_2300_hawai_i_colorado_state step=kickoff parsed=2025-10-18T23:00:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_2300_hawai_i_colorado_state h='Colorado State'->'Colorado State Rams' a='Hawai'i'->'Hawaii Rainbow Warriors' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_2300_hawai_i_colorado_state step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_2300_maryland_ucla step=kickoff parsed=2025-10-18T23:00:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_2300_maryland_ucla h='Ucla'->'UCLA Bruins' a='Maryland'->'Maryland Terrapins' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_2300_maryland_ucla step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_2300_penn_state_iowa step=kickoff parsed=2025-10-18T23:00:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_2300_penn_state_iowa h='Iowa'->'Iowa Hawkeyes' a='Penn State'->'Penn State Nittany Lions' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_2300_penn_state_iowa step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_2300_texas_longhorns_kentucky step=kickoff parsed=2025-10-18T23:00:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_2300_texas_longhorns_kentucky h='Kentucky'->'Kentucky Wildcats' a='Texas Longhorns'->'Texas Longhorns' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_2300_texas_longhorns_kentucky step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_2330_florida_atlantic_south_florida step=kickoff parsed=2025-10-18T23:30:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_2330_florida_atlantic_south_florida h='South Florida'->'South Florida Bulls' a='Florida Atlantic'->'Florida Atlantic Owls' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_2330_florida_atlantic_south_florida step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_2330_pittsburgh_syracuse step=kickoff parsed=2025-10-18T23:30:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_2330_pittsburgh_syracuse h='Syracuse'->'Syracuse Orange' a='Pittsburgh'->'Pittsburgh Panthers' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_2330_pittsburgh_syracuse step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_2330_tennessee_alabama_crimson_tide step=kickoff parsed=2025-10-18T23:30:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_2330_tennessee_alabama_crimson_tide h='Alabama Crimson Tide'->'Alabama Crimson Tide' a='Tennessee'->'Tennessee Volunteers' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_2330_tennessee_alabama_crimson_tide step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_2330_usc_trojans_notre_dame_fighting_irish step=kickoff parsed=2025-10-18T23:30:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_2330_usc_trojans_notre_dame_fighting_irish h='Notre Dame Fighting Irish'->'Notre Dame Fighting Irish' a='USC Trojans'->'USC Trojans' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_2330_usc_trojans_notre_dame_fighting_irish step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_2345_missouri_auburn step=kickoff parsed=2025-10-18T23:45:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_2345_missouri_auburn h='Auburn'->'Auburn Tigers' a='Missouri'->'Missouri Tigers' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251018_2345_missouri_auburn step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251019_0000_cincinnati_oklahoma_state step=kickoff parsed=2025-10-19T00:00:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251019_0000_cincinnati_oklahoma_state h='Oklahoma State'->'Oklahoma State Cowboys' a='Cincinnati'->'Cincinnati Bearcats' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251019_0000_cincinnati_oklahoma_state step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251019_0000_utah_byu step=kickoff parsed=2025-10-19T00:00:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251019_0000_utah_byu h='Byu'->'BYU Cougars' a='Utah'->'Utah Utes' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251019_0000_utah_byu step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251019_0145_nevada_new_mexico step=kickoff parsed=2025-10-19T01:45:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251019_0145_nevada_new_mexico h='New Mexico'->'New Mexico Lobos' a='Nevada'->'Nevada Wolf Pack' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251019_0145_nevada_new_mexico step=resolve resolver=failed event_id=-
+ATSDBG(CFB): week=2025-8 game=20251019_0230_florida_state_stanford step=kickoff parsed=2025-10-19T02:30:00+00:00
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251019_0230_florida_state_stanford h='Stanford'->'Stanford Cardinal' a='Florida State'->'Florida State Seminoles' resolver=failed reason=no_event_match event_id=-
+ATSDBG(CFB): week=2025-8 game=20251019_0230_florida_state_stanford step=resolve resolver=failed event_id=-
+HIST_ODDS_CACHE: league=cfb week=2025-8 snapshot=- available=0 missing=0
+ATS_BACKFILL(API CFB): week=2025-8 games_fixed=0 sources={history:0,current:0} resolve={pinned:0,events:0,failed:59} skips={already_populated:0,no_kickoff:0,resolve_failed:59,no_provider_map:0,no_event_match:59,time_guard_miss:0,hist_odds_none:0,hist_odds_filtered:0,invalid_spread:0,no_scores:0} writes={merged_week:0,patched_sidecar:0} books={} probes_total=0 usage=used:20000,remaining:0
+PASS: CFB Game View rows=59 (C:\Users\Jordan\Documents\Football Project George\NEW PROJECT\football-statfinder\out\cfb\2025_week8\games_week_2025_8.jsonl)
+CFB odds join: rows=59 spread=0 total=0 both=0 unmatched_names=[]
+CFB ODDS PROMOTION: week=2025-8 promoted=0 by_market={} by_book={} legacy_mismatch=0 hint="provider ahead; staged"
+Scores(CFB): weeks=[W6,W7,W8] updated=58 skipped=3; ATS: teams=0 rows_updated=0
+
+=== SUMMARY ===
+Games JSONL records : 59
+Games CSV rows      : 59
+League metric rows  : 136
+Odds records        : 0
+Sagarin rows        : 134
+Sidecar files       : 296
+Done.
+NOTIFY: CFB refresh complete week=2025-8 rows=59 odds_promoted=0

@@ -31,7 +31,7 @@ from src.odds.ats_backfill_api import (
     select_closing_spread,
 )
 from src.odds.participants_cache import build_provider_map
-from src.odds.odds_api_client import ODDS_API_USAGE
+from src.odds.odds_api_client import ODDS_API_USAGE, hist_odds_cache_exists
 from src.ratings.sagarin_cfb_fetch import run_cfb_sagarin_staging
 from src.scores.cfb_backfill import backfill_cfb_scores
 from src.schedule_master_cfb import (
@@ -232,6 +232,7 @@ def _ats_backfill_api(
         flush=True,
     )
 
+    contexts: List[Dict[str, Any]] = []
     for game in games or []:
         if not isinstance(game, dict):
             continue
@@ -258,6 +259,22 @@ def _ats_backfill_api(
                 "probe_steps": 0,
             }
 
+        context: Dict[str, Any] = {
+            "game": game,
+            "game_key": game_key,
+            "debug_entry": debug_entry,
+            "kickoff_dt": None,
+            "kickoff_iso": None,
+            "event_id": None,
+            "resolver_used": None,
+            "resolver_reason": None,
+            "skip_reason": None,
+            "debug_reason": None,
+            "snapshot_iso": None,
+            "cache_exists": None,
+        }
+        contexts.append(context)
+
         existing = (
             game.get("home_ats"),
             game.get("away_ats"),
@@ -265,16 +282,18 @@ def _ats_backfill_api(
             game.get("to_margin_away"),
         )
         if any(not _is_blank(field) for field in existing):
-            counters["already_populated"] += 1
+            context["skip_reason"] = "already_populated"
+            context["debug_reason"] = "already_populated"
             if debug_enabled:
                 debug_entry["reason"] = "already_populated"  # type: ignore[index]
-                debug_rows.append(debug_entry)  # type: ignore[arg-type]
             continue
 
         kickoff_dt = _parse_kickoff(game)
         kickoff_iso = kickoff_dt.isoformat() if kickoff_dt else (
             game.get("kickoff_iso_utc") or game.get("kickoff_iso")
         )
+        context["kickoff_dt"] = kickoff_dt
+        context["kickoff_iso"] = kickoff_iso
         _atsdbg(
             debug_enabled,
             f"ATSDBG({league_tag}): week={season}-{week} game={game_key} step=kickoff parsed={kickoff_iso or '-'}",
@@ -282,10 +301,8 @@ def _ats_backfill_api(
         if debug_enabled:
             debug_entry["kickoff"] = kickoff_iso  # type: ignore[index]
         if kickoff_dt is None:
-            counters["no_kickoff"] += 1
-            if debug_enabled:
-                debug_entry["reason"] = "no_kickoff"  # type: ignore[index]
-                debug_rows.append(debug_entry)  # type: ignore[arg-type]
+            context["skip_reason"] = "no_kickoff"
+            context["debug_reason"] = "no_kickoff"
             continue
 
         event_id, resolver_used, resolver_reason = resolve_event_id(
@@ -296,6 +313,9 @@ def _ats_backfill_api(
             pinned_index=pinned_index,
         )
         resolver_counts[resolver_used] += 1
+        context["event_id"] = event_id
+        context["resolver_used"] = resolver_used
+        context["resolver_reason"] = resolver_reason
         _atsdbg(
             debug_enabled,
             f"ATSDBG({league_tag}): week={season}-{week} game={game_key} step=resolve resolver={resolver_used} event_id={event_id or '-'}",
@@ -307,18 +327,75 @@ def _ats_backfill_api(
                 debug_entry["resolver_reason"] = resolver_reason  # type: ignore[index]
 
         if not event_id:
-            counters["resolve_failed"] += 1
-            if resolver_reason:
-                counters[resolver_reason] += 1
-            if debug_enabled:
-                debug_entry["reason"] = resolver_reason or "resolve_failed"  # type: ignore[index]
+            context["skip_reason"] = "resolve_failed"
+            context["debug_reason"] = resolver_reason or "resolve_failed"
+            continue
+
+        snapshot_dt = get_last_snapshot(league)
+        if snapshot_dt is not None:
+            snapshot_iso = snapshot_dt.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+        else:
+            snapshot_iso = _normalize_kickoff(kickoff_dt, kickoff_iso)
+        context["snapshot_iso"] = snapshot_iso
+        if snapshot_iso:
+            context["cache_exists"] = hist_odds_cache_exists(league, event_id, snapshot_iso)
+        else:
+            context["cache_exists"] = False
+
+    eligible_contexts = [
+        ctx for ctx in contexts if ctx.get("skip_reason") is None and ctx.get("event_id")
+    ]
+    snapshot_values = {
+        str(ctx["snapshot_iso"])
+        for ctx in eligible_contexts
+        if ctx.get("snapshot_iso")
+    }
+    if len(snapshot_values) == 1:
+        snapshot_label = next(iter(snapshot_values))
+    elif len(snapshot_values) > 1:
+        snapshot_label = "mixed"
+    else:
+        snapshot_label = "-"
+    cache_available = sum(1 for ctx in eligible_contexts if ctx.get("cache_exists"))
+    cache_missing = sum(
+        1 for ctx in eligible_contexts if ctx.get("cache_exists") is False
+    )
+    print(
+        f"HIST_ODDS_CACHE: league={league} week={season}-{week} snapshot={snapshot_label} "
+        f"available={cache_available} missing={cache_missing}",
+        flush=True,
+    )
+
+    for context in contexts:
+        game = context["game"]
+        game_key = context["game_key"]
+        debug_entry = context["debug_entry"]
+        skip_reason = context.get("skip_reason")
+
+        if skip_reason:
+            if skip_reason == "already_populated":
+                counters["already_populated"] += 1
+            elif skip_reason == "no_kickoff":
+                counters["no_kickoff"] += 1
+            elif skip_reason == "resolve_failed":
+                counters["resolve_failed"] += 1
+                resolver_reason = context.get("resolver_reason")
+                if resolver_reason:
+                    counters[resolver_reason] += 1
+            if debug_enabled and debug_entry is not None:
+                debug_entry["reason"] = context.get("debug_reason")  # type: ignore[index]
                 debug_rows.append(debug_entry)  # type: ignore[arg-type]
             continue
+
+        event_id = context.get("event_id")
+        if not event_id:
+            continue
+        kickoff_iso = context.get("kickoff_iso") or ""
 
         selection = select_closing_spread(
             league=league,
             event_id=event_id,
-            kickoff_iso=kickoff_iso or "",
+            kickoff_iso=kickoff_iso,
             home_name=game.get("home_team_norm") or game.get("home_team_raw") or "",
             away_name=game.get("away_team_norm") or game.get("away_team_raw") or "",
         )
@@ -336,7 +413,7 @@ def _ats_backfill_api(
             selection_reason = selection.get("reason")
             if selection_reason:
                 counters[selection_reason] += 1
-            if debug_enabled:
+            if debug_enabled and debug_entry is not None:
                 debug_entry["reason"] = selection_reason or status  # type: ignore[index]
                 debug_entry["books"] = {  # type: ignore[index]
                     "raw": selection.get("raw_book_count", 0),
@@ -367,7 +444,7 @@ def _ats_backfill_api(
                 kept=selection.get("kept_book_count", 0),
             ),
         )
-        if debug_enabled:
+        if debug_enabled and debug_entry is not None:
             debug_entry["endpoint"] = endpoint_name  # type: ignore[index]
             debug_entry["book"] = selection.get("book")  # type: ignore[index]
             debug_entry["favored_team"] = selection.get("favored_team")  # type: ignore[index]
@@ -387,7 +464,7 @@ def _ats_backfill_api(
             spread = float(selection["spread"])
         except (KeyError, TypeError, ValueError):
             counters["invalid_spread"] += 1
-            if debug_enabled:
+            if debug_enabled and debug_entry is not None:
                 debug_entry["reason"] = "invalid_spread"  # type: ignore[index]
                 debug_rows.append(debug_entry)  # type: ignore[arg-type]
             continue
@@ -395,7 +472,7 @@ def _ats_backfill_api(
         home_score, away_score, score_source = _extract_scores(game, sidecar_map, season, week)
         if home_score is None or away_score is None:
             counters["no_scores"] += 1
-            if debug_enabled:
+            if debug_enabled and debug_entry is not None:
                 debug_entry["scores"] = {"home": home_score, "away": away_score}  # type: ignore[index]
                 debug_entry["score_source"] = score_source  # type: ignore[index]
                 debug_entry["reason"] = "no_scores"  # type: ignore[index]
@@ -408,14 +485,14 @@ def _ats_backfill_api(
             debug_enabled,
             f"ATSDBG({league_tag}): week={season}-{week} game={game_key} step=scores home={hs} away={as_}",
         )
-        if debug_enabled:
+        if debug_enabled and debug_entry is not None:
             debug_entry["scores"] = {"home": hs, "away": as_}  # type: ignore[index]
             debug_entry["score_source"] = score_source  # type: ignore[index]
 
         ats_payload = compute_ats(hs, as_, str(favored or ""), spread)
         if not ats_payload:
             counters["no_scores"] += 1
-            if debug_enabled:
+            if debug_enabled and debug_entry is not None:
                 debug_entry["reason"] = "compute_failed"  # type: ignore[index]
                 debug_rows.append(debug_entry)  # type: ignore[arg-type]
             continue
@@ -434,7 +511,7 @@ def _ats_backfill_api(
                 tm_away=ats_payload["to_margin_away"],
             ),
         )
-        if debug_enabled:
+        if debug_enabled and debug_entry is not None:
             debug_entry["computed"] = ats_payload  # type: ignore[index]
 
         row_changed = False
@@ -454,7 +531,7 @@ def _ats_backfill_api(
             games_fixed += 1
             week_dirty = True
             counters["merged_week"] += 1
-        if debug_enabled:
+        if debug_enabled and debug_entry is not None:
             debug_entry["merged_week_fields"] = changed_fields  # type: ignore[index]
 
         sidecar_record = sidecar_map.get(game_key)
@@ -523,7 +600,7 @@ def _ats_backfill_api(
             f"ATSDBG({league_tag}): week={season}-{week} game={game_key} step=sidecar team=away updated={int(away_updated)}"
             + (f" reason={away_reason}" if away_reason else ""),
         )
-        if debug_enabled:
+        if debug_enabled and debug_entry is not None:
             debug_entry["patched_sidecar"] = {  # type: ignore[index]
                 "home": bool(home_updated),
                 "away": bool(away_updated),
@@ -781,10 +858,14 @@ def main() -> int:
 
     notes: List[str] = []
 
-    try:
-        ensure_cfb_schedule_master([season, season - 1])
-    except Exception as exc:
-        print(f"WARNING: schedule master update failed: {exc}")
+    refresh_flag = getenv("CFBD_REFRESH", "1").strip().lower() not in {"0", "false", "off", "no"}
+    if refresh_flag:
+        try:
+            ensure_cfb_schedule_master([season, season - 1])
+        except Exception as exc:
+            print(f"WARNING: schedule master update failed: {exc}")
+    else:
+        print("SKIP: CFBD schedule refresh disabled (CFBD_REFRESH=0)")
     critical_fields = [
         "spread_home_relative",
         "favored_side",

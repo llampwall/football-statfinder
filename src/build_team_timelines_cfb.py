@@ -11,7 +11,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import pandas as pd
 
-from src.common.io_utils import ensure_out_dir
+from src.common.io_utils import ensure_out_dir, getenv
 from src.common.team_names_cfb import team_merge_key_cfb
 from src.schedule_master_cfb import (
     ensure_weeks_present as ensure_schedule_master,
@@ -464,7 +464,11 @@ def build_sidecars(season: int, week: int) -> dict:
     games_df = _load_games_json(games_path)
     games_total = len(games_df)
 
-    ensure_schedule_master([season, season - 1])
+    refresh_flag = getenv("CFBD_REFRESH", "1").strip().lower() not in {"0", "false", "off", "no"}
+    if refresh_flag:
+        ensure_schedule_master([season, season - 1])
+    else:
+        print("SKIP: CFBD schedule refresh disabled (CFBD_REFRESH=0)")
     schedule_master = load_schedule_master()
     schedule_master = schedule_master[
         (schedule_master["league"].astype(str).str.upper() == "CFB")

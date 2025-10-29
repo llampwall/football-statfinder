@@ -1,0 +1,122 @@
+ATSDBG(PARTICIPANTS): league=cfb count=275 (cache) sample=[Abilene Christian Wildcats, Air Force Falcons, Akron Zips]
+ATSDBG(HIST-EVENTS): league=cfb snapshot=2025-10-14T12:00:00+00:00 fetched=0
+ATSDBG(HIST-EVENTS): league=cfb filtered=0 window=[2025-10-13T00:00:00+00:00->2025-10-19T23:59:59+00:00]
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251014_2300_new_mexico_state_liberty h='Liberty'->'Liberty Flames' a='New Mexico State'->'New Mexico State Aggies' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251014_2330_arkansas_state_south_alabama h='South Alabama'->'South Alabama Jaguars' a='Arkansas State'->'Arkansas State Red Wolves' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251015_0000_florida_international_western_kentucky h='Western Kentucky'->'Western Kentucky Hilltoppers' a='Florida International'->'Florida International Panthers' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251015_2300_delaware_jacksonville_state h='Jacksonville State'->'Jacksonville State Gamecocks' a='Delaware'->'Delaware Blue Hens' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251015_2300_utep_sam_houston h='Sam Houston'->'Sam Houston Bearkats' a='Utep'->'UTEP Miners' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251016_2330_tulsa_east_carolina h='East Carolina'->'East Carolina Pirates' a='Tulsa'->'Tulsa Golden Hurricane' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251017_2300_louisville_miami h='Miami'->'Miami Hurricanes' a='Louisville'->'Louisville Cardinals' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_0000_nebraska_minnesota h='Minnesota'->'Minnesota Golden Gophers' a='Nebraska'->'Nebraska Cornhuskers' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_0100_san_jos_state_utah_state h='Utah State'->'Utah State Aggies' a='San JosΘ State'->'San Jose State Spartans' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_0230_north_carolina_california h='California'->'California Golden Bears' a='North Carolina'->'North Carolina Tar Heels' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1600_arizona_houston h='Houston'->'Houston Cougars' a='Arizona'->'Arizona Wildcats' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1600_army_tulane h='Tulane'->'Tulane Green Wave' a='Army'->'Army Black Knights' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1600_baylor_tcu h='Tcu'->'TCU Horned Frogs' a='Baylor'->'Baylor Bears' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1600_central_michigan_bowling_green h='Bowling Green'->'Bowling Green Falcons' a='Central Michigan'->'Central Michigan Chippewas' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1600_eastern_michigan_miami_oh h='Miami (oh)'->'Miami (OH) RedHawks' a='Eastern Michigan'->'Eastern Michigan Eagles' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1600_georgia_tech_duke h='Duke'->'Duke Blue Devils' a='Georgia Tech'->'Georgia Tech Yellow Jackets' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1600_lsu_vanderbilt h='Vanderbilt'->'Vanderbilt Commodores' a='Lsu'->'LSU Tigers' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1600_uconn_boston_college h='Boston College'->'Boston College Eagles' a='Uconn'->'UConn Huskies' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1600_washington_michigan h='Michigan'->'Michigan Wolverines' a='Washington'->'Washington Huskies' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1645_oklahoma_south_carolina h='South Carolina'->'South Carolina Gamecocks' a='Oklahoma'->'Oklahoma Sooners' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1700_west_virginia_ucf h='Ucf'->'UCF Knights' a='West Virginia'->'West Virginia Mountaineers' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1800_kent_state_toledo h='Toledo'->'Toledo Rockets' a='Kent State'->'Kent State Golden Flashes' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1830_buffalo_massachusetts h='Massachusetts'->'Massachusetts Minutemen' a='Buffalo'->'Buffalo Bulls' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1900_purdue_northwestern h='Northwestern'->'Northwestern Wildcats' a='Purdue'->'Purdue Boilermakers' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1900_troy_ul_monroe h='Ul Monroe'->'UL Monroe Warhawks' a='Troy'->'Troy Trojans' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1930_akron_ball_state h='Ball State'->'Ball State Cardinals' a='Akron'->'Akron Zips' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1930_coastal_carolina_app_state h='App State'->'Appalachian State Mountaineers' a='Coastal Carolina'->'Coastal Carolina Chanticleers' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1930_michigan_state_indiana h='Indiana'->'Indiana Hoosiers' a='Michigan State'->'Michigan State Spartans' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1930_northern_illinois_ohio h='Ohio'->'Ohio Bobcats' a='Northern Illinois'->'Northern Illinois Huskies' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1930_ohio_state_buckeyes_wisconsin h='Wisconsin'->'Wisconsin Badgers' a='Ohio State Buckeyes'->'Ohio State Buckeyes' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1930_old_dominion_james_madison h='James Madison'->'James Madison Dukes' a='Old Dominion'->'Old Dominion Monarchs' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1930_ole_miss_georgia_bulldogs h='Georgia Bulldogs'->'Georgia Bulldogs' a='Ole Miss'->'Ole Miss Rebels' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1930_smu_clemson_tigers h='Clemson Tigers'->'Clemson Tigers' a='Smu'->'SMU Mustangs' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1930_temple_charlotte h='Charlotte'->'Charlotte 49ers' a='Temple'->'Temple Owls' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1930_texas_aandm_arkansas h='Arkansas'->'Arkansas Razorbacks' a='Texas Aandm'->'Texas A&M Aggies' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1930_texas_state_marshall h='Marshall'->'Marshall Thundering Herd' a='Texas State'->'Texas State Bobcats' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1930_unlv_boise_state h='Boise State'->'Boise State Broncos' a='Unlv'->'UNLV Rebels' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1930_utsa_north_texas h='North Texas'->'North Texas Mean Green' a='Utsa'->'UTSA Roadrunners' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_1930_wyoming_air_force h='Air Force'->'Air Force Falcons' a='Wyoming'->'Wyoming Cowboys' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_2000_memphis_uab h='Uab'->'UAB Blazers' a='Memphis'->'Memphis Tigers' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_2000_texas_tech_arizona_state h='Arizona State'->'Arizona State Sun Devils' a='Texas Tech'->'Texas Tech Red Raiders' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_2015_mississippi_state_florida h='Florida'->'Florida Gators' a='Mississippi State'->'Mississippi State Bulldogs' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_2100_southern_miss_louisiana h='Louisiana'->'Louisiana Ragin Cajuns' a='Southern Miss'->'Southern Mississippi Golden Eagles' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_2230_oregon_ducks_rutgers h='Rutgers'->'Rutgers Scarlet Knights' a='Oregon Ducks'->'Oregon Ducks' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_2230_washington_state_virginia h='Virginia'->'Virginia Cavaliers' a='Washington State'->'Washington State Cougars' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_2300_georgia_state_georgia_southern h='Georgia Southern'->'Georgia Southern Eagles' a='Georgia State'->'Georgia State Panthers' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_2300_hawai_i_colorado_state h='Colorado State'->'Colorado State Rams' a='Hawai'i'->'Hawaii Rainbow Warriors' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_2300_maryland_ucla h='Ucla'->'UCLA Bruins' a='Maryland'->'Maryland Terrapins' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_2300_penn_state_iowa h='Iowa'->'Iowa Hawkeyes' a='Penn State'->'Penn State Nittany Lions' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_2300_texas_longhorns_kentucky h='Kentucky'->'Kentucky Wildcats' a='Texas Longhorns'->'Texas Longhorns' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_2330_florida_atlantic_south_florida h='South Florida'->'South Florida Bulls' a='Florida Atlantic'->'Florida Atlantic Owls' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_2330_pittsburgh_syracuse h='Syracuse'->'Syracuse Orange' a='Pittsburgh'->'Pittsburgh Panthers' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_2330_tennessee_alabama_crimson_tide h='Alabama Crimson Tide'->'Alabama Crimson Tide' a='Tennessee'->'Tennessee Volunteers' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_2330_usc_trojans_notre_dame_fighting_irish h='Notre Dame Fighting Irish'->'Notre Dame Fighting Irish' a='USC Trojans'->'USC Trojans' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251018_2345_missouri_auburn h='Auburn'->'Auburn Tigers' a='Missouri'->'Missouri Tigers' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251019_0000_cincinnati_oklahoma_state h='Oklahoma State'->'Oklahoma State Cowboys' a='Cincinnati'->'Cincinnati Bearcats' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251019_0000_utah_byu h='Byu'->'BYU Cougars' a='Utah'->'Utah Utes' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251019_0145_nevada_new_mexico h='New Mexico'->'New Mexico Lobos' a='Nevada'->'Nevada Wolf Pack' resolver=failed reason=no_event_match event_id=-
+ATSDBG(RESOLVE): league=cfb week=2025-8 game=20251019_0230_florida_state_stanford h='Stanford'->'Stanford Cardinal' a='Florida State'->'Florida State Seminoles' resolver=failed reason=no_event_match event_id=-
+HIST_ODDS_CACHE: league=cfb week=2025-8 snapshot=- available=0 missing=0 unresolved=59
+  20251014_2300_new_mexico_state_liberty status=no_event_match event_id=- snapshot=- resolver=failed
+  20251014_2330_arkansas_state_south_alabama status=no_event_match event_id=- snapshot=- resolver=failed
+  20251015_0000_florida_international_western_kentucky status=no_event_match event_id=- snapshot=- resolver=failed
+  20251015_2300_delaware_jacksonville_state status=no_event_match event_id=- snapshot=- resolver=failed
+  20251015_2300_utep_sam_houston status=no_event_match event_id=- snapshot=- resolver=failed
+  20251016_2330_tulsa_east_carolina status=no_event_match event_id=- snapshot=- resolver=failed
+  20251017_2300_louisville_miami status=no_event_match event_id=- snapshot=- resolver=failed
+  20251018_0000_nebraska_minnesota status=no_event_match event_id=- snapshot=- resolver=failed
+  20251018_0100_san_jos_state_utah_state status=no_event_match event_id=- snapshot=- resolver=failed
+  20251018_0230_north_carolina_california status=no_event_match event_id=- snapshot=- resolver=failed
+  20251018_1600_arizona_houston status=no_event_match event_id=- snapshot=- resolver=failed
+  20251018_1600_army_tulane status=no_event_match event_id=- snapshot=- resolver=failed
+  20251018_1600_baylor_tcu status=no_event_match event_id=- snapshot=- resolver=failed
+  20251018_1600_central_michigan_bowling_green status=no_event_match event_id=- snapshot=- resolver=failed
+  20251018_1600_eastern_michigan_miami_oh status=no_event_match event_id=- snapshot=- resolver=failed
+  20251018_1600_georgia_tech_duke status=no_event_match event_id=- snapshot=- resolver=failed
+  20251018_1600_lsu_vanderbilt status=no_event_match event_id=- snapshot=- resolver=failed
+  20251018_1600_uconn_boston_college status=no_event_match event_id=- snapshot=- resolver=failed
+  20251018_1600_washington_michigan status=no_event_match event_id=- snapshot=- resolver=failed
+  20251018_1645_oklahoma_south_carolina status=no_event_match event_id=- snapshot=- resolver=failed
+  20251018_1700_west_virginia_ucf status=no_event_match event_id=- snapshot=- resolver=failed
+  20251018_1800_kent_state_toledo status=no_event_match event_id=- snapshot=- resolver=failed
+  20251018_1830_buffalo_massachusetts status=no_event_match event_id=- snapshot=- resolver=failed
+  20251018_1900_purdue_northwestern status=no_event_match event_id=- snapshot=- resolver=failed
+  20251018_1900_troy_ul_monroe status=no_event_match event_id=- snapshot=- resolver=failed
+  20251018_1930_akron_ball_state status=no_event_match event_id=- snapshot=- resolver=failed
+  20251018_1930_coastal_carolina_app_state status=no_event_match event_id=- snapshot=- resolver=failed
+  20251018_1930_michigan_state_indiana status=no_event_match event_id=- snapshot=- resolver=failed
+  20251018_1930_northern_illinois_ohio status=no_event_match event_id=- snapshot=- resolver=failed
+  20251018_1930_ohio_state_buckeyes_wisconsin status=no_event_match event_id=- snapshot=- resolver=failed
+  20251018_1930_old_dominion_james_madison status=no_event_match event_id=- snapshot=- resolver=failed
+  20251018_1930_ole_miss_georgia_bulldogs status=no_event_match event_id=- snapshot=- resolver=failed
+  20251018_1930_smu_clemson_tigers status=no_event_match event_id=- snapshot=- resolver=failed
+  20251018_1930_temple_charlotte status=no_event_match event_id=- snapshot=- resolver=failed
+  20251018_1930_texas_aandm_arkansas status=no_event_match event_id=- snapshot=- resolver=failed
+  20251018_1930_texas_state_marshall status=no_event_match event_id=- snapshot=- resolver=failed
+  20251018_1930_unlv_boise_state status=no_event_match event_id=- snapshot=- resolver=failed
+  20251018_1930_utsa_north_texas status=no_event_match event_id=- snapshot=- resolver=failed
+  20251018_1930_wyoming_air_force status=no_event_match event_id=- snapshot=- resolver=failed
+  20251018_2000_memphis_uab status=no_event_match event_id=- snapshot=- resolver=failed
+  20251018_2000_texas_tech_arizona_state status=no_event_match event_id=- snapshot=- resolver=failed
+  20251018_2015_mississippi_state_florida status=no_event_match event_id=- snapshot=- resolver=failed
+  20251018_2100_southern_miss_louisiana status=no_event_match event_id=- snapshot=- resolver=failed
+  20251018_2230_oregon_ducks_rutgers status=no_event_match event_id=- snapshot=- resolver=failed
+  20251018_2230_washington_state_virginia status=no_event_match event_id=- snapshot=- resolver=failed
+  20251018_2300_georgia_state_georgia_southern status=no_event_match event_id=- snapshot=- resolver=failed
+  20251018_2300_hawai_i_colorado_state status=no_event_match event_id=- snapshot=- resolver=failed
+  20251018_2300_maryland_ucla status=no_event_match event_id=- snapshot=- resolver=failed
+  20251018_2300_penn_state_iowa status=no_event_match event_id=- snapshot=- resolver=failed
+  20251018_2300_texas_longhorns_kentucky status=no_event_match event_id=- snapshot=- resolver=failed
+  20251018_2330_florida_atlantic_south_florida status=no_event_match event_id=- snapshot=- resolver=failed
+  20251018_2330_pittsburgh_syracuse status=no_event_match event_id=- snapshot=- resolver=failed
+  20251018_2330_tennessee_alabama_crimson_tide status=no_event_match event_id=- snapshot=- resolver=failed
+  20251018_2330_usc_trojans_notre_dame_fighting_irish status=no_event_match event_id=- snapshot=- resolver=failed
+  20251018_2345_missouri_auburn status=no_event_match event_id=- snapshot=- resolver=failed
+  20251019_0000_cincinnati_oklahoma_state status=no_event_match event_id=- snapshot=- resolver=failed
+  20251019_0000_utah_byu status=no_event_match event_id=- snapshot=- resolver=failed
+  20251019_0145_nevada_new_mexico status=no_event_match event_id=- snapshot=- resolver=failed
+  20251019_0230_florida_state_stanford status=no_event_match event_id=- snapshot=- resolver=failed
