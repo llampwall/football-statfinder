@@ -90,6 +90,7 @@ const STATE = {
   season: null,
   week: null,
   league: DEFAULT_LEAGUE,
+  gameOrdinals: new Map(),
   deepLinkUsed: false,
   autoFromStorage: false,
   sortedKeys: [],
@@ -389,6 +390,7 @@ async function loadGames(autoGameKey) {
   const previousPath = STATE.weekPaths ? STATE.weekPaths.gamesJsonl : null;
   const paths = buildWeekPaths(STATE.league, season, week);
   STATE.weekPaths = paths;
+  STATE.gameOrdinals = new Map();
   if (previousPath !== paths.gamesJsonl) {
     STATE.pathsLogged = false;
   }
@@ -554,6 +556,7 @@ function populateGameSelect(records, autoSelectKey) {
     .sort((a, b) => (a.kickoff_iso_utc ?? "").localeCompare(b.kickoff_iso_utc ?? ""));
 
   STATE.sortedKeys = sorted.map((game) => game.game_key);
+  STATE.gameOrdinals = buildGameOrdinals(sorted);
 
   sorted.forEach((game) => {
     const option = document.createElement("option");
@@ -694,11 +697,13 @@ function renderHeader(game, teamNames) {
   const awayName = teamNames.away;
   const kickoffPT = fmtKickoffPT(game.kickoff_iso_utc);
   const kickoffUTC = formatKickoff(game.kickoff_iso_utc);
+  const gameNumber = resolveGameNumber(game);
   const kickoffTitle =
     kickoffUTC && kickoffUTC !== MISSING_VALUE ? ` title="UTC: ${kickoffUTC}"` : "";
+  const numberMarkup = gameNumber ? ` <span class="game-number">(Game #${gameNumber})</span>` : "";
 
   els.teamsBlock.innerHTML = `
-    <h2>${homeName} vs ${awayName}</h2>
+    <h2>${awayName} at ${homeName}${numberMarkup}</h2>
     <div class="meta-line">Kickoff (Pacific): <span${kickoffTitle}>${kickoffPT}</span></div>
     <div class="meta-line">Game key: ${fallback(game.game_key)}</div>
   `;
@@ -1311,6 +1316,51 @@ function fallback(value) {
     return MISSING_VALUE;
   }
   return value;
+}
+
+function resolveGameNumber(game) {
+  if (!game || typeof game !== "object") return null;
+  const key = game.game_key ?? null;
+  const ordinal = key && STATE.gameOrdinals instanceof Map ? STATE.gameOrdinals.get(key) : null;
+  const formatted = formatGameNumber(STATE.week, ordinal);
+  if (formatted) return formatted;
+
+  const candidate =
+    game.game_number ??
+    game.week_game_number ??
+    game?.raw_sources?.schedule_row?.game_no ??
+    game?.raw_sources?.schedule_row?.rotation ??
+    game.rotation_number ??
+    game.game_no ??
+    game?.raw_sources?.schedule_row?.gsis ??
+    null;
+  if (candidate === null || candidate === undefined) return null;
+  const text = String(candidate).trim();
+  if (!text) return null;
+  const numeric = Number(text);
+  if (Number.isFinite(numeric)) {
+    return String(Math.trunc(numeric));
+  }
+  return text;
+}
+
+function formatGameNumber(weekValue, ordinal) {
+  if (!hasNumeric(weekValue) || !hasNumeric(ordinal)) return null;
+  const weekPart = String(Math.trunc(Number(weekValue)));
+  const ordinalPart = String(Math.trunc(Number(ordinal))).padStart(2, "0");
+  return `${weekPart}${ordinalPart}`;
+}
+
+function buildGameOrdinals(records) {
+  const map = new Map();
+  if (!Array.isArray(records)) return map;
+  let ordinal = 1;
+  records.forEach((row) => {
+    const key = row?.game_key;
+    if (!key || map.has(key)) return;
+    map.set(key, ordinal++);
+  });
+  return map;
 }
 
 function formatAtsValue(value) {

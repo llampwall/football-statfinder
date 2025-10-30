@@ -40,6 +40,7 @@ const leagueParam = (query.get("league") || "NFL").toUpperCase();
 const seasonParam = toNumber(query.get("season"));
 const weekParam = toNumber(query.get("week"));
 const gameKey = (query.get("game_key") || query.get("game") || "").trim();
+let GAME_ORDINALS = null;
 
 const baseDir =
   Number.isFinite(seasonParam) && Number.isFinite(weekParam)
@@ -304,7 +305,14 @@ function resolveTeamNumber(row, side) {
 }
 
 function resolveGameNumber(row) {
+  const key = row?.game_key ?? null;
+  const ordinal = key && GAME_ORDINALS instanceof Map ? GAME_ORDINALS.get(key) : null;
+  const formatted = formatGameNumber(weekParam, ordinal);
+  if (formatted) return formatted;
+
   const candidate =
+    row?.game_number ??
+    row?.week_game_number ??
     row?.raw_sources?.schedule_row?.game_no ??
     row?.raw_sources?.schedule_row?.rotation ??
     row?.rotation_number ??
@@ -312,12 +320,35 @@ function resolveGameNumber(row) {
     row?.raw_sources?.schedule_row?.gsis ??
     null;
   if (candidate === null || candidate === undefined || candidate === "") return DASH;
-  const num = Number(candidate);
+  const text = String(candidate).trim();
+  if (!text) return DASH;
+  const num = Number(text);
   if (Number.isFinite(num)) {
     return String(Math.trunc(num));
   }
-  const str = String(candidate).trim();
-  return str ? str : DASH;
+  return text;
+}
+
+function formatGameNumber(weekValue, ordinal) {
+  if (!Number.isFinite(weekValue) || !Number.isFinite(ordinal)) return null;
+  const weekPart = String(Math.trunc(Number(weekValue)));
+  const ordinalPart = String(Math.trunc(Number(ordinal))).padStart(2, "0");
+  return `${weekPart}${ordinalPart}`;
+}
+
+function buildGameOrdinals(rows) {
+  const map = new Map();
+  if (!Array.isArray(rows)) return map;
+  let ordinal = 1;
+  rows
+    .slice()
+    .sort((a, b) => (a?.kickoff_iso_utc ?? "").localeCompare(b?.kickoff_iso_utc ?? ""))
+    .forEach((row) => {
+      const key = row?.game_key;
+      if (!key || map.has(key)) return;
+      map.set(key, ordinal++);
+    });
+  return map;
 }
 
 function applyHeader(row) {
@@ -556,6 +587,7 @@ function renderError(message) {
       throw new Error("missing query params");
     }
     const rows = await loadJsonl(weekPath);
+    GAME_ORDINALS = buildGameOrdinals(rows);
     const row = rows.find((r) => r?.game_key === gameKey);
     if (!row) {
       throw new Error("game not found");
@@ -714,4 +746,3 @@ function renderError(message) {
     renderError(error);
   }
 })();
-
