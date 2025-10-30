@@ -695,6 +695,38 @@ function renderError(message) {
       awayCandidates.find((value) => value && value !== DASH) || DASH;
     const homeLabel =
       homeCandidates.find((value) => value && value !== DASH) || DASH;
+    const prevSeasonValue = Number.isFinite(seasonParam) ? seasonParam - 1 : null;
+
+    const homeDisplay =
+      homeLabel !== DASH ? homeLabel : row?.home_team_name || DASH;
+    const awayDisplay =
+      awayLabel !== DASH ? awayLabel : row?.away_team_name || DASH;
+
+    const currentHeadingEl = document.getElementById("schedule-current-heading");
+    if (currentHeadingEl) {
+      currentHeadingEl.textContent = Number.isFinite(seasonParam)
+        ? `${seasonParam} Schedule/Scores`
+        : "Schedule/Scores";
+    }
+    const prevHeadingEl = document.getElementById("schedule-previous-heading");
+    if (prevHeadingEl) {
+      prevHeadingEl.textContent = Number.isFinite(prevSeasonValue)
+        ? `${prevSeasonValue} Schedule/Scores`
+        : "Previous Season Schedule/Scores";
+    }
+    const homeTitleText =
+      homeDisplay && homeDisplay !== DASH ? `${homeDisplay} (Home)` : "Home Team";
+    const awayTitleText =
+      awayDisplay && awayDisplay !== DASH ? `${awayDisplay} (Away)` : "Away Team";
+
+    const homeHeaderEl = document.getElementById("schedule-home-header");
+    if (homeHeaderEl) homeHeaderEl.textContent = homeTitleText;
+    const awayHeaderEl = document.getElementById("schedule-away-header");
+    if (awayHeaderEl) awayHeaderEl.textContent = awayTitleText;
+    const homeHeaderPrevEl = document.getElementById("schedule-home-header-prev");
+    if (homeHeaderPrevEl) homeHeaderPrevEl.textContent = homeTitleText;
+    const awayHeaderPrevEl = document.getElementById("schedule-away-header-prev");
+    if (awayHeaderPrevEl) awayHeaderPrevEl.textContent = awayTitleText;
 
     const leagueKey = leagueParam.toLowerCase();
     const metrics = deriveTopMetrics(row, leagueKey);
@@ -707,8 +739,8 @@ function renderError(message) {
     const snippetMetrics = buildSnippetMetrics(row, metrics);
     fillTeam("t1", row, "away", metrics, snippetMetrics);
     fillTeam("t2", row, "home", metrics, snippetMetrics);
-    setText("stats1Team", awayLabel !== DASH ? awayLabel : row?.away_team_name);
-    setText("stats2Team", homeLabel !== DASH ? homeLabel : row?.home_team_name);
+    setText("stats1Team", awayDisplay);
+    setText("stats2Team", homeDisplay);
 
     const gameNo = resolveGameNumber(row);
     setText("t1GameNo", gameNo);
@@ -751,8 +783,6 @@ function renderError(message) {
 
     fillOffDefFromMetrics("t1", awayMetrics);
     fillOffDefFromMetrics("t2", homeMetrics);
-
-    const prevSeasonValue = Number.isFinite(seasonParam) ? seasonParam - 1 : null;
 
     let sidecar = null;
     try {
