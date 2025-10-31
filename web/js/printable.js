@@ -21,6 +21,16 @@ const setText = (id, v) => {
   el.textContent = hasValue ? String(v) : DASH;
 };
 
+function setSnippetText(id, value) {
+  const el = $(id);
+  if (!el) return;
+  if (value === null || value === undefined) {
+    el.textContent = DASH;
+    return;
+  }
+  el.textContent = value;
+}
+
 const setPlus = (id, n) => {
   const num = Number(n);
   if (!Number.isFinite(num)) {
@@ -40,6 +50,7 @@ const leagueParam = (query.get("league") || "NFL").toUpperCase();
 const seasonParam = toNumber(query.get("season"));
 const weekParam = toNumber(query.get("week"));
 const gameKey = (query.get("game_key") || query.get("game") || "").trim();
+let GAME_ORDINALS = null;
 
 const baseDir =
   Number.isFinite(seasonParam) && Number.isFinite(weekParam)
@@ -303,8 +314,101 @@ function resolveTeamNumber(row, side) {
   return dash(scheduleRow[field]);
 }
 
+function buildSnippetMetrics(row, metrics) {
+  const result = {
+    favoredSide: null,
+    odds: { home: "", away: "" },
+    total: { home: "", away: "" },
+    diff: { home: null, away: null },
+    rvo: { home: null, away: null },
+    sosDiff: { home: "", away: "" },
+  };
+
+  const spreadHome = Number(row?.spread_home_relative);
+  if (Number.isFinite(spreadHome) && spreadHome !== 0) {
+    result.favoredSide = spreadHome < 0 ? "home" : "away";
+  } else if (typeof row?.favored_side === "string") {
+    if (row.favored_side === "HOME") result.favoredSide = "home";
+    else if (row.favored_side === "AWAY") result.favoredSide = "away";
+  }
+
+  const favored = result.favoredSide;
+  if (favored) {
+    if (Number.isFinite(spreadHome)) {
+      const favoredSpread = favored === "home" ? spreadHome : spreadHome * -1;
+      result.odds[favored] = formatNumber(favoredSpread, { decimals: 1, signed: true });
+    } else if (hasNumeric(row?.spread_favored_team)) {
+      result.odds[favored] = formatNumber(row.spread_favored_team, { decimals: 1, signed: true });
+    } else {
+      result.odds[favored] = null;
+    }
+
+    if (hasNumeric(row?.total)) {
+      result.total[favored] = formatNumber(row.total, { decimals: 1 });
+    } else if (hasNumeric(metrics?.total)) {
+      result.total[favored] = formatNumber(metrics.total, { decimals: 1 });
+    } else {
+      result.total[favored] = null;
+    }
+
+    let diffValue = null;
+    if (hasNumeric(row?.rating_diff_favored_team)) {
+      diffValue = Number(row.rating_diff_favored_team);
+    } else if (metrics && metrics.prDiffFavored !== null && metrics.prDiffFavored !== undefined) {
+      diffValue = Number(metrics.prDiffFavored);
+    } else if (hasNumeric(row?.rating_diff)) {
+      const ratingDiff = Number(row.rating_diff);
+      diffValue = favored === "home" ? ratingDiff : ratingDiff * -1;
+    }
+    result.diff[favored] =
+      diffValue !== null && Number.isFinite(diffValue)
+        ? formatNumber(diffValue, { decimals: 1, signed: true })
+        : null;
+
+    let rvoValue = null;
+    if (hasNumeric(row?.rating_vs_odds)) {
+      rvoValue = Number(row.rating_vs_odds);
+    } else if (metrics && metrics.rvo !== null && metrics.rvo !== undefined) {
+      rvoValue = Number(metrics.rvo);
+    }
+    result.rvo[favored] =
+      rvoValue !== null && Number.isFinite(rvoValue)
+        ? formatNumber(rvoValue, { decimals: 1, signed: true })
+        : null;
+  }
+
+  const homeSos = Number(row?.home_sos);
+  const awaySos = Number(row?.away_sos);
+  if (Number.isFinite(homeSos) && Number.isFinite(awaySos)) {
+    const diffHome = homeSos - awaySos;
+    if (diffHome > 0) {
+      result.sosDiff.home = formatNumber(diffHome, { decimals: 1, signed: true });
+      result.sosDiff.away = "";
+    } else if (diffHome < 0) {
+      const diffAway = awaySos - homeSos;
+      result.sosDiff.away = formatNumber(diffAway, { decimals: 1, signed: true });
+      result.sosDiff.home = "";
+    } else {
+      result.sosDiff.home = "";
+      result.sosDiff.away = "";
+    }
+  } else {
+    result.sosDiff.home = null;
+    result.sosDiff.away = null;
+  }
+
+  return result;
+}
+
 function resolveGameNumber(row) {
+  const key = row?.game_key ?? null;
+  const ordinal = key && GAME_ORDINALS instanceof Map ? GAME_ORDINALS.get(key) : null;
+  const formatted = formatGameNumber(weekParam, ordinal);
+  if (formatted) return formatted;
+
   const candidate =
+    row?.game_number ??
+    row?.week_game_number ??
     row?.raw_sources?.schedule_row?.game_no ??
     row?.raw_sources?.schedule_row?.rotation ??
     row?.rotation_number ??
@@ -312,12 +416,35 @@ function resolveGameNumber(row) {
     row?.raw_sources?.schedule_row?.gsis ??
     null;
   if (candidate === null || candidate === undefined || candidate === "") return DASH;
-  const num = Number(candidate);
+  const text = String(candidate).trim();
+  if (!text) return DASH;
+  const num = Number(text);
   if (Number.isFinite(num)) {
     return String(Math.trunc(num));
   }
-  const str = String(candidate).trim();
-  return str ? str : DASH;
+  return text;
+}
+
+function formatGameNumber(weekValue, ordinal) {
+  if (!Number.isFinite(weekValue) || !Number.isFinite(ordinal)) return null;
+  const weekPart = String(Math.trunc(Number(weekValue)));
+  const ordinalPart = String(Math.trunc(Number(ordinal))).padStart(2, "0");
+  return `${weekPart}${ordinalPart}`;
+}
+
+function buildGameOrdinals(rows) {
+  const map = new Map();
+  if (!Array.isArray(rows)) return map;
+  let ordinal = 1;
+  rows
+    .slice()
+    .sort((a, b) => (a?.kickoff_iso_utc ?? "").localeCompare(b?.kickoff_iso_utc ?? ""))
+    .forEach((row) => {
+      const key = row?.game_key;
+      if (!key || map.has(key)) return;
+      map.set(key, ordinal++);
+    });
+  return map;
 }
 
 function applyHeader(row) {
@@ -353,39 +480,38 @@ function applyHeader(row) {
   setText("hdrTime", timeFmt.format(kickoff));
 }
 
-function fillTeam(prefix, row, side, metrics) {
+function fillTeam(prefix, row, side, metrics, snippet) {
   const sideKey = side === "home" ? "HOME" : "AWAY";
   setText(`${prefix}TeamNo`, resolveTeamNumber(row, side));
   setText(`${prefix}GameNo`, resolveGameNumber(row));
   setText(`${prefix}Name`, dash(teamName(row, side)));
-  setText(`${prefix}Odds`, spreadFor(side, row));
-  const totalSource = metrics?.total ?? row?.total;
-  setText(`${prefix}OU`, formatNumber(totalSource, { decimals: 1 }));
+
+  const snippetMetrics = snippet || buildSnippetMetrics(row, metrics);
+  setSnippetText(`${prefix}Odds`, snippetMetrics.odds?.[side] ?? null);
+  setSnippetText(`${prefix}OU`, snippetMetrics.total?.[side] ?? null);
   setText(`${prefix}PR`, formatNumber(row?.[`${side}_pr`], { decimals: 2 }));
-  const diffDerived =
-    metrics && metrics.prDiffFavored !== null && metrics.favoredSide
-      ? metrics.favoredSide === sideKey
-        ? metrics.prDiffFavored
-        : metrics.prDiffFavored * -1
-      : null;
-  if (diffDerived !== null) {
-    setText(`${prefix}Diff`, formatPlus(diffDerived, 2));
+
+  const diffValue = snippetMetrics.diff?.[side];
+  if (diffValue !== undefined) {
+    setSnippetText(`${prefix}Diff`, diffValue);
   } else {
-    setText(`${prefix}Diff`, ratingDiffFor(side, row));
+    setSnippetText(`${prefix}Diff`, null);
   }
-  const rvoDerived =
-    metrics && metrics.rvo !== null && metrics.favoredSide
-      ? metrics.favoredSide === sideKey
-        ? metrics.rvo
-        : metrics.rvo * -1
-      : null;
-  if (rvoDerived !== null) {
-    setText(`${prefix}RVO`, formatPlus(rvoDerived, 2));
+
+  const rvoValue = snippetMetrics.rvo?.[side];
+  if (rvoValue !== undefined) {
+    setSnippetText(`${prefix}RVO`, rvoValue);
   } else {
-    setText(`${prefix}RVO`, ratingVsOddsFor(side, row));
+    setSnippetText(`${prefix}RVO`, null);
   }
+
   setText(`${prefix}SoS`, formatNumber(row?.[`${side}_sos`], { decimals: 2 }));
-  setText(`${prefix}SoSDiff`, sosDiffFor(side, row));
+  const sosDiffValue = snippetMetrics.sosDiff?.[side];
+  if (sosDiffValue !== undefined) {
+    setSnippetText(`${prefix}SoSDiff`, sosDiffValue);
+  } else {
+    setSnippetText(`${prefix}SoSDiff`, null);
+  }
   setText(`${prefix}PF`, formatNumber(row?.[`${side}_pf_pg`], { decimals: 1 }));
   setText(`${prefix}PA`, formatNumber(row?.[`${side}_pa_pg`], { decimals: 1 }));
   setText(`${prefix}SU`, dash(row?.[`${side}_su`]));
@@ -556,6 +682,7 @@ function renderError(message) {
       throw new Error("missing query params");
     }
     const rows = await loadJsonl(weekPath);
+    GAME_ORDINALS = buildGameOrdinals(rows);
     const row = rows.find((r) => r?.game_key === gameKey);
     if (!row) {
       throw new Error("game not found");
@@ -568,6 +695,38 @@ function renderError(message) {
       awayCandidates.find((value) => value && value !== DASH) || DASH;
     const homeLabel =
       homeCandidates.find((value) => value && value !== DASH) || DASH;
+    const prevSeasonValue = Number.isFinite(seasonParam) ? seasonParam - 1 : null;
+
+    const homeDisplay =
+      homeLabel !== DASH ? homeLabel : row?.home_team_name || DASH;
+    const awayDisplay =
+      awayLabel !== DASH ? awayLabel : row?.away_team_name || DASH;
+
+    const currentHeadingEl = document.getElementById("schedule-current-heading");
+    if (currentHeadingEl) {
+      currentHeadingEl.textContent = Number.isFinite(seasonParam)
+        ? `${seasonParam} Schedule/Scores`
+        : "Schedule/Scores";
+    }
+    const prevHeadingEl = document.getElementById("schedule-previous-heading");
+    if (prevHeadingEl) {
+      prevHeadingEl.textContent = Number.isFinite(prevSeasonValue)
+        ? `${prevSeasonValue} Schedule/Scores`
+        : "Previous Season Schedule/Scores";
+    }
+    const homeTitleText =
+      homeDisplay && homeDisplay !== DASH ? `${homeDisplay} (Home)` : "Home Team";
+    const awayTitleText =
+      awayDisplay && awayDisplay !== DASH ? `${awayDisplay} (Away)` : "Away Team";
+
+    const homeHeaderEl = document.getElementById("schedule-home-header");
+    if (homeHeaderEl) homeHeaderEl.textContent = homeTitleText;
+    const awayHeaderEl = document.getElementById("schedule-away-header");
+    if (awayHeaderEl) awayHeaderEl.textContent = awayTitleText;
+    const homeHeaderPrevEl = document.getElementById("schedule-home-header-prev");
+    if (homeHeaderPrevEl) homeHeaderPrevEl.textContent = homeTitleText;
+    const awayHeaderPrevEl = document.getElementById("schedule-away-header-prev");
+    if (awayHeaderPrevEl) awayHeaderPrevEl.textContent = awayTitleText;
 
     const leagueKey = leagueParam.toLowerCase();
     const metrics = deriveTopMetrics(row, leagueKey);
@@ -577,10 +736,11 @@ function renderError(message) {
       hfaLabel.textContent = `HFA=${hfaText}`;
     }
 
-    fillTeam("t1", row, "away", metrics);
-    fillTeam("t2", row, "home", metrics);
-    setText("stats1Team", awayLabel !== DASH ? awayLabel : row?.away_team_name);
-    setText("stats2Team", homeLabel !== DASH ? homeLabel : row?.home_team_name);
+    const snippetMetrics = buildSnippetMetrics(row, metrics);
+    fillTeam("t1", row, "away", metrics, snippetMetrics);
+    fillTeam("t2", row, "home", metrics, snippetMetrics);
+    setText("stats1Team", awayDisplay);
+    setText("stats2Team", homeDisplay);
 
     const gameNo = resolveGameNumber(row);
     setText("t1GameNo", gameNo);
@@ -623,8 +783,6 @@ function renderError(message) {
 
     fillOffDefFromMetrics("t1", awayMetrics);
     fillOffDefFromMetrics("t2", homeMetrics);
-
-    const prevSeasonValue = Number.isFinite(seasonParam) ? seasonParam - 1 : null;
 
     let sidecar = null;
     try {
@@ -714,4 +872,3 @@ function renderError(message) {
     renderError(error);
   }
 })();
-
