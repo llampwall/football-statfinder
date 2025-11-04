@@ -134,6 +134,7 @@ def _is_truthy(value: str) -> bool:
 def _align_columns(df: pd.DataFrame, columns: Sequence[str]) -> pd.DataFrame:
     ordered = [col for col in columns if col in df.columns]
     remainder = [col for col in df.columns if col not in ordered]
+    return df.reindex(columns=ordered + remainder)
 
 
 def _is_finite_number(value: object) -> bool:
@@ -348,7 +349,6 @@ def _apply_ats_backfill(
             write_atomic_json(entry["path"], entry["data"])
 
     return games_fixed, source_counts, rows_changed
-    return df.reindex(columns=ordered + remainder)
 
 
 def _rebuild_cfb_game_view(season: int, week: int) -> None:
@@ -483,13 +483,21 @@ def backfill_cfb_scores(
             rebuild_game_view = True
 
         if week_changed or promoted_games > 0:
+            final_df = pd.DataFrame(final_rows)
+            if csv_df is not None:
+                final_df = _align_columns(final_df, list(csv_df.columns))
+
+            if not final_rows or final_df.empty:
+                print(
+                    f"Scores(CFB): week={season}-{prior_week} "
+                    "already up to date; 0 rows written"
+                )
+                continue
+
             preserved_odds_total += preservation["preserved_odds"]
             preserved_rvo_total += preservation["preserved_rvo"]
 
             write_atomic_jsonl(json_path, final_rows)
-            final_df = pd.DataFrame(final_rows)
-            if csv_df is not None:
-                final_df = _align_columns(final_df, list(csv_df.columns))
             write_atomic_csv(csv_path, final_df)
             files_rewritten += 1
 
@@ -504,6 +512,9 @@ def backfill_cfb_scores(
             if rebuild_game_view:
                 _rebuild_cfb_game_view(season, prior_week)
 
+
+    if updated == 0 and files_rewritten == 0:
+        print("Scores(CFB): current week already up to date; 0 rows written")
 
     return {
         "weeks": weeks_to_scan,

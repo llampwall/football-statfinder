@@ -1,0 +1,50 @@
+{
+  "games_week_keys_missing": [],
+  "games_week_keys_present_blank": [
+    "20251105_0000_massachusetts_akron",
+    "20251107_0030_georgia_southern_app_state",
+    "20251108_1700_southern_miss_arkansas_state",
+    "20251108_1800_missouri_state_liberty",
+    "20251108_2000_charlotte_east_carolina",
+    "20251108_2000_jacksonville_state_utep",
+    "20251108_2000_louisiana_tech_delaware",
+    "20251108_2000_tulsa_florida_atlantic",
+    "20251108_2300_air_force_san_jos_state",
+    "20251109_0030_navy_notre_dame_fighting_irish",
+    "20251109_0300_sam_houston_oregon_state",
+    "20251109_0400_san_diego_state_hawai_i"
+  ],
+  "counts": {
+    "rows": 51,
+    "missing_key_hits": {},
+    "blank_key_hits": {
+      "20251105_0000_massachusetts_akron": 5,
+      "20251107_0030_georgia_southern_app_state": 5,
+      "20251108_1700_southern_miss_arkansas_state": 5,
+      "20251108_1800_missouri_state_liberty": 2,
+      "20251108_2000_charlotte_east_carolina": 5,
+      "20251108_2000_jacksonville_state_utep": 5,
+      "20251108_2000_louisiana_tech_delaware": 2,
+      "20251108_2000_tulsa_florida_atlantic": 5,
+      "20251108_2300_air_force_san_jos_state": 5,
+      "20251109_0030_navy_notre_dame_fighting_irish": 5,
+      "20251109_0300_sam_houston_oregon_state": 5,
+      "20251109_0400_san_diego_state_hawai_i": 5
+    }
+  },
+  "notes": [
+    "Schedule rows=309",
+    "Odds staging raw=1482 pinned=1197 unmatched=285",
+    "League metrics 136/136 teams meeting threshold (required 100); ranks_ok=1.00",
+    "Odds matched 41/51 (total 51); unmatched=10",
+    "Master enrichment 41/350",
+    "Sagarin rows=134; master=6696",
+    "Sidecars 51/309",
+    "Sagarin enrichment 100%/89%",
+    "Odds promotion promoted=13 current_week=2966 other_weeks=32545 mismatch=0",
+    "Scores backfill [W9,W10] updated=104 skipped=1 files=2",
+    "ATS rows=0 teams=0 zero=102 weeks_scanned=[7, 8, 9, 10]",
+    "Game View rows=51",
+    "NFL week baseline not found; skipping cross-league key comparison."
+  ]
+}

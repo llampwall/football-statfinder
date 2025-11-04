@@ -1,0 +1,23 @@
+{
+  "ts_utc": "2025-11-04T07:54:42.910501Z",
+  "cfb": {
+    "ok": false,
+    "seconds": 45.907,
+    "notify": null,
+    "notes": [
+      "Traceback (most recent call last):",
+      "ODDS_REPROMOTE(CFB): week=2025-9 promoted=14 source=staging/odds_pinned"
+    ]
+  },
+  "nfl": {
+    "ok": false,
+    "seconds": 12.433,
+    "notify": null,
+    "notes": [
+      "Traceback (most recent call last):",
+      "ODDS_REPROMOTE(NFL): week=2025-8 promoted=0 source=staging/odds_pinned",
+      "ODDS_REPROMOTE(NFL): week=2025-9 promoted=0 source=staging/odds_pinned"
+    ]
+  },
+  "host": "DESKTOP-P97ADMK"
+}

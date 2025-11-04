@@ -1,0 +1,101 @@
+{
+  "fbs_rows": 51,
+  "joined_metrics_rows": 51,
+  "joined_odds_rows": 41,
+  "joined_sagarin_rows": 49,
+  "output_rows": 51,
+  "odds_games": 41,
+  "sagarin_games": 49,
+  "coverage_metrics": 1.0,
+  "notes": [
+    "FBS games: 51",
+    "Metrics coverage: 51/51",
+    "Odds coverage: 41/51",
+    "Sagarin coverage: 49/51"
+  ],
+  "samples": {
+    "missing_odds": [
+      {
+        "game_key": "20251105_0000_massachusetts_akron",
+        "home": "Akron",
+        "away": "Massachusetts",
+        "kickoff_iso_utc": "2025-11-05T00:00:00Z"
+      },
+      {
+        "game_key": "20251107_0030_georgia_southern_app_state",
+        "home": "App State",
+        "away": "Georgia Southern",
+        "kickoff_iso_utc": "2025-11-07T00:30:00Z"
+      },
+      {
+        "game_key": "20251108_1700_southern_miss_arkansas_state",
+        "home": "Arkansas State",
+        "away": "Southern Miss",
+        "kickoff_iso_utc": "2025-11-08T17:00:00Z"
+      },
+      {
+        "game_key": "20251108_2000_jacksonville_state_utep",
+        "home": "Utep",
+        "away": "Jacksonville State",
+        "kickoff_iso_utc": "2025-11-08T20:00:00Z"
+      },
+      {
+        "game_key": "20251108_2000_charlotte_east_carolina",
+        "home": "East Carolina",
+        "away": "Charlotte",
+        "kickoff_iso_utc": "2025-11-08T20:00:00Z"
+      },
+      {
+        "game_key": "20251108_2000_tulsa_florida_atlantic",
+        "home": "Florida Atlantic",
+        "away": "Tulsa",
+        "kickoff_iso_utc": "2025-11-08T20:00:00Z"
+      },
+      {
+        "game_key": "20251108_2300_air_force_san_jos_state",
+        "home": "San Jos\u00e9 State",
+        "away": "Air Force",
+        "kickoff_iso_utc": "2025-11-08T23:00:00Z"
+      },
+      {
+        "game_key": "20251109_0030_navy_notre_dame_fighting_irish",
+        "home": "Notre Dame Fighting Irish",
+        "away": "Navy",
+        "kickoff_iso_utc": "2025-11-09T00:30:00Z"
+      },
+      {
+        "game_key": "20251109_0300_sam_houston_oregon_state",
+        "home": "Oregon State",
+        "away": "Sam Houston",
+        "kickoff_iso_utc": "2025-11-09T03:00:00Z"
+      },
+      {
+        "game_key": "20251109_0400_san_diego_state_hawai_i",
+        "home": "Hawai'i",
+        "away": "San Diego State",
+        "kickoff_iso_utc": "2025-11-09T04:00:00Z"
+      }
+    ],
+    "missing_sagarin": [
+      {
+        "game_key": "20251108_1800_missouri_state_liberty",
+        "home": "Liberty",
+        "away": "Missouri State",
+        "kickoff_iso_utc": "2025-11-08T18:00:00Z"
+      },
+      {
+        "game_key": "20251108_2000_louisiana_tech_delaware",
+        "home": "Delaware",
+        "away": "Louisiana Tech",
+        "kickoff_iso_utc": "2025-11-08T20:00:00Z"
+      }
+    ],
+    "metrics_gaps": []
+  },
+  "ratings": {
+    "eligible": 39,
+    "edges_count": 39,
+    "rvo_count": 39
+  },
+  "failures": []
+}
