@@ -16,15 +16,15 @@
   "samples": {
     "missing_odds": [
       {
-        "game_key": "20251029_0000_james_madison_texas_state",
-        "home": "Texas State",
-        "away": "James Madison",
-        "kickoff_iso_utc": "2025-10-29T00:00:00Z"
-      },
-      {
         "game_key": "20251029_0000_utep_kennesaw_state",
         "home": "Kennesaw State",
         "away": "Utep",
+        "kickoff_iso_utc": "2025-10-29T00:00:00Z"
+      },
+      {
+        "game_key": "20251029_0000_james_madison_texas_state",
+        "home": "Texas State",
+        "away": "James Madison",
         "kickoff_iso_utc": "2025-10-29T00:00:00Z"
       },
       {
@@ -70,9 +70,9 @@
         "kickoff_iso_utc": "2025-11-01T00:00:00Z"
       },
       {
-        "game_key": "20251101_1600_uab_uconn",
-        "home": "Uconn",
-        "away": "Uab",
+        "game_key": "20251101_1600_navy_north_texas",
+        "home": "North Texas",
+        "away": "Navy",
         "kickoff_iso_utc": "2025-11-01T16:00:00Z"
       }
     ],
