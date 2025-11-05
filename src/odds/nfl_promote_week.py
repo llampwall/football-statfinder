@@ -31,9 +31,11 @@ import pandas as pd
 
 from src.common.io_atomic import write_atomic_csv, write_atomic_jsonl
 from src.common.io_utils import ensure_out_dir
+from src.odds.ats_compute import pick_latest_before
 
 OUT_ROOT = ensure_out_dir()
 PINNED_DIR = OUT_ROOT / "staging" / "odds_pinned" / "nfl"
+_WARNED_POLICIES: set[str] = set()
 
 
 def _parse_fetch_ts(value: Optional[str]) -> datetime:
@@ -85,6 +87,64 @@ def _choose_best(records: Sequence[dict]) -> Optional[dict]:
     )
 
 
+def _parse_kickoff(value: Optional[str]) -> Optional[datetime]:
+    if not value:
+        return None
+    try:
+        dt = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+    except Exception:
+        return None
+    return dt.astimezone(timezone.utc)
+
+
+def _choose_by_policy(
+    records: Sequence[dict],
+    policy: str,
+    kickoff: Optional[datetime],
+) -> Tuple[Optional[dict], bool]:
+    if not records:
+        return None, False
+    if policy == "closing_pre_kickoff" and kickoff:
+        pick = pick_latest_before(records, kickoff)
+        if pick:
+            return pick, True
+    fallback = _choose_best(records)
+    return fallback, False
+
+
+def _row_sort_key(row: Mapping[str, Any]) -> Tuple[int, int, str, str]:
+    def _safe_int(value: Any) -> int:
+        try:
+            return int(value)
+        except (TypeError, ValueError):
+            return 0
+
+    season = _safe_int(row.get("season"))
+    week = _safe_int(row.get("week"))
+    kickoff = str(row.get("kickoff_iso_utc") or row.get("kickoff_iso") or "")
+    game_key = str(row.get("game_key") or "")
+    return (season, week, kickoff, game_key)
+
+
+def _sort_rows_for_output(rows: Sequence[Mapping[str, Any]]) -> List[Mapping[str, Any]]:
+    return sorted(rows, key=_row_sort_key)
+
+
+def _sort_dataframe(df: pd.DataFrame) -> pd.DataFrame:
+    if df.empty:
+        return df.copy()
+    sort_cols = [col for col in ("season", "week", "kickoff_iso_utc", "game_key") if col in df.columns]
+    if not sort_cols:
+        return df.reset_index(drop=True)
+    return df.sort_values(sort_cols, kind="mergesort").reset_index(drop=True)
+
+
+def _align_dataframe(df: pd.DataFrame, columns: Sequence[str]) -> pd.DataFrame:
+    ordered = [col for col in columns if col in df.columns]
+    remainder = [col for col in df.columns if col not in ordered]
+    return df.reindex(columns=ordered + remainder)
+
+
 def _merge_line(row: MutableMapping[str, Any], record: dict, line: Mapping[str, Any]) -> None:
     market = record.get("market")
     if market == "spreads":
@@ -106,8 +166,16 @@ def promote_week_odds(
     policy: str = "latest_by_fetch_ts",
 ) -> Dict[str, Any]:
     """Promote pinned NFL odds into the provided in-memory rows."""
-    if policy != "latest_by_fetch_ts":
-        raise ValueError(f"Unsupported odds selection policy: {policy}")
+    policy = (policy or "latest_by_fetch_ts").strip() or "latest_by_fetch_ts"
+    supported_policies = {"latest_by_fetch_ts", "closing_pre_kickoff"}
+    if policy not in supported_policies:
+        if policy not in _WARNED_POLICIES:
+            print(
+                f"WARNING: Unsupported odds selection policy '{policy}'; "
+                "falling back to latest_by_fetch_ts"
+            )
+            _WARNED_POLICIES.add(policy)
+        policy = "latest_by_fetch_ts"
     if not rows:
         return {
             "promoted_games": 0,
@@ -153,6 +221,12 @@ def promote_week_odds(
         row = game_lookup.get(game_key)
         if not row:
             continue
+        kickoff_iso = (
+            row.get("kickoff_iso_utc")
+            or row.get("kickoff_iso")
+            or row.get("kickoff_utc")
+        )
+        kickoff_dt = _parse_kickoff(kickoff_iso)
         odds_payload = {
             "source": "staging",
             "season": season,
@@ -160,8 +234,9 @@ def promote_week_odds(
             "markets": {},
         }
         primary_record: Optional[dict] = None
+        closing_selected = False
         for market, records in market_records.items():
-            best = _choose_best(records)
+            best, used_closing = _choose_by_policy(records, policy, kickoff_dt)
             if not best:
                 continue
             line = best.get("line") or {}
@@ -178,13 +253,18 @@ def promote_week_odds(
                 primary_record.get("fetch_ts") if primary_record else None
             ):
                 primary_record = best
+            if used_closing and market == "spreads":
+                closing_selected = True
         if odds_payload["markets"]:
             promoted_games.add(game_key)
             row.setdefault("raw_sources", {})["odds_row"] = odds_payload
             if primary_record:
                 row["odds_source"] = primary_record.get("book")
                 row["snapshot_at"] = primary_record.get("fetch_ts")
-                row["is_closing"] = False
+                if policy == "closing_pre_kickoff":
+                    row["is_closing"] = closing_selected
+                else:
+                    row["is_closing"] = False
 
     return {
         "promoted_games": len(promoted_games),
@@ -207,8 +287,16 @@ def write_week_outputs(
     base_dir = OUT_ROOT / f"{season}_week{week}"
     json_path = base_dir / f"games_week_{season}_{week}.jsonl"
     csv_path = base_dir / f"games_week_{season}_{week}.csv"
-    write_atomic_jsonl(json_path, rows)
-    write_atomic_csv(csv_path, pd.DataFrame(rows))
+    sorted_rows = _sort_rows_for_output(rows)
+    write_atomic_jsonl(json_path, sorted_rows)
+
+    df = pd.DataFrame(sorted_rows)
+    df = _sort_dataframe(df)
+    if csv_path.exists():
+        existing_cols = list(pd.read_csv(csv_path, nrows=0).columns)
+        union_cols = list(dict.fromkeys(existing_cols + list(df.columns)))
+        df = _align_dataframe(df, union_cols)
+    write_atomic_csv(csv_path, df)
     return json_path, csv_path
 
 

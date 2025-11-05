@@ -11,7 +11,7 @@ from typing import Iterable, Tuple
 import pandas as pd
 
 from src.common.cfb_source import fetch_cfbd_games
-from src.common.io_utils import read_env
+from src.common.io_utils import read_env, getenv
 from src.common.team_names_cfb import normalize_team_name_cfb_stats, team_merge_key_cfb
 
 __all__ = [
@@ -195,6 +195,10 @@ def _fetch_cfbd_schedule(season: int) -> pd.DataFrame:
 
 def ensure_weeks_present(seasons: Iterable[int]) -> None:
     seasons = list(seasons)
+    refresh_flag = (getenv("CFBD_REFRESH", "1") or "1").strip().lower()
+    if refresh_flag in {"0", "false", "off", "disabled"}:
+        _log("CFBD refresh disabled via CFBD_REFRESH; skipping schedule fetch.")
+        return
     frames = []
     for season in seasons:
         _log(f"Fetching CFBD schedule for season {season}")

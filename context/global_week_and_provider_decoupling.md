@@ -93,11 +93,12 @@ Result: future odds stay quietly staged; current odds appear automatically when 
 
 * Before ATS, update scores for the **previous two weeks** (default; tunable via `BACKFILL_WEEKS`).
 * Fetch finals from official stats source.
-* Atomic update of each prior week’s `games_week` file.
+* Atomic update of each prior week's `games_week` file.
+* If the staged snapshot matches disk content (after canonical ordering), skip the rewrite and log `already up to date`, preserving prior-week artifacts on reruns while still running odds/ATS repair when needed.
 * Then run ATS builder:
 
   * Uses only finished + lined games.
-  * Writes to current week’s `games_week` rows.
+  * Writes to current week's `games_week` rows.
 
 ---
 
@@ -202,9 +203,11 @@ Extra diagnostics:
 
 * UTC everywhere; all timestamps ISO 8601.
 * Append-only staging; atomic replacement for outputs.
+* Week artifacts are written in a stable `(season, week, kickoff_iso_utc, game_key)` order, and JSON payloads use sorted keys so cosmetic diffs disappear between runs.
 * No changes to filenames or schemas consumed by UI until explicitly versioned.
 * Daily cron: `refresh_week_data_NFL` + `refresh_week_data_CFB` (auto).
 * Logs routed to Discord via existing webhook.
+* `CFBD_REFRESH=0` suppresses schedule re-fetches, enabling dry runs against a frozen master without triggering placeholder kickoffs.
 
 ---
 
@@ -216,7 +219,6 @@ This unified plan:
 * Decouples all sources from their own week semantics.
 * Ensures every run ingests *all* data, pins it deterministically to schedule, and only promotes what belongs.
 * Guarantees stable Week/Game views even when providers are early, late, or mislabeled.
-
 
 
 

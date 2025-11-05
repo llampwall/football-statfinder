@@ -31,7 +31,7 @@ import sys
 from copy import deepcopy
 from collections import Counter
 from pathlib import Path
-from typing import Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
+from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
 
 import pandas as pd
 
@@ -134,6 +134,57 @@ def _is_truthy(value: str) -> bool:
 def _align_columns(df: pd.DataFrame, columns: Sequence[str]) -> pd.DataFrame:
     ordered = [col for col in columns if col in df.columns]
     remainder = [col for col in df.columns if col not in ordered]
+    return df.reindex(columns=ordered + remainder)
+
+
+def _safe_int(value: object) -> int:
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return 0
+
+
+def _row_sort_key(row: Mapping[str, Any]) -> Tuple[int, int, str, str]:
+    season = _safe_int(row.get("season"))
+    week = _safe_int(row.get("week"))
+    kickoff = str(row.get("kickoff_iso_utc") or row.get("kickoff_iso") or "")
+    game_key = str(row.get("game_key") or "")
+    return (season, week, kickoff, game_key)
+
+
+def _sort_rows_for_output(rows: Sequence[Mapping[str, Any]]) -> List[dict]:
+    return sorted(rows, key=_row_sort_key)
+
+
+def _sort_dataframe(df: pd.DataFrame) -> pd.DataFrame:
+    if df.empty:
+        return df.copy()
+    sort_cols = [col for col in ("season", "week", "kickoff_iso_utc", "game_key") if col in df.columns]
+    if not sort_cols:
+        return df.reset_index(drop=True)
+    return df.sort_values(sort_cols, kind="mergesort").reset_index(drop=True)
+
+
+def _frames_match(lhs: pd.DataFrame, rhs: pd.DataFrame) -> bool:
+    if list(lhs.columns) != list(rhs.columns):
+        return False
+    lhs_norm = lhs.fillna("<NA>").astype(str)
+    rhs_norm = rhs.fillna("<NA>").astype(str)
+    return lhs_norm.equals(rhs_norm)
+
+
+IGNORED_CANONICAL_FIELDS = {"home_score", "away_score"}
+
+
+def _canonicalize_rows(rows: Sequence[Mapping[str, Any]]) -> List[Tuple[str, str]]:
+    canonical: List[Tuple[str, str]] = []
+    for row in rows:
+        key = str(row.get("game_key") or "")
+        sanitized = {k: v for k, v in row.items() if k not in IGNORED_CANONICAL_FIELDS}
+        payload = json.dumps(sanitized, ensure_ascii=False, sort_keys=True, default=str)
+        canonical.append((key, payload))
+    canonical.sort(key=lambda item: item[0])
+    return canonical
 
 
 def _is_finite_number(value: object) -> bool:
@@ -348,7 +399,6 @@ def _apply_ats_backfill(
             write_atomic_json(entry["path"], entry["data"])
 
     return games_fixed, source_counts, rows_changed
-    return df.reindex(columns=ordered + remainder)
 
 
 def _rebuild_cfb_game_view(season: int, week: int) -> None:
@@ -412,6 +462,7 @@ def backfill_cfb_scores(
             continue
 
         incoming_rows = deepcopy(existing_rows)
+        existing_canonical = _canonicalize_rows(existing_rows)
         csv_df = pd.read_csv(csv_path) if csv_path.exists() else None
         row_updates = 0
         week_changed = False
@@ -449,7 +500,6 @@ def backfill_cfb_scores(
             promoted_games = promote_stats.get("promoted_games", 0)
             final_rows = promoted_rows
             if promoted_games > 0:
-                rebuild_game_view = True
                 week_changed = True
             print(
                 f"ODDS_REPROMOTE(CFB): week={season}-{prior_week} "
@@ -482,15 +532,38 @@ def backfill_cfb_scores(
         if ats_games_fixed > 0:
             rebuild_game_view = True
 
+        final_rows = _sort_rows_for_output(final_rows)
+        final_canonical = _canonicalize_rows(final_rows)
+        if final_canonical == existing_canonical:
+            updated -= row_updates
+            continue
+
         if week_changed or promoted_games > 0:
+            final_df = pd.DataFrame(final_rows)
+            final_df = _sort_dataframe(final_df)
+
+            if csv_df is not None:
+                existing_sorted = _sort_dataframe(csv_df)
+                union_columns = list(dict.fromkeys(list(existing_sorted.columns) + list(final_df.columns)))
+                final_aligned = _align_columns(final_df, union_columns)
+                existing_aligned = _align_columns(existing_sorted, union_columns)
+                if _frames_match(final_aligned, existing_aligned):
+                    updated -= row_updates
+                    if promoted_games > 0 or week_changed:
+                        print(
+                            f"Scores(CFB): week={season}-{prior_week} "
+                            "already up to date; 0 rows written"
+                        )
+                    continue
+            else:
+                union_columns = list(dict.fromkeys(list(final_df.columns)))
+                final_aligned = _align_columns(final_df, union_columns)
+
             preserved_odds_total += preservation["preserved_odds"]
             preserved_rvo_total += preservation["preserved_rvo"]
 
             write_atomic_jsonl(json_path, final_rows)
-            final_df = pd.DataFrame(final_rows)
-            if csv_df is not None:
-                final_df = _align_columns(final_df, list(csv_df.columns))
-            write_atomic_csv(csv_path, final_df)
+            write_atomic_csv(csv_path, final_aligned)
             files_rewritten += 1
 
             if week_changed:
@@ -504,6 +577,10 @@ def backfill_cfb_scores(
             if rebuild_game_view:
                 _rebuild_cfb_game_view(season, prior_week)
 
+
+    if updated == 0 and files_rewritten == 0:
+        weeks_label = "[" + ",".join(f"W{wk}" for wk in weeks_to_scan) + "]" if weeks_to_scan else "[]"
+        print(f"Scores(CFB): weeks={weeks_label} already up to date; 0 rows written")
 
     return {
         "weeks": weeks_to_scan,

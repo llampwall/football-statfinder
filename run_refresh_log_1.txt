@@ -1,0 +1,145 @@
+CFB parity check aborting
+PASS: CFB league metrics teams 136/136; ranks_ok=1.00; wrote C:\Users\Jordan\Documents\Football Project George\NEW PROJECT\football-statfinder\out\cfb\2025_week11\league_metrics_2025_11.csv
+Window: 2025-10-30T00:00:00Z -> 2025-11-15T04:00:00Z | events 51 / in_window 51 / matched 41 / unmatched 10 (total=10) by_why={'outside_window': 0, 'no_schedule_candidate': 10, 'other': 0}
+PASS: CFB odds matched 41; unmatched 10 (total=10); wrote C:\Users\Jordan\Documents\Football Project George\NEW PROJECT\football-statfinder\out\cfb\2025_week11\odds_2025_wk11.jsonl
+Debug: C:\Users\Jordan\Documents\Football Project George\NEW PROJECT\football-statfinder\out\cfb\2025_week11\odds_match_debug.json
+Alias debt: C:\Users\Jordan\Documents\Football Project George\NEW PROJECT\football-statfinder\out\cfb\2025_week11\odds_alias_debt.json
+PASS: CFB Game View rows=53 (jsonl=C:\Users\Jordan\Documents\Football Project George\NEW PROJECT\football-statfinder\out\cfb\2025_week9\games_week_2025_9.jsonl, csv=C:\Users\Jordan\Documents\Football Project George\NEW PROJECT\football-statfinder\out\cfb\2025_week9\games_week_2025_9.csv, receipt=C:\Users\Jordan\Documents\Football Project George\NEW PROJECT\football-statfinder\out\cfb\2025_week9\gameview_build_receipt.json)
+PASS: CFB Game View rows=52 (jsonl=C:\Users\Jordan\Documents\Football Project George\NEW PROJECT\football-statfinder\out\cfb\2025_week10\games_week_2025_10.jsonl, csv=C:\Users\Jordan\Documents\Football Project George\NEW PROJECT\football-statfinder\out\cfb\2025_week10\games_week_2025_10.csv, receipt=C:\Users\Jordan\Documents\Football Project George\NEW PROJECT\football-statfinder\out\cfb\2025_week10\gameview_build_receipt.json)
+PASS: CFB Game View rows=51 (jsonl=C:\Users\Jordan\Documents\Football Project George\NEW PROJECT\football-statfinder\out\cfb\2025_week11\games_week_2025_11.jsonl, csv=C:\Users\Jordan\Documents\Football Project George\NEW PROJECT\football-statfinder\out\cfb\2025_week11\games_week_2025_11.csv, receipt=C:\Users\Jordan\Documents\Football Project George\NEW PROJECT\football-statfinder\out\cfb\2025_week11\gameview_build_receipt.json)
+[schedule_master_cfb] Fetching CFBD schedule for season 2025
+[schedule_master_cfb] Fetching CFBD schedule for season 2024
+[schedule_master_cfb] Upsert complete: before=7542, after=7542, delta=0
+[schedule_master_cfb] ensure_weeks_present seasons=[2025, 2024] -> delta 0
+Sagarin spot check 20251105_0000_massachusetts_akron: Akron@Massachusetts -> home_ytd[0] pr=50.41 opp_pr=61.72
+SIDEcar_RANKS(CFB): week=2025-11 fixed_pr=0 fixed_opp_pr=182 fixed_sos=0 fixed_opp_sos=182
+PASS: CFB sidecars written -> out/cfb/2025_week11/game_schedules (51/51)
+PASS: CFB Game View rows=51 (jsonl=C:\Users\Jordan\Documents\Football Project George\NEW PROJECT\football-statfinder\out\cfb\2025_week11\games_week_2025_11.jsonl, csv=C:\Users\Jordan\Documents\Football Project George\NEW PROJECT\football-statfinder\out\cfb\2025_week11\games_week_2025_11.csv, receipt=C:\Users\Jordan\Documents\Football Project George\NEW PROJECT\football-statfinder\out\cfb\2025_week11\gameview_build_receipt.json)
+CurrentWeek(CFB)=2025 W11 computed_at=2025-11-04T08:19:03.618722Z; args=auto
+=== CFB WEEKLY REFRESH ===
+Season 2025 Week 11
+[schedule_master_cfb] Fetching CFBD schedule for season 2025
+[schedule_master_cfb] Fetching CFBD schedule for season 2024
+[schedule_master_cfb] Upsert complete: before=7542, after=7542, delta=0
+[schedule_master_cfb] ensure_weeks_present seasons=[2025, 2024] -> delta 0
+
+>>> Running src.fetch_games_cfb .
+PASS: CFB schedule rows=309
+CFB ODDS STAGING: raw=1482 pinned=1197 unmatched=285 new_raw=1482 new_pinned=1197 markets={'spreads': 402, 'totals': 406, 'h2h': 389} books={'draftkings': 123, 'fanduel': 120, 'mybookieag': 116, 'betrivers': 122, 'williamhill_us': 120, 'lowvig': 119, 'betonlineag': 119, 'bovada': 121, 'betmgm': 119, 'betus': 118} window=+/-3d candidate_sets_zero=0 candidate_sets_multi=0 max_delta=36.0h examples_unmatched=['akron vs umass (no_candidate)']
+
+>>> Running src.fetch_year_to_date_stats_cfb .
+PASS: CFB league metrics coverage -> 136/136 teams meeting threshold (required 100); ranks_ok=1.00
+
+>>> Running src.fetch_week_odds_cfb .
+PASS: CFB odds matched 41/51 in-window (total=51); unmatched=10 (C:\Users\Jordan\Documents\Football Project George\NEW PROJECT\football-statfinder\out\cfb\2025_week11\odds_2025_wk11.jsonl)
+      by_why={'outside_window': 0, 'no_schedule_candidate': 10, 'other': 0}
+[schedule_master_cfb] Master enrichment season=2025 week=11: updated 41/350
+Master enrichment: updated 41/350 rows for season=2025 week=11
+
+>>> Running Sagarin staging flow.
+WARNING: Sagarin page week differs (page=10, requested=11); using requested week for outputs.
+=== CFB SAGARIN ACCEPTANCE ===
+Rows: 134 (expected 120-140)
+pr_rank coverage: 1 .. 134
+Unique team_norm: 134
+Home-field advantage: 3.93
+Sagarin page season/week: 2025 Week 10
+Sagarin(CFB): latest_fetch_ts=2025-11-04T08:19:26.922356Z teams=134 wrote_master_rows=134 selected_for_build=134
+ODDS_REPROMOTE(CFB): week=2025-9 promoted=14 source=staging/odds_pinned
+ATS_BACKFILL(CFB): week=2025-9 games_fixed=0 source_counts=pinned:0,snapshot:0,history:0
+BACKFILL_MERGE(CFB): week=2025-9 updated_scores=53 preserved_odds=44 preserved_rvo=42
+ODDS_REPROMOTE(CFB): week=2025-10 promoted=2 source=staging/odds_pinned
+ATS_BACKFILL(CFB): week=2025-10 games_fixed=0 source_counts=pinned:0,snapshot:0,history:0
+BACKFILL_MERGE(CFB): week=2025-10 updated_scores=51 preserved_odds=0 preserved_rvo=0
+
+>>> Running src.gameview_build_cfb .
+
+>>> Running src.build_team_timelines_cfb .
+PASS: CFB sidecars written -> 51 files (schedule rows=309)
+PASS: Sagarin enrichment rows=1904 (coverage 100%, opp 89%) -> C:\Users\Jordan\Documents\Football Project George\NEW PROJECT\football-statfinder\out\cfb\2025_week11\schedules_sagarin_receipt.json
+
+>>> Running src.gameview_build_cfb .
+PASS: CFB Game View rows=51 (C:\Users\Jordan\Documents\Football Project George\NEW PROJECT\football-statfinder\out\cfb\2025_week11\games_week_2025_11.jsonl)
+CFB odds join: rows=51 spread=41 total=41 both=41 unmatched_names=['Akron Zips', 'UMass Minutemen', 'akron', 'umass', 'Appalachian State Mountaineers']
+CFB ODDS PROMOTION: week=2025-11 promoted=13 by_market={'spreads': 13, 'totals': 13, 'h2h': 13} by_book={'draftkings': 18, 'fanduel': 21} legacy_mismatch=0
+Scores(CFB): weeks=[W9,W10] updated=104 skipped=1; ATS: teams=0 rows_updated=0
+
+=== SUMMARY ===
+Games JSONL records : 51
+Games CSV rows      : 51
+League metric rows  : 136
+Odds records        : 41
+Sagarin rows        : 134
+Sidecar files       : 51
+Done.
+NOTIFY: CFB refresh complete week=2025-11 rows=51 odds_promoted=13
+C:\Users\Jordan\Documents\Football Project George\NEW PROJECT\football-statfinder\src\fetch_year_to_date_stats.py:260: FutureWarning: Downcasting object dtype arrays on .fillna, .ffill, .bfill is deprecated and will change in a future version. Call result.infer_objects(copy=False) instead. To opt-in to the future behavior, set `pd.set_option('future.no_silent_downcasting', True)`
+  give = float(subset["turnovers"].fillna(0).sum()) if "turnovers" in subset else 0.0
+C:\Users\Jordan\Documents\Football Project George\NEW PROJECT\football-statfinder\src\fetch_sagarin_week_nfl.py:328: RuntimeWarning: Requested week 10 but Sagarin page reports week 9. Using page week in outputs.
+  warnings.warn(
+CurrentWeek(NFL)=2025 W10 computed_at=2025-11-04T08:20:52.979360Z; args=auto
+TO merge: found TeamRankings values for 32/32 teams.
+=== SAGARIN ACCEPTANCE CHECKS ===
+Count: 32
+Ranks coverage: [1, 2, 3, 4, 5] ... [28, 29, 30, 31, 32]
+PR precision ok: True
+Team_norm unique: 32 of 32
+SoS coverage: 32/32 (100.0%)
+Sagarin page season/week: 2025 Week 9 (requested Week 10)
+HFA used: 2.70
+=== ACCEPTANCE SUMMARY ===
+Schedule count (nflverse, filtered): 14
+Emitted records:                   : 14
+COUNT MATCH: PASS
+Games with spreads: 14/14
+Marked closing=true: 0
+Derived S2D completeness: PASS
+Favored metrics coverage: 14/14
+S2D coverage (home_ry_pg): 14/14
+S2D coverage (home_ry_allowed_pg): 14/14
+S2D coverage (home_rush_def_rank): 14/14
+S2D coverage (away_pa_pg): 14/14
+Rank out-of-range: 0
+SU tallies shape check: PASS
+ATS tallies shape check: PASS
+Rank fields validity: PASS
+Spot check: ind atl spread_home_relative= 6.0 total= 48.5 rating_diff= 7.05 rating_vs_odds= 13.05 favored_side= AWAY spread_favored_team= -6.0 rating_diff_favored_team= -7.05 rating_vs_odds_favored_team= -13.05
+Wrote: C:\Users\Jordan\Documents\Football Project George\NEW PROJECT\football-statfinder\out\2025_week10\games_week_2025_10.jsonl
+Wrote: C:\Users\Jordan\Documents\Football Project George\NEW PROJECT\football-statfinder\out\2025_week10\games_week_2025_10.csv
+=== WEEKLY REFRESH ===
+Season 2025 Week 10
+Outputs directory: C:\Users\Jordan\Documents\Football Project George\NEW PROJECT\football-statfinder\out\2025_week10
+Schedule games (REG): 14
+Game View records:     14 (C:\Users\Jordan\Documents\Football Project George\NEW PROJECT\football-statfinder\out\2025_week10\games_week_2025_10.jsonl)
+League metrics rows:   32 (C:\Users\Jordan\Documents\Football Project George\NEW PROJECT\football-statfinder\out\2025_week10\league_metrics_2025_10.csv)
+Sagarin records:       32 (C:\Users\Jordan\Documents\Football Project George\NEW PROJECT\football-statfinder\out\2025_week10\sagarin_nfl_2025_wk10.csv)
+Sagarin master upsert: +0 (rows now 480)
+Sagarin page reports week 9 while request was week 10.
+Odds records:          14 (C:\Users\Jordan\Documents\Football Project George\NEW PROJECT\football-statfinder\out\2025_week10\odds_2025_wk10.jsonl)
+[schedule_master] Fetching nflverse schedule for season 2025
+[schedule_master] Fetching nflverse schedule for season 2024
+[schedule_master] Upsert complete: before=557, after=557, delta=0
+[schedule_master] ensure_weeks_present seasons=[2025, 2024] -> delta 0
+Schedule master rows (NFL REG) for seasons 2024,2025: 557
+Sidecars written: 14/14 -> C:\Users\Jordan\Documents\Football Project George\NEW PROJECT\football-statfinder\out\2025_week10\game_schedules
+game=20251107_0115_den_lv home_ytd=9 away_ytd=8 home_prev=18 away_prev=17
+game=20251109_1430_ind_atl home_ytd=9 away_ytd=8 home_prev=17 away_prev=17
+SIDEcar_RANKS(NFL): week=2025-10 fixed_pr=360 fixed_opp_pr=360 fixed_sos=0 fixed_opp_sos=0
+team PR join missing: 0
+opp PR join missing: -360
+LM join coverage: 28/32
+S2D coverage: ry_pg 28/28; ry_allowed_pg 28/28; rush_def_rank 28/28
+Rank fields in range: PASS
+Favorite metrics coverage: 14/14
+NaN/Inf fields: 28
+NFL ODDS STAGING: raw=446 pinned=446 unmatched=0 candidate_sets_zero=0 candidate_sets_multi=0 markets={'spreads': 149, 'totals': 149, 'h2h': 148} books={'draftkings': 42, 'betmgm': 42, 'williamhill_us': 42, 'fanduel': 42, 'lowvig': 39, 'betonlineag': 39, 'betus': 38, 'betrivers': 39, 'mybookieag': 42, 'fanatics': 42, 'bovada': 39}
+Sagarin(NFL): latest_fetch_ts=2025-11-04T08:21:05Z teams=32 wrote_master_rows=32 selected_for_build=32
+ODDS_REPROMOTE(NFL): week=2025-8 promoted=0 source=staging/odds_pinned
+ATS_BACKFILL(NFL): week=2025-8 games_fixed=0 source_counts=pinned:0,snapshot:0,history:0
+ODDS_REPROMOTE(NFL): week=2025-9 promoted=0 source=staging/odds_pinned
+ATS_BACKFILL(NFL): week=2025-9 games_fixed=0 source_counts=pinned:0,snapshot:0,history:0
+Scores(NFL): weeks=[W8,W9] updated=0 skipped=27
+ATS(NFL): teams=0 rows_updated=0
+NFL ODDS PROMOTION: week=2025-10 promoted=0 by_market={} by_book={} legacy_mismatch=0 hint="provider ahead; staged"
+NOTIFY: NFL refresh complete week=2025-10 rows=14 odds_promoted=0.
+RUNNER NOTIFY: CFB=ok NFL=ok log=C:/Users/Jordan/Documents/Football Project George/NEW PROJECT/football-statfinder/out/logs/refresh_2025-11-04T08-19-03.071126Z.json

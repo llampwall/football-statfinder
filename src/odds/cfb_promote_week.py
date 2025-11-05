@@ -36,6 +36,7 @@ from typing import Any, Dict, Iterable, List, Mapping, MutableMapping, Optional,
 
 from src.common.io_utils import ensure_out_dir
 from src.fetch_week_odds_cfb import parse_utc
+from src.odds.ats_compute import pick_latest_before
 
 OUT_ROOT = ensure_out_dir()
 PINNED_DIR = OUT_ROOT / "staging" / "odds_pinned" / "cfb"
@@ -48,6 +49,7 @@ LINE_FIELDS = (
     "moneyline_home",
     "moneyline_away",
 )
+_WARNED_POLICIES: set[str] = set()
 
 
 def _parse_fetch_ts(value: Optional[str]) -> datetime:
@@ -126,6 +128,28 @@ def _choose_best(records: Sequence[dict]) -> Optional[dict]:
 )
 
 
+def _parse_kickoff(value: Optional[str]) -> Optional[datetime]:
+    dt = parse_utc(value)
+    if isinstance(dt, datetime):
+        return dt.astimezone(timezone.utc)
+    return None
+
+
+def _choose_by_policy(
+    records: Sequence[dict],
+    policy: str,
+    kickoff: Optional[datetime],
+) -> Tuple[Optional[dict], bool]:
+    if not records:
+        return None, False
+    if policy == "closing_pre_kickoff" and kickoff:
+        chosen = pick_latest_before(records, kickoff)
+        if chosen:
+            return chosen, True
+    fallback = _choose_best(records)
+    return fallback, False
+
+
 def _merge_line(row: MutableMapping[str, Any], record: dict, line: Mapping[str, Any]) -> None:
     """Apply odds line values to a ``games_week`` row.
 
@@ -159,16 +183,21 @@ def promote_week_odds(
         rows: ``games_week`` row dictionaries (mutated in-place).
         season: Target season (e.g., 2025).
         week: Target week number.
-        policy: Selection policy. Only ``latest_by_fetch_ts`` is supported.
+        policy: Selection policy (``latest_by_fetch_ts`` or ``closing_pre_kickoff``).
 
     Returns:
         Dict summarizing promotion results with counts by market and book.
-
-    Raises:
-        ValueError: When an unsupported selection policy is provided.
     """
-    if policy != "latest_by_fetch_ts":
-        raise ValueError(f"Unsupported odds selection policy: {policy}")
+    policy = (policy or "latest_by_fetch_ts").strip() or "latest_by_fetch_ts"
+    supported = {"latest_by_fetch_ts", "closing_pre_kickoff"}
+    if policy not in supported:
+        if policy not in _WARNED_POLICIES:
+            print(
+                f"WARNING: Unsupported odds selection policy '{policy}'; "
+                "falling back to latest_by_fetch_ts"
+            )
+            _WARNED_POLICIES.add(policy)
+        policy = "latest_by_fetch_ts"
 
     if not rows:
         return {
@@ -217,6 +246,16 @@ def promote_week_odds(
         row = game_lookup.get(game_key)
         if not row:
             continue
+        kickoff_iso = (
+            row.get("kickoff_iso_utc")
+            or row.get("kickoff_iso")
+            or row.get("kickoff_utc")
+        )
+        kickoff_dt = _parse_kickoff(kickoff_iso)
+        if kickoff_dt is None:
+            sample_records = next(iter(market_records.values()), [])
+            if sample_records:
+                kickoff_dt = _parse_kickoff(sample_records[0].get("kickoff_utc"))
         odds_payload: Dict[str, Any] = {
             "source": "staging",
             "season": season,
@@ -224,8 +263,9 @@ def promote_week_odds(
             "markets": {},
         }
         primary_record: Optional[dict] = None
+        closing_selected = False
         for market, records in market_records.items():
-            best = _choose_best(records)
+            best, used_closing = _choose_by_policy(records, policy, kickoff_dt)
             if not best:
                 continue
             line = best.get("line") or {}
@@ -239,13 +279,18 @@ def promote_week_odds(
             by_book[best.get("book") or "unknown"] += 1
             if primary_record is None or _parse_fetch_ts(best.get("fetch_ts")) > _parse_fetch_ts(primary_record.get("fetch_ts")):
                 primary_record = best
+            if used_closing and market == "spreads":
+                closing_selected = True
         if odds_payload["markets"]:
             promoted_games.add(game_key)
             row.setdefault("raw_sources", {})["odds_row"] = odds_payload
             if primary_record:
                 row["odds_source"] = primary_record.get("book")
                 row["snapshot_at"] = primary_record.get("fetch_ts")
-                row["is_closing"] = False
+                if policy == "closing_pre_kickoff":
+                    row["is_closing"] = closing_selected
+                else:
+                    row["is_closing"] = False
 
     return {
         "promoted_games": len(promoted_games),

@@ -81,7 +81,7 @@ def write_jsonl(rows: Iterable[Mapping], path: Union[str, Path]) -> None:
     target.parent.mkdir(parents=True, exist_ok=True)
     with target.open("w", encoding="utf-8") as fh:
         for row in rows:
-            fh.write(json.dumps(row, default=str))
+            fh.write(json.dumps(row, default=str, sort_keys=True))
             fh.write("\n")
 
 
