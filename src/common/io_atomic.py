@@ -54,7 +54,7 @@ def write_atomic_jsonl(path: Union[str, Path], rows: Iterable[JsonLike]) -> None
     tmp = _tmp_path(target)
     with tmp.open("w", encoding="utf-8") as handle:
         for row in rows:
-            handle.write(json.dumps(row, ensure_ascii=False))
+            handle.write(json.dumps(row, ensure_ascii=False, sort_keys=True))
             handle.write("\n")
     os.replace(tmp, target)
 

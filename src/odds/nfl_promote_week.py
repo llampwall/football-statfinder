@@ -112,6 +112,39 @@ def _choose_by_policy(
     return fallback, False
 
 
+def _row_sort_key(row: Mapping[str, Any]) -> Tuple[int, int, str, str]:
+    def _safe_int(value: Any) -> int:
+        try:
+            return int(value)
+        except (TypeError, ValueError):
+            return 0
+
+    season = _safe_int(row.get("season"))
+    week = _safe_int(row.get("week"))
+    kickoff = str(row.get("kickoff_iso_utc") or row.get("kickoff_iso") or "")
+    game_key = str(row.get("game_key") or "")
+    return (season, week, kickoff, game_key)
+
+
+def _sort_rows_for_output(rows: Sequence[Mapping[str, Any]]) -> List[Mapping[str, Any]]:
+    return sorted(rows, key=_row_sort_key)
+
+
+def _sort_dataframe(df: pd.DataFrame) -> pd.DataFrame:
+    if df.empty:
+        return df.copy()
+    sort_cols = [col for col in ("season", "week", "kickoff_iso_utc", "game_key") if col in df.columns]
+    if not sort_cols:
+        return df.reset_index(drop=True)
+    return df.sort_values(sort_cols, kind="mergesort").reset_index(drop=True)
+
+
+def _align_dataframe(df: pd.DataFrame, columns: Sequence[str]) -> pd.DataFrame:
+    ordered = [col for col in columns if col in df.columns]
+    remainder = [col for col in df.columns if col not in ordered]
+    return df.reindex(columns=ordered + remainder)
+
+
 def _merge_line(row: MutableMapping[str, Any], record: dict, line: Mapping[str, Any]) -> None:
     market = record.get("market")
     if market == "spreads":
@@ -254,8 +287,16 @@ def write_week_outputs(
     base_dir = OUT_ROOT / f"{season}_week{week}"
     json_path = base_dir / f"games_week_{season}_{week}.jsonl"
     csv_path = base_dir / f"games_week_{season}_{week}.csv"
-    write_atomic_jsonl(json_path, rows)
-    write_atomic_csv(csv_path, pd.DataFrame(rows))
+    sorted_rows = _sort_rows_for_output(rows)
+    write_atomic_jsonl(json_path, sorted_rows)
+
+    df = pd.DataFrame(sorted_rows)
+    df = _sort_dataframe(df)
+    if csv_path.exists():
+        existing_cols = list(pd.read_csv(csv_path, nrows=0).columns)
+        union_cols = list(dict.fromkeys(existing_cols + list(df.columns)))
+        df = _align_dataframe(df, union_cols)
+    write_atomic_csv(csv_path, df)
     return json_path, csv_path
 
 
