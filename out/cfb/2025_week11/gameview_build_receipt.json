@@ -34,6 +34,12 @@
         "kickoff_iso_utc": "2025-11-08T17:00:00Z"
       },
       {
+        "game_key": "20251108_2000_charlotte_east_carolina",
+        "home": "East Carolina",
+        "away": "Charlotte",
+        "kickoff_iso_utc": "2025-11-08T20:00:00Z"
+      },
+      {
         "game_key": "20251108_2000_tulsa_florida_atlantic",
         "home": "Florida Atlantic",
         "away": "Tulsa",
@@ -43,12 +49,6 @@
         "game_key": "20251108_2000_jacksonville_state_utep",
         "home": "Utep",
         "away": "Jacksonville State",
-        "kickoff_iso_utc": "2025-11-08T20:00:00Z"
-      },
-      {
-        "game_key": "20251108_2000_charlotte_east_carolina",
-        "home": "East Carolina",
-        "away": "Charlotte",
         "kickoff_iso_utc": "2025-11-08T20:00:00Z"
       },
       {
