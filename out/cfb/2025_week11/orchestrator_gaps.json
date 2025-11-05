@@ -34,16 +34,16 @@
   },
   "notes": [
     "Schedule rows=309",
-    "Odds staging raw=1482 pinned=1197 unmatched=285",
+    "Odds staging raw=1469 pinned=1195 unmatched=274",
     "League metrics 136/136 teams meeting threshold (required 100); ranks_ok=1.00",
-    "Odds matched 41/51 (total 51); unmatched=10",
-    "Master enrichment 41/350",
+    "Odds matched 41/51 (total 52); unmatched=11",
+    "Master enrichment 0/350",
     "Sagarin rows=134; master=6696",
     "Sidecars 51/309",
     "Sagarin enrichment 100%/89%",
-    "Odds promotion promoted=13 current_week=3336 other_weeks=33372 mismatch=0",
-    "Scores backfill [W9,W10] updated=104 skipped=1 files=2",
-    "ATS rows=0 teams=0 zero=102 weeks_scanned=[7, 8, 9, 10]",
+    "Odds promotion promoted=13 current_week=4090 other_weeks=35009 mismatch=0",
+    "Scores backfill [W9,W10] updated=0 skipped=1 files=0",
+    "ATS rows=40 teams=91 zero=40 weeks_scanned=[7, 8, 9, 10]",
     "Game View rows=51",
     "NFL week baseline not found; skipping cross-league key comparison."
   ]

@@ -3,11 +3,11 @@
   "week": 11,
   "window": "2025-10-30T00:00:00Z -> 2025-11-15T04:00:00Z",
   "stats": {
-    "events_total": 51,
+    "events_total": 52,
     "events_after_window_filter": 51,
     "events_in_window": 51,
     "matched": 41,
-    "unmatched": 10,
+    "unmatched": 11,
     "eligible_unmatched": 10
   },
   "samples": {
@@ -15,12 +15,12 @@
       {
         "event_home": "Ohio Bobcats",
         "event_away": "Miami (OH) RedHawks",
-        "event_time": "2025-11-05T00:00:00Z",
+        "event_time": "2025-11-05T00:08:00Z",
         "home_norm": "ohio",
         "away_norm": "miamioh",
         "game_key": "20251105_0000_miami_oh_ohio",
         "kickoff_iso_utc": "2025-11-05T00:00:00Z",
-        "mode": "ordered_exact"
+        "mode": "ordered_near"
       },
       {
         "event_home": "Ball State Cardinals",
@@ -317,7 +317,7 @@
       {
         "event_home": "Akron Zips",
         "event_away": "UMass Minutemen",
-        "event_time": "2025-11-05T00:00:00Z",
+        "event_time": "2025-11-05T00:06:00Z",
         "home_norm": "akron",
         "away_norm": "umass",
         "why": "no_schedule_candidate"
@@ -393,15 +393,24 @@
         "home_norm": "hawaii",
         "away_norm": "sandiegostateaztecs",
         "why": "no_schedule_candidate"
+      },
+      {
+        "event_home": "Indiana Hoosiers",
+        "event_away": "Ohio State Buckeyes",
+        "event_time": "2025-12-07T01:00:00Z",
+        "home_norm": "indiana",
+        "away_norm": "ohiostatebuckeyes",
+        "why": "future_week"
       }
     ]
   },
   "reason_counts": {
-    "no_schedule_candidate": 10
+    "no_schedule_candidate": 10,
+    "future_week": 1
   },
   "reason_buckets": {
     "outside_window": 0,
     "no_schedule_candidate": 10,
-    "other": 0
+    "other": 1
   }
 }
