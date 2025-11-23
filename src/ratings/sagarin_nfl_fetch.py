@@ -27,6 +27,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
@@ -52,6 +53,7 @@ OUT_ROOT = ensure_out_dir()
 STAGING_DIR = OUT_ROOT / "staging" / "sagarin_latest" / "nfl"
 MASTER_PATH = OUT_ROOT / "master" / "sagarin_nfl_master.csv"
 LEAGUE = "NFL"
+RAW_SNAPSHOT_DIR = Path("data") / "sagarin" / "raw" / "nfl"
 
 WEEKLY_TEMPLATE = "sagarin_nfl_{season}_wk{week}"
 MASTER_COLUMNS = [
@@ -66,6 +68,34 @@ MASTER_COLUMNS = [
     "sos_rank",
 ]
 MASTER_KEY = ["league", "season", "week", "team_norm"]
+
+
+def _slugify(text: Optional[str]) -> Optional[str]:
+    """Return a filesystem-friendly slug from a page stamp."""
+    if not text:
+        return None
+    slug = re.sub(r"[^A-Za-z0-9]+", "-", text).strip("-").lower()
+    return slug[:80] if slug else None
+
+
+def _write_snapshot_html(season: int, week: int, html: str, page_stamp: Optional[str]) -> None:
+    """Archive the raw Sagarin HTML; warn but do not fail on errors."""
+    if not html:
+        return
+    timestamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    slug = _slugify(page_stamp)
+    base_name = f"nflsend_{season}_wk{week}_{timestamp}"
+    if slug:
+        base_name = f"{base_name}_{slug}"
+    target = RAW_SNAPSHOT_DIR / f"{base_name}.html"
+    tmp = target.with_suffix(".html.tmp")
+    try:
+        RAW_SNAPSHOT_DIR.mkdir(parents=True, exist_ok=True)
+        with tmp.open("w", encoding="utf-8") as handle:
+            handle.write(html)
+        tmp.replace(target)
+    except Exception as exc:  # pragma: no cover - archival best-effort
+        print(f"WARNING: failed to archive Sagarin HTML for NFL {season} week {week}: {exc}")
 
 
 def _now_iso() -> str:
@@ -214,6 +244,8 @@ def run_nfl_sagarin_staging(
 
     hfa = parse_hfa(stripped)
     page_stamp = header_line or parse_page_stamp(stripped.splitlines())
+    season_from_state, week_from_state, _ = get_current_week("NFL")
+    _write_snapshot_html(season_from_state, week_from_state, html, page_stamp)
     season = int(page_season or datetime.now(timezone.utc).year)
     season = max(season, datetime.now(timezone.utc).year)  # ensure current season at minimum
     fetch_ts = _now_iso()
@@ -250,7 +282,6 @@ def run_nfl_sagarin_staging(
     staging_path = STAGING_DIR / f"{season}.jsonl"
     _append_staging(staging_path, staging_rows)
 
-    season_from_state, week_from_state, _ = get_current_week("NFL")
     staging_records = _load_staging_records(staging_path)
     latest_records, latest_ts = _select_latest_by_team(staging_records)
 
