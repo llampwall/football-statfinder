@@ -3,11 +3,11 @@
   "week": 13,
   "window": "2025-11-13T00:00:00Z -> 2025-11-29T03:30:00Z",
   "stats": {
-    "events_total": 46,
+    "events_total": 68,
     "events_after_window_filter": 0,
     "events_in_window": 0,
     "matched": 0,
-    "unmatched": 46,
+    "unmatched": 68,
     "eligible_unmatched": 0
   },
   "samples": {
@@ -38,6 +38,14 @@
         "why": "future_week"
       },
       {
+        "event_home": "Buffalo Bulls",
+        "event_away": "Ohio Bobcats",
+        "event_time": "2025-11-28T17:00:00Z",
+        "home_norm": "buffalo",
+        "away_norm": "ohio",
+        "why": "future_week"
+      },
+      {
         "event_home": "Nebraska Cornhuskers",
         "event_away": "Iowa Hawkeyes",
         "event_time": "2025-11-28T17:00:00Z",
@@ -54,11 +62,27 @@
         "why": "future_week"
       },
       {
+        "event_home": "Northern Illinois Huskies",
+        "event_away": "Kent State Golden Flashes",
+        "event_time": "2025-11-28T17:00:00Z",
+        "home_norm": "northernillinois",
+        "away_norm": "kentstate",
+        "why": "future_week"
+      },
+      {
         "event_home": "Mississippi State Bulldogs",
         "event_away": "Ole Miss Rebels",
         "event_time": "2025-11-28T17:00:00Z",
         "home_norm": "mississippistate",
         "away_norm": "olemiss",
+        "why": "future_week"
+      },
+      {
+        "event_home": "Colorado State Rams",
+        "event_away": "Air Force Falcons",
+        "event_time": "2025-11-28T20:00:00Z",
+        "home_norm": "coloradostate",
+        "away_norm": "airforce",
         "why": "future_week"
       },
       {
@@ -83,6 +107,14 @@
         "event_time": "2025-11-28T20:30:00Z",
         "home_norm": "northtexas",
         "away_norm": "temple",
+        "why": "future_week"
+      },
+      {
+        "event_home": "Utah State Aggies",
+        "event_away": "Boise State Broncos",
+        "event_time": "2025-11-28T21:00:00Z",
+        "home_norm": "utahstate",
+        "away_norm": "boisestate",
         "why": "future_week"
       },
       {
@@ -150,6 +182,22 @@
         "why": "future_week"
       },
       {
+        "event_home": "Miami (OH) RedHawks",
+        "event_away": "Ball State Cardinals",
+        "event_time": "2025-11-29T17:00:00Z",
+        "home_norm": "miamioh",
+        "away_norm": "ballstate",
+        "why": "future_week"
+      },
+      {
+        "event_home": "Central Michigan Chippewas",
+        "event_away": "Toledo Rockets",
+        "event_time": "2025-11-29T17:00:00Z",
+        "home_norm": "centralmichigan",
+        "away_norm": "toledo",
+        "why": "future_week"
+      },
+      {
         "event_home": "South Carolina Gamecocks",
         "event_away": "Clemson Tigers",
         "event_time": "2025-11-29T17:00:00Z",
@@ -204,63 +252,15 @@
         "home_norm": "michigan",
         "away_norm": "ohiostatebuckeyes",
         "why": "future_week"
-      },
-      {
-        "event_home": "NC State Wolfpack",
-        "event_away": "North Carolina Tar Heels",
-        "event_time": "2025-11-29T17:00:00Z",
-        "home_norm": "ncstate",
-        "away_norm": "northcarolina",
-        "why": "future_week"
-      },
-      {
-        "event_home": "Washington Huskies",
-        "event_away": "Oregon Ducks",
-        "event_time": "2025-11-29T17:00:00Z",
-        "home_norm": "washington",
-        "away_norm": "oregonducks",
-        "why": "future_week"
-      },
-      {
-        "event_home": "West Virginia Mountaineers",
-        "event_away": "Texas Tech Red Raiders",
-        "event_time": "2025-11-29T17:00:00Z",
-        "home_norm": "westvirginia",
-        "away_norm": "texastech",
-        "why": "future_week"
-      },
-      {
-        "event_home": "Syracuse Orange",
-        "event_away": "Boston College Eagles",
-        "event_time": "2025-11-29T20:00:00Z",
-        "home_norm": "syracuse",
-        "away_norm": "bostoncollege",
-        "why": "future_week"
-      },
-      {
-        "event_home": "Tulsa Golden Hurricane",
-        "event_away": "UAB Blazers",
-        "event_time": "2025-11-29T20:00:00Z",
-        "home_norm": "tulsagoldenhurricane",
-        "away_norm": "uab",
-        "why": "future_week"
-      },
-      {
-        "event_home": "Auburn Tigers",
-        "event_away": "Alabama Crimson Tide",
-        "event_time": "2025-11-29T20:30:00Z",
-        "home_norm": "auburn",
-        "away_norm": "alabamacrimsontide",
-        "why": "future_week"
       }
     ]
   },
   "reason_counts": {
-    "future_week": 46
+    "future_week": 68
   },
   "reason_buckets": {
     "outside_window": 0,
     "no_schedule_candidate": 0,
-    "other": 46
+    "other": 68
   }
 }

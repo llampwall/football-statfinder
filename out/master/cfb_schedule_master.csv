@@ -7444,7 +7444,7 @@ CFB,2025,13,REG,2025-11-22T17:00:00+00:00,Brown,Dartmouth,brown,dartmouth,35.0,2
 CFB,2025,13,REG,2025-11-20T00:00:00+00:00,Buffalo,Miami (oh),buffalo,miamioh,20.0,37.0,,,cfbd
 CFB,2025,13,REG,2025-11-22T18:00:00+00:00,Butler,Valparaiso,butler,valparaiso,27.0,20.0,,,cfbd
 CFB,2025,13,REG,2025-11-22T22:00:00+00:00,Cal Poly,Eastern Washington,calpoly,easternwashington,43.0,34.0,,,cfbd
-CFB,2025,13,REG,2025-11-22T17:00:00+00:00,Carnegie Mellon,Misericordia,carnegiemellon,misericordia,,,,,cfbd
+CFB,2025,13,REG,2025-11-22T17:00:00+00:00,Carnegie Mellon,Misericordia,carnegiemellon,misericordia,24.0,17.0,,,cfbd
 CFB,2025,13,REG,2025-11-22T22:00:00+00:00,Central Arkansas,Abilene Christian,centralarkansas,abilenechristian,28.0,49.0,,,cfbd
 CFB,2025,13,REG,2025-11-22T05:00:00+00:00,Central Connecticut,Mercyhurst,centralconnecticut,mercyhurst,,,,,cfbd
 CFB,2025,13,REG,2025-11-22T17:00:00+00:00,Central Connecticut,Mercyhurst,centralconnecticut,mercyhurst,35.0,28.0,,,cfbd
@@ -7458,7 +7458,7 @@ CFB,2025,13,REG,2025-11-22T05:00:00+00:00,Colorado,Arizona State,colorado,arizon
 CFB,2025,13,REG,2025-11-23T01:00:00+00:00,Colorado,Arizona State,colorado,arizonastate,17.0,42.0,,,cfbd
 CFB,2025,13,REG,2025-11-22T05:00:00+00:00,Cornell,Columbia,cornell,columbia,,,,,cfbd
 CFB,2025,13,REG,2025-11-22T18:00:00+00:00,Cornell,Columbia,cornell,columbia,12.0,29.0,,,cfbd
-CFB,2025,13,REG,2025-11-21T22:00:00+00:00,Curry College,Merchant Marine Academy,currycollege,merchantmarineacademy,,,,,cfbd
+CFB,2025,13,REG,2025-11-21T22:00:00+00:00,Curry College,Merchant Marine Academy,currycollege,merchantmarineacademy,24.0,27.0,,,cfbd
 CFB,2025,13,REG,2025-11-22T18:00:00+00:00,Davidson,Dayton,davidson,dayton,14.0,42.0,,,cfbd
 CFB,2025,13,REG,2025-11-22T18:00:00+00:00,Delaware State,South Carolina State,delawarestate,southcarolinastate,17.0,28.0,,,cfbd
 CFB,2025,13,REG,2025-11-22T17:00:00+00:00,Delaware Valley,Dickinson (pa),delawarevalley,dickinsonpa,14.0,13.0,,,cfbd
@@ -7559,7 +7559,7 @@ CFB,2025,13,REG,2025-11-22T19:00:00+00:00,Southeast Missouri State,Lindenwood,so
 CFB,2025,13,REG,2025-11-22T05:00:00+00:00,Stanford,California,stanford,california,,,,,cfbd
 CFB,2025,13,REG,2025-11-23T00:30:00+00:00,Stanford,California,stanford,california,31.0,10.0,,,cfbd
 CFB,2025,13,REG,2025-11-22T18:00:00+00:00,Stetson,San Diego,stetson,sandiego,8.0,42.0,,,cfbd
-CFB,2025,13,REG,2025-11-22T17:00:00+00:00,St John Fisher University,Rensselaer,stjohnfisheruniversity,rensselaer,,,,,cfbd
+CFB,2025,13,REG,2025-11-22T17:00:00+00:00,St John Fisher University,Rensselaer,stjohnfisheruniversity,rensselaer,24.0,35.0,,,cfbd
 CFB,2025,13,REG,2025-11-22T18:00:00+00:00,Stonehill,St. Francis (pa),stonehill,stfrancispa,20.0,10.0,,,cfbd
 CFB,2025,13,REG,2025-11-22T17:00:00+00:00,Stony Brook,Bryant,stonybrook,bryant,35.0,28.0,,,cfbd
 CFB,2025,13,REG,2025-11-22T18:00:00+00:00,Suny Maritime,Hobart College,sunymaritime,hobartcollege,14.0,42.0,,,cfbd
