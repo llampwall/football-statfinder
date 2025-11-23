@@ -1,0 +1,101 @@
+{
+  "fbs_rows": 60,
+  "joined_metrics_rows": 60,
+  "joined_odds_rows": 0,
+  "joined_sagarin_rows": 58,
+  "output_rows": 60,
+  "odds_games": 0,
+  "sagarin_games": 58,
+  "coverage_metrics": 1.0,
+  "notes": [
+    "FBS games: 60",
+    "Metrics coverage: 60/60",
+    "Odds coverage: 0/60",
+    "Sagarin coverage: 58/60"
+  ],
+  "samples": {
+    "missing_odds": [
+      {
+        "game_key": "20251119_0000_western_michigan_northern_illinois",
+        "home": "Northern Illinois",
+        "away": "Western Michigan",
+        "kickoff_iso_utc": "2025-11-19T00:00:00Z"
+      },
+      {
+        "game_key": "20251119_0000_massachusetts_ohio",
+        "home": "Ohio",
+        "away": "Massachusetts",
+        "kickoff_iso_utc": "2025-11-19T00:00:00Z"
+      },
+      {
+        "game_key": "20251119_0000_akron_bowling_green",
+        "home": "Bowling Green",
+        "away": "Akron",
+        "kickoff_iso_utc": "2025-11-19T00:00:00Z"
+      },
+      {
+        "game_key": "20251120_0000_miami_oh_buffalo",
+        "home": "Buffalo",
+        "away": "Miami (oh)",
+        "kickoff_iso_utc": "2025-11-20T00:00:00Z"
+      },
+      {
+        "game_key": "20251120_0000_central_michigan_kent_state",
+        "home": "Kent State",
+        "away": "Central Michigan",
+        "kickoff_iso_utc": "2025-11-20T00:00:00Z"
+      },
+      {
+        "game_key": "20251121_0030_louisiana_arkansas_state",
+        "home": "Arkansas State",
+        "away": "Louisiana",
+        "kickoff_iso_utc": "2025-11-21T00:30:00Z"
+      },
+      {
+        "game_key": "20251122_0100_florida_state_nc_state",
+        "home": "Nc State",
+        "away": "Florida State",
+        "kickoff_iso_utc": "2025-11-22T01:00:00Z"
+      },
+      {
+        "game_key": "20251122_0330_hawai_i_unlv",
+        "home": "Unlv",
+        "away": "Hawai'i",
+        "kickoff_iso_utc": "2025-11-22T03:30:00Z"
+      },
+      {
+        "game_key": "20251122_1700_miami_virginia_tech",
+        "home": "Virginia Tech",
+        "away": "Miami",
+        "kickoff_iso_utc": "2025-11-22T17:00:00Z"
+      },
+      {
+        "game_key": "20251122_1700_minnesota_northwestern",
+        "home": "Northwestern",
+        "away": "Minnesota",
+        "kickoff_iso_utc": "2025-11-22T17:00:00Z"
+      }
+    ],
+    "missing_sagarin": [
+      {
+        "game_key": "20251122_1700_delaware_wake_forest",
+        "home": "Wake Forest",
+        "away": "Delaware",
+        "kickoff_iso_utc": "2025-11-22T17:00:00Z"
+      },
+      {
+        "game_key": "20251122_1900_missouri_state_kennesaw_state",
+        "home": "Kennesaw State",
+        "away": "Missouri State",
+        "kickoff_iso_utc": "2025-11-22T19:00:00Z"
+      }
+    ],
+    "metrics_gaps": []
+  },
+  "ratings": {
+    "eligible": 0,
+    "edges_count": 0,
+    "rvo_count": 0
+  },
+  "failures": []
+}
