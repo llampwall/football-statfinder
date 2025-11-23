@@ -11,9 +11,10 @@ import subprocess
 import sys
 from collections import Counter
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Any
 
 OUT_ROOT = Path(__file__).resolve().parents[1] / "out"
+_LAST_RUN_CONTEXT: Dict[str, Optional[int]] = {"season": None, "week": None}
 
 from src.fetch_games_cfb import load_games, filter_week_reg
 from src.cfb_ats import apply_ats_to_week, build_team_ats
@@ -31,6 +32,70 @@ from src.schedule_master_cfb import (
 
 LEAGUE_MIN_TEAMS_ABS = 100
 LEAGUE_MIN_TEAMS_FRAC = 0.70
+
+
+class StageError(RuntimeError):
+    """Lightweight exception carrying a friendly stage + hint."""
+
+    def __init__(self, stage: str, hint: str = "") -> None:
+        super().__init__(hint)
+        self.stage = stage
+        self.hint = hint
+
+
+def _clean_env(value: Optional[str], default: str = "") -> str:
+    if value is None:
+        return default
+    text = value.strip()
+    return text if text else default
+
+
+def _config_banner(league: str, season: int, week: int) -> str:
+    policy = _clean_env(getenv("ODDS_SELECT_POLICY", "latest_by_fetch_ts"), "latest_by_fetch_ts")
+    cache_only = _clean_env(getenv("ODDS_CACHE_ONLY", "0"), "0")
+    cfbd_refresh = _clean_env(getenv("CFBD_REFRESH", "1"), "1")
+    ats_enabled = _clean_env(getenv("ATS_BACKFILL_ENABLED", "1"), "1")
+    ats_source = _clean_env(getenv("ATS_BACKFILL_SOURCE", "auto"), "auto")
+    return (
+        f"CONFIG({league}): season={season} week={week} "
+        f"policy={policy} cache_only={cache_only} "
+        f"cfbd_refresh={cfbd_refresh} ats_enabled={ats_enabled} ats_source={ats_source}"
+    )
+
+
+def _require_secrets(include_cfbd: bool) -> None:
+    missing: List[str] = []
+    if not _clean_env(getenv("THE_ODDS_API_KEY")):
+        missing.append("THE_ODDS_API_KEY")
+    if include_cfbd and not _clean_env(getenv("CFBD_API_KEY")):
+        missing.append("CFBD_API_KEY")
+    if missing:
+        hint = "missing " + " or ".join(missing)
+        raise StageError("config_missing", hint)
+
+
+def _odds_sources_empty(
+    staging_counts: Dict[str, int],
+    ats_sources: Dict[str, int],
+    promotion_info: Optional[Dict[str, Any]],
+    ats_enabled: bool,
+) -> Optional[StageError]:
+    if not promotion_info or not ats_enabled:
+        return None
+    promoted = promotion_info.get("promoted_games", 0)
+    if promoted:
+        return None
+    pinned = staging_counts.get("pinned", 0)
+    snapshot = ats_sources.get("snapshot", 0)
+    history = ats_sources.get("history", 0)
+    if pinned == 0 and snapshot == 0 and history == 0:
+        hint = f"pinned:{pinned},snapshot:{snapshot},history:{history}"
+        return StageError("odds_sources_empty", hint)
+    return None
+
+
+def _sanitize_hint(text: str) -> str:
+    return text.replace('"', "'")
 
 
 def run_module(
@@ -276,12 +341,12 @@ def main() -> int:
     schedule_rc = run_module("src.fetch_games_cfb", season, week, check=False)
     if schedule_rc != 0:
         print("FAIL: CFB schedule ingest command failed.")
-        return schedule_rc or 1
+        raise StageError("exceptions.CommandFailed", f"schedule ingest rc={schedule_rc}")
     schedule_df = filter_week_reg(load_games(season), season, week)
     schedule_rows = int(schedule_df.shape[0])
     if schedule_rows == 0:
         print("FAIL: CFB schedule produced 0 normalized rows.")
-        return 1
+        raise StageError("exceptions.EmptySchedule", "schedule produced 0 normalized rows")
     print(f"PASS: CFB schedule rows={schedule_rows}")
     notes.append(f"Schedule rows={schedule_rows}")
 
@@ -337,7 +402,10 @@ def main() -> int:
     league_debug_path = base_dir / "league_metrics_debug.json"
     if lm_rc != 0 or not league_path.exists():
         print(f"FAIL: CFB league metrics; see {league_debug_path}")
-        return lm_rc or 1
+        raise StageError(
+            "exceptions.CommandFailed",
+            f"league metrics rc={lm_rc} path={league_debug_path}",
+        )
     league_rows = count_csv_rows(league_path)
     league_stats = {}
     if league_debug_path.exists():
@@ -373,7 +441,10 @@ def main() -> int:
         eoy_debug = OUT_ROOT / "cfb" / "final_league_metrics_debug.json"
         if eoy_rc != 0 or not eoy_csv.exists():
             print(f"FAIL: CFB final league metrics; see {eoy_debug}")
-            return eoy_rc or 1
+            raise StageError(
+                "exceptions.CommandFailed",
+                f"final league metrics rc={eoy_rc} path={eoy_debug}",
+            )
         eoy_stats = {}
         if eoy_debug.exists():
             try:
@@ -407,7 +478,10 @@ def main() -> int:
     odds_debug = base_dir / "odds_match_debug.json"
     if odds_rc != 0 or not odds_debug.exists():
         print(f"FAIL: CFB odds coverage; see {odds_debug}")
-        return odds_rc or 1
+        raise StageError(
+            "exceptions.CommandFailed",
+            f"odds coverage rc={odds_rc} path={odds_debug}",
+        )
     try:
         odds_stats = json.loads(odds_debug.read_text(encoding="utf-8"))
     except json.JSONDecodeError:
@@ -453,12 +527,12 @@ def main() -> int:
             sagarin_summary = run_cfb_sagarin_staging(season, week)
         except Exception as exc:
             print(f"FAIL: CFB Sagarin staging failed: {exc}")
-            return 1
+            raise StageError("exceptions.SagarinError", str(exc))
         sag_csv = Path(sagarin_summary.get("weekly_csv"))
         sag_rows = count_csv_rows(sag_csv)
         if sag_rows == 0:
             print(f"FAIL: CFB Sagarin staging produced empty snapshot ({sag_csv}).")
-            return 1
+            raise StageError("exceptions.SagarinEmpty", f"snapshot empty at {sag_csv}")
         master_rows = int(sagarin_summary.get("master_total", 0))
         teams_selected = int(sagarin_summary.get("teams_selected", sag_rows))
         wrote_master_rows = int(sagarin_summary.get("wrote_master_rows", teams_selected))
@@ -479,18 +553,24 @@ def main() -> int:
                 base_dir / f"sagarin_cfb_{season}_wk{week}_raw.txt"
             )
             print(f"FAIL: CFB Sagarin fetch failed; see {debug_hint}")
-            return sag_rc or 1
+            raise StageError(
+                "exceptions.SagarinError",
+                f"fetch rc={sag_rc} debug={debug_hint}",
+            )
         sag_rows = count_csv_rows(sag_csv)
         if sag_rows == 0:
             debug_hint = receipt_path if receipt_path.exists() else sag_csv
             print(f"FAIL: CFB Sagarin snapshot empty; see {debug_hint}")
-            return 1
+            raise StageError("exceptions.SagarinEmpty", f"snapshot empty at {debug_hint}")
 
         print("\n>>> Running src.sagarin_master_cfb .")
         master_rc = run_module("src.sagarin_master_cfb", season, week, check=False)
         if master_rc != 0:
             print("FAIL: CFB Sagarin master upsert failed.")
-            return master_rc or 1
+            raise StageError(
+                "exceptions.SagarinError",
+                f"master upsert rc={master_rc}",
+            )
         master_csv = OUT_ROOT / "master" / "sagarin_cfb_master.csv"
         master_rows = count_csv_rows(master_csv)
         print(f"PASS: CFB Sagarin rows={sag_rows}; master_total={master_rows}")
@@ -504,11 +584,14 @@ def main() -> int:
     gv_csv = base_dir / f"games_week_{season}_{week}.csv"
     if gameview_rc != 0 or not gv_jsonl.exists() or not gv_csv.exists():
         print("FAIL: CFB Game View build failed.")
-        return gameview_rc or 1
+        raise StageError(
+            "exceptions.GameView",
+            f"builder rc={gameview_rc}",
+        )
     gv_records = read_jsonl(gv_jsonl)
     if not gv_records:
         print("FAIL: CFB Game View JSONL is empty.")
-        return 1
+        raise StageError("exceptions.GameView", "games_week JSONL empty")
     favorite_fields = [
         "spread_home_relative",
         "favored_side",
@@ -519,18 +602,18 @@ def main() -> int:
     missing_favorite_fields = [field for field in favorite_fields if field not in gv_records[0]]
     if missing_favorite_fields:
         print(f"FAIL: CFB Game View missing fields: {', '.join(missing_favorite_fields)}")
-        return 1
+        raise StageError("exceptions.GameView", "missing favorite fields")
 
     # Sidecar timelines
     print("\n>>> Running src.build_team_timelines_cfb .")
     timelines_rc = run_module("src.build_team_timelines_cfb", season, week, check=False)
     if timelines_rc != 0:
         print("FAIL: CFB team timelines step failed.")
-        return timelines_rc or 1
+        raise StageError("exceptions.CommandFailed", f"team timelines rc={timelines_rc}")
     sidecar_dir = base_dir / "game_schedules"
     if not sidecar_dir.exists():
         print("FAIL: CFB sidecar directory missing.")
-        return 1
+        raise StageError("exceptions.SidecarMissing", "game_schedules directory missing")
     sidecar_count = len(list(sidecar_dir.glob("*.json")))
     print(f"PASS: CFB sidecars written -> {sidecar_count} files (schedule rows={schedule_rows})")
     notes.append(f"Sidecars {sidecar_count}/{schedule_rows}")
@@ -559,11 +642,11 @@ def main() -> int:
     gv_csv = base_dir / f"games_week_{season}_{week}.csv"
     if gameview_rc != 0 or not gv_jsonl.exists() or not gv_csv.exists():
         print("FAIL: CFB Game View build failed.")
-        return gameview_rc or 1
+        raise StageError("exceptions.GameView", f"builder rc={gameview_rc}")
     gv_records = read_jsonl(gv_jsonl)
     if not gv_records:
         print("FAIL: CFB Game View JSONL is empty.")
-        return 1
+        raise StageError("exceptions.GameView", "games_week JSONL empty")
     favorite_fields = [
         "spread_home_relative",
         "favored_side",
@@ -574,7 +657,7 @@ def main() -> int:
     missing_favorite_fields = [field for field in favorite_fields if field not in gv_records[0]]
     if missing_favorite_fields:
         print(f"FAIL: CFB Game View missing fields: {', '.join(missing_favorite_fields)}")
-        return 1
+        raise StageError("exceptions.GameView", "missing favorite fields")
 
     legacy_rows = None
     legacy_flag = getenv("ODDS_LEGACY_JOIN_ENABLE", "0").strip().lower() not in {"0", "false", "off", "disabled"}

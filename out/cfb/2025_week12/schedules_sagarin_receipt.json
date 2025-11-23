@@ -1,0 +1,162 @@
+{
+  "season": 2025,
+  "week": 12,
+  "rows_considered": 2337,
+  "rows_enriched": 2337,
+  "opp_rows_enriched": 2081,
+  "coverage_fraction": 1.0,
+  "opp_coverage_fraction": 0.8904578519469405,
+  "missing_examples": [
+    {
+      "season": 2025,
+      "week": 7,
+      "team_norm": "miamioh",
+      "context": "home_ytd_opp_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 2,
+      "team_norm": "stfrancispa",
+      "context": "away_prev_opp_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 12,
+      "team_norm": "miamioh",
+      "context": "away_prev_opp_not_in_master"
+    },
+    {
+      "season": 2025,
+      "week": 9,
+      "team_norm": "miamioh",
+      "context": "home_ytd_opp_not_in_master"
+    },
+    {
+      "season": 2025,
+      "week": 11,
+      "team_norm": "miamioh",
+      "context": "away_ytd_opp_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 8,
+      "team_norm": "miamioh",
+      "context": "away_prev_opp_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 15,
+      "team_norm": "miamioh",
+      "context": "away_prev_opp_not_in_master"
+    },
+    {
+      "season": 2025,
+      "week": 1,
+      "team_norm": "sanjosstate",
+      "context": "home_ytd_opp_not_in_master"
+    },
+    {
+      "season": 2025,
+      "week": 2,
+      "team_norm": "stfrancispa",
+      "context": "away_ytd_opp_not_in_master"
+    },
+    {
+      "season": 2025,
+      "week": 5,
+      "team_norm": "uconn",
+      "context": "away_ytd_opp_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 2,
+      "team_norm": "floridainternational",
+      "context": "home_prev_opp_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 9,
+      "team_norm": "miamioh",
+      "context": "home_prev_opp_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 5,
+      "team_norm": "uconn",
+      "context": "away_prev_opp_not_in_master"
+    },
+    {
+      "season": 2025,
+      "week": 6,
+      "team_norm": "miamioh",
+      "context": "away_ytd_opp_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 5,
+      "team_norm": "miamioh",
+      "context": "home_prev_opp_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 14,
+      "team_norm": "uconn",
+      "context": "home_prev_opp_not_in_master"
+    },
+    {
+      "season": 2024,
+      "week": 13,
+      "team_norm": "miamioh",
+      "context": "away_prev_opp_not_in_master"
+    },
+    {
+      "season": 2025,
+      "week": 1,
+      "team_norm": "miamioh",
+      "context": "home_ytd_not_in_master"
+    },
+    {
+      "season": 2025,
+      "week": 2,
+      "team_norm": "miamioh",
+      "context": "home_ytd_not_in_master"
+    },
+    {
+      "season": 2025,
+      "week": 4,
+      "team_norm": "miamioh",
+      "context": "home_ytd_not_in_master"
+    },
+    {
+      "season": 2025,
+      "week": 5,
+      "team_norm": "miamioh",
+      "context": "home_ytd_not_in_master"
+    },
+    {
+      "season": 2025,
+      "week": 6,
+      "team_norm": "miamioh",
+      "context": "home_ytd_not_in_master"
+    },
+    {
+      "season": 2025,
+      "week": 7,
+      "team_norm": "miamioh",
+      "context": "home_ytd_not_in_master"
+    },
+    {
+      "season": 2025,
+      "week": 8,
+      "team_norm": "miamioh",
+      "context": "home_ytd_not_in_master"
+    },
+    {
+      "season": 2025,
+      "week": 9,
+      "team_norm": "miamioh",
+      "context": "home_ytd_not_in_master"
+    }
+  ],
+  "source": "C:\\Users\\Jordan\\Documents\\Football Project George\\NEW PROJECT\\football-statfinder\\out\\master\\sagarin_cfb_master.csv"
+}

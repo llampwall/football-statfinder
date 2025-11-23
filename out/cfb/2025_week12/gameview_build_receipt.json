@@ -1,0 +1,101 @@
+{
+  "fbs_rows": 58,
+  "joined_metrics_rows": 58,
+  "joined_odds_rows": 0,
+  "joined_sagarin_rows": 56,
+  "output_rows": 58,
+  "odds_games": 0,
+  "sagarin_games": 56,
+  "coverage_metrics": 1.0,
+  "notes": [
+    "FBS games: 58",
+    "Metrics coverage: 58/58",
+    "Odds coverage: 0/58",
+    "Sagarin coverage: 56/58"
+  ],
+  "samples": {
+    "missing_odds": [
+      {
+        "game_key": "20251112_0030_kent_state_akron",
+        "home": "Akron",
+        "away": "Kent State",
+        "kickoff_iso_utc": "2025-11-12T00:30:00Z"
+      },
+      {
+        "game_key": "20251112_0100_ohio_western_michigan",
+        "home": "Western Michigan",
+        "away": "Ohio",
+        "kickoff_iso_utc": "2025-11-12T01:00:00Z"
+      },
+      {
+        "game_key": "20251113_0000_northern_illinois_massachusetts",
+        "home": "Massachusetts",
+        "away": "Northern Illinois",
+        "kickoff_iso_utc": "2025-11-13T00:00:00Z"
+      },
+      {
+        "game_key": "20251113_0000_toledo_miami_oh",
+        "home": "Miami (oh)",
+        "away": "Toledo",
+        "kickoff_iso_utc": "2025-11-13T00:00:00Z"
+      },
+      {
+        "game_key": "20251113_0000_buffalo_central_michigan",
+        "home": "Central Michigan",
+        "away": "Buffalo",
+        "kickoff_iso_utc": "2025-11-13T00:00:00Z"
+      },
+      {
+        "game_key": "20251114_0030_troy_old_dominion",
+        "home": "Old Dominion",
+        "away": "Troy",
+        "kickoff_iso_utc": "2025-11-14T00:30:00Z"
+      },
+      {
+        "game_key": "20251115_0030_clemson_tigers_louisville",
+        "home": "Louisville",
+        "away": "Clemson Tigers",
+        "kickoff_iso_utc": "2025-11-15T00:30:00Z"
+      },
+      {
+        "game_key": "20251115_0200_minnesota_oregon_ducks",
+        "home": "Oregon Ducks",
+        "away": "Minnesota",
+        "kickoff_iso_utc": "2025-11-15T02:00:00Z"
+      },
+      {
+        "game_key": "20251115_1700_utsa_charlotte",
+        "home": "Charlotte",
+        "away": "Utsa",
+        "kickoff_iso_utc": "2025-11-15T17:00:00Z"
+      },
+      {
+        "game_key": "20251115_1700_kansas_state_oklahoma_state",
+        "home": "Oklahoma State",
+        "away": "Kansas State",
+        "kickoff_iso_utc": "2025-11-15T17:00:00Z"
+      }
+    ],
+    "missing_sagarin": [
+      {
+        "game_key": "20251115_2000_utep_missouri_state",
+        "home": "Missouri State",
+        "away": "Utep",
+        "kickoff_iso_utc": "2025-11-15T20:00:00Z"
+      },
+      {
+        "game_key": "20251116_0000_delaware_sam_houston",
+        "home": "Sam Houston",
+        "away": "Delaware",
+        "kickoff_iso_utc": "2025-11-16T00:00:00Z"
+      }
+    ],
+    "metrics_gaps": []
+  },
+  "ratings": {
+    "eligible": 0,
+    "edges_count": 0,
+    "rvo_count": 0
+  },
+  "failures": []
+}
