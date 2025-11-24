@@ -142,22 +142,6 @@
         "why": "future_week"
       },
       {
-        "event_home": "Stanford Cardinal",
-        "event_away": "Notre Dame Fighting Irish",
-        "event_time": "2025-11-29T13:00:00Z",
-        "home_norm": "stanford",
-        "away_norm": "notredamefightingirish",
-        "why": "future_week"
-      },
-      {
-        "event_home": "Baylor Bears",
-        "event_away": "Houston Cougars",
-        "event_time": "2025-11-29T16:00:00Z",
-        "home_norm": "baylor",
-        "away_norm": "houston",
-        "why": "future_week"
-      },
-      {
         "event_home": "TCU Horned Frogs",
         "event_away": "Cincinnati Bearcats",
         "event_time": "2025-11-29T16:00:00Z",
@@ -166,27 +150,19 @@
         "why": "future_week"
       },
       {
-        "event_home": "Florida Gators",
-        "event_away": "Florida State Seminoles",
-        "event_time": "2025-11-29T16:00:00Z",
-        "home_norm": "florida",
-        "away_norm": "floridastate",
-        "why": "future_week"
-      },
-      {
-        "event_home": "BYU Cougars",
-        "event_away": "UCF Knights",
-        "event_time": "2025-11-29T17:00:00Z",
-        "home_norm": "byu",
-        "away_norm": "ucf",
-        "why": "future_week"
-      },
-      {
         "event_home": "Miami (OH) RedHawks",
         "event_away": "Ball State Cardinals",
         "event_time": "2025-11-29T17:00:00Z",
         "home_norm": "miamioh",
         "away_norm": "ballstate",
+        "why": "future_week"
+      },
+      {
+        "event_home": "Baylor Bears",
+        "event_away": "Houston Cougars",
+        "event_time": "2025-11-29T17:00:00Z",
+        "home_norm": "baylor",
+        "away_norm": "houston",
         "why": "future_week"
       },
       {
@@ -251,6 +227,30 @@
         "event_time": "2025-11-29T17:00:00Z",
         "home_norm": "michigan",
         "away_norm": "ohiostatebuckeyes",
+        "why": "future_week"
+      },
+      {
+        "event_home": "West Virginia Mountaineers",
+        "event_away": "Texas Tech Red Raiders",
+        "event_time": "2025-11-29T17:00:00Z",
+        "home_norm": "westvirginia",
+        "away_norm": "texastech",
+        "why": "future_week"
+      },
+      {
+        "event_home": "BYU Cougars",
+        "event_away": "UCF Knights",
+        "event_time": "2025-11-29T18:00:00Z",
+        "home_norm": "byu",
+        "away_norm": "ucf",
+        "why": "future_week"
+      },
+      {
+        "event_home": "Delaware Blue Hens",
+        "event_away": "UTEP Miners",
+        "event_time": "2025-11-29T18:00:00Z",
+        "home_norm": "delaware",
+        "away_norm": "utepminers",
         "why": "future_week"
       }
     ]
