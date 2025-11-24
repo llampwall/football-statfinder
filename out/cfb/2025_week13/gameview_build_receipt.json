@@ -16,15 +16,15 @@
   "samples": {
     "missing_odds": [
       {
-        "game_key": "20251119_0000_massachusetts_ohio",
-        "home": "Ohio",
-        "away": "Massachusetts",
-        "kickoff_iso_utc": "2025-11-19T00:00:00Z"
-      },
-      {
         "game_key": "20251119_0000_western_michigan_northern_illinois",
         "home": "Northern Illinois",
         "away": "Western Michigan",
+        "kickoff_iso_utc": "2025-11-19T00:00:00Z"
+      },
+      {
+        "game_key": "20251119_0000_massachusetts_ohio",
+        "home": "Ohio",
+        "away": "Massachusetts",
         "kickoff_iso_utc": "2025-11-19T00:00:00Z"
       },
       {
@@ -64,15 +64,15 @@
         "kickoff_iso_utc": "2025-11-22T03:30:00Z"
       },
       {
-        "game_key": "20251122_1700_missouri_oklahoma",
-        "home": "Oklahoma",
-        "away": "Missouri",
-        "kickoff_iso_utc": "2025-11-22T17:00:00Z"
-      },
-      {
         "game_key": "20251122_1700_kansas_iowa_state",
         "home": "Iowa State",
         "away": "Kansas",
+        "kickoff_iso_utc": "2025-11-22T17:00:00Z"
+      },
+      {
+        "game_key": "20251122_1700_delaware_wake_forest",
+        "home": "Wake Forest",
+        "away": "Delaware",
         "kickoff_iso_utc": "2025-11-22T17:00:00Z"
       }
     ],
