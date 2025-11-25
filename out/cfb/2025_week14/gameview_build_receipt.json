@@ -1,0 +1,101 @@
+{
+  "fbs_rows": 67,
+  "joined_metrics_rows": 67,
+  "joined_odds_rows": 55,
+  "joined_sagarin_rows": 65,
+  "output_rows": 67,
+  "odds_games": 55,
+  "sagarin_games": 65,
+  "coverage_metrics": 1.0,
+  "notes": [
+    "FBS games: 67",
+    "Metrics coverage: 67/67",
+    "Odds coverage: 55/67",
+    "Sagarin coverage: 65/67"
+  ],
+  "samples": {
+    "missing_odds": [
+      {
+        "game_key": "20251125_2130_bowling_green_massachusetts",
+        "home": "Massachusetts",
+        "away": "Bowling Green",
+        "kickoff_iso_utc": "2025-11-25T21:30:00Z"
+      },
+      {
+        "game_key": "20251128_0030_navy_memphis",
+        "home": "Memphis",
+        "away": "Navy",
+        "kickoff_iso_utc": "2025-11-28T00:30:00Z"
+      },
+      {
+        "game_key": "20251128_2030_san_diego_state_new_mexico",
+        "home": "New Mexico",
+        "away": "San Diego State",
+        "kickoff_iso_utc": "2025-11-28T20:30:00Z"
+      },
+      {
+        "game_key": "20251129_1700_east_carolina_florida_atlantic",
+        "home": "Florida Atlantic",
+        "away": "East Carolina",
+        "kickoff_iso_utc": "2025-11-29T17:00:00Z"
+      },
+      {
+        "game_key": "20251129_1800_utep_delaware",
+        "home": "Delaware",
+        "away": "Utep",
+        "kickoff_iso_utc": "2025-11-29T18:00:00Z"
+      },
+      {
+        "game_key": "20251129_1800_florida_international_sam_houston",
+        "home": "Sam Houston",
+        "away": "Florida International",
+        "kickoff_iso_utc": "2025-11-29T18:00:00Z"
+      },
+      {
+        "game_key": "20251129_1930_arkansas_state_app_state",
+        "home": "App State",
+        "away": "Arkansas State",
+        "kickoff_iso_utc": "2025-11-29T19:30:00Z"
+      },
+      {
+        "game_key": "20251129_2000_uab_tulsa",
+        "home": "Tulsa",
+        "away": "Uab",
+        "kickoff_iso_utc": "2025-11-29T20:00:00Z"
+      },
+      {
+        "game_key": "20251129_2030_cincinnati_tcu",
+        "home": "Tcu",
+        "away": "Cincinnati",
+        "kickoff_iso_utc": "2025-11-29T20:30:00Z"
+      },
+      {
+        "game_key": "20251129_2030_troy_southern_miss",
+        "home": "Southern Miss",
+        "away": "Troy",
+        "kickoff_iso_utc": "2025-11-29T20:30:00Z"
+      }
+    ],
+    "missing_sagarin": [
+      {
+        "game_key": "20251129_1800_utep_delaware",
+        "home": "Delaware",
+        "away": "Utep",
+        "kickoff_iso_utc": "2025-11-29T18:00:00Z"
+      },
+      {
+        "game_key": "20251129_1900_louisiana_tech_missouri_state",
+        "home": "Missouri State",
+        "away": "Louisiana Tech",
+        "kickoff_iso_utc": "2025-11-29T19:00:00Z"
+      }
+    ],
+    "metrics_gaps": []
+  },
+  "ratings": {
+    "eligible": 54,
+    "edges_count": 54,
+    "rvo_count": 54
+  },
+  "failures": []
+}
