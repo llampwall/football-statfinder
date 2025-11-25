@@ -3,11 +3,11 @@
   "week": 14,
   "window": "2025-11-19T21:30:00Z -> 2025-12-06T04:00:00Z",
   "stats": {
-    "events_total": 68,
+    "events_total": 74,
     "events_after_window_filter": 67,
     "events_in_window": 67,
     "matched": 55,
-    "unmatched": 13,
+    "unmatched": 19,
     "eligible_unmatched": 12
   },
   "samples": {
@@ -317,7 +317,7 @@
       {
         "event_home": "UMass Minutemen",
         "event_away": "Bowling Green Falcons",
-        "event_time": "2025-11-25T21:30:00Z",
+        "event_time": "2025-11-25T21:32:29Z",
         "home_norm": "umass",
         "away_norm": "bowlinggreen",
         "why": "no_schedule_candidate"
@@ -411,6 +411,54 @@
         "why": "no_schedule_candidate"
       },
       {
+        "event_home": "Tulane Green Wave",
+        "event_away": "North Texas Mean Green",
+        "event_time": "2025-12-06T01:00:00Z",
+        "home_norm": "tulane",
+        "away_norm": "northtexas",
+        "why": "future_week"
+      },
+      {
+        "event_home": "Texas Tech Red Raiders",
+        "event_away": "BYU Cougars",
+        "event_time": "2025-12-06T17:00:00Z",
+        "home_norm": "texastech",
+        "away_norm": "byu",
+        "why": "future_week"
+      },
+      {
+        "event_home": "Alabama Crimson Tide",
+        "event_away": "Georgia Bulldogs",
+        "event_time": "2025-12-06T21:00:00Z",
+        "home_norm": "alabamacrimsontide",
+        "away_norm": "georgiabulldogs",
+        "why": "future_week"
+      },
+      {
+        "event_home": "Texas A&M Aggies",
+        "event_away": "Alabama Crimson Tide",
+        "event_time": "2025-12-06T21:00:00Z",
+        "home_norm": "texasaandm",
+        "away_norm": "alabamacrimsontide",
+        "why": "future_week"
+      },
+      {
+        "event_home": "Texas A&M Aggies",
+        "event_away": "Georgia Bulldogs",
+        "event_time": "2025-12-06T21:00:00Z",
+        "home_norm": "texasaandm",
+        "away_norm": "georgiabulldogs",
+        "why": "future_week"
+      },
+      {
+        "event_home": "Virginia Cavaliers",
+        "event_away": "SMU Mustangs",
+        "event_time": "2025-12-07T01:00:00Z",
+        "home_norm": "virginia",
+        "away_norm": "smu",
+        "why": "future_week"
+      },
+      {
         "event_home": "Ohio State Buckeyes",
         "event_away": "Indiana Hoosiers",
         "event_time": "2025-12-07T01:01:00Z",
@@ -422,11 +470,11 @@
   },
   "reason_counts": {
     "no_schedule_candidate": 12,
-    "future_week": 1
+    "future_week": 7
   },
   "reason_buckets": {
     "outside_window": 0,
     "no_schedule_candidate": 12,
-    "other": 1
+    "other": 7
   }
 }
