@@ -46,15 +46,15 @@
         "kickoff_iso_utc": "2025-11-29T17:00:00Z"
       },
       {
-        "game_key": "20251129_1800_florida_international_sam_houston",
-        "home": "Sam Houston",
-        "away": "Florida International",
-        "kickoff_iso_utc": "2025-11-29T18:00:00Z"
-      },
-      {
         "game_key": "20251129_1800_utep_delaware",
         "home": "Delaware",
         "away": "Utep",
+        "kickoff_iso_utc": "2025-11-29T18:00:00Z"
+      },
+      {
+        "game_key": "20251129_1800_florida_international_sam_houston",
+        "home": "Sam Houston",
+        "away": "Florida International",
         "kickoff_iso_utc": "2025-11-29T18:00:00Z"
       },
       {
