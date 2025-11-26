@@ -7645,7 +7645,7 @@ CFB,2025,14,REG,2025-11-29T18:00:00+00:00,Delaware,Utep,delaware,utep,,,,,cfbd
 CFB,2025,14,REG,2025-11-29T05:00:00+00:00,Duke,Wake Forest,duke,wakeforest,,,,,cfbd
 CFB,2025,14,REG,2025-11-29T20:30:00+00:00,Duke,Wake Forest,duke,wakeforest,,,,,cfbd
 CFB,2025,14,REG,2025-11-25T05:00:00+00:00,Eastern Michigan,Western Michigan,easternmichigan,westernmichigan,,,,,cfbd
-CFB,2025,14,REG,2025-11-26T00:30:00+00:00,Eastern Michigan,Western Michigan,easternmichigan,westernmichigan,,,,,cfbd
+CFB,2025,14,REG,2025-11-26T00:30:00+00:00,Eastern Michigan,Western Michigan,easternmichigan,westernmichigan,21.0,31.0,,,cfbd
 CFB,2025,14,REG,2025-11-29T18:00:00+00:00,Ferris State,Ashland,ferrisstate,ashland,,,,,cfbd
 CFB,2025,14,REG,2025-11-29T05:00:00+00:00,Florida,Florida State,florida,floridastate,,,,,cfbd
 CFB,2025,14,REG,2025-11-29T21:30:00+00:00,Florida,Florida State,florida,floridastate,,,,,cfbd
@@ -7674,7 +7674,7 @@ CFB,2025,14,REG,2025-11-29T17:00:00+00:00,Louisville,Kentucky,louisville,kentuck
 CFB,2025,14,REG,2025-11-29T05:00:00+00:00,Marshall,Georgia Southern,marshall,georgiasouthern,,,,,cfbd
 CFB,2025,14,REG,2025-11-29T18:30:00+00:00,Marshall,Georgia Southern,marshall,georgiasouthern,,,,,cfbd
 CFB,2025,14,REG,2025-11-25T05:00:00+00:00,Massachusetts,Bowling Green,massachusetts,bowlinggreen,,,,,cfbd
-CFB,2025,14,REG,2025-11-25T21:30:00+00:00,Massachusetts,Bowling Green,massachusetts,bowlinggreen,,,,,cfbd
+CFB,2025,14,REG,2025-11-25T21:30:00+00:00,Massachusetts,Bowling Green,massachusetts,bowlinggreen,14.0,45.0,,,cfbd
 CFB,2025,14,REG,2025-11-28T00:30:00+00:00,Memphis,Navy,memphis,navy,,,,,cfbd
 CFB,2025,14,REG,2025-11-29T05:00:00+00:00,Miami (oh),Ball State,miamioh,ballstate,,,,,cfbd
 CFB,2025,14,REG,2025-11-29T17:00:00+00:00,Miami (oh),Ball State,miamioh,ballstate,,,,,cfbd
