@@ -11,7 +11,6 @@
     "20251129_1900_louisiana_tech_missouri_state",
     "20251129_1930_arkansas_state_app_state",
     "20251129_2000_uab_tulsa",
-    "20251129_2030_cincinnati_tcu",
     "20251129_2030_troy_southern_miss",
     "20251130_0330_fresno_state_san_jos_state"
   ],
@@ -29,21 +28,20 @@
       "20251129_1900_louisiana_tech_missouri_state": 2,
       "20251129_1930_arkansas_state_app_state": 5,
       "20251129_2000_uab_tulsa": 5,
-      "20251129_2030_cincinnati_tcu": 2,
       "20251129_2030_troy_southern_miss": 5,
       "20251130_0330_fresno_state_san_jos_state": 5
     }
   },
   "notes": [
     "Schedule rows=94",
-    "Odds staging raw=2078 pinned=1763 unmatched=315",
+    "Odds staging raw=2081 pinned=1766 unmatched=315",
     "League metrics 136/136 teams meeting threshold (required 100); ranks_ok=1.00",
-    "Odds matched 55/65 (total 72); unmatched=17",
-    "Master enrichment 55/148",
+    "Odds matched 56/65 (total 72); unmatched=16",
+    "Master enrichment 56/148",
     "Sagarin rows=134; master=7098",
     "Sidecars 67/94",
     "Sagarin enrichment 100%/89%",
-    "Odds promotion promoted=18 current_week=4361 other_weeks=50528 mismatch=0",
+    "Odds promotion promoted=18 current_week=4930 other_weeks=51725 mismatch=0",
     "Scores backfill [W12,W13] updated=0 skipped=2 files=0",
     "ATS rows=59 teams=98 zero=38 weeks_scanned=[7, 8, 9, 10, 11, 12, 13]",
     "Game View rows=67",

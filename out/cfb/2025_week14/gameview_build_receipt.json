@@ -1,16 +1,16 @@
 {
   "fbs_rows": 67,
   "joined_metrics_rows": 67,
-  "joined_odds_rows": 55,
+  "joined_odds_rows": 56,
   "joined_sagarin_rows": 65,
   "output_rows": 67,
-  "odds_games": 55,
+  "odds_games": 56,
   "sagarin_games": 65,
   "coverage_metrics": 1.0,
   "notes": [
     "FBS games: 67",
     "Metrics coverage: 67/67",
-    "Odds coverage: 55/67",
+    "Odds coverage: 56/67",
     "Sagarin coverage: 65/67"
   ],
   "samples": {
@@ -70,9 +70,9 @@
         "kickoff_iso_utc": "2025-11-29T20:00:00Z"
       },
       {
-        "game_key": "20251129_2030_cincinnati_tcu",
-        "home": "Tcu",
-        "away": "Cincinnati",
+        "game_key": "20251129_2030_troy_southern_miss",
+        "home": "Southern Miss",
+        "away": "Troy",
         "kickoff_iso_utc": "2025-11-29T20:30:00Z"
       }
     ],
@@ -93,9 +93,9 @@
     "metrics_gaps": []
   },
   "ratings": {
-    "eligible": 54,
-    "edges_count": 54,
-    "rvo_count": 54
+    "eligible": 55,
+    "edges_count": 55,
+    "rvo_count": 55
   },
   "failures": []
 }
