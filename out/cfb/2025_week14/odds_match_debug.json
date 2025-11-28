@@ -3,12 +3,12 @@
   "week": 14,
   "window": "2025-11-19T21:30:00Z -> 2025-12-06T04:00:00Z",
   "stats": {
-    "events_total": 72,
-    "events_after_window_filter": 65,
-    "events_in_window": 65,
+    "events_total": 71,
+    "events_after_window_filter": 64,
+    "events_in_window": 64,
     "matched": 56,
-    "unmatched": 16,
-    "eligible_unmatched": 9
+    "unmatched": 15,
+    "eligible_unmatched": 8
   },
   "samples": {
     "matched": [
@@ -315,14 +315,6 @@
     ],
     "unmatched": [
       {
-        "event_home": "Memphis Tigers",
-        "event_away": "Navy Midshipmen",
-        "event_time": "2025-11-28T00:30:00Z",
-        "home_norm": "memphis",
-        "away_norm": "navymidshipmen",
-        "why": "no_schedule_candidate"
-      },
-      {
         "event_home": "New Mexico Lobos",
         "event_away": "San Diego State Aztecs",
         "event_time": "2025-11-28T20:30:00Z",
@@ -445,12 +437,12 @@
     ]
   },
   "reason_counts": {
-    "no_schedule_candidate": 9,
+    "no_schedule_candidate": 8,
     "future_week": 7
   },
   "reason_buckets": {
     "outside_window": 0,
-    "no_schedule_candidate": 9,
+    "no_schedule_candidate": 8,
     "other": 7
   }
 }
