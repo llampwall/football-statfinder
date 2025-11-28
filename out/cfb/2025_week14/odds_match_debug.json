@@ -3,89 +3,29 @@
   "week": 14,
   "window": "2025-11-19T21:30:00Z -> 2025-12-06T04:00:00Z",
   "stats": {
-    "events_total": 71,
-    "events_after_window_filter": 64,
-    "events_in_window": 64,
-    "matched": 56,
-    "unmatched": 15,
+    "events_total": 63,
+    "events_after_window_filter": 59,
+    "events_in_window": 59,
+    "matched": 51,
+    "unmatched": 12,
     "eligible_unmatched": 8
   },
   "samples": {
     "matched": [
       {
-        "event_home": "Buffalo Bulls",
-        "event_away": "Ohio Bobcats",
-        "event_time": "2025-11-28T17:00:00Z",
-        "home_norm": "buffalo",
-        "away_norm": "ohio",
-        "game_key": "20251128_1700_ohio_buffalo",
-        "kickoff_iso_utc": "2025-11-28T17:00:00Z",
-        "mode": "ordered_exact"
-      },
-      {
-        "event_home": "Nebraska Cornhuskers",
-        "event_away": "Iowa Hawkeyes",
-        "event_time": "2025-11-28T17:00:00Z",
-        "home_norm": "nebraska",
-        "away_norm": "iowa",
-        "game_key": "20251128_1700_iowa_nebraska",
-        "kickoff_iso_utc": "2025-11-28T17:00:00Z",
-        "mode": "ordered_exact"
-      },
-      {
-        "event_home": "Kansas Jayhawks",
-        "event_away": "Utah Utes",
-        "event_time": "2025-11-28T17:00:00Z",
-        "home_norm": "kansas",
-        "away_norm": "utah",
-        "game_key": "20251128_1700_utah_kansas",
-        "kickoff_iso_utc": "2025-11-28T17:00:00Z",
-        "mode": "ordered_exact"
-      },
-      {
-        "event_home": "Northern Illinois Huskies",
-        "event_away": "Kent State Golden Flashes",
-        "event_time": "2025-11-28T17:00:00Z",
-        "home_norm": "northernillinois",
-        "away_norm": "kentstate",
-        "game_key": "20251128_1700_kent_state_northern_illinois",
-        "kickoff_iso_utc": "2025-11-28T17:00:00Z",
-        "mode": "ordered_exact"
-      },
-      {
-        "event_home": "Mississippi State Bulldogs",
-        "event_away": "Ole Miss Rebels",
-        "event_time": "2025-11-28T17:00:00Z",
-        "home_norm": "mississippistate",
-        "away_norm": "olemiss",
-        "game_key": "20251128_1700_ole_miss_mississippi_state",
-        "kickoff_iso_utc": "2025-11-28T17:00:00Z",
-        "mode": "ordered_exact"
-      },
-      {
-        "event_home": "Colorado State Rams",
-        "event_away": "Air Force Falcons",
-        "event_time": "2025-11-28T20:00:00Z",
-        "home_norm": "coloradostate",
-        "away_norm": "airforce",
-        "game_key": "20251128_2000_air_force_colorado_state",
-        "kickoff_iso_utc": "2025-11-28T20:00:00Z",
-        "mode": "ordered_exact"
-      },
-      {
-        "event_home": "Georgia Tech Yellow Jackets",
-        "event_away": "Georgia Bulldogs",
-        "event_time": "2025-11-28T20:30:00Z",
-        "home_norm": "georgiatech",
-        "away_norm": "georgiabulldogs",
-        "game_key": "20251128_2030_georgia_bulldogs_georgia_tech",
-        "kickoff_iso_utc": "2025-11-28T20:30:00Z",
-        "mode": "ordered_exact"
+        "event_home": "Utah State Aggies",
+        "event_away": "Boise State Broncos",
+        "event_time": "2025-11-28T20:34:00Z",
+        "home_norm": "utahstate",
+        "away_norm": "boisestate",
+        "game_key": "20251128_2100_boise_state_utah_state",
+        "kickoff_iso_utc": "2025-11-28T21:00:00Z",
+        "mode": "ordered_near"
       },
       {
         "event_home": "North Texas Mean Green",
         "event_away": "Temple Owls",
-        "event_time": "2025-11-28T20:30:00Z",
+        "event_time": "2025-11-28T20:35:00Z",
         "home_norm": "northtexas",
         "away_norm": "temple",
         "game_key": "20251128_2030_temple_north_texas",
@@ -93,14 +33,24 @@
         "mode": "ordered_exact"
       },
       {
-        "event_home": "Utah State Aggies",
-        "event_away": "Boise State Broncos",
-        "event_time": "2025-11-28T21:00:00Z",
-        "home_norm": "utahstate",
-        "away_norm": "boisestate",
-        "game_key": "20251128_2100_boise_state_utah_state",
-        "kickoff_iso_utc": "2025-11-28T21:00:00Z",
-        "mode": "ordered_exact"
+        "event_home": "Georgia Tech Yellow Jackets",
+        "event_away": "Georgia Bulldogs",
+        "event_time": "2025-11-28T20:45:58Z",
+        "home_norm": "georgiatech",
+        "away_norm": "georgiabulldogs",
+        "game_key": "20251128_2030_georgia_bulldogs_georgia_tech",
+        "kickoff_iso_utc": "2025-11-28T20:30:00Z",
+        "mode": "ordered_near"
+      },
+      {
+        "event_home": "Colorado State Rams",
+        "event_away": "Air Force Falcons",
+        "event_time": "2025-11-28T21:30:00Z",
+        "home_norm": "coloradostate",
+        "away_norm": "airforce",
+        "game_key": "20251128_2000_air_force_colorado_state",
+        "kickoff_iso_utc": "2025-11-28T20:00:00Z",
+        "mode": "ordered_near"
       },
       {
         "event_home": "Purdue Boilermakers",
@@ -311,13 +261,63 @@
         "game_key": "20251129_2000_middle_tennessee_new_mexico_state",
         "kickoff_iso_utc": "2025-11-29T20:00:00Z",
         "mode": "ordered_exact"
+      },
+      {
+        "event_home": "Texas State Bobcats",
+        "event_away": "South Alabama Jaguars",
+        "event_time": "2025-11-29T20:00:00Z",
+        "home_norm": "texasstate",
+        "away_norm": "southalabama",
+        "game_key": "20251129_2000_south_alabama_texas_state",
+        "kickoff_iso_utc": "2025-11-29T20:00:00Z",
+        "mode": "ordered_exact"
+      },
+      {
+        "event_home": "Arkansas Razorbacks",
+        "event_away": "Missouri Tigers",
+        "event_time": "2025-11-29T20:30:00Z",
+        "home_norm": "arkansas",
+        "away_norm": "missouri",
+        "game_key": "20251129_2030_missouri_arkansas",
+        "kickoff_iso_utc": "2025-11-29T20:30:00Z",
+        "mode": "ordered_exact"
+      },
+      {
+        "event_home": "UTSA Roadrunners",
+        "event_away": "Army Black Knights",
+        "event_time": "2025-11-29T20:30:00Z",
+        "home_norm": "utsa",
+        "away_norm": "army",
+        "game_key": "20251129_2030_army_utsa",
+        "kickoff_iso_utc": "2025-11-29T20:30:00Z",
+        "mode": "ordered_exact"
+      },
+      {
+        "event_home": "TCU Horned Frogs",
+        "event_away": "Cincinnati Bearcats",
+        "event_time": "2025-11-29T20:30:00Z",
+        "home_norm": "tcu",
+        "away_norm": "cincinnati",
+        "game_key": "20251129_2030_cincinnati_tcu",
+        "kickoff_iso_utc": "2025-11-29T20:30:00Z",
+        "mode": "ordered_exact"
+      },
+      {
+        "event_home": "Duke Blue Devils",
+        "event_away": "Wake Forest Demon Deacons",
+        "event_time": "2025-11-29T20:30:00Z",
+        "home_norm": "duke",
+        "away_norm": "wakeforest",
+        "game_key": "20251129_2030_wake_forest_duke",
+        "kickoff_iso_utc": "2025-11-29T20:30:00Z",
+        "mode": "ordered_exact"
       }
     ],
     "unmatched": [
       {
         "event_home": "New Mexico Lobos",
         "event_away": "San Diego State Aztecs",
-        "event_time": "2025-11-28T20:30:00Z",
+        "event_time": "2025-11-28T20:32:00Z",
         "home_norm": "newmexico",
         "away_norm": "sandiegostateaztecs",
         "why": "no_schedule_candidate"
@@ -379,14 +379,6 @@
         "why": "no_schedule_candidate"
       },
       {
-        "event_home": "Tulane Green Wave",
-        "event_away": "North Texas Mean Green",
-        "event_time": "2025-12-06T01:00:00Z",
-        "home_norm": "tulane",
-        "away_norm": "northtexas",
-        "why": "future_week"
-      },
-      {
         "event_home": "Texas Tech Red Raiders",
         "event_away": "BYU Cougars",
         "event_time": "2025-12-06T17:00:00Z",
@@ -395,27 +387,11 @@
         "why": "future_week"
       },
       {
-        "event_home": "Alabama Crimson Tide",
-        "event_away": "Georgia Bulldogs",
-        "event_time": "2025-12-06T21:00:00Z",
-        "home_norm": "alabamacrimsontide",
-        "away_norm": "georgiabulldogs",
-        "why": "future_week"
-      },
-      {
         "event_home": "Texas A&M Aggies",
         "event_away": "Alabama Crimson Tide",
         "event_time": "2025-12-06T21:00:00Z",
         "home_norm": "texasaandm",
         "away_norm": "alabamacrimsontide",
-        "why": "future_week"
-      },
-      {
-        "event_home": "Texas A&M Aggies",
-        "event_away": "Georgia Bulldogs",
-        "event_time": "2025-12-06T21:00:00Z",
-        "home_norm": "texasaandm",
-        "away_norm": "georgiabulldogs",
         "why": "future_week"
       },
       {
@@ -438,11 +414,11 @@
   },
   "reason_counts": {
     "no_schedule_candidate": 8,
-    "future_week": 7
+    "future_week": 4
   },
   "reason_buckets": {
     "outside_window": 0,
     "no_schedule_candidate": 8,
-    "other": 7
+    "other": 4
   }
 }

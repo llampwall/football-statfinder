@@ -1,16 +1,16 @@
 {
   "fbs_rows": 67,
   "joined_metrics_rows": 67,
-  "joined_odds_rows": 56,
+  "joined_odds_rows": 51,
   "joined_sagarin_rows": 65,
   "output_rows": 67,
-  "odds_games": 56,
+  "odds_games": 51,
   "sagarin_games": 65,
   "coverage_metrics": 1.0,
   "notes": [
     "FBS games: 67",
     "Metrics coverage: 67/67",
-    "Odds coverage: 56/67",
+    "Odds coverage: 51/67",
     "Sagarin coverage: 65/67"
   ],
   "samples": {
@@ -34,6 +34,36 @@
         "kickoff_iso_utc": "2025-11-28T00:30:00Z"
       },
       {
+        "game_key": "20251128_1700_ole_miss_mississippi_state",
+        "home": "Mississippi State",
+        "away": "Ole Miss",
+        "kickoff_iso_utc": "2025-11-28T17:00:00Z"
+      },
+      {
+        "game_key": "20251128_1700_ohio_buffalo",
+        "home": "Buffalo",
+        "away": "Ohio",
+        "kickoff_iso_utc": "2025-11-28T17:00:00Z"
+      },
+      {
+        "game_key": "20251128_1700_kent_state_northern_illinois",
+        "home": "Northern Illinois",
+        "away": "Kent State",
+        "kickoff_iso_utc": "2025-11-28T17:00:00Z"
+      },
+      {
+        "game_key": "20251128_1700_utah_kansas",
+        "home": "Kansas",
+        "away": "Utah",
+        "kickoff_iso_utc": "2025-11-28T17:00:00Z"
+      },
+      {
+        "game_key": "20251128_1700_iowa_nebraska",
+        "home": "Nebraska",
+        "away": "Iowa",
+        "kickoff_iso_utc": "2025-11-28T17:00:00Z"
+      },
+      {
         "game_key": "20251128_2030_san_diego_state_new_mexico",
         "home": "New Mexico",
         "away": "San Diego State",
@@ -44,36 +74,6 @@
         "home": "Florida Atlantic",
         "away": "East Carolina",
         "kickoff_iso_utc": "2025-11-29T17:00:00Z"
-      },
-      {
-        "game_key": "20251129_1800_utep_delaware",
-        "home": "Delaware",
-        "away": "Utep",
-        "kickoff_iso_utc": "2025-11-29T18:00:00Z"
-      },
-      {
-        "game_key": "20251129_1800_florida_international_sam_houston",
-        "home": "Sam Houston",
-        "away": "Florida International",
-        "kickoff_iso_utc": "2025-11-29T18:00:00Z"
-      },
-      {
-        "game_key": "20251129_1930_arkansas_state_app_state",
-        "home": "App State",
-        "away": "Arkansas State",
-        "kickoff_iso_utc": "2025-11-29T19:30:00Z"
-      },
-      {
-        "game_key": "20251129_2000_uab_tulsa",
-        "home": "Tulsa",
-        "away": "Uab",
-        "kickoff_iso_utc": "2025-11-29T20:00:00Z"
-      },
-      {
-        "game_key": "20251129_2030_troy_southern_miss",
-        "home": "Southern Miss",
-        "away": "Troy",
-        "kickoff_iso_utc": "2025-11-29T20:30:00Z"
       }
     ],
     "missing_sagarin": [
@@ -93,9 +93,9 @@
     "metrics_gaps": []
   },
   "ratings": {
-    "eligible": 55,
-    "edges_count": 55,
-    "rvo_count": 55
+    "eligible": 50,
+    "edges_count": 50,
+    "rvo_count": 50
   },
   "failures": []
 }
