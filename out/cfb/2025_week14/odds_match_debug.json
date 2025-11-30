@@ -3,11 +3,11 @@
   "week": 14,
   "window": "2025-11-19T21:30:00Z -> 2025-12-06T04:00:00Z",
   "stats": {
-    "events_total": 9,
+    "events_total": 10,
     "events_after_window_filter": 0,
     "events_in_window": 0,
     "matched": 0,
-    "unmatched": 9,
+    "unmatched": 10,
     "eligible_unmatched": 0
   },
   "samples": {
@@ -35,6 +35,14 @@
         "event_time": "2025-12-06T01:00:00Z",
         "home_norm": "tulane",
         "away_norm": "northtexas",
+        "why": "future_week"
+      },
+      {
+        "event_home": "Boise State Broncos",
+        "event_away": "UNLV Rebels",
+        "event_time": "2025-12-06T01:01:00Z",
+        "home_norm": "boisestate",
+        "away_norm": "unlv",
         "why": "future_week"
       },
       {
@@ -88,11 +96,11 @@
     ]
   },
   "reason_counts": {
-    "future_week": 9
+    "future_week": 10
   },
   "reason_buckets": {
     "outside_window": 0,
     "no_schedule_candidate": 0,
-    "other": 9
+    "other": 10
   }
 }

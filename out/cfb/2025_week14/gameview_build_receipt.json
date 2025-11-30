@@ -34,27 +34,15 @@
         "kickoff_iso_utc": "2025-11-28T00:30:00Z"
       },
       {
-        "game_key": "20251128_1700_iowa_nebraska",
-        "home": "Nebraska",
-        "away": "Iowa",
-        "kickoff_iso_utc": "2025-11-28T17:00:00Z"
-      },
-      {
-        "game_key": "20251128_1700_kent_state_northern_illinois",
-        "home": "Northern Illinois",
-        "away": "Kent State",
-        "kickoff_iso_utc": "2025-11-28T17:00:00Z"
-      },
-      {
         "game_key": "20251128_1700_utah_kansas",
         "home": "Kansas",
         "away": "Utah",
         "kickoff_iso_utc": "2025-11-28T17:00:00Z"
       },
       {
-        "game_key": "20251128_1700_ole_miss_mississippi_state",
-        "home": "Mississippi State",
-        "away": "Ole Miss",
+        "game_key": "20251128_1700_iowa_nebraska",
+        "home": "Nebraska",
+        "away": "Iowa",
         "kickoff_iso_utc": "2025-11-28T17:00:00Z"
       },
       {
@@ -64,15 +52,27 @@
         "kickoff_iso_utc": "2025-11-28T17:00:00Z"
       },
       {
+        "game_key": "20251128_1700_kent_state_northern_illinois",
+        "home": "Northern Illinois",
+        "away": "Kent State",
+        "kickoff_iso_utc": "2025-11-28T17:00:00Z"
+      },
+      {
+        "game_key": "20251128_1700_ole_miss_mississippi_state",
+        "home": "Mississippi State",
+        "away": "Ole Miss",
+        "kickoff_iso_utc": "2025-11-28T17:00:00Z"
+      },
+      {
         "game_key": "20251128_2000_air_force_colorado_state",
         "home": "Colorado State",
         "away": "Air Force",
         "kickoff_iso_utc": "2025-11-28T20:00:00Z"
       },
       {
-        "game_key": "20251128_2030_temple_north_texas",
-        "home": "North Texas",
-        "away": "Temple",
+        "game_key": "20251128_2030_georgia_bulldogs_georgia_tech",
+        "home": "Georgia Tech",
+        "away": "Georgia Bulldogs",
         "kickoff_iso_utc": "2025-11-28T20:30:00Z"
       }
     ],
