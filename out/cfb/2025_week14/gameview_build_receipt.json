@@ -1,16 +1,16 @@
 {
   "fbs_rows": 67,
   "joined_metrics_rows": 67,
-  "joined_odds_rows": 44,
+  "joined_odds_rows": 0,
   "joined_sagarin_rows": 65,
   "output_rows": 67,
-  "odds_games": 44,
+  "odds_games": 0,
   "sagarin_games": 65,
   "coverage_metrics": 1.0,
   "notes": [
     "FBS games: 67",
     "Metrics coverage: 67/67",
-    "Odds coverage: 44/67",
+    "Odds coverage: 0/67",
     "Sagarin coverage: 65/67"
   ],
   "samples": {
@@ -34,9 +34,9 @@
         "kickoff_iso_utc": "2025-11-28T00:30:00Z"
       },
       {
-        "game_key": "20251128_1700_utah_kansas",
-        "home": "Kansas",
-        "away": "Utah",
+        "game_key": "20251128_1700_iowa_nebraska",
+        "home": "Nebraska",
+        "away": "Iowa",
         "kickoff_iso_utc": "2025-11-28T17:00:00Z"
       },
       {
@@ -46,15 +46,9 @@
         "kickoff_iso_utc": "2025-11-28T17:00:00Z"
       },
       {
-        "game_key": "20251128_1700_ohio_buffalo",
-        "home": "Buffalo",
-        "away": "Ohio",
-        "kickoff_iso_utc": "2025-11-28T17:00:00Z"
-      },
-      {
-        "game_key": "20251128_1700_iowa_nebraska",
-        "home": "Nebraska",
-        "away": "Iowa",
+        "game_key": "20251128_1700_utah_kansas",
+        "home": "Kansas",
+        "away": "Utah",
         "kickoff_iso_utc": "2025-11-28T17:00:00Z"
       },
       {
@@ -64,15 +58,21 @@
         "kickoff_iso_utc": "2025-11-28T17:00:00Z"
       },
       {
+        "game_key": "20251128_1700_ohio_buffalo",
+        "home": "Buffalo",
+        "away": "Ohio",
+        "kickoff_iso_utc": "2025-11-28T17:00:00Z"
+      },
+      {
         "game_key": "20251128_2000_air_force_colorado_state",
         "home": "Colorado State",
         "away": "Air Force",
         "kickoff_iso_utc": "2025-11-28T20:00:00Z"
       },
       {
-        "game_key": "20251128_2030_san_diego_state_new_mexico",
-        "home": "New Mexico",
-        "away": "San Diego State",
+        "game_key": "20251128_2030_temple_north_texas",
+        "home": "North Texas",
+        "away": "Temple",
         "kickoff_iso_utc": "2025-11-28T20:30:00Z"
       }
     ],
@@ -93,9 +93,9 @@
     "metrics_gaps": []
   },
   "ratings": {
-    "eligible": 43,
-    "edges_count": 43,
-    "rvo_count": 43
+    "eligible": 0,
+    "edges_count": 0,
+    "rvo_count": 0
   },
   "failures": []
 }
