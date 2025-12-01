@@ -3,11 +3,11 @@
   "week": 14,
   "window": "2025-11-19T21:30:00Z -> 2025-12-06T04:00:00Z",
   "stats": {
-    "events_total": 10,
+    "events_total": 11,
     "events_after_window_filter": 0,
     "events_in_window": 0,
     "matched": 0,
-    "unmatched": 10,
+    "unmatched": 11,
     "eligible_unmatched": 0
   },
   "samples": {
@@ -78,11 +78,11 @@
         "why": "future_week"
       },
       {
-        "event_home": "Indiana Hoosiers",
-        "event_away": "Ohio State Buckeyes",
-        "event_time": "2025-12-07T01:00:00Z",
-        "home_norm": "indiana",
-        "away_norm": "ohiostatebuckeyes",
+        "event_home": "Ohio State Buckeyes",
+        "event_away": "Indiana Hoosiers",
+        "event_time": "2025-12-07T01:01:00Z",
+        "home_norm": "ohiostatebuckeyes",
+        "away_norm": "indiana",
         "why": "future_week"
       },
       {
@@ -92,15 +92,23 @@
         "home_norm": "navymidshipmen",
         "away_norm": "army",
         "why": "future_week"
+      },
+      {
+        "event_home": "Ole Miss Rebels",
+        "event_away": "LSU Tigers",
+        "event_time": "2026-11-21T17:00:00Z",
+        "home_norm": "olemiss",
+        "away_norm": "lsu",
+        "why": "future_week"
       }
     ]
   },
   "reason_counts": {
-    "future_week": 10
+    "future_week": 11
   },
   "reason_buckets": {
     "outside_window": 0,
     "no_schedule_candidate": 0,
-    "other": 10
+    "other": 11
   }
 }
