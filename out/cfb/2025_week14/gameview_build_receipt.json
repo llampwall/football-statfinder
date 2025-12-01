@@ -34,9 +34,15 @@
         "kickoff_iso_utc": "2025-11-28T00:30:00Z"
       },
       {
-        "game_key": "20251128_1700_utah_kansas",
-        "home": "Kansas",
-        "away": "Utah",
+        "game_key": "20251128_1700_ohio_buffalo",
+        "home": "Buffalo",
+        "away": "Ohio",
+        "kickoff_iso_utc": "2025-11-28T17:00:00Z"
+      },
+      {
+        "game_key": "20251128_1700_ole_miss_mississippi_state",
+        "home": "Mississippi State",
+        "away": "Ole Miss",
         "kickoff_iso_utc": "2025-11-28T17:00:00Z"
       },
       {
@@ -46,21 +52,15 @@
         "kickoff_iso_utc": "2025-11-28T17:00:00Z"
       },
       {
-        "game_key": "20251128_1700_ohio_buffalo",
-        "home": "Buffalo",
-        "away": "Ohio",
+        "game_key": "20251128_1700_utah_kansas",
+        "home": "Kansas",
+        "away": "Utah",
         "kickoff_iso_utc": "2025-11-28T17:00:00Z"
       },
       {
         "game_key": "20251128_1700_kent_state_northern_illinois",
         "home": "Northern Illinois",
         "away": "Kent State",
-        "kickoff_iso_utc": "2025-11-28T17:00:00Z"
-      },
-      {
-        "game_key": "20251128_1700_ole_miss_mississippi_state",
-        "home": "Mississippi State",
-        "away": "Ole Miss",
         "kickoff_iso_utc": "2025-11-28T17:00:00Z"
       },
       {
