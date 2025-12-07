@@ -7764,7 +7764,7 @@ CFB,2025,14,REG,2025-11-29T18:00:00+00:00,Wisconsin-river Falls,Chapman,wisconsi
 CFB,2025,14,REG,2025-11-29T17:00:00+00:00,Youngstown State,Yale,youngstownstate,yale,42.0,43.0,,,cfbd
 CFB,2025,15,REG,2025-12-06T21:00:00+00:00,Alabama Crimson Tide,Georgia Bulldogs,alabamacrimsontide,georgiabulldogs,7.0,28.0,,,cfbd
 CFB,2025,15,REG,2025-12-06T18:00:00+00:00,Albany State Ga,Newberry,albanystatega,newberry,24.0,31.0,,,cfbd
-CFB,2025,15,REG,2025-12-06T18:00:00+00:00,Arkansas Tech,West Texas Aandm,arkansastech,westtexasaandm,28.0,27.0,,,cfbd
+CFB,2025,15,REG,2025-12-06T18:00:00+00:00,Arkansas Tech,West Texas Aandm,arkansastech,westtexasaandm,27.0,28.0,,,cfbd
 CFB,2025,15,REG,2025-12-06T18:00:00+00:00,Bethel (mn),Wisconsin-platteville,bethelmn,wisconsinplatteville,35.0,24.0,,,cfbd
 CFB,2025,15,REG,2025-12-06T01:00:00+00:00,Boise State,Unlv,boisestate,unlv,38.0,21.0,,,cfbd
 CFB,2025,15,REG,2025-12-06T17:00:00+00:00,Depauw,Wheaton,depauw,wheaton,24.0,49.0,,,cfbd
@@ -7775,7 +7775,7 @@ CFB,2025,15,REG,2025-12-06T19:00:00+00:00,Hillsdale,Upper Iowa University,hillsd
 CFB,2025,15,REG,2025-12-06T19:00:00+00:00,Jackson State,Prairie View Aandm,jacksonstate,prairieviewaandm,21.0,23.0,,,cfbd
 CFB,2025,15,REG,2025-12-06T00:00:00+00:00,Jacksonville State,Kennesaw State,jacksonvillestate,kennesawstate,15.0,19.0,,,cfbd
 CFB,2025,15,REG,2025-12-06T00:00:00+00:00,James Madison,Troy,jamesmadison,troy,31.0,14.0,,,cfbd
-CFB,2025,15,REG,2025-12-06T17:00:00+00:00,Johns Hopkins University,Salisbury,johnshopkinsuniversity,salisbury,13.0,45.0,,,cfbd
+CFB,2025,15,REG,2025-12-06T17:00:00+00:00,Johns Hopkins University,Salisbury,johnshopkinsuniversity,salisbury,45.0,13.0,,,cfbd
 CFB,2025,15,REG,2025-12-06T17:00:00+00:00,Kutztown University,Frostburg State,kutztownuniversity,frostburgstate,51.0,29.0,,,cfbd
 CFB,2025,15,REG,2025-12-06T17:00:00+00:00,Lehigh,Villanova,lehigh,villanova,7.0,14.0,,,cfbd
 CFB,2025,15,REG,2025-12-06T17:00:00+00:00,Mercer,South Dakota,mercer,southdakota,0.0,47.0,,,cfbd
@@ -7786,10 +7786,10 @@ CFB,2025,15,REG,2025-12-06T18:00:00+00:00,North Dakota State,Illinois State,nort
 CFB,2025,15,REG,2025-12-07T01:00:00+00:00,Ohio State Buckeyes,Indiana,ohiostatebuckeyes,indiana,10.0,13.0,,,cfbd
 CFB,2025,15,REG,2025-12-06T18:00:00+00:00,Stephen F. Austin,Abilene Christian,stephenfaustin,abilenechristian,,,,,cfbd
 CFB,2025,15,REG,2025-12-06T19:00:00+00:00,Stephen F. Austin,Abilene Christian,stephenfaustin,abilenechristian,41.0,34.0,,,cfbd
-CFB,2025,15,REG,2025-12-06T17:00:00+00:00,Susquehanna,Eastern University,susquehanna,easternuniversity,29.0,,,,cfbd
+CFB,2025,15,REG,2025-12-06T17:00:00+00:00,Susquehanna,Eastern University,susquehanna,easternuniversity,29.0,0.0,,,cfbd
 CFB,2025,15,REG,2025-12-06T18:00:00+00:00,Tarleton State,North Dakota,tarletonstate,northdakota,31.0,13.0,,,cfbd
 CFB,2025,15,REG,2025-12-06T17:00:00+00:00,Texas Tech,Byu,texastech,byu,34.0,7.0,,,cfbd
-CFB,2025,15,REG,2025-12-06T17:00:00+00:00,Trinity University Tx,Berry College,trinityuniversitytx,berrycollege,31.0,23.0,,,cfbd
+CFB,2025,15,REG,2025-12-06T17:00:00+00:00,Trinity University Tx,Berry College,trinityuniversitytx,berrycollege,23.0,31.0,,,cfbd
 CFB,2025,15,REG,2025-12-06T18:00:00+00:00,Trinity University Tx,Berry College,trinityuniversitytx,berrycollege,,,,,cfbd
 CFB,2025,15,REG,2025-12-06T01:00:00+00:00,Tulane,North Texas,tulane,northtexas,34.0,21.0,,,cfbd
 CFB,2025,15,REG,2025-12-07T03:00:00+00:00,Uc Davis,Rhode Island,ucdavis,rhodeisland,47.0,26.0,,,cfbd

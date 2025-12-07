@@ -16,15 +16,15 @@
   "samples": {
     "missing_odds": [
       {
-        "game_key": "20251206_0000_kennesaw_state_jacksonville_state",
-        "home": "Jacksonville State",
-        "away": "Kennesaw State",
-        "kickoff_iso_utc": "2025-12-06T00:00:00Z"
-      },
-      {
         "game_key": "20251206_0000_troy_james_madison",
         "home": "James Madison",
         "away": "Troy",
+        "kickoff_iso_utc": "2025-12-06T00:00:00Z"
+      },
+      {
+        "game_key": "20251206_0000_kennesaw_state_jacksonville_state",
+        "home": "Jacksonville State",
+        "away": "Kennesaw State",
         "kickoff_iso_utc": "2025-12-06T00:00:00Z"
       },
       {
@@ -58,15 +58,15 @@
         "kickoff_iso_utc": "2025-12-06T21:00:00Z"
       },
       {
-        "game_key": "20251207_0100_indiana_ohio_state_buckeyes",
-        "home": "Ohio State Buckeyes",
-        "away": "Indiana",
-        "kickoff_iso_utc": "2025-12-07T01:00:00Z"
-      },
-      {
         "game_key": "20251207_0100_duke_virginia",
         "home": "Virginia",
         "away": "Duke",
+        "kickoff_iso_utc": "2025-12-07T01:00:00Z"
+      },
+      {
+        "game_key": "20251207_0100_indiana_ohio_state_buckeyes",
+        "home": "Ohio State Buckeyes",
+        "away": "Indiana",
         "kickoff_iso_utc": "2025-12-07T01:00:00Z"
       }
     ],
