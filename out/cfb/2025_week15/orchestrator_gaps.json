@@ -1,0 +1,44 @@
+{
+  "games_week_keys_missing": [],
+  "games_week_keys_present_blank": [
+    "20251206_0000_kennesaw_state_jacksonville_state",
+    "20251206_0000_troy_james_madison",
+    "20251206_0100_north_texas_tulane",
+    "20251206_0100_unlv_boise_state",
+    "20251206_1700_byu_texas_tech",
+    "20251206_1700_miami_oh_western_michigan",
+    "20251206_2100_georgia_bulldogs_alabama_crimson_tide",
+    "20251207_0100_duke_virginia",
+    "20251207_0100_indiana_ohio_state_buckeyes"
+  ],
+  "counts": {
+    "rows": 9,
+    "missing_key_hits": {},
+    "blank_key_hits": {
+      "20251206_0000_kennesaw_state_jacksonville_state": 5,
+      "20251206_0000_troy_james_madison": 5,
+      "20251206_0100_north_texas_tulane": 5,
+      "20251206_0100_unlv_boise_state": 5,
+      "20251206_1700_byu_texas_tech": 5,
+      "20251206_1700_miami_oh_western_michigan": 5,
+      "20251206_2100_georgia_bulldogs_alabama_crimson_tide": 5,
+      "20251207_0100_duke_virginia": 2,
+      "20251207_0100_indiana_ohio_state_buckeyes": 5
+    }
+  },
+  "notes": [
+    "Schedule rows=32",
+    "Odds staging raw=47 pinned=0 unmatched=47",
+    "League metrics 136/136 teams meeting threshold (required 100); ranks_ok=1.00",
+    "Odds matched 0/0 (total 4); unmatched=4",
+    "Master enrichment 0/0",
+    "Sagarin rows=134; master=7232",
+    "Sidecars 9/32",
+    "Sagarin enrichment 100%/90%",
+    "Odds promotion promoted=1 current_week=113 other_weeks=62321 mismatch=0",
+    "Scores backfill [W13,W14] updated=0 skipped=2 files=0",
+    "ATS rows=8 teams=98 zero=6 weeks_scanned=[7, 8, 9, 10, 11, 12, 13, 14]",
+    "Game View rows=9",
+    "NFL week baseline not found; skipping cross-league key comparison."
+  ]
+}

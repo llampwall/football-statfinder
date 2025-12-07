@@ -1,0 +1,58 @@
+{
+  "season": 2025,
+  "week": 15,
+  "window": "2025-11-30T00:00:00Z -> 2025-12-13T03:00:00Z",
+  "stats": {
+    "events_total": 4,
+    "events_after_window_filter": 0,
+    "events_in_window": 0,
+    "matched": 0,
+    "unmatched": 4,
+    "eligible_unmatched": 0
+  },
+  "samples": {
+    "matched": [],
+    "unmatched": [
+      {
+        "event_home": "Navy Midshipmen",
+        "event_away": "Army Black Knights",
+        "event_time": "2025-12-13T20:00:00Z",
+        "home_norm": "navymidshipmen",
+        "away_norm": "army",
+        "why": "future_week"
+      },
+      {
+        "event_home": "South Florida Bulls",
+        "event_away": "Old Dominion Monarchs",
+        "event_time": "2025-12-17T22:00:00Z",
+        "home_norm": "southflorida",
+        "away_norm": "olddominion",
+        "why": "future_week"
+      },
+      {
+        "event_home": "Arkansas State Red Wolves",
+        "event_away": "Missouri State Bears",
+        "event_time": "2025-12-19T02:00:00Z",
+        "home_norm": "arkansasstateredwolves",
+        "away_norm": "missouristate",
+        "why": "future_week"
+      },
+      {
+        "event_home": "Hawaii Rainbow Warriors",
+        "event_away": "California Golden Bears",
+        "event_time": "2025-12-25T01:00:00Z",
+        "home_norm": "hawaii",
+        "away_norm": "california",
+        "why": "future_week"
+      }
+    ]
+  },
+  "reason_counts": {
+    "future_week": 4
+  },
+  "reason_buckets": {
+    "outside_window": 0,
+    "no_schedule_candidate": 0,
+    "other": 4
+  }
+}

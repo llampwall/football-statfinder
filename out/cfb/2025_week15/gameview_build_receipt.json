@@ -1,0 +1,82 @@
+{
+  "fbs_rows": 9,
+  "joined_metrics_rows": 9,
+  "joined_odds_rows": 0,
+  "joined_sagarin_rows": 9,
+  "output_rows": 9,
+  "odds_games": 0,
+  "sagarin_games": 9,
+  "coverage_metrics": 1.0,
+  "notes": [
+    "FBS games: 9",
+    "Metrics coverage: 9/9",
+    "Odds coverage: 0/9",
+    "Sagarin coverage: 9/9"
+  ],
+  "samples": {
+    "missing_odds": [
+      {
+        "game_key": "20251206_0000_kennesaw_state_jacksonville_state",
+        "home": "Jacksonville State",
+        "away": "Kennesaw State",
+        "kickoff_iso_utc": "2025-12-06T00:00:00Z"
+      },
+      {
+        "game_key": "20251206_0000_troy_james_madison",
+        "home": "James Madison",
+        "away": "Troy",
+        "kickoff_iso_utc": "2025-12-06T00:00:00Z"
+      },
+      {
+        "game_key": "20251206_0100_north_texas_tulane",
+        "home": "Tulane",
+        "away": "North Texas",
+        "kickoff_iso_utc": "2025-12-06T01:00:00Z"
+      },
+      {
+        "game_key": "20251206_0100_unlv_boise_state",
+        "home": "Boise State",
+        "away": "Unlv",
+        "kickoff_iso_utc": "2025-12-06T01:00:00Z"
+      },
+      {
+        "game_key": "20251206_1700_byu_texas_tech",
+        "home": "Texas Tech",
+        "away": "Byu",
+        "kickoff_iso_utc": "2025-12-06T17:00:00Z"
+      },
+      {
+        "game_key": "20251206_1700_miami_oh_western_michigan",
+        "home": "Western Michigan",
+        "away": "Miami (oh)",
+        "kickoff_iso_utc": "2025-12-06T17:00:00Z"
+      },
+      {
+        "game_key": "20251206_2100_georgia_bulldogs_alabama_crimson_tide",
+        "home": "Alabama Crimson Tide",
+        "away": "Georgia Bulldogs",
+        "kickoff_iso_utc": "2025-12-06T21:00:00Z"
+      },
+      {
+        "game_key": "20251207_0100_indiana_ohio_state_buckeyes",
+        "home": "Ohio State Buckeyes",
+        "away": "Indiana",
+        "kickoff_iso_utc": "2025-12-07T01:00:00Z"
+      },
+      {
+        "game_key": "20251207_0100_duke_virginia",
+        "home": "Virginia",
+        "away": "Duke",
+        "kickoff_iso_utc": "2025-12-07T01:00:00Z"
+      }
+    ],
+    "missing_sagarin": [],
+    "metrics_gaps": []
+  },
+  "ratings": {
+    "eligible": 0,
+    "edges_count": 0,
+    "rvo_count": 0
+  },
+  "failures": []
+}
