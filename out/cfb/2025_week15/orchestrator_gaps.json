@@ -28,7 +28,7 @@
   },
   "notes": [
     "Schedule rows=32",
-    "Odds staging raw=692 pinned=0 unmatched=692",
+    "Odds staging raw=897 pinned=0 unmatched=897",
     "League metrics 136/136 teams meeting threshold (required 100); ranks_ok=1.00",
     "Odds matched 0/0 (total 40); unmatched=40",
     "Master enrichment 0/0",

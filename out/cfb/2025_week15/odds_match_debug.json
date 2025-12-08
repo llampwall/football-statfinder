@@ -238,11 +238,11 @@
         "why": "future_week"
       },
       {
-        "event_home": "Georgia Southern Eagles",
-        "event_away": "Appalachian State Mountaineers",
-        "event_time": "2025-12-29T18:00:00Z",
-        "home_norm": "georgiasouthern",
-        "away_norm": "appalachianstate",
+        "event_home": "Appalachian State Mountaineers",
+        "event_away": "Georgia Southern Eagles",
+        "event_time": "2025-12-29T19:00:00Z",
+        "home_norm": "appalachianstate",
+        "away_norm": "georgiasouthern",
         "why": "future_week"
       },
       {
