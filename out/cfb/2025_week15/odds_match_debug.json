@@ -3,11 +3,11 @@
   "week": 15,
   "window": "2025-11-30T00:00:00Z -> 2025-12-13T03:00:00Z",
   "stats": {
-    "events_total": 23,
+    "events_total": 40,
     "events_after_window_filter": 0,
     "events_in_window": 0,
     "matched": 0,
-    "unmatched": 23,
+    "unmatched": 40,
     "eligible_unmatched": 0
   },
   "samples": {
@@ -70,6 +70,14 @@
         "why": "future_week"
       },
       {
+        "event_home": "NC State Wolfpack",
+        "event_away": "Memphis Tigers",
+        "event_time": "2025-12-19T19:30:00Z",
+        "home_norm": "ncstate",
+        "away_norm": "memphis",
+        "why": "future_week"
+      },
+      {
         "event_home": "Oklahoma Sooners",
         "event_away": "Alabama Crimson Tide",
         "event_time": "2025-12-20T01:00:00Z",
@@ -110,6 +118,30 @@
         "why": "future_week"
       },
       {
+        "event_home": "Louisville Cardinals",
+        "event_away": "Toledo Rockets",
+        "event_time": "2025-12-23T19:00:00Z",
+        "home_norm": "louisville",
+        "away_norm": "toledo",
+        "why": "future_week"
+      },
+      {
+        "event_home": "Southern Mississippi Golden Eagles",
+        "event_away": "Western Kentucky Hilltoppers",
+        "event_time": "2025-12-23T22:30:00Z",
+        "home_norm": "southernmississippi",
+        "away_norm": "westernkentucky",
+        "why": "future_week"
+      },
+      {
+        "event_home": "Ohio Bobcats",
+        "event_away": "UNLV Rebels",
+        "event_time": "2025-12-24T02:00:00Z",
+        "home_norm": "ohio",
+        "away_norm": "unlv",
+        "why": "future_week"
+      },
+      {
         "event_home": "Hawaii Rainbow Warriors",
         "event_away": "California Golden Bears",
         "event_time": "2025-12-25T01:00:00Z",
@@ -134,11 +166,67 @@
         "why": "future_week"
       },
       {
+        "event_home": "UTSA Roadrunners",
+        "event_away": "Florida International Panthers",
+        "event_time": "2025-12-27T01:00:00Z",
+        "home_norm": "utsa",
+        "away_norm": "floridainternational",
+        "why": "future_week"
+      },
+      {
+        "event_home": "East Carolina Pirates",
+        "event_away": "Pittsburgh Panthers",
+        "event_time": "2025-12-27T16:00:00Z",
+        "home_norm": "eastcarolinapirates",
+        "away_norm": "pittsburgh",
+        "why": "future_week"
+      },
+      {
+        "event_home": "Clemson Tigers",
+        "event_away": "Penn State Nittany Lions",
+        "event_time": "2025-12-27T17:00:00Z",
+        "home_norm": "clemsontigers",
+        "away_norm": "pennstate",
+        "why": "future_week"
+      },
+      {
+        "event_home": "Army Black Knights",
+        "event_away": "UConn Huskies",
+        "event_time": "2025-12-27T19:15:00Z",
+        "home_norm": "army",
+        "away_norm": "uconn",
+        "why": "future_week"
+      },
+      {
         "event_home": "BYU Cougars",
         "event_away": "Georgia Tech Yellow Jackets",
         "event_time": "2025-12-27T20:30:00Z",
         "home_norm": "byu",
         "away_norm": "georgiatech",
+        "why": "future_week"
+      },
+      {
+        "event_home": "Fresno State Bulldogs",
+        "event_away": "Miami (OH) RedHawks",
+        "event_time": "2025-12-27T21:30:00Z",
+        "home_norm": "fresnostate",
+        "away_norm": "miamioh",
+        "why": "future_week"
+      },
+      {
+        "event_home": "San Diego State Aztecs",
+        "event_away": "North Texas Mean Green",
+        "event_time": "2025-12-27T22:45:00Z",
+        "home_norm": "sandiegostateaztecs",
+        "away_norm": "northtexas",
+        "why": "future_week"
+      },
+      {
+        "event_home": "Missouri Tigers",
+        "event_away": "Virginia Cavaliers",
+        "event_time": "2025-12-28T00:30:00Z",
+        "home_norm": "missouri",
+        "away_norm": "virginia",
         "why": "future_week"
       },
       {
@@ -150,61 +238,29 @@
         "why": "future_week"
       },
       {
-        "event_home": "Illinois Fighting Illini",
-        "event_away": "Tennessee Volunteers",
-        "event_time": "2025-12-30T22:30:00Z",
-        "home_norm": "illinois",
-        "away_norm": "tennessee",
+        "event_home": "Georgia Southern Eagles",
+        "event_away": "Appalachian State Mountaineers",
+        "event_time": "2025-12-29T18:00:00Z",
+        "home_norm": "georgiasouthern",
+        "away_norm": "appalachianstate",
         "why": "future_week"
       },
       {
-        "event_home": "TCU Horned Frogs",
-        "event_away": "USC Trojans",
-        "event_time": "2025-12-31T02:00:00Z",
-        "home_norm": "tcu",
-        "away_norm": "usctrojans",
-        "why": "future_week"
-      },
-      {
-        "event_home": "Vanderbilt Commodores",
-        "event_away": "Iowa Hawkeyes",
-        "event_time": "2025-12-31T17:00:00Z",
-        "home_norm": "vanderbilt",
-        "away_norm": "iowa",
-        "why": "future_week"
-      },
-      {
-        "event_home": "Texas Longhorns",
-        "event_away": "Michigan Wolverines",
-        "event_time": "2025-12-31T20:00:00Z",
-        "home_norm": "texaslonghorns",
-        "away_norm": "michigan",
-        "why": "future_week"
-      },
-      {
-        "event_home": "Utah Utes",
-        "event_away": "Nebraska Cornhuskers",
-        "event_time": "2025-12-31T20:30:00Z",
-        "home_norm": "utah",
-        "away_norm": "nebraska",
-        "why": "future_week"
-      },
-      {
-        "event_home": "Cincinnati Bearcats",
-        "event_away": "Navy Midshipmen",
-        "event_time": "2026-01-02T21:30:00Z",
-        "home_norm": "cincinnati",
-        "away_norm": "navymidshipmen",
+        "event_home": "Louisiana Tech Bulldogs",
+        "event_away": "Coastal Carolina Chanticleers",
+        "event_time": "2025-12-30T19:00:00Z",
+        "home_norm": "louisianatech",
+        "away_norm": "coastalcarolina",
         "why": "future_week"
       }
     ]
   },
   "reason_counts": {
-    "future_week": 23
+    "future_week": 40
   },
   "reason_buckets": {
     "outside_window": 0,
     "no_schedule_candidate": 0,
-    "other": 23
+    "other": 40
   }
 }
