@@ -1,0 +1,28 @@
+{
+  "games_week_keys_missing": [],
+  "games_week_keys_present_blank": [
+    "20251213_2000_army_navy"
+  ],
+  "counts": {
+    "rows": 1,
+    "missing_key_hits": {},
+    "blank_key_hits": {
+      "20251213_2000_army_navy": 5
+    }
+  },
+  "notes": [
+    "Schedule rows=11",
+    "Odds staging raw=1053 pinned=0 unmatched=1053",
+    "League metrics 136/136 teams meeting threshold (required 100); ranks_ok=1.00",
+    "Odds matched 0/0 (total 46); unmatched=46",
+    "Master enrichment 0/0",
+    "Sagarin rows=134; master=7366",
+    "Sidecars 1/11",
+    "Sagarin enrichment 100%/96%",
+    "Odds promotion promoted=0 current_week=0 other_weeks=62434 mismatch=0",
+    "Scores backfill [W14,W15] updated=0 skipped=1 files=0",
+    "ATS rows=1 teams=98 zero=1 weeks_scanned=[7, 8, 9, 10, 11, 12, 13, 14, 15]",
+    "Game View rows=1",
+    "NFL week baseline not found; skipping cross-league key comparison."
+  ]
+}

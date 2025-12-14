@@ -1,0 +1,34 @@
+{
+  "fbs_rows": 1,
+  "joined_metrics_rows": 1,
+  "joined_odds_rows": 0,
+  "joined_sagarin_rows": 1,
+  "output_rows": 1,
+  "odds_games": 0,
+  "sagarin_games": 1,
+  "coverage_metrics": 1.0,
+  "notes": [
+    "FBS games: 1",
+    "Metrics coverage: 1/1",
+    "Odds coverage: 0/1",
+    "Sagarin coverage: 1/1"
+  ],
+  "samples": {
+    "missing_odds": [
+      {
+        "game_key": "20251213_2000_army_navy",
+        "home": "Navy",
+        "away": "Army",
+        "kickoff_iso_utc": "2025-12-13T20:00:00Z"
+      }
+    ],
+    "missing_sagarin": [],
+    "metrics_gaps": []
+  },
+  "ratings": {
+    "eligible": 0,
+    "edges_count": 0,
+    "rvo_count": 0
+  },
+  "failures": []
+}
