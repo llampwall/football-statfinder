@@ -7800,7 +7800,7 @@ CFB,2025,15,REG,2025-12-06T18:00:00+00:00,Wisconsin-river Falls,Saint John's (mn
 CFB,2025,16,REG,2025-12-13T05:00:00+00:00,Ferris State,Newberry,ferrisstate,newberry,,,,,cfbd
 CFB,2025,16,REG,2025-12-13T17:00:00+00:00,Ferris State,Newberry,ferrisstate,newberry,49.0,17.0,,,cfbd
 CFB,2025,16,REG,2025-12-13T05:00:00+00:00,John Carroll University,Berry College,johncarrolluniversity,berrycollege,,,,,cfbd
-CFB,2025,16,REG,2025-12-13T17:00:00+00:00,John Carroll University,Berry College,johncarrolluniversity,berrycollege,13.0,21.0,,,cfbd
+CFB,2025,16,REG,2025-12-13T17:00:00+00:00,John Carroll University,Berry College,johncarrolluniversity,berrycollege,21.0,13.0,,,cfbd
 CFB,2025,16,REG,2025-12-13T05:00:00+00:00,Kutztown University,Harding University,kutztownuniversity,hardinguniversity,,,,,cfbd
 CFB,2025,16,REG,2025-12-13T20:30:00+00:00,Kutztown University,Harding University,kutztownuniversity,hardinguniversity,27.0,49.0,,,cfbd
 CFB,2025,16,REG,2025-12-13T20:30:00+00:00,Montana,South Dakota,montana,southdakota,52.0,22.0,,,cfbd
@@ -7809,7 +7809,7 @@ CFB,2025,16,REG,2025-12-13T20:00:00+00:00,Navy,Army,navy,army,17.0,16.0,,,cfbd
 CFB,2025,16,REG,2025-12-13T05:00:00+00:00,North Central College,Bethel (mn),northcentralcollege,bethelmn,,,,,cfbd
 CFB,2025,16,REG,2025-12-13T18:00:00+00:00,North Central College,Bethel (mn),northcentralcollege,bethelmn,35.0,21.0,,,cfbd
 CFB,2025,16,REG,2025-12-13T05:00:00+00:00,Susquehanna,Johns Hopkins University,susquehanna,johnshopkinsuniversity,,,,,cfbd
-CFB,2025,16,REG,2025-12-13T17:00:00+00:00,Susquehanna,Johns Hopkins University,susquehanna,johnshopkinsuniversity,40.0,10.0,,,cfbd
+CFB,2025,16,REG,2025-12-13T17:00:00+00:00,Susquehanna,Johns Hopkins University,susquehanna,johnshopkinsuniversity,10.0,40.0,,,cfbd
 CFB,2025,16,REG,2025-12-13T17:00:00+00:00,Tarleton State,Villanova,tarletonstate,villanova,21.0,26.0,,,cfbd
 CFB,2025,16,REG,2025-12-13T05:00:00+00:00,Uc Davis,Illinois State,ucdavis,illinoisstate,,,,,cfbd
 CFB,2025,16,REG,2025-12-13T22:00:00+00:00,Uc Davis,Illinois State,ucdavis,illinoisstate,31.0,42.0,,,cfbd
