@@ -1,18 +1,52 @@
 {
-  "games_week_keys_missing": [],
+  "games_week_keys_missing": [
+    "20251219_0115_sea_la",
+    "20251220_2200_commanders_phi",
+    "20251221_0120_chi_gb",
+    "20251221_1800_car_tb",
+    "20251221_1800_cle_buf",
+    "20251221_1800_dal_lac",
+    "20251221_1800_mia_cin",
+    "20251221_1800_no_nyj",
+    "20251221_1800_nyg_min",
+    "20251221_1800_ten_kc",
+    "20251221_2105_ari_atl",
+    "20251221_2105_den_jaguars",
+    "20251221_2125_det_pit",
+    "20251221_2125_hou_lv",
+    "20251222_0120_bal_ne",
+    "20251223_0115_ind_49ers"
+  ],
   "games_week_keys_present_blank": [
     "20251213_2000_army_navy"
   ],
   "counts": {
     "rows": 1,
-    "missing_key_hits": {},
+    "missing_key_hits": {
+      "20251219_0115_sea_la": 1,
+      "20251220_2200_commanders_phi": 1,
+      "20251221_0120_chi_gb": 1,
+      "20251221_1800_car_tb": 1,
+      "20251221_1800_cle_buf": 1,
+      "20251221_1800_dal_lac": 1,
+      "20251221_1800_mia_cin": 1,
+      "20251221_1800_no_nyj": 1,
+      "20251221_1800_nyg_min": 1,
+      "20251221_1800_ten_kc": 1,
+      "20251221_2105_ari_atl": 1,
+      "20251221_2105_den_jaguars": 1,
+      "20251221_2125_det_pit": 1,
+      "20251221_2125_hou_lv": 1,
+      "20251222_0120_bal_ne": 1,
+      "20251223_0115_ind_49ers": 1
+    },
     "blank_key_hits": {
       "20251213_2000_army_navy": 5
     }
   },
   "notes": [
     "Schedule rows=11",
-    "Odds staging raw=1050 pinned=0 unmatched=1050",
+    "Odds staging raw=1057 pinned=0 unmatched=1057",
     "League metrics 136/136 teams meeting threshold (required 100); ranks_ok=1.00",
     "Odds matched 0/0 (total 46); unmatched=46",
     "Master enrichment 0/0",
@@ -22,7 +56,6 @@
     "Odds promotion promoted=0 current_week=0 other_weeks=62434 mismatch=0",
     "Scores backfill [W14,W15] updated=0 skipped=1 files=0",
     "ATS rows=1 teams=98 zero=1 weeks_scanned=[7, 8, 9, 10, 11, 12, 13, 14, 15]",
-    "Game View rows=1",
-    "NFL week baseline not found; skipping cross-league key comparison."
+    "Game View rows=1"
   ]
 }
