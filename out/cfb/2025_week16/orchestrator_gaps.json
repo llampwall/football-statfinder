@@ -46,9 +46,9 @@
   },
   "notes": [
     "Schedule rows=11",
-    "Odds staging raw=1057 pinned=0 unmatched=1057",
+    "Odds staging raw=1126 pinned=0 unmatched=1126",
     "League metrics 136/136 teams meeting threshold (required 100); ranks_ok=1.00",
-    "Odds matched 0/0 (total 46); unmatched=46",
+    "Odds matched 0/0 (total 45); unmatched=45",
     "Master enrichment 0/0",
     "Sagarin rows=134; master=7366",
     "Sidecars 1/11",
