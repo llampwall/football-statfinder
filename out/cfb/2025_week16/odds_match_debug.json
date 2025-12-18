@@ -3,32 +3,16 @@
   "week": 16,
   "window": "2025-12-07T02:00:00Z -> 2025-12-19T22:00:00Z",
   "stats": {
-    "events_total": 45,
+    "events_total": 43,
     "events_after_window_filter": 0,
     "events_in_window": 0,
     "matched": 0,
-    "unmatched": 45,
+    "unmatched": 43,
     "eligible_unmatched": 0
   },
   "samples": {
     "matched": [],
     "unmatched": [
-      {
-        "event_home": "South Florida Bulls",
-        "event_away": "Old Dominion Monarchs",
-        "event_time": "2025-12-17T22:06:00Z",
-        "home_norm": "southflorida",
-        "away_norm": "olddominion",
-        "why": "future_week"
-      },
-      {
-        "event_home": "Delaware Blue Hens",
-        "event_away": "Louisiana Ragin Cajuns",
-        "event_time": "2025-12-18T01:30:00Z",
-        "home_norm": "delaware",
-        "away_norm": "louisiana",
-        "why": "future_week"
-      },
       {
         "event_home": "Arkansas State Red Wolves",
         "event_away": "Missouri State Bears",
@@ -252,15 +236,31 @@
         "home_norm": "vanderbilt",
         "away_norm": "iowa",
         "why": "future_week"
+      },
+      {
+        "event_home": "Duke Blue Devils",
+        "event_away": "Arizona State Sun Devils",
+        "event_time": "2025-12-31T19:00:00Z",
+        "home_norm": "duke",
+        "away_norm": "arizonastate",
+        "why": "future_week"
+      },
+      {
+        "event_home": "Texas Longhorns",
+        "event_away": "Michigan Wolverines",
+        "event_time": "2025-12-31T20:00:00Z",
+        "home_norm": "texaslonghorns",
+        "away_norm": "michigan",
+        "why": "future_week"
       }
     ]
   },
   "reason_counts": {
-    "future_week": 45
+    "future_week": 43
   },
   "reason_buckets": {
     "outside_window": 0,
     "no_schedule_candidate": 0,
-    "other": 45
+    "other": 43
   }
 }
