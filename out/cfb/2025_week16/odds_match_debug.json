@@ -3,28 +3,20 @@
   "week": 16,
   "window": "2025-12-07T02:00:00Z -> 2025-12-19T22:00:00Z",
   "stats": {
-    "events_total": 42,
+    "events_total": 41,
     "events_after_window_filter": 0,
     "events_in_window": 0,
     "matched": 0,
-    "unmatched": 42,
+    "unmatched": 41,
     "eligible_unmatched": 0
   },
   "samples": {
     "matched": [],
     "unmatched": [
       {
-        "event_home": "Western Michigan Broncos",
-        "event_away": "Kennesaw State Owls",
-        "event_time": "2025-12-19T16:00:00Z",
-        "home_norm": "westernmichigan",
-        "away_norm": "kennesawstate",
-        "why": "future_week"
-      },
-      {
         "event_home": "NC State Wolfpack",
         "event_away": "Memphis Tigers",
-        "event_time": "2025-12-19T19:30:00Z",
+        "event_time": "2025-12-19T19:35:00Z",
         "home_norm": "ncstate",
         "away_norm": "memphis",
         "why": "future_week"
@@ -252,15 +244,23 @@
         "home_norm": "utah",
         "away_norm": "nebraska",
         "why": "future_week"
+      },
+      {
+        "event_home": "Ohio State Buckeyes",
+        "event_away": "Miami Hurricanes",
+        "event_time": "2026-01-01T00:30:00Z",
+        "home_norm": "ohiostatebuckeyes",
+        "away_norm": "miami",
+        "why": "future_week"
       }
     ]
   },
   "reason_counts": {
-    "future_week": 42
+    "future_week": 41
   },
   "reason_buckets": {
     "outside_window": 0,
     "no_schedule_candidate": 0,
-    "other": 42
+    "other": 41
   }
 }
