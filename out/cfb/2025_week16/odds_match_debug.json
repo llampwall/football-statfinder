@@ -3,30 +3,30 @@
   "week": 16,
   "window": "2025-12-07T02:00:00Z -> 2025-12-19T22:00:00Z",
   "stats": {
-    "events_total": 38,
+    "events_total": 35,
     "events_after_window_filter": 0,
     "events_in_window": 0,
     "matched": 0,
-    "unmatched": 38,
+    "unmatched": 35,
     "eligible_unmatched": 0
   },
   "samples": {
     "matched": [],
     "unmatched": [
       {
-        "event_home": "Texas A&M Aggies",
-        "event_away": "Miami Hurricanes",
-        "event_time": "2025-12-20T17:00:00Z",
-        "home_norm": "texasaandm",
-        "away_norm": "miami",
+        "event_home": "Ole Miss Rebels",
+        "event_away": "Tulane Green Wave",
+        "event_time": "2025-12-20T20:41:00Z",
+        "home_norm": "olemiss",
+        "away_norm": "tulane",
         "why": "future_week"
       },
       {
-        "event_home": "Ole Miss Rebels",
-        "event_away": "Tulane Green Wave",
-        "event_time": "2025-12-20T20:30:00Z",
-        "home_norm": "olemiss",
-        "away_norm": "tulane",
+        "event_home": "Montana State Bobcats",
+        "event_away": "Montana Grizzlies",
+        "event_time": "2025-12-20T21:01:00Z",
+        "home_norm": "montanastate",
+        "away_norm": "montanagrizzlies",
         "why": "future_week"
       },
       {
@@ -238,29 +238,29 @@
         "why": "future_week"
       },
       {
-        "event_home": "Ohio State Buckeyes",
-        "event_away": "Texas A&M Aggies",
-        "event_time": "2026-01-01T00:30:00Z",
-        "home_norm": "ohiostatebuckeyes",
-        "away_norm": "texasaandm",
-        "why": "future_week"
-      },
-      {
         "event_home": "Texas Tech Red Raiders",
         "event_away": "James Madison Dukes",
         "event_time": "2026-01-01T17:00:00Z",
         "home_norm": "texastech",
         "away_norm": "jamesmadison",
         "why": "future_week"
+      },
+      {
+        "event_home": "Texas Tech Red Raiders",
+        "event_away": "Oregon Ducks",
+        "event_time": "2026-01-01T17:00:00Z",
+        "home_norm": "texastech",
+        "away_norm": "oregonducks",
+        "why": "future_week"
       }
     ]
   },
   "reason_counts": {
-    "future_week": 38
+    "future_week": 35
   },
   "reason_buckets": {
     "outside_window": 0,
     "no_schedule_candidate": 0,
-    "other": 38
+    "other": 35
   }
 }
