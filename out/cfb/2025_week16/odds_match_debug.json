@@ -3,40 +3,16 @@
   "week": 16,
   "window": "2025-12-07T02:00:00Z -> 2025-12-19T22:00:00Z",
   "stats": {
-    "events_total": 35,
+    "events_total": 33,
     "events_after_window_filter": 0,
     "events_in_window": 0,
     "matched": 0,
-    "unmatched": 35,
+    "unmatched": 33,
     "eligible_unmatched": 0
   },
   "samples": {
     "matched": [],
     "unmatched": [
-      {
-        "event_home": "Ole Miss Rebels",
-        "event_away": "Tulane Green Wave",
-        "event_time": "2025-12-20T20:41:00Z",
-        "home_norm": "olemiss",
-        "away_norm": "tulane",
-        "why": "future_week"
-      },
-      {
-        "event_home": "Montana State Bobcats",
-        "event_away": "Montana Grizzlies",
-        "event_time": "2025-12-20T21:01:00Z",
-        "home_norm": "montanastate",
-        "away_norm": "montanagrizzlies",
-        "why": "future_week"
-      },
-      {
-        "event_home": "Oregon Ducks",
-        "event_away": "James Madison Dukes",
-        "event_time": "2025-12-21T00:30:00Z",
-        "home_norm": "oregonducks",
-        "away_norm": "jamesmadison",
-        "why": "future_week"
-      },
       {
         "event_home": "Utah State Aggies",
         "event_away": "Washington State Cougars",
@@ -239,28 +215,52 @@
       },
       {
         "event_home": "Texas Tech Red Raiders",
-        "event_away": "James Madison Dukes",
-        "event_time": "2026-01-01T17:00:00Z",
-        "home_norm": "texastech",
-        "away_norm": "jamesmadison",
-        "why": "future_week"
-      },
-      {
-        "event_home": "Texas Tech Red Raiders",
         "event_away": "Oregon Ducks",
         "event_time": "2026-01-01T17:00:00Z",
         "home_norm": "texastech",
         "away_norm": "oregonducks",
         "why": "future_week"
+      },
+      {
+        "event_home": "Indiana Hoosiers",
+        "event_away": "Alabama Crimson Tide",
+        "event_time": "2026-01-01T21:00:00Z",
+        "home_norm": "indiana",
+        "away_norm": "alabamacrimsontide",
+        "why": "future_week"
+      },
+      {
+        "event_home": "Georgia Bulldogs",
+        "event_away": "Ole Miss Rebels",
+        "event_time": "2026-01-02T01:00:00Z",
+        "home_norm": "georgiabulldogs",
+        "away_norm": "olemiss",
+        "why": "future_week"
+      },
+      {
+        "event_home": "Texas State Bobcats",
+        "event_away": "Rice Owls",
+        "event_time": "2026-01-02T18:00:00Z",
+        "home_norm": "texasstate",
+        "away_norm": "rice",
+        "why": "future_week"
+      },
+      {
+        "event_home": "Cincinnati Bearcats",
+        "event_away": "Navy Midshipmen",
+        "event_time": "2026-01-02T21:30:00Z",
+        "home_norm": "cincinnati",
+        "away_norm": "navymidshipmen",
+        "why": "future_week"
       }
     ]
   },
   "reason_counts": {
-    "future_week": 35
+    "future_week": 33
   },
   "reason_buckets": {
     "outside_window": 0,
     "no_schedule_candidate": 0,
-    "other": 35
+    "other": 33
   }
 }
