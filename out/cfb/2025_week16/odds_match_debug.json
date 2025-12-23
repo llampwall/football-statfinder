@@ -3,11 +3,11 @@
   "week": 16,
   "window": "2025-12-07T02:00:00Z -> 2025-12-19T22:00:00Z",
   "stats": {
-    "events_total": 40,
+    "events_total": 39,
     "events_after_window_filter": 0,
     "events_in_window": 0,
     "matched": 0,
-    "unmatched": 40,
+    "unmatched": 39,
     "eligible_unmatched": 0
   },
   "samples": {
@@ -16,7 +16,7 @@
       {
         "event_home": "Louisville Cardinals",
         "event_away": "Toledo Rockets",
-        "event_time": "2025-12-23T19:00:00Z",
+        "event_time": "2025-12-23T19:05:31Z",
         "home_norm": "louisville",
         "away_norm": "toledo",
         "why": "future_week"
@@ -256,11 +256,11 @@
     ]
   },
   "reason_counts": {
-    "future_week": 40
+    "future_week": 39
   },
   "reason_buckets": {
     "outside_window": 0,
     "no_schedule_candidate": 0,
-    "other": 40
+    "other": 39
   }
 }
