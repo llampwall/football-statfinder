@@ -3,28 +3,20 @@
   "week": 16,
   "window": "2025-12-07T02:00:00Z -> 2025-12-19T22:00:00Z",
   "stats": {
-    "events_total": 35,
+    "events_total": 34,
     "events_after_window_filter": 0,
     "events_in_window": 0,
     "matched": 0,
-    "unmatched": 35,
+    "unmatched": 34,
     "eligible_unmatched": 0
   },
   "samples": {
     "matched": [],
     "unmatched": [
       {
-        "event_home": "Northwestern Wildcats",
-        "event_away": "Central Michigan Chippewas",
-        "event_time": "2025-12-26T18:00:00Z",
-        "home_norm": "northwestern",
-        "away_norm": "centralmichigan",
-        "why": "future_week"
-      },
-      {
         "event_home": "Minnesota Golden Gophers",
         "event_away": "New Mexico Lobos",
-        "event_time": "2025-12-26T21:30:00Z",
+        "event_time": "2025-12-26T21:33:45Z",
         "home_norm": "minnesota",
         "away_norm": "newmexico",
         "why": "future_week"
@@ -252,15 +244,23 @@
         "home_norm": "olemiss",
         "away_norm": "miami",
         "why": "future_week"
+      },
+      {
+        "event_home": "Ohio State Buckeyes",
+        "event_away": "Ole Miss Rebels",
+        "event_time": "2026-01-09T00:30:00Z",
+        "home_norm": "ohiostatebuckeyes",
+        "away_norm": "olemiss",
+        "why": "future_week"
       }
     ]
   },
   "reason_counts": {
-    "future_week": 35
+    "future_week": 34
   },
   "reason_buckets": {
     "outside_window": 0,
     "no_schedule_candidate": 0,
-    "other": 35
+    "other": 34
   }
 }
