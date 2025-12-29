@@ -3,24 +3,16 @@
   "week": 16,
   "window": "2025-12-07T02:00:00Z -> 2025-12-19T22:00:00Z",
   "stats": {
-    "events_total": 25,
+    "events_total": 24,
     "events_after_window_filter": 0,
     "events_in_window": 0,
     "matched": 0,
-    "unmatched": 25,
+    "unmatched": 24,
     "eligible_unmatched": 0
   },
   "samples": {
     "matched": [],
     "unmatched": [
-      {
-        "event_home": "Appalachian State Mountaineers",
-        "event_away": "Georgia Southern Eagles",
-        "event_time": "2025-12-29T19:00:00Z",
-        "home_norm": "appalachianstate",
-        "away_norm": "georgiasouthern",
-        "why": "future_week"
-      },
       {
         "event_home": "Louisiana Tech Bulldogs",
         "event_away": "Coastal Carolina Chanticleers",
@@ -216,11 +208,11 @@
     ]
   },
   "reason_counts": {
-    "future_week": 25
+    "future_week": 24
   },
   "reason_buckets": {
     "outside_window": 0,
     "no_schedule_candidate": 0,
-    "other": 25
+    "other": 24
   }
 }
