@@ -3,11 +3,11 @@
   "week": 16,
   "window": "2025-12-07T02:00:00Z -> 2025-12-19T22:00:00Z",
   "stats": {
-    "events_total": 24,
+    "events_total": 25,
     "events_after_window_filter": 0,
     "events_in_window": 0,
     "matched": 0,
-    "unmatched": 24,
+    "unmatched": 25,
     "eligible_unmatched": 0
   },
   "samples": {
@@ -142,6 +142,14 @@
         "why": "future_week"
       },
       {
+        "event_home": "Montana State Bobcats",
+        "event_away": "Illinois State Redbirds",
+        "event_time": "2026-01-06T00:30:00Z",
+        "home_norm": "montanastate",
+        "away_norm": "illinoisstateredbirds",
+        "why": "future_week"
+      },
+      {
         "event_home": "Georgia Bulldogs",
         "event_away": "Miami Hurricanes",
         "event_time": "2026-01-09T00:30:00Z",
@@ -208,11 +216,11 @@
     ]
   },
   "reason_counts": {
-    "future_week": 24
+    "future_week": 25
   },
   "reason_buckets": {
     "outside_window": 0,
     "no_schedule_candidate": 0,
-    "other": 24
+    "other": 25
   }
 }
