@@ -3,28 +3,20 @@
   "week": 16,
   "window": "2025-12-07T02:00:00Z -> 2025-12-19T22:00:00Z",
   "stats": {
-    "events_total": 21,
+    "events_total": 20,
     "events_after_window_filter": 0,
     "events_in_window": 0,
     "matched": 0,
-    "unmatched": 21,
+    "unmatched": 20,
     "eligible_unmatched": 0
   },
   "samples": {
     "matched": [],
     "unmatched": [
       {
-        "event_home": "Vanderbilt Commodores",
-        "event_away": "Iowa Hawkeyes",
-        "event_time": "2025-12-31T17:00:00Z",
-        "home_norm": "vanderbilt",
-        "away_norm": "iowa",
-        "why": "future_week"
-      },
-      {
         "event_home": "Duke Blue Devils",
         "event_away": "Arizona State Sun Devils",
-        "event_time": "2025-12-31T19:00:00Z",
+        "event_time": "2025-12-31T19:10:41Z",
         "home_norm": "duke",
         "away_norm": "arizonastate",
         "why": "future_week"
@@ -32,7 +24,7 @@
       {
         "event_home": "Texas Longhorns",
         "event_away": "Michigan Wolverines",
-        "event_time": "2025-12-31T20:00:00Z",
+        "event_time": "2025-12-31T20:06:45Z",
         "home_norm": "texaslonghorns",
         "away_norm": "michigan",
         "why": "future_week"
@@ -40,7 +32,7 @@
       {
         "event_home": "Utah Utes",
         "event_away": "Nebraska Cornhuskers",
-        "event_time": "2025-12-31T20:30:00Z",
+        "event_time": "2025-12-31T20:32:26Z",
         "home_norm": "utah",
         "away_norm": "nebraska",
         "why": "future_week"
@@ -184,11 +176,11 @@
     ]
   },
   "reason_counts": {
-    "future_week": 21
+    "future_week": 20
   },
   "reason_buckets": {
     "outside_window": 0,
     "no_schedule_candidate": 0,
-    "other": 21
+    "other": 20
   }
 }
