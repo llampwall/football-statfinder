@@ -1,34 +1,83 @@
-# Football Statfinder
+# football-statfinder
 
-Automated tooling for producing weekly NFL data packs: league metrics, game view records, and odds snapshots. The refactored pipeline keeps calculations identical to the original scripts while splitting responsibilities into focused modules for easier maintenance and reuse.
+Weekly betting data packs for NFL and college football (FBS). Twice a day, an automated pipeline scrapes Sagarin power ratings, pulls schedules, scores, season-to-date stats, and betting odds, joins them per game, and publishes per-week "game view" packs that a static HTML/JS frontend renders as three printable views (Week View, Game View, Printable game sheet). The system replaces a hand-maintained set of Excel sheets; the scanned originals in `context/` are the product spec.
 
-## Quickstart
+**Start here:**
+
+- [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — how the system works today: production call tree, subsystems, data contracts, config reference, error-handling map.
+- [`docs/REBUILD.md`](docs/REBUILD.md) — known bugs, duplication inventory, dead/stranded code (including unmerged branch work), and the phased rebuild plan for next season.
+
+## How it runs in production
+
+`.github/workflows/refresh.yml` (cron 10:00 and 22:00 UTC) runs `tools/run_refresh_all_and_notify.py`, which refreshes CFB then NFL as isolated subprocesses, posts a summary to Discord, and auto-commits the regenerated `out/**` and `data/sagarin/raw/**` back to this repo. There is no external database: `out/` is git-tracked and *is* the datastore, and the frontend fetches files from it directly.
+
+Each league orchestrator ends with exactly one machine-readable line the runner greps for:
 
 ```
+NOTIFY: <LEAGUE> refresh complete week=<season>-<week> rows=<n> odds_promoted=<p>
+```
+
+## Manual runs
+
+```bash
 pip install -r requirements.txt
-python -m src.refresh_week_data --season 2025 --week 7
-python -m src.fetch_last_year_stats              # defaults to last year
-python -m src.fetch_sagarin_week_nfl --season 2025 --week 7
+
+# Full production run (CFB + NFL + Discord + logs)
+python tools/run_refresh_all_and_notify.py
+
+# One league, current week auto-detected from the schedule masters
+python -m src.refresh_week_data_nfl
+python -m src.refresh_week_data_cfb
+
+# One league, explicit week
+python -m src.refresh_week_data_nfl --season 2025 --week 7
+python -m src.refresh_week_data_cfb --season 2025 --week 7
+
+# Tests (12 tests, pure logic only; CI does not run them)
+python -m pytest tests/
 ```
 
-## Outputs
+Credentials come from a `.env` at the repo root (never committed). Minimum useful set: `THE_ODDS_API_KEY` (The Odds API), `CFBD_API_KEY` (CollegeFootballData, CFB only), `DISCORD_WEBHOOK_URL` (optional notifications). The full flag reference is in `docs/ARCHITECTURE.md` section 7. Note that `.env` values override real environment variables in local runs.
 
-| File | Description |
-| ---- | ----------- |
-| `out/final_league_metrics_{season}.csv` | Prior-season finals with offense/defense per game, dense ranks, TO, PF/PA/SU/ATS. |
-| `out/league_metrics_{season}_{week}.csv` | In-season league metrics aggregated through the selected week. |
-| `out/games_week_{season}_{week}.jsonl` & `.csv` | Game View records with matchup derivations, ranks, and S2D context. |
-| `out/odds_{season}_wk{week}.jsonl` | Weekly odds snapshot (The Odds API, when credentials are available). |
-| `out/sagarin_nfl_{season}_wk{week}.jsonl` & `.csv` | Sagarin power ratings with PR/SOS ranks, hfa, and audit metadata. |
+## Frontend
 
-### Sagarin Scraper
+Static ES modules under `web/`, no build step. Serve the repo root and open `web/week_view.html`:
 
-The Sagarin fetcher scrapes the fixed-width table at `http://sagarin.com/sports/nflsend.htm`, normalizes every team label, and writes both CSV and JSONL records sorted by power-rating rank. CLI flags:
-
-```
-python -m src.fetch_sagarin_week_nfl --season 2025 --week 6 \
-    --out out/sagarin_nfl_2025_wk6               # optional basename
-python -m src.fetch_sagarin_week_nfl --season 2025 --week 6 --local-html fixtures/nflsend.html
+```bash
+python -m http.server 8000
+# http://localhost:8000/web/week_view.html?league=nfl
 ```
 
-The script enforces 32-team coverage, rank validation, decimal precision, and optional SoS completeness, exiting non-zero on failure and emitting a debug text file when parsing issues arise.
+Week auto-discovery relies on server directory listings, so it works under `python -m http.server` but not on GitHub Pages (manual season/week entry works everywhere). League switching (`?league=nfl|cfb`) flips the data root between `out/` and `out/cfb/`.
+
+## Key outputs
+
+| Artifact | What it is |
+| --- | --- |
+| `out/{S}_week{W}/games_week_{S}_{W}.jsonl` + `.csv` | NFL week pack: one record per game with ratings, odds, stats, ranks |
+| `out/cfb/{S}_week{W}/games_week_{S}_{W}.jsonl` + `.csv` | CFB week pack (same schema family) |
+| `out/{...}/game_schedules/{game_key}.json` | Per-game sidecar: home/away year-to-date and prior-season timelines |
+| `out/{...}/league_metrics_{S}_{W}.csv` | Season-to-date team stats and ranks |
+| `out/{...}/sagarin_*_{S}_wk{W}.csv/.jsonl` | Weekly Sagarin ratings snapshot |
+| `out/master/*.csv` | Schedule and Sagarin masters (also drive current-week detection) |
+| `out/staging/` | Append-only odds and Sagarin staging ledgers |
+| `data/sagarin/raw/` | Archived raw Sagarin HTML pages (parser insurance and test fixtures) |
+
+The full artifact catalog and record schemas are in `docs/ARCHITECTURE.md` section 4.
+
+## Repo layout
+
+```
+src/                  Python pipeline (per-league orchestrators + subsystem modules)
+src/common/           Shared utils: env/config, atomic writes, team names, current-week service
+src/odds/             Odds staging pipeline: ingest -> pin to schedule -> promote
+src/ratings/          Sagarin staging fetchers (current generation)
+src/scores/, src/ats/ Score backfill and against-the-spread computation
+web/                  Static frontend (Week View, Game View, Printable)
+tools/                Production runner + one-off utilities
+context/              Product spec, scanned deliverables, design canon docs
+tests/                Pure-logic tests (metrics, Sagarin parser, team names)
+out/                  Generated data (git-tracked; committed by CI)
+```
+
+Working conventions for agentic sessions are in `AGENTS.md`.
