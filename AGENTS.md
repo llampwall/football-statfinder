@@ -37,5 +37,5 @@ All code paths in this repo; prefer surgical patches; never break logging/NOTIFY
 - main full auto refresh: `python tools/run_refresh_all_and_notify`
 - NFL manual refresh: `python -m src.refresh_week_data_nfl [--season S --week W]`
 - CFB manual refresh: `python -m src.refresh_week_data_cfb [--season S --week W]`
-- Notify me of task completion: `powershell -NoProfile -ExecutionPolicy Bypass -File .webhooks\discord_notify.ps1 -Message "<one sentence summary of the work done>"`
+- Notify me of task completion: POST a one-sentence summary to the webhook in `$env:DISCORD_WEBHOOK_URL` (from `.env`); the old `webhooks\discord_notify.ps1` was removed because it hardcoded the webhook URL.
 

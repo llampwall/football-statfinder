@@ -237,7 +237,7 @@ Asymmetries worth knowing: the NFL refresh runs **both** generations every time 
 - `.github/workflows/refresh.yml`: the only CI workflow; described in section 2. Secrets fall back to repository variables (`secrets.X || vars.X`). No pytest step, no concurrency group.
 - `tools/run_refresh_all_and_notify.py`: the production runner (section 2.2).
 - Manual one-off tools, not referenced by the workflow: `tools/run_refresh_cfb_and_notify.py` (superseded CFB-only ancestor; has an import-before-sys.path bug at line 14), `tools/recompute_current_week.py` and `tools/recompute_current_week_nfl.py` (duplicates differing only in default league), `tools/seed_schedule_master.py` (seeds from `data/NFL_SCHEDULE_SEED.csv`), `tools/replace_sagarin_master.py` (full master replace from `data/SAGARIN_WEEKLY_HISTORICAL_NFL.csv`), `tools/check_parity_cfb.py`, `tools/diff_games_week.py`.
-- `webhooks/discord_notify.ps1`: a PowerShell Discord helper with a hardcoded webhook URL committed in plaintext (webhooks/discord_notify.ps1:20).
+- `webhooks/discord_notify.ps1`: was a PowerShell Discord helper with a hardcoded webhook URL committed in plaintext. Deleted 2026-07-02; the URL remains in git history until the webhook is rotated in Discord.
 - `tests/`: 12 pytest tests across 3 modules (`test_metrics.py`, `test_sagarin_parser.py`, `test_team_names.py`), NFL-only coverage. CI never runs them.
 - `requirements.txt`: pandas, requests, lxml, html5lib, python-dotenv, pytest, all unpinned.
 
@@ -302,7 +302,7 @@ The hard dependency: if the schedule master is missing or empty, `get_current_we
 | CollegeFootballData API | CFB schedules, scores, FBS team list, per-game team stats | `https://api.collegefootballdata.com` `/games`, `/teams/fbs`, `/games/teams`; Bearer `CFBD_API_KEY` | Rate/quota sensitive: one refresh makes dozens of calls (per-week stats loop, double schedule fetch, double gameview build). Fetch errors in `load_games` are swallowed into an empty DataFrame, surfacing later as "0 normalized rows". |
 | The Odds API v4 | Spreads, totals, moneylines (`/sports/{sport}/odds`); closing lines (`/events/{id}/odds-history`, paid tier) | `THE_ODDS_API_KEY` query param | Quota-metered. Four independent client implementations exist. The legacy NFL snapshot plus staging ingest means double spend per run; every ATS closing-spread lookup is one paid history call with no on-disk cache. Event names must match schedule names via token matching; naming drift lands records in the unmatched quarantine (and can abort CFB via the coverage gate). |
 | TeamRankings | NFL turnover margin (weekly) and season-final stat tables | `pd.read_html` scrapes of `teamrankings.com/nfl/stat/*` | HTML-table scrape; a markup change breaks `generate_league_metrics` and aborts the NFL refresh. Scraped live, so re-running past weeks injects today's turnover values (known quirk). |
-| Discord | Run notifications | Webhook POST, `DISCORD_WEBHOOK_URL` | Best-effort; failures never affect the run. A live webhook URL is also hardcoded in `webhooks/discord_notify.ps1`. |
+| Discord | Run notifications | Webhook POST, `DISCORD_WEBHOOK_URL` | Best-effort; failures never affect the run. A webhook URL was also hardcoded in the now-deleted `webhooks/discord_notify.ps1` and survives in git history until rotated. |
 | Don Best XML v2 | Alternate NFL odds | `DONBEST_TOKEN` (never provisioned) | Unused in practice; CLI-only code path. |
 
 ## 7. Configuration reference
