@@ -1,0 +1,175 @@
+# REBUILD.md: Technical Debt Inventory and Rebuild Roadmap
+
+Status date: 2026-07-02. Verified against main at commit `84fff5c` (post cruft-removal), then independently fact-checked claim by claim; every file:line below was confirmed in source.
+
+This document is the bridge between the season-1 system and the season-2 rebuild: what exists, what is broken, what earned its keep, and how to rebuild it.
+
+## Table of contents
+
+1. [State of the system](#1-state-of-the-system)
+2. [Known bugs](#2-known-bugs)
+3. [Duplication inventory](#3-duplication-inventory)
+4. [Dead and stranded code](#4-dead-and-stranded-code)
+5. [What to keep](#5-what-to-keep)
+6. [Rebuild recommendations](#6-rebuild-recommendations)
+7. [Commercialization flags](#7-commercialization-flags)
+
+## 1. State of the system
+
+The system works. Twice a day a GitHub Actions cron (`.github/workflows/refresh.yml`, 10:00 and 22:00 UTC) runs `tools/run_refresh_all_and_notify.py`, which refreshes CFB and then NFL as isolated subprocesses, posts a summary to Discord, and auto-commits the regenerated data back to the repo. Each refresh pulls Sagarin power ratings (scraped from sagarin.com), schedules and team stats (nflverse for NFL, the CFBD API for CFB), turnover data (TeamRankings scrape), and betting odds (The Odds API), then assembles per-week "game view" packs of JSONL/CSV plus per-game schedule sidecars under `out/`. A static, build-free HTML/JS frontend (Week View, Game View, Printable) reads those files directly. The deliverables match the product spec in `context/SPEC_DELIVERABLES.md` and the scanned Excel mockups the owner works from, and the owner was paid for the season it ran.
+
+The shape of the mess is consistent and diagnosable. Nearly every module exists twice, as an NFL copy and a CFB copy that diverged after the paste: two orchestrators with different architectures (`src/refresh_week_data_cfb.py` is a 755-line subprocess-per-stage runner; `src/refresh_week_data_nfl.py` is a 184-line wrapper around a third, older orchestrator, `src/refresh_week_data.py`, which still runs in full). Two generations of Sagarin ingestion are both live, so the NFL refresh scrapes the same page twice per run and writes weekly outputs into two different directory trees. Two odds pipelines coexist: a legacy per-week snapshot that nothing reads back, and a newer staging pipeline (raw ingest, pin to schedule, promote) that is the best-designed code in the repo. The output-path conventions split three ways (`out/{S}_week{W}/` for NFL, `out/cfb/{S}_week{W}/` for CFB, plus a stray `out/nfl/{S}_week{W}/` that only two modules use), and that split is the direct cause of the highest-impact bug below.
+
+The repo is also its own database and its own config store: roughly 1,450 data files under `out/` are git-tracked and grow by one auto-commit per cron run; behavior is steered by roughly 20 environment flags loaded from a `.env` file that silently overrides real environment variables; run diagnostics are `print` lines that a runner script greps for a `NOTIFY:` string. Test coverage is 3 test files (12 tests) against 43 Python modules, all NFL-side, and CI never runs them. None of this is fatal for a single-operator tool, but all of it has to change before the system is rebuilt for a new season, let alone sold.
+
+## 2. Known bugs
+
+All entries verified in source unless marked otherwise. Ordered by severity.
+
+| # | Sev | Location | Bug |
+|---|-----|----------|-----|
+| 1 | High | `src/ats/nfl_ats.py:36,41` | NFL season ATS is a permanent no-op. `NFL_ROOT = OUT_ROOT / "nfl"` and `_week_path` look for `games_week_*.jsonl` under `out/nfl/{S}_week{W}/`, but the NFL pipeline writes game files to `out/{S}_week{W}/`. `build_team_ats` scans nothing; every run logs 0 rows updated. The staged-odds-based ATS correction never lands. |
+| 2 | High | `src/ats/nfl_ats.py:203` | Masked crash behind bug 1: `pd.DataFrame(updated_rows)` with pandas never imported (imports at lines 26-33 confirmed). The first run that ever updates a row raises `NameError`. Fixing the directory without fixing the import converts a silent no-op into a crash. |
+| 3 | High | `src/scores/nfl_backfill.py:345-350` vs `:224-229` | Latent `TypeError` that aborts the whole NFL refresh. `_apply_ats_backfill` calls `_update_sidecar_entry(data.get("home_ytd"), season, week, ats=..., margin=...)` but the definition is `(sidecar, is_home, season, week, *, ats, to_margin)`: a missing positional and an unexpected kwarg `margin`. Unguarded; it fires the moment a sidecar exists, scores are present, and a closing spread resolves. The CFB clone (`src/scores/cfb_backfill.py:213-232`) has the correct signature; the NFL copy is a broken paste. It also returns `None`, so the `home_changed or away_changed` logic at 351 could never be true. |
+| 4 | High | `src/odds/ats_compute.py:200-211` | Two of three closing-spread tiers are dead. `_PINNED_CACHE` is never populated (`load_pinned_index`, line 71, has zero callers repo-wide) and `_SNAPSHOT_CACHE` is never filled (`_load_snapshots`, line 100, zero callers) and is read with a mismatched key shape anyway. Every ATS closing-spread lookup falls through to a paid The Odds API history call per game per run (`odds_history.py:148`), or silently returns nothing without an API key. |
+| 5 | High | `src/scores/nfl_backfill.py:131-147` | NFL W-L-T record backfill always computes "0-0": wins/losses are tallied under upper-cased team keys (lines 131-141) but read back at line 142 under `.lower()` keys from a `defaultdict`, which mints fresh zeroed entries. Any game whose score lookup hits would overwrite `home_su`/`away_su` with "0-0". |
+| 6 | High | `src/scores/cfb_backfill.py:176,535-539` | CFB score backfill cannot persist a score-only change. The canonical no-op comparison excludes `home_score`/`away_score` (`IGNORED_CANONICAL_FIELDS`), so a run whose only effect is filling final scores compares equal to the existing file and is skipped. The module's primary purpose only lands when some other field changed in the same run. |
+| 7 | High | `src/gameview_build_cfb.py:508-527` | Two conflicting rating-vs-odds formulas in one record. `_compute_rating_vectors` (line 508) sets `rating_vs_odds` and the favored-team fields, then lines 525-527 unconditionally overwrite `rating_vs_odds` and `rating_diff_favored_team` with `_compute_rating_vs_odds`, a formula with different HFA handling and sign convention. The emitted row mixes both; `rating_vs_odds_favored_team` comes from formula A, its siblings from formula B. |
+| 8 | High | `src/odds/nfl_ingest.py:135-141`, `src/odds/cfb_ingest.py:106-113`, `src/fetch_games_cfb.py:71-80` | Missing API key yields empty data silently. Both odds ingest twins return an empty result when `THE_ODDS_API_KEY` is unset and swallow every fetch exception the same way; the refresh stays green. `load_games` returns an empty DataFrame when `CFBD_API_KEY` is missing or the fetch throws, so an auth or network failure surfaces later as "schedule produced 0 rows" instead of the real cause. |
+| 9 | High | `webhooks/discord_notify.ps1:20` | A live Discord webhook URL with full token is committed in plaintext. Compromised the moment the repo is shared; rotate and remove. |
+| 10 | Med | 25+ sites, e.g. `src/scores/nfl_backfill.py:171`, `src/cfb_ats.py:32`, `src/ratings/sagarin_nfl_fetch.py:124`, `src/odds/nfl_promote_week.py:62` | Every JSONL reader in the repo skips `json.JSONDecodeError` lines with a bare `continue`, without counting or logging. A truncated or corrupted line (the staging appends are non-atomic) silently drops data with no signal. |
+| 11 | Med | `src/scores/nfl_backfill.py:188`, `src/scores/cfb_backfill.py:406` | Ignored exit codes on backfill rebuild subprocesses: `subprocess.run(cmd, check=False)` relaunches the game view builders after ATS/odds changes and discards the return code. A failed rebuild leaves stale weekly files with no error signal. |
+| 12 | Med | `src/refresh_week_data_cfb.py:638-660` | The CFB game view builder runs twice per refresh, the second time under the comment "Game view builder (again - might be necessary)". Each pass makes its own live CFBD schedule call, so the two passes can see different schedules. Symptom of the ordering problem in bug 13, not a fix for it. |
+| 13 | Med | `src/fetch_games_cfb.py:183-186` | The "schedule ingest" stage is a hardcoded no-op: `abort = 1; print("CFB parity check aborting"); return 0`. The orchestrator runs it and treats exit 0 as success. No schedule artifact is ever written, so every downstream stage refetches the CFBD schedule live. |
+| 14 | Med | `src/ratings/sagarin_nfl_fetch.py:249-250` | Staging season is computed as `max(page_season, current calendar year)`. In January and February a late-season page gets stamped with the next year's season, splitting the staging ledger and mislabeling master rows, while the weekly output directory uses the current-week service's season (line 247-248), so path and content can disagree. |
+| 15 | Med | `src/fetch_sagarin_week_nfl.py:320-331` | The week/season mismatch warnings lie: they say "Using page season" and "Using page week in outputs" but `effective_week`/`effective_season` (lines 320-321) are never reassigned; outputs are always stamped with the requested values. The CFB legacy scraper does the opposite (adopts the page values), so the two leagues label the same situation differently. |
+| 16 | Med | `src/refresh_week_data.py:72` via `src/refresh_week_data_nfl.py:112-118`, `src/fetch_sagarin_week_nfl.py:334-338` | The legacy NFL Sagarin scraper still runs on every refresh in addition to the staging fetch: two HTTP hits per run to the same page, two output trees, two writers to one master CSV. The legacy path hard-raises `RuntimeError` when it parses anything other than exactly 32 teams, killing the entire NFL refresh before the soft-fail staging path runs. |
+| 17 | Med | `src/common/io_utils.py:39-55` | `getenv()` loads `.env` with `override=True` ("source of truth"), so a stale local `.env` silently overrides real environment variables, including CI-provided keys and flags. `read_env()` in the same file loads with `override=False`; both are used interchangeably across the repo with opposite precedence. |
+| 18 | Low | `src/refresh_week_data.py:81-90` | The legacy per-week odds snapshot (`odds_{S}_wk{W}.jsonl`) is still fetched and written on every NFL run even though the staging pipeline supersedes it and nothing reads it back, doubling Odds API spend. |
+| 19 | Low | `src/ats/nfl_ats.py:193` | The ATS placeholder is a literal em dash string, which `ats_compute.is_blank` treats as non-blank, so backfill would consider such rows already done. Cross-module sentinel mismatch (currently masked by bug 1). |
+
+Plausible but not independently re-verified (reported by the mapping pass; treat as leads, not confirmed findings): NFL final scores may not be landing at all because master-derived abbreviation game keys never match the weekly rows' keys (`src/scores/nfl_backfill.py:61-77`; observed week-10 rows without score fields); `current_week_service` pins to the last played week forever in the offseason, so the cron rebuilds the final week twice daily; TeamRankings turnover data is scraped live even when rebuilding past weeks, injecting current values into historical files (`src/fetch_year_to_date_stats.py:293-325`).
+
+## 3. Duplication inventory
+
+### NFL/CFB twin modules
+
+Line counts measured on main. "Differs" describes the real semantic divergence beyond league constants, paths, and name normalization.
+
+| NFL | CFB | Lines | What actually differs |
+|-----|-----|-------|------------------------|
+| `src/refresh_week_data_nfl.py` (+ legacy `src/refresh_week_data.py`) | `src/refresh_week_data_cfb.py` | 184 + 281 vs 755 | Different architectures: NFL is a wrapper delegating in-process to the legacy builder then bolting on staging/promotion/ATS; CFB is a subprocess-per-stage runner with `StageError` gates and receipts. The bolt-on tails (odds staging, promotion, NOTIFY line) are near copy-paste. |
+| `src/odds/nfl_ingest.py` | `src/odds/cfb_ingest.py` | 212 vs 184 | ~95% identical. Sport key and normalizer; CFB imports its fetch helpers from the CLI module `fetch_week_odds_cfb` while NFL has its own. |
+| `src/odds/nfl_pin_to_schedule.py` | `src/odds/cfb_pin_to_schedule.py` | 533 vs 634 | Same dataclasses, matching, and line extraction near line-for-line. CFB's slug replaces `&` with `and`, NFL's does not; NFL's fallback schedule dir is the wrong `out/nfl/` tree. |
+| `src/odds/nfl_promote_week.py` | `src/odds/cfb_promote_week.py` | 363 vs 353 | Same selection/merge logic. NFL adds atomic `write_week_outputs`; CFB's caller persists with its own writers. CFB adds a kickoff fallback from pinned records. |
+| `src/ratings/sagarin_nfl_fetch.py` | `src/ratings/sagarin_cfb_fetch.py` | 311 vs 373 | ~80% identical staging engines. CFB takes explicit season/week, validates, and raises; NFL derives season/week internally, skips validation entirely, and soft-fails to a zero-count summary. |
+| `src/scores/nfl_backfill.py` | `src/scores/cfb_backfill.py` | 573 vs 597 | ~130 duplicated ATS-backfill lines. NFL's `_update_sidecar_entry` is the broken paste (bug 3); NFL backfills W-L records (incorrectly, bug 5), CFB does not; CFB has canonical no-op detection (over-suppressing, bug 6). |
+| `src/ats/nfl_ats.py` | `src/cfb_ats.py` | 212 vs 244 | Same cover math and the same function-attribute state hack. Different roots (the fatal `out/nfl/` vs the correct `out/cfb/`), different placeholders, CFB adds split counts and a dry-run flag but never rewrites the CSV. Note the layout drift: one lives in a package dir, the other at `src/` top level. |
+| `src/schedule_master.py`, `src/sagarin_master.py` | `src/schedule_master_cfb.py`, `src/sagarin_master_cfb.py` | 184/92 vs 377/110 | Same upsert-keyed master CSV idea; CWD-relative paths in several of them (masters silently split if run from another directory). |
+| `src/fetch_sagarin_week_nfl.py` | `src/fetch_sagarin_week_cfb.py` | 385 vs 401 | Legacy scrapers sharing verbatim fetch/strip/HFA helpers. Line parsers differ (32-team NFC/AFC scan vs FBS classification regex with 120-140 row bounds); page week/season semantics are opposite (bug 15). |
+| `src/gameview_build.py` | `src/gameview_build_cfb.py` | 822 vs 699 | Share the output schema and derived-field names; genuinely different implementations (NFL computes season-to-date stats in-process from nflverse, CFB joins the prebuilt league metrics CSV). |
+| `src/fetch_year_to_date_stats.py`, `src/fetch_last_year_stats.py` | `src/fetch_year_to_date_stats_cfb.py`, `src/fetch_last_year_stats_cfb.py` | 373/265 vs 586/603 | The two CFB files are ~90% identical to each other (only the week window and output path differ). |
+| `src/fetch_games.py` | `src/fetch_games_cfb.py` | 147 vs 220 | Different sources (nflverse CSV vs CFBD API). CFB's `home_relative_spread`/`total_from_schedule` are stubs returning `None`, kept for NFL signature parity. |
+| `src/fetch_week_odds_nfl.py` | `src/fetch_week_odds_cfb.py` | 325 vs 791 | Legacy odds fetchers that diverged most: NFL has unused Don Best XML support and no schedule matching; CFB does full schedule matching with coverage gates and debug receipts. |
+
+There are four independent The Odds API fetch implementations (`fetch_week_odds_nfl`, `fetch_week_odds_cfb`, `nfl_ingest`, `odds_history`) and three independent dense-ranking implementations (`fetch_year_to_date_stats.py`, inline in `gameview_build.py:551-571`, `build_team_timelines.py`).
+
+### Two Sagarin ingestion generations
+
+Both live simultaneously. Generation 1 (legacy): `src/fetch_sagarin_week_nfl.py` and `src/fetch_sagarin_week_cfb.py`, per-week scrape, non-atomic writes to the week dir, hard failure semantics. Generation 2 (staging): `src/ratings/sagarin_{nfl,cfb}_fetch.py`, append-only ledger under `out/staging/sagarin_latest/`, latest-per-team selection, atomic snapshot and master upsert, raw HTML archive. The NFL refresh runs both generations every run (bug 16); CFB runs generation 2 by default and generation 1 only when `SAGARIN_STAGING_ENABLE` is off. Both generations write the same master CSVs through different upsert code. Generation 2 also imports its parser primitives from generation 1, so "legacy" cannot simply be deleted; the parsers must be extracted first.
+
+### Two odds pipelines
+
+Legacy: per-week snapshot fetch into `odds_{S}_wk{W}.jsonl` (NFL version is never read by anything; CFB version is still load-bearing because the gameview builder joins it). Staging: raw ingest to `out/staging/odds_raw/`, pin to schedule into `out/staging/odds_pinned/{league}/{season}.jsonl` (append-only, duplicates appended every run, unbounded growth, committed to git), promotion into the week's game rows. The staging model is the keeper; the legacy NFL snapshot is pure duplicate API spend (bug 18).
+
+### Frontend
+
+`web/week_view.js` (1,670 lines), `web/game_view.js` (1,659), `web/js/printable.js` (874) duplicate week-path building, JSONL parsing and NaN sanitization, localStorage week caching, league switching, number/kickoff formatting, team aliasing, and naive CSV parsing in two or three diverging copies each; the favored-side/spread math exists in three subtly different precedence orders. `web/js/game_metrics.js` (215 lines) is the only genuinely shared module and is the pattern to generalize.
+
+## 4. Dead and stranded code
+
+### Unreachable or no-op in production
+
+- `src/fetch_last_year_stats.py`: no Python caller anywhere; its `out/final_league_metrics_{season}.csv` is consumed directly by the frontend and must be regenerated manually each offseason.
+- `src/fetch_last_year_stats_cfb.py`: only behind `--include-eoy`, which production never passes.
+- `src/sagarin_master_cfb.py` and the `src/fetch_sagarin_week_cfb.py` CLI path: only reachable when `SAGARIN_STAGING_ENABLE` is off (it defaults on). The CFB module survives as a parser library import.
+- `src/fetch_games_cfb.py` `main()`: deliberate no-op stage (bug 13).
+- `src/fetch_week_odds_nfl.py` `fetch_odds_donbest` and CLI: Don Best support with no token provisioned anywhere; presumed never used.
+- `src/odds/ats_compute.py`: `load_pinned_index` (line 71) and `_load_snapshots` (line 100) have zero callers; the pinned/snapshot tiers of `resolve_closing_spread` are unreachable (bug 4).
+- `src/refresh_week_data_cfb.py`: `_config_banner`, `_require_secrets`, `_odds_sources_empty`, `_sanitize_hint`, `_LAST_RUN_CONTEXT` are defined and never called (grep confirmed for the first two; the orchestrator raises `StageError` 15+ times but never catches it, so its friendly stage/hint fields are unused).
+- `src/build_team_timelines.py:468-496`: truncated dead tail after `__all__`, an interrupted edit ending in a loop whose body is `pass`; it rebinds `RankMaps` at import time.
+- `tools/run_refresh_cfb_and_notify.py`: superseded by `run_refresh_all_and_notify.py`; also has an import-before-sys.path bug (line 14) that breaks direct script invocation.
+- `tools/recompute_current_week_nfl.py`: duplicate of `recompute_current_week.py` differing only in the argparse default; both accept `--league`.
+- `web/game_view.css`: referenced by no HTML file; plus a set of unused frontend helpers (`week_view.js` `NFL_TEAM_DEFINITIONS`, unused kickoff formatters, `game_view.js` `resolveAtsValue`, `printable.js` `setPlus`/`setRank`/`spreadFor` family).
+
+Note: a batch of tracked cruft the season left behind (an `out-backup/` snapshot tree, `tmp/` scratch parsers, pasted run logs, stray CSV exports, an empty patch file) was already removed by commit `84fff5c`.
+
+### The unmerged branch situation
+
+`feature/ats-api-backfill` is 27 commits ahead of main (tip `d44af55`, 2025-10-29) and holds a real, substantial ATS-from-API implementation that main never received: `src/odds/odds_api_client.py` (730 lines, a proper Odds API client including correct URL building for the historical endpoint), `src/odds/ats_backfill_api.py`, `src/odds/historical_events.py`, `src/odds/participants_cache.py`, and `tools/clean_cfb_schedule_master.py`. Orphaned `.pyc` files for all four odds modules sit in `src/odds/__pycache__/` on main (verified), proving the branch was run locally against this working tree. Three `.env` keys belong to that branch and are read by nothing on main: `ATS_DEBUG` and `THE_ODDS_API_KEY_TEMP` (zero references in any `.py` file, grep confirmed) and `ATS_BACKFILL_SOURCE`, which on main is read only inside the never-called `_config_banner` (`src/refresh_week_data_cfb.py:58`); setting it is a no-op. This branch work would replace the dead pinned/snapshot tiers and the per-game paid history calls (bug 4). Its diff also drags in ~178k lines of staging data and transcripts, so harvest the six code files rather than merging wholesale.
+
+`stabilize/demo` is 7 commits of WIP ATS/backfill fixes from 2025-10-24; main advanced past it via `fix/refresh-green-w11` and later determinism work, so it is probably superseded, but nobody has verified fix-by-fix.
+
+Six branches are fully merged into main (0 commits ahead, verified) and safe to delete: `cfb`, `feature/cfb-global-week`, `feature/nfl-global-week`, `feature/ui-cleanups`, `fix/refresh-green-w11`, `integration/global-week`. All local branches are in sync with origin.
+
+## 5. What to keep
+
+These parts earned their keep and should survive the rebuild as concepts, contracts, or lifted code:
+
+- **Team-name normalization tables.** `src/common/team_names.py` is an exhaustive, closed-world NFL synonym map (abbreviations, city forms, nicknames) that returns an explicit failure for unknowns. The CFB side needs the same treatment (its Title-Case fallback is a bug factory), but the NFL table itself is accumulated knowledge worth porting.
+- **Sagarin parser regexes and validation gates.** The line parsers were derived empirically against real pages, and the acceptance gates are genuinely good production guards: exactly 32 teams with rank coverage and 2-decimal precision for NFL, FBS classification filtering with 120-140 row bounds for CFB, plus the 80% PR-join coverage hard fail in the NFL builder and CFB's per-stage coverage gates.
+- **Raw HTML archiving.** `data/sagarin/raw/` snapshots of every fetched page (commit `c5b12cb`) make parser regressions diagnosable and double as parser test fixtures. Archive before parsing, not after.
+- **The current-week concept.** `src/common/current_week_service.py`: one persisted per-league `{season, week}` computed only from schedule kickoff windows (Tuesday 00:00 UTC anchored), every provider's own week label ignored, with a `WEEK_FORCE` override. The canon doc (`context/global_week_and_provider_decoupling.md`) is good spec writing.
+- **Atomic writes.** `src/common/io_atomic.py` (tmp + `os.replace`) is used by all the newer modules and should be the only write path.
+- **Pin-to-schedule matching.** Team-token pair plus kickoff-window matching with role-swap fallback and an unmatched quarantine that records why each record missed. The append-only staging, pin, promote odds model as a whole is the soundest design in the repo.
+- **The merge-preserve backfill idea.** `src/common/backfill_merge.py`: incoming scores win, existing odds/rating fields survive. This concept was the fix for the season's worst production incident (backfill wiping promoted odds); keep it as an invariant.
+- **The deliverable formats.** Week View, Game View, and Printable are the product. The `games_week_{S}_{W}.jsonl` record schema, the `game_schedules/{game_key}.json` sidecar schema, and the URL contract (`?league&season&week&game_key`) are the frontend contract; preserve or version them deliberately. `context/SPEC_DELIVERABLES.md` and the three scanned Excel JPGs are the true product spec.
+- **Receipts and the NOTIFY contract.** CFB's per-stage receipt/debug JSONs (build receipts, odds match debug, alias debt) and the machine-readable NOTIFY line the runner parses are the right observability instincts; formalize rather than discard.
+
+## 6. Rebuild recommendations
+
+Opinionated direction, then phases sized for roughly a month of part-time agentic work.
+
+**One league-parameterized pipeline instead of twins.** Ingest, pin, promote, backfill, ATS, Sagarin staging, and the masters differ only in constants (sport key, URL, expected team counts, output root) and the name normalizer. A single `League` config object collapses ~14 twin modules to ~7 and makes the third fork (a new league, or a new sport) cheap instead of another paste.
+
+**Real package layout.** `pyproject.toml`, `football_statfinder/` package with subpackages (`sources/`, `pipeline/`, `storage/`, `web/`), console-script entry points instead of `python -m src.x` with `sys.argv` shims, pinned dependencies, and no import-time side effects (several modules currently `mkdir` on import; two anchor paths to the CWD instead of the repo).
+
+**A database instead of 855 git-tracked CSVs.** SQLite is sufficient for this data volume and removes the append-only-ledger growth, the two-writers-one-master races, and the repo-as-database commit churn. Tables fall out of the existing artifacts: schedule, ratings, odds_raw, odds_pinned, games, sidecars. Keep a flat-file export step that writes exactly the JSONL/JSON/CSV the frontend consumes today (or add a tiny read-only API later); the frontend contract does not need to change on day one. Postgres only if multi-tenant hosting becomes real.
+
+**One odds pipeline, one Sagarin generation.** The staging model (raw, pin, promote) is the keeper for odds; delete the legacy NFL snapshot fetch and fold CFB's coverage gates and debug receipts into the staging path. For Sagarin, keep the generation-2 staging engine, extract the generation-1 parsers into it as a library, and give both leagues the same validation policy (validate always, fail into a receipt artifact, never silently stage a partial parse). One shared `game_key` builder used by schedule, pin, promote, and the frontend, instead of three recomputations from slugs.
+
+**Typed config instead of 20+ env flags.** One dataclass/pydantic settings object, loaded once, with explicit precedence (real environment beats `.env`, the opposite of today's `override=True`), validated at startup with a printed effective-config banner. Secrets stay in the environment/CI store; everything else becomes a config file field with a default.
+
+**Structured logging instead of print + NOTIFY grep.** Python `logging` with a JSON formatter, per-stage timing and counts, and a single machine-readable run summary written as a JSON status file that the runner and Discord notifier read, replacing three regex variants scraping stdout.
+
+**Test the pure logic.** The pure functions are already isolated and cheap to test: metrics math (`compute_ats`, `compute_su`, `dense_rank`), the Sagarin line parsers (fixtures exist: the archived raw HTML pages), team-name normalization both leagues, `game_key` construction, pin matching, and the merge-preserve rules. Add one golden-file test around a full `games_week` build using the existing `tools/diff_games_week.py` sanitizer. Run pytest in CI before the refresh job is allowed to commit anything.
+
+**Error policy.** Fail loud per stage: a stage either produces its artifact and receipt or raises, and missing credentials are a startup error, not an empty DataFrame (bug 8). Keep per-league isolation exactly as today (one league failing never blocks the other). Never swallow a subprocess exit code. Count and log skipped JSONL lines. Distinguish null from 0.0 in emitted stats.
+
+### Phases
+
+**Phase 0: Harvest (days).** Salvage `feature/ats-api-backfill`: cherry-pick or hand-port the six code files (`odds_api_client.py` and siblings) onto main without the data noise; verify against the dead-tier bug 4 use case. Delete the six merged branches. Rotate the Discord webhook and delete `webhooks/discord_notify.ps1`. Fix or disable the two latent NFL crashes (bugs 2, 3) so the current system stays safe while the rebuild proceeds. Snapshot the season's `out/` tree somewhere outside git history.
+
+**Phase 1: Core pipeline (weeks 1-2).** New package skeleton with `pyproject.toml` and typed config. Build the league-parameterized pipeline: schedule ingest (fetched once per run, persisted as the week's schedule artifact), metrics, Sagarin staging engine with shared parsers, odds staging/pin/promote, gameview build (one pass, one rating-vs-odds formula), sidecars, backfill with merge-preserve, ATS (one writer for `home_ats`/`away_ats`, sourced from the harvested API client). One output-root convention: `out/{league}/{season}_week{week}/` for both leagues. Tests for the pure logic as each piece lands.
+
+**Phase 2: Storage (week 2-3).** SQLite schema, ingestion writes to the DB, flat-file export step reproduces the current frontend artifacts byte-compatibly (golden-file diff against season-1 outputs for a known week). Retire the git auto-commit of data; publish exported artifacts to Pages/object storage instead.
+
+**Phase 3: Frontend (week 3).** Extract the shared JS module (paths, parsing, caching, formatting, aliasing, favored-side math) so the three pages share one implementation. Replace directory-listing week discovery with a pipeline-written `out/index.json` manifest. Fix the printable page's hardcoded season heading and CSV quote handling. No redesign; the views are the product.
+
+**Phase 4: Ops (week 4).** CI: pytest gate, pinned dependencies, concurrency group, secrets only from the encrypted store, commit/publish step that runs even on partial failure so raw archives are never lost. Structured run summary to Discord. Offseason behavior defined explicitly (current-week service must not rebuild the last week forever). Runbook in README that matches reality.
+
+## 7. Commercialization flags
+
+Short factual list of what stands between this and a sellable product. Not a business plan.
+
+**Data-source licensing.**
+
+- **sagarin.com** (both leagues' power ratings, the core input): scraped over plain HTTP with a spoofed browser User-Agent. No license, no permission, no API. Jeff Sagarin's ratings are proprietary editorial content; redistributing them in a paid product is a real licensing problem, and the site can break or block the scraper at any time.
+- **TeamRankings** (NFL turnover and season stats): scraped HTML pages. Their terms of use restrict automated access and republication. Same exposure class as Sagarin.
+- **nflverse** (NFL schedules/stats): openly licensed community data. Fine, but verify the current license text before commercial redistribution.
+- **CFBD / CollegeFootballData** (CFB schedules/stats): keyed API with free-tier rate limits; commercial use requires an appropriate paid tier per their terms.
+- **The Odds API** (odds, both leagues): paid, per-request quota billing. The dead-tier bug (bug 4) currently spends one paid history call per game per backfill run. Their terms restrict redistribution of odds data, and bookmaker odds carry their own upstream rights questions.
+
+**Single-tenant assumptions baked in.** One `.env` at the repo root as the config store; the git repo as the database (~1,450 tracked data files, auto-committed twice daily); GitHub Actions secrets as the only key management; one hardcoded Discord channel; frontend state in one browser's localStorage; no accounts, no auth, no per-customer isolation anywhere.
+
+**Minimum bar to productize.** A licensing review of Sagarin and TeamRankings usage (or replacement with licensed/owned ratings and stats feeds); multi-tenant storage and a real API in front of it; secrets and key management per environment; monitoring and an SLA story for the twice-daily refresh; terms-compliant odds redistribution or display-only sourcing; and the Phase 1-4 engineering above as the prerequisite for all of it.

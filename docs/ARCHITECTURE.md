@@ -150,11 +150,11 @@ Each league orchestrator must print exactly one machine-readable line to stdout:
 NOTIFY: <LEAGUE> refresh complete week=<season>-<week> rows=<n> odds_promoted=<p>
 ```
 
-(CFB at refresh_week_data_cfb.py:747-750; NFL at refresh_week_data_nfl.py:178-181; documented in AGENTS.md:28-40.) `tools/run_refresh_all_and_notify.py` captures each subprocess's stdout+stderr, regex-extracts the NOTIFY line, and marks a league "ok" only when the return code is 0 **and** the NOTIFY line appeared (run_refresh_all_and_notify.py:258-259). It then writes `out/logs/refresh_{ts}.json` and appends a row to `out/logs/refresh_index.tsv` (`ts_utc, ok_cfb, ok_nfl, sec_cfb, sec_nfl`), and POSTs a summary (trimmed to 1900 chars) to the Discord webhook when `DISCORD_WEBHOOK_URL` is set. Discord failures are logged and swallowed; they never fail the run.
+(CFB at refresh_week_data_cfb.py:747-750; NFL at refresh_week_data_nfl.py:178-181; documented in AGENTS.md:28-40, though AGENTS.md's format string omits the `odds_promoted=<p>` suffix the code emits.) `tools/run_refresh_all_and_notify.py` captures each subprocess's stdout+stderr, regex-extracts the NOTIFY line, and marks a league "ok" only when the return code is 0 **and** the NOTIFY line appeared (run_refresh_all_and_notify.py:258-259). It then writes `out/logs/refresh_{ts}.json` and appends a row to `out/logs/refresh_index.tsv` (`ts_utc, ok_cfb, ok_nfl, sec_cfb, sec_nfl`), and POSTs a summary (trimmed to 1900 chars) to the Discord webhook when `DISCORD_WEBHOOK_URL` is set. Discord failures are logged and swallowed; they never fail the run.
 
 ### 2.3 Auto-commit: the repo is the database
 
-`out/` is git-tracked (about 855 files, plus 347 under `out-backup/`), and CI commits `out/**` and `data/sagarin/raw/**` after every successful run. There is no external datastore: the masters, staging ledgers, weekly packs, state file, and run logs are all versioned files. This is load-bearing in two ways: the frontend serves data straight from `out/` on GitHub Pages or any static host, and the current-week service bootstraps from the committed schedule masters (a fresh clone can resolve the week without ever fetching). It also means every scheduled run adds a commit and the append-only staging files grow inside git history.
+`out/` is git-tracked (about 1,450 files), and CI commits `out/**` and `data/sagarin/raw/**` after every successful run. There is no external datastore: the masters, staging ledgers, weekly packs, state file, and run logs are all versioned files. This is load-bearing in two ways: the frontend serves data straight from `out/` on GitHub Pages or any static host, and the current-week service bootstraps from the committed schedule masters (a fresh clone can resolve the week without ever fetching). It also means every scheduled run adds a commit and the append-only staging files grow inside git history.
 
 ## 3. Subsystem guide
 
@@ -246,9 +246,9 @@ Asymmetries worth knowing: the NFL refresh runs **both** generations every time 
 - `context/SPEC_DELIVERABLES.md` plus the three JPG scans: the product contract (Week View and Game View layouts).
 - `context/global_week_and_provider_decoupling.md` and `context/merge_summary_global_week.md`: the canon for the Global Week service and the staging/promotion design; the closest docs to current truth.
 - `AGENTS.md` and `context/CODEX_RULES.md`: agent working rules and the NOTIFY contract.
-- `README.md`: describes only the legacy NFL-only pipeline with output paths that no longer match reality (README.md:18-22); do not trust it for orientation. `context/implementation.md` is one generation newer but still calls CFB "future work".
+- `README.md`: rewritten in July 2026 to match the current system; earlier revisions described only the legacy NFL-only pipeline. `context/implementation.md` predates the CFB build-out and still calls CFB "future work".
 - `ACCOUNTING-2026-06-13.md` (untracked): post-mortem of the November 2025 failures.
-- Stray tracked artifacts that are data or debris rather than code: `out-backup/` (full Oct 2025 snapshot of `out/`), `run_refresh_log*.txt` (pasted console transcripts), `tmp/` (a saved Sagarin page and scratch parsers), `cfb_2025_w10.csv`/`cfb_2025_w11.csv` (manual Sagarin exports, unread by code), `data/archive/2025_w7_nfl/`, `codex_patch_ats_backfill.diff` (0 bytes).
+- Archived data drops: `data/archive/2025_w7_nfl/` (an early NFL week snapshot) and `data/archive/sagarin_wayback/cfb_2025_w1{0,1}.csv` (wayback-recovered Sagarin CFB exports with extra columns, unread by code). A larger batch of tracked debris (an `out-backup/` snapshot, `tmp/` scratch parsers, pasted run logs, an empty patch file) was removed in commit `84fff5c`.
 
 ## 4. Data contracts (the out/ tree)
 
@@ -309,7 +309,7 @@ The hard dependency: if the schedule master is missing or empty, `get_current_we
 
 Env is loaded from `.env` at the repo root via `io_utils.getenv` with `override=True`, so `.env` values beat real environment variables in local runs (known quirk; CI has no `.env`). Names only; never commit values.
 
-**The 17 keys present in `.env`:**
+**The 16 keys present in `.env`:**
 
 | Key | Read at | Effect |
 |---|---|---|
