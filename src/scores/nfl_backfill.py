@@ -221,31 +221,29 @@ def _load_sidecar(sidecar_dir: Path, game_key: str, cache: Dict[str, dict]) -> O
     return cache[game_key]
 
 
-def _update_sidecar_entry(sidecar: dict,
-                          is_home: bool,
-                          season: int,
-                          week: int,
-                          *, ats: str | None,
-                          to_margin: float | None) -> None:
-    """
-    Ensure the home_ytd/away_ytd list exists, locate the (season, week) entry,
-    and update or append with ATS + to_margin.
-    """
-    key = "home_ytd" if is_home else "away_ytd"
-    rows = sidecar.setdefault(key, [])
-    # locate row
-    row = None
-    for r in rows:
-        if r.get("season") == season and r.get("week") == week:
-            row = r
-            break
-    if row is None:
-        row = {"season": season, "week": week}
-        rows.append(row)
-    if ats is not None:
-        row["ats"] = ats
-    if to_margin is not None and math.isfinite(to_margin):
-        row["to_margin"] = round(float(to_margin), 3)
+def _update_sidecar_entry(entries: Iterable[dict], season: int, week: int, *, ats: Optional[str], margin: Optional[float]) -> bool:
+    # Ported verbatim from cfb_backfill.py; the previous NFL definition took a
+    # different signature than the call sites below and raised TypeError the
+    # first time a closing spread ever resolved (REBUILD.md bug 3).
+    updated = False
+    for entry in entries or []:
+        try:
+            entry_season = int(entry.get("season"))
+            entry_week = int(entry.get("week"))
+        except Exception:
+            continue
+        if entry_season != season or entry_week != week:
+            continue
+        if ats and ats_is_blank(entry.get("ats")):
+            entry["ats"] = ats
+            updated = True
+        if margin is not None:
+            current_margin = entry.get("to_margin")
+            if not _is_finite_number(current_margin):
+                entry["to_margin"] = round(float(margin), 2)
+                updated = True
+        break
+    return updated
 
 
 

@@ -29,10 +29,15 @@ import os
 from pathlib import Path
 from typing import Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
 
+import pandas as pd
+
 from src.common.io_atomic import write_atomic_csv, write_atomic_jsonl
 from src.common.io_utils import ensure_out_dir, getenv
 
 OUT_ROOT = ensure_out_dir()
+# KNOWN NO-OP (REBUILD.md bug 1): the NFL pipeline writes weeks to out/{S}_week{W}/,
+# not out/nfl/. Season ATS therefore scans nothing. Left as-is on purpose until the
+# Phase 1 rebuild; pointing this at OUT_ROOT would activate a never-exercised write path.
 NFL_ROOT = OUT_ROOT / "nfl"
 EPSILON = 1e-6
 
