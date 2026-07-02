@@ -7,6 +7,23 @@ Weekly betting data packs for NFL and college football (FBS). Twice a day, an au
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — how the system works today: production call tree, subsystems, data contracts, config reference, error-handling map.
 - [`docs/REBUILD.md`](docs/REBUILD.md) — known bugs, duplication inventory, dead/stranded code (including unmerged branch work), and the phased rebuild plan for next season.
 
+**Two trees coexist during the rebuild:** `src/` is the season-1 system and still what production runs; `football_statfinder/` is the season-2 package (REBUILD.md Phase 1, built 2026-07-02) — one league-parameterized pipeline, typed config, unified `out/{league}/{season}_week{week}/` layout, and a `statfinder` CLI. The new package does not import from `src/` and does not run in production yet.
+
+## Season-2 package (rebuild)
+
+```bash
+pip install -e .            # installs the statfinder console script
+
+statfinder refresh --league all              # weekly refresh, both leagues
+statfinder refresh --league nfl --season 2026 --week 3
+statfinder current-week --league nfl
+statfinder seed-schedule --league nfl --season 2026   # bootstrap a new season's master
+
+python -m pytest tests/     # 177 tests (season-1 + season-2)
+```
+
+Config precedence in the new package is the reverse of season 1: real environment variables beat `.env`. Each refresh writes a machine-readable run summary to `out/state/run_summary_{league}.json` alongside the legacy NOTIFY line.
+
 ## How it runs in production
 
 `.github/workflows/refresh.yml` (cron 10:00 and 22:00 UTC) runs `tools/run_refresh_all_and_notify.py`, which refreshes CFB then NFL as isolated subprocesses, posts a summary to Discord, and auto-commits the regenerated `out/**` and `data/sagarin/raw/**` back to this repo. There is no external database: `out/` is git-tracked and *is* the datastore, and the frontend fetches files from it directly.
@@ -68,7 +85,9 @@ The full artifact catalog and record schemas are in `docs/ARCHITECTURE.md` secti
 ## Repo layout
 
 ```
-src/                  Python pipeline (per-league orchestrators + subsystem modules)
+football_statfinder/  Season-2 package: league-parameterized pipeline (config, leagues, paths,
+                      common/, sources/, pipeline/, refresh.py orchestrator, cli.py)
+src/                  Season-1 pipeline (per-league orchestrators + subsystem modules; production)
 src/common/           Shared utils: env/config, atomic writes, team names, current-week service
 src/odds/             Odds staging pipeline: ingest -> pin to schedule -> promote
 src/ratings/          Sagarin staging fetchers (current generation)
