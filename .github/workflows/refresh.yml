@@ -1,8 +1,10 @@
 name: Refresh Global Week
 
 on:
-  schedule:
-    - cron: "0 10,22 * * *"
+  # Cron disabled 2026-07-02 (offseason; the pipeline was rebuilding the last
+  # played week twice daily). Re-enable for the new season by uncommenting.
+  # schedule:
+  #   - cron: "0 10,22 * * *"
   workflow_dispatch:
 
 permissions:
