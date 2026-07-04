@@ -7,3 +7,5 @@ __pycache__/
 out/debug/
 tmp/
 run_refresh_log*.txt
+data/statfinder.sqlite3
+data/statfinder.sqlite3-*

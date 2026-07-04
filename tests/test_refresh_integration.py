@@ -19,7 +19,7 @@ from football_statfinder import refresh as refresh_mod
 from football_statfinder import run_summary as run_summary_mod
 from football_statfinder.common.game_key import build_game_key
 from football_statfinder.common.jsonl import read_jsonl
-from football_statfinder.config import BackfillSettings, OddsSettings, Settings
+from football_statfinder.config import BackfillSettings, OddsSettings, Settings, StorageSettings
 from football_statfinder.leagues import NFL
 from football_statfinder.sources import sagarin as sagarin_mod
 from football_statfinder.sources import schedule as schedule_mod
@@ -47,6 +47,11 @@ def _settings() -> Settings:
     return Settings(
         odds=OddsSettings(staging_enable=False, promotion_enable=False),
         backfill=BackfillSettings(scores_enable=False, ats_enable=False),
+        # Storage defaults to enabled (StorageSettings.enable=True) and would
+        # otherwise touch the real repo-anchored data/statfinder.sqlite3 as a
+        # side effect of this test; storage's own dual-write behavior is
+        # covered separately in tests/test_storage.py.
+        storage=StorageSettings(enable=False),
     )
 
 

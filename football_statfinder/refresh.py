@@ -22,6 +22,7 @@ in-process stage runner. Design (REBUILD.md section 6 error policy):
 from __future__ import annotations
 
 import logging
+import sqlite3
 import time
 from dataclasses import asdict
 from typing import Any, Callable, Dict, List, Mapping, Optional, Sequence, Tuple
@@ -43,6 +44,8 @@ from .sources import schedule as schedule_mod
 from .sources import schedule_master as master_mod
 from .sources import sagarin as sagarin_mod
 from .sources import stats as stats_mod
+from .storage import db as db_mod
+from .storage import store as store_mod
 
 logger = logging.getLogger(__name__)
 
@@ -147,6 +150,7 @@ def refresh_league(
     cfg = settings if settings is not None else get_settings()
     summary = RunSummary(league=league.display)
     build: Optional[gameview_mod.GameviewBuild] = None
+    storage_conn: Optional[sqlite3.Connection] = None
     logger.info("%s refresh starting; %s", league.display, cfg.banner())
 
     try:
@@ -154,6 +158,22 @@ def refresh_league(
             season, week, _ = get_current_week(league, settings=cfg)
         summary.season, summary.week = int(season), int(week)
         logger.info("%s current week: season=%s week=%s", league.display, season, week)
+
+        if cfg.storage.enable:
+            storage_conn = db_mod.connect(cfg.storage.db_path)
+
+        def _record_games_now() -> None:
+            """Re-record the current week's games rows from the on-disk JSONL.
+
+            Used after stages (promotion, recompute, ATS) that rewrite the
+            games_week file in place without returning the updated rows —
+            reading the file they just wrote is the only faithful way to get
+            the post-stage state back into memory.
+            """
+            if storage_conn is None:
+                return
+            rows = read_jsonl(paths.games_week_jsonl(league.code, season, week)).rows
+            store_mod.record_games(storage_conn, league, int(season), int(week), rows)
 
         def schedule_stage() -> Tuple[pd.DataFrame, Dict[str, int], List[str]]:
             refresh_master = league.code == "nfl" or cfg.cfbd_refresh
@@ -169,6 +189,8 @@ def refresh_league(
             if week_df.empty:
                 raise RuntimeError(f"schedule produced 0 rows for {league.display} {season} week {week}")
             schedule_mod.write_schedule_artifact(league, int(season), int(week), week_df)
+            if storage_conn is not None:
+                store_mod.record_schedule(storage_conn, league, week_df)
             return week_df, {"rows": len(week_df), "inserted": inserted, "updated": updated}, []
 
         week_df = _run_stage(summary, "schedule", schedule_stage)
@@ -177,6 +199,8 @@ def refresh_league(
             result = sagarin_mod.run_sagarin_staging(league, int(season), int(week), cfg)
             rows = read_jsonl(result.weekly_jsonl).rows if result.weekly_jsonl else []
             mapping = gameview_mod.sagarin_map_from_rows(league, rows)
+            if storage_conn is not None:
+                store_mod.record_sagarin(storage_conn, league, int(season), int(week), rows)
             counts = {"teams_parsed": result.teams_parsed, "teams_selected": result.teams_selected,
                       "mapped": len(mapping)}
             notes = [f"page_stamp={result.page_stamp}"] if result.page_stamp else []
@@ -188,6 +212,8 @@ def refresh_league(
             provider = stats_mod.get_stats_provider(league, cfg)
             rows = provider.league_metrics_rows(int(season), int(week))
             stats_mod.write_league_metrics_csv(league, int(season), int(week), rows)
+            if storage_conn is not None:
+                store_mod.record_metrics(storage_conn, league, int(season), int(week), rows)
             team_stats = stats_mod.team_stats_from_metrics_rows(league, rows)
             return team_stats, {"teams": len(team_stats)}, []
 
@@ -198,6 +224,8 @@ def refresh_league(
                 ingest = odds_ingest.ingest_raw(league, cfg)
                 schedule_games = odds_pin.load_schedule_master(league)
                 pin = odds_pin.pin_to_schedule(league, ingest.get("records") or [], schedule_games, cfg)
+                if storage_conn is not None:
+                    store_mod.record_pinned_odds(storage_conn, league, pin.get("pinned_records") or [])
                 counts = {"raw": len(ingest.get("records") or []), **_int_counts(pin.get("counts") or {})}
                 notes = [str(x) for x in (pin.get("examples_unmatched") or [])[:3]]
                 return pin, counts, notes
@@ -216,6 +244,8 @@ def refresh_league(
                 odds={},
             )
             gameview_mod.write_gameview(league, int(season), int(week), build)
+            if storage_conn is not None:
+                store_mod.record_games(storage_conn, league, int(season), int(week), build.records)
             return build, _int_counts(build.receipt.get("counts") or build.receipt), []
 
         build = _run_stage(summary, "gameview", gameview_stage)
@@ -224,6 +254,7 @@ def refresh_league(
             def promotion_stage() -> Tuple[Dict[str, Any], Dict[str, int], List[str]]:
                 promo = odds_promote.promote_week(league, int(season), int(week), cfg)
                 recomputed = _recompute_rating_fields(league, int(season), int(week))
+                _record_games_now()
                 counts = {**_int_counts(promo), "rating_fields_recomputed": recomputed}
                 notes = []
                 if promo.get("skipped_reason"):
@@ -238,6 +269,9 @@ def refresh_league(
 
         def sidecars_stage() -> Tuple[Dict[str, Any], Dict[str, int], List[str]]:
             receipt = _rebuild_sidecars(league, int(season), int(week))
+            if storage_conn is not None:
+                payloads = list((receipt.get("payloads") or {}).values())
+                store_mod.record_sidecars(storage_conn, league, int(season), int(week), payloads)
             return receipt, _int_counts(receipt.get("counts") or receipt), []
 
         _run_stage(summary, "sidecars", sidecars_stage)
@@ -250,7 +284,18 @@ def refresh_league(
                     if cfg.backfill.promote_prev else None,
                 )
                 for changed_week in result.changed_weeks:
-                    _rebuild_sidecars(league, int(season), int(changed_week))
+                    changed_receipt = _rebuild_sidecars(league, int(season), int(changed_week))
+                    if storage_conn is not None:
+                        changed_rows = read_jsonl(
+                            paths.games_week_jsonl(league.code, season, changed_week)
+                        ).rows
+                        store_mod.record_games(
+                            storage_conn, league, int(season), int(changed_week), changed_rows
+                        )
+                        changed_payloads = list((changed_receipt.get("payloads") or {}).values())
+                        store_mod.record_sidecars(
+                            storage_conn, league, int(season), int(changed_week), changed_payloads
+                        )
                 counts = _int_counts(result)
                 counts["changed_weeks"] = len(result.changed_weeks)
                 return result, counts, []
@@ -262,6 +307,7 @@ def refresh_league(
         if cfg.backfill.ats_enable:
             def ats_stage() -> Tuple[Any, Dict[str, int], List[str]]:
                 result = ats_mod.run_ats(league, int(season), int(week), cfg)
+                _record_games_now()
                 return result, _int_counts(result), []
 
             _run_stage(summary, "ats", ats_stage)
@@ -270,6 +316,8 @@ def refresh_league(
 
         return summary
     finally:
+        if storage_conn is not None:
+            storage_conn.close()
         summary.write()
         rows = len(build.records) if build is not None else 0
         status = "ok" if summary.ok else "FAILED"

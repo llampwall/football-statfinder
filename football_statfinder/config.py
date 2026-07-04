@@ -79,6 +79,11 @@ def _as_float(env: Mapping[str, str], key: str, default: float) -> float:
         raise ConfigError(f"{key}={text!r} is not a number") from exc
 
 
+def _as_path(env: Mapping[str, str], key: str) -> Optional[Path]:
+    text = _clean(env.get(key))
+    return Path(text) if text else None
+
+
 def _parse_week_force(raw: Optional[str]) -> Optional[Tuple[int, int]]:
     """Parse ``WEEK_FORCE`` shaped like ``2026-3`` / ``2026:3`` / ``2026 3``."""
     text = _clean(raw)
@@ -121,6 +126,18 @@ class BackfillSettings:
 
 
 @dataclass(frozen=True)
+class StorageSettings:
+    """SQLite dual-write settings (Phase 2: ``football_statfinder/storage/``).
+
+    The DB mirrors the flat-file outputs the pipeline already writes; disabling
+    it (``enable=False``) makes the orchestrator perform zero DB touches.
+    """
+
+    enable: bool = True
+    db_path: Optional[Path] = None
+
+
+@dataclass(frozen=True)
 class WeekForce:
     """Manual current-week override; applies when ``league`` matches or is ALL."""
 
@@ -142,6 +159,7 @@ class Settings:
     cfbd_refresh: bool = True
     odds: OddsSettings = field(default_factory=OddsSettings)
     backfill: BackfillSettings = field(default_factory=BackfillSettings)
+    storage: StorageSettings = field(default_factory=StorageSettings)
     week_force: WeekForce = field(default_factory=WeekForce)
 
     def require(self, *names: str) -> None:
@@ -220,6 +238,10 @@ def load_settings(
             ats_source=_clean(env.get("ATS_BACKFILL_SOURCE")) or "auto",
             ats_debug=_as_bool(env, "ATS_DEBUG", False),
         ),
+        storage=StorageSettings(
+            enable=_as_bool(env, "STORAGE_ENABLE", True),
+            db_path=_as_path(env, "STORAGE_DB_PATH"),
+        ),
         week_force=week_force,
     )
 
@@ -246,6 +268,7 @@ __all__ = [
     "ConfigError",
     "OddsSettings",
     "Settings",
+    "StorageSettings",
     "WeekForce",
     "get_settings",
     "load_settings",

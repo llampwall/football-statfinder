@@ -35,6 +35,10 @@ def _out(out_root: Optional[Path]) -> Path:
     return Path(out_root) if out_root is not None else OUT_ROOT
 
 
+def _data(data_root: Optional[Path]) -> Path:
+    return Path(data_root) if data_root is not None else DATA_ROOT
+
+
 def staging_root(*, out_root: Optional[Path] = None) -> Path:
     return _out(out_root) / "staging"
 
@@ -145,6 +149,17 @@ def sagarin_raw_html_dir(league_code: str) -> Path:
     return SAGARIN_RAW_ROOT / league_code.lower()
 
 
+def db_path(*, data_root: Optional[Path] = None) -> Path:
+    """Path to the SQLite storage DB (Phase 2): ``data/statfinder.sqlite3``.
+
+    Anchored on :data:`DATA_ROOT`, not :data:`OUT_ROOT` (the storage DB is a
+    development artifact, not a published output); ``data_root`` mirrors the
+    other helpers' ``out_root`` test-injection keyword, just anchored on the
+    other repo-root subtree.
+    """
+    return _data(data_root) / "statfinder.sqlite3"
+
+
 __all__ = [
     "DATA_ROOT",
     "MASTER_ROOT",
@@ -153,6 +168,7 @@ __all__ = [
     "SAGARIN_RAW_ROOT",
     "STAGING_ROOT",
     "STATE_PATH",
+    "db_path",
     "games_week_csv",
     "games_week_jsonl",
     "hist_odds_cache_dir",

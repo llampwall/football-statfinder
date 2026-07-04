@@ -354,6 +354,7 @@ def build_sidecars(
 
     written = 0
     join_issues: List[Dict[str, Any]] = []
+    payloads: Dict[str, Dict[str, Any]] = {}
     for game in games:
         game_key = game.get("game_key")
         kickoff_iso = game.get("kickoff_iso_utc")
@@ -389,6 +390,7 @@ def build_sidecars(
         }
         side_path = side_dir / f"{game_key}.json"
         write_atomic_text(side_path, json.dumps(payload, ensure_ascii=False))
+        payloads[game_key] = payload
         written += 1
 
     rows_considered = coverage["rows_considered"]
@@ -416,6 +418,11 @@ def build_sidecars(
         len(games),
         receipt["sagarin_coverage_fraction"],
     )
+
+    # In-memory payloads keyed by game_key, for callers that dual-write to
+    # storage without re-reading the just-written sidecar files (Phase 2:
+    # football_statfinder/storage/). Not persisted to the receipt file itself.
+    receipt["payloads"] = payloads
 
     if strict and written != len(games):
         missing = [issue["game_key"] for issue in join_issues]
