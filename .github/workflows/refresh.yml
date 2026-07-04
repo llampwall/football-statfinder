@@ -1,14 +1,9 @@
+# Retired 2026-07-04: season-1 archive, superseded by the season-2 statfinder
+# repo. A manual dispatch still runs the refresh but commits nothing.
 name: Refresh Global Week
 
 on:
-  # Cron disabled 2026-07-02 (offseason; the pipeline was rebuilding the last
-  # played week twice daily). Re-enable for the new season by uncommenting.
-  # schedule:
-  #   - cron: "0 10,22 * * *"
   workflow_dispatch:
-
-permissions:
-  contents: write
 
 jobs:
   refresh:
@@ -36,11 +31,3 @@ jobs:
 
       - name: Run global week refresh
         run: python tools/run_refresh_all_and_notify.py
-
-      - name: Commit refreshed data and Sagarin snapshots
-        uses: stefanzweifel/git-auto-commit-action@v7
-        with:
-          commit_message: "chore: auto-refresh football data"
-          file_pattern: |
-            out/**
-            data/sagarin/raw/**
