@@ -270,8 +270,14 @@ class TestGameviewBuild:
         build = build_gameview(NFL, 2026, 3, schedule=schedule, team_stats=team_stats, sagarin=sagarin, odds=odds)
         rec = next(r for r in build.records if r["game_key"] == buf_key)
         raw = rec["raw_sources"]
-        # Frontend reads these exact keys (web/js/game_metrics.js etc.).
-        assert raw["schedule_row"] == {"game_id": "2026_03_NYJ_BUF"}
+        # Frontend reads these exact keys (web/js/game_metrics.js etc.). F4:
+        # printable Team # reads schedule_row.home_team / .away_team, aliased
+        # from the raw names when the schedule extra lacks them.
+        assert raw["schedule_row"] == {
+            "game_id": "2026_03_NYJ_BUF",
+            "home_team": "BUF",
+            "away_team": "NYJ",
+        }
         assert raw["sagarin_row_home"]["team"] == "Buffalo Bills"
         assert raw["sagarin_row_home"]["hfa"] == 2.0
         assert raw["sagarin_row_away"]["team"] == "New York Jets"
@@ -280,7 +286,10 @@ class TestGameviewBuild:
         rec2 = next(r for r in build.records if r["game_key"] == mia_key)
         assert rec2["raw_sources"]["odds_row"] is None
 
-    def test_cfb_fbs_filter_drops_games_missing_stats(self):
+    def test_cfb_fbs_filter_requires_both_teams_present(self):
+        # F2: legacy fbs_mask semantics — a game survives only when BOTH teams
+        # resolve in the FBS metrics/team-stats roster. Mixed slate:
+        # FBS-FBS (kept), FBS-FCS (dropped), FCS-FCS (dropped).
         team_stats = team_stats_from_metrics_rows(CFB, [_metrics_row("Alpha"), _metrics_row("Beta")])
         schedule = [
             ScheduleGame(
@@ -293,12 +302,99 @@ class TestGameviewBuild:
                 home_team_raw="Alpha", away_team_raw="FCS Team",
                 home_team_norm="Alpha", away_team_norm="FCS Team",
             ),
+            ScheduleGame(
+                season=2026, week=3, kickoff_utc=KICK_LATE,
+                home_team_raw="FCS One", away_team_raw="FCS Two",
+                home_team_norm="FCS One", away_team_norm="FCS Two",
+            ),
         ]
         build = build_gameview(CFB, 2026, 3, schedule=schedule, team_stats=team_stats, sagarin={}, odds={})
         assert len(build.records) == 1
-        assert build.receipt["skipped_non_fbs"] == 1
+        assert build.receipt["skipped_non_fbs"] == 2
         # CFB game_key is away-first (frozen contract).
         assert build.records[0]["game_key"] == "20260920_1700_beta_alpha"
+
+    def test_nfl_fbs_filter_off_by_default_keeps_all_games(self):
+        # The fbs_only default is on for CFB, off for NFL: NFL games with no
+        # matching team_stats are kept (with None stats), never dropped.
+        schedule, _, sagarin, odds, _, _ = _nfl_inputs()
+        build = build_gameview(NFL, 2026, 3, schedule=schedule, team_stats={}, sagarin=sagarin, odds=odds)
+        assert len(build.records) == len(schedule)
+        assert build.receipt["skipped_non_fbs"] == 0
+
+    def test_nfl_schedule_lines_fallback(self):
+        # F3: with no promoted odds, an NFL game whose schedule row carries
+        # spread_line/total_line emits them as odds_source="schedule". Numbers
+        # copied from a real legacy row (out/2025_week16 sea_la): SEA home, LA
+        # away, spread_line 1.5 (home-relative, AWAY favored), total 42.5.
+        team_stats = team_stats_from_metrics_rows(NFL, [_metrics_row("Seattle Seahawks"), _metrics_row("Los Angeles Rams")])
+        schedule = [
+            ScheduleGame(
+                season=2025, week=16, kickoff_utc=KICK_EARLY,
+                home_team_raw="SEA", away_team_raw="LA",
+                home_team_norm="Seattle Seahawks", away_team_norm="Los Angeles Rams",
+                extra={"spread_line": 1.5, "total_line": 42.5},
+            ),
+        ]
+        build = build_gameview(NFL, 2025, 16, schedule=schedule, team_stats=team_stats, sagarin={}, odds={})
+        rec = build.records[0]
+        assert rec["odds_source"] == "schedule"
+        assert rec["is_closing"] is False
+        # spread_line maps straight to spread_home_relative (no sign flip).
+        assert rec["spread_home_relative"] == 1.5
+        assert rec["total"] == 42.5
+        assert rec["moneyline_home"] is None
+        assert rec["moneyline_away"] is None
+        assert rec["snapshot_at"] is None
+        # legacy schedule rows carry no odds_row provenance
+        assert rec["raw_sources"]["odds_row"] is None
+        # favored fields derived from the home-relative sign: +1.5 -> AWAY.
+        assert rec["favored_side"] == "AWAY"
+        assert rec["spread_favored_team"] == -1.5
+
+    def test_schedule_lines_fallback_yields_to_promoted_odds(self):
+        # The fallback fires only when the odds mapping has no entry.
+        buf_kick = KICK_EARLY
+        team_stats = team_stats_from_metrics_rows(NFL, [_metrics_row("Buffalo Bills"), _metrics_row("New York Jets")])
+        game = ScheduleGame(
+            season=2025, week=16, kickoff_utc=buf_kick,
+            home_team_raw="BUF", away_team_raw="NYJ",
+            home_team_norm="Buffalo Bills", away_team_norm="New York Jets",
+            extra={"spread_line": 1.5, "total_line": 42.5},
+        )
+        key = build_game_key(NFL, buf_kick, "Buffalo Bills", "New York Jets")
+        odds = {key: {"spread_home_relative": -6.5, "total": 47.0, "odds_source": "theoddsapi"}}
+        build = build_gameview(NFL, 2025, 16, schedule=[game], team_stats=team_stats, sagarin={}, odds=odds)
+        rec = build.records[0]
+        assert rec["odds_source"] == "theoddsapi"
+        assert rec["spread_home_relative"] == -6.5
+        assert rec["total"] == 47.0
+
+    def test_cfb_has_no_schedule_lines_fallback(self):
+        # CFB must not invent schedule-source spreads even if the master row
+        # carries a spread_line (legacy CFB had no such tier).
+        team_stats = team_stats_from_metrics_rows(CFB, [_metrics_row("Alpha"), _metrics_row("Beta")])
+        game = ScheduleGame(
+            season=2025, week=13, kickoff_utc=KICK_EARLY,
+            home_team_raw="Alpha", away_team_raw="Beta",
+            home_team_norm="Alpha", away_team_norm="Beta",
+            extra={"spread_line": -3.5, "total_line": 55.0},
+        )
+        build = build_gameview(CFB, 2025, 13, schedule=[game], team_stats=team_stats, sagarin={}, odds={})
+        rec = build.records[0]
+        assert rec["odds_source"] is None
+        assert rec["spread_home_relative"] is None
+        assert rec["total"] is None
+
+    def test_schedule_row_carries_team_number_aliases(self):
+        # F4: emitted raw_sources.schedule_row must expose home_team/away_team
+        # for printable Team # resolution, aliased from the raw names.
+        schedule, team_stats, sagarin, odds, buf_key, _ = _nfl_inputs()
+        build = build_gameview(NFL, 2026, 3, schedule=schedule, team_stats=team_stats, sagarin=sagarin, odds=odds)
+        rec = next(r for r in build.records if r["game_key"] == buf_key)
+        schedule_row = rec["raw_sources"]["schedule_row"]
+        assert schedule_row["home_team"] == "BUF"
+        assert schedule_row["away_team"] == "NYJ"
 
     def test_missing_stats_emit_none_not_zero(self):
         schedule, _, sagarin, odds, buf_key, _ = _nfl_inputs()

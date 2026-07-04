@@ -13,8 +13,10 @@ Legacy behavior deliberately changed:
 * Writes go through the atomic CSV writer instead of a bare ``to_csv``.
 * No env reads: the CFB refresh toggle is ``settings.cfbd_refresh``.
 
-Semantics preserved: KEEP/KEY column sets, score-present and source-priority
+Semantics preserved: the KEEP column set, score-present and source-priority
 tie-breaking on duplicate keys, and the post-upsert duplicate-key hard fail.
+The upsert KEY drops ``kickoff_iso_utc`` (bug 22) so a kickoff correction
+replaces the stale row instead of accumulating a never-scored duplicate.
 """
 
 from __future__ import annotations
@@ -49,6 +51,12 @@ KEEP = [
     "source",
 ]
 
+# The upsert identity deliberately EXCLUDES ``kickoff_iso_utc`` (bug 22): a
+# kickoff correction for an existing matchup must REPLACE the stale row, not
+# mint a second one keyed on the old time. The matchup identity
+# (league/season/week/game_type/home_key/away_key) already pins one game; the
+# score-present / source-priority / incoming-last tie-break below picks the
+# right survivor when a duplicate collides.
 KEY = [
     "league",
     "season",
@@ -56,7 +64,6 @@ KEY = [
     "game_type",
     "home_team_key",
     "away_team_key",
-    "kickoff_iso_utc",
 ]
 
 # Provider rows beat seed rows on key collisions (legacy tie-break, unified).

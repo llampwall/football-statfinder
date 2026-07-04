@@ -21,6 +21,7 @@ from football_statfinder.common.game_key import build_game_key
 from football_statfinder.common.jsonl import read_jsonl
 from football_statfinder.config import BackfillSettings, OddsSettings, Settings, StorageSettings
 from football_statfinder.leagues import NFL
+from football_statfinder.sources import ats_backfill_api as ats_backfill_api_mod
 from football_statfinder.sources import sagarin as sagarin_mod
 from football_statfinder.sources import schedule as schedule_mod
 from football_statfinder.sources import stats as stats_mod
@@ -212,6 +213,46 @@ def test_refresh_failure_is_recorded_and_raises(out_root, monkeypatch):
     assert payload["ok"] is False
     assert payload["stages"][0]["name"] == "schedule"
     assert "nflverse download failed" in payload["stages"][0]["error"]
+
+
+def test_backfill_stage_wires_spread_api(out_root, monkeypatch):
+    # F5 (bug 23): the backfill stage must construct and pass the AtsBackfillApi
+    # spread_api when ats_source reaches the API tier (auto/api/history), and
+    # pass None when it does not (pinned). Previously refresh passed nothing, so
+    # the harvested API ATS tier was a dead tier.
+    monkeypatch.setattr(schedule_mod, "fetch_schedule", lambda league, season, settings, **kw: _fake_schedule_df())
+    monkeypatch.setattr(
+        refresh_mod.sagarin_mod, "run_sagarin_staging",
+        lambda league, season, week, settings, **kw: _fake_sagarin_result(out_root),
+    )
+    monkeypatch.setattr(stats_mod, "get_stats_provider", lambda league, settings: _FakeProvider())
+    # Keep the ATS stage inert so this test isolates the backfill wiring.
+    monkeypatch.setattr(
+        refresh_mod.ats_mod, "run_ats",
+        lambda *a, **k: refresh_mod.ats_mod.AtsApplyResult(),
+    )
+
+    captured = {}
+
+    def _capture_backfill(league, season, week, settings, *, spread_api=None, **kw):
+        captured["spread_api"] = spread_api
+        return refresh_mod.backfill_mod.BackfillResult()
+
+    monkeypatch.setattr(refresh_mod.backfill_mod, "backfill_scores", _capture_backfill)
+
+    def _settings_for(ats_source: str) -> Settings:
+        return Settings(
+            odds=OddsSettings(staging_enable=False, promotion_enable=False, cache_only=True),
+            backfill=BackfillSettings(scores_enable=True, weeks=2, ats_enable=True, ats_source=ats_source),
+            storage=StorageSettings(enable=False),
+        )
+
+    refresh_mod.refresh_league(NFL, _settings_for("auto"), season=SEASON, week=WEEK)
+    assert isinstance(captured["spread_api"], ats_backfill_api_mod.AtsBackfillApi)
+
+    captured.clear()
+    refresh_mod.refresh_league(NFL, _settings_for("pinned"), season=SEASON, week=WEEK)
+    assert captured["spread_api"] is None
 
 
 def test_recompute_rating_fields_after_promotion(out_root):

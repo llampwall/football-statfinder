@@ -40,6 +40,7 @@ from .pipeline import gameview as gameview_mod
 from .pipeline import odds_ingest, odds_pin, odds_promote
 from .pipeline import sidecars as sidecars_mod
 from .run_summary import RunSummary, StageResult
+from .sources import ats_backfill_api as ats_backfill_api_mod
 from .sources import schedule as schedule_mod
 from .sources import schedule_master as master_mod
 from .sources import sagarin as sagarin_mod
@@ -278,8 +279,19 @@ def refresh_league(
 
         if cfg.backfill.scores_enable and int(week) > 1:
             def backfill_stage() -> Tuple[backfill_mod.BackfillResult, Dict[str, int], List[str]]:
+                # F5 (bug 23): construct the paid ATS closing-spread tier so the
+                # backfill can reach it. resolve_closing_spread only consults the
+                # API when ats_source is auto/api/history AND spread_api is not
+                # None; refresh previously passed nothing, leaving the harvested
+                # API tier dead. cache_only still guarantees zero network — the
+                # OddsApiClient blocks every paid endpoint itself.
+                spread_api = None
+                ats_source = (cfg.backfill.ats_source or "auto").strip().lower()
+                if cfg.backfill.ats_enable and ats_source in {"auto", "api", "history"}:
+                    spread_api = ats_backfill_api_mod.AtsBackfillApi(league, cfg)
                 result = backfill_mod.backfill_scores(
                     league, int(season), int(week), cfg,
+                    spread_api=spread_api,
                     promote_week=(lambda _rows, s, w: odds_promote.promote_week(league, s, w, cfg))
                     if cfg.backfill.promote_prev else None,
                 )

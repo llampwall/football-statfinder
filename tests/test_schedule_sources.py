@@ -223,6 +223,63 @@ def test_master_upsert_scores_win(sandbox):
     assert set(written["home_score"]) == {27.0}
 
 
+def _master_frame(kickoff, *, home="KC", away="BUF", home_score=None, away_score=None, source="nflverse"):
+    """One-game master input for the F1 (bug 22) upsert-identity tests."""
+    return pd.DataFrame(
+        [
+            {
+                "league": "NFL",
+                "season": 2026,
+                "week": 1,
+                "game_type": "REG",
+                "kickoff_iso_utc": kickoff,
+                "home_team_norm": home,
+                "away_team_norm": away,
+                "home_score": home_score,
+                "away_score": away_score,
+                "source": source,
+            }
+        ]
+    )
+
+
+def test_master_upsert_drifted_kickoff_replaces_row(sandbox):
+    # F1 (bug 22): a kickoff correction for the same matchup must REPLACE the
+    # stale row, not accumulate a second one. Old KEY included kickoff_iso_utc
+    # and so kept both; the fixed KEY collapses them and the corrected kickoff
+    # (incoming-last) wins.
+    schedule_master.upsert_schedule_rows(NFL, _master_frame("2026-09-13T17:00:00+00:00"))
+    before, after = schedule_master.upsert_schedule_rows(NFL, _master_frame("2026-09-13T20:15:00+00:00"))
+    assert (before, after) == (1, 1)
+    written = pd.read_csv(paths.schedule_master_csv("nfl"))
+    assert len(written) == 1
+    assert written["kickoff_iso_utc"].iloc[0] == "2026-09-13T20:15:00+00:00"
+
+
+def test_master_upsert_scored_row_survives_unscored_incoming(sandbox):
+    # A scored row must beat an unscored incoming duplicate (score-present
+    # tie-break), keeping its own scores and kickoff.
+    schedule_master.upsert_schedule_rows(
+        NFL, _master_frame("2026-09-13T17:00:00+00:00", home_score=27, away_score=13)
+    )
+    schedule_master.upsert_schedule_rows(NFL, _master_frame("2026-09-13T20:15:00+00:00"))
+    written = pd.read_csv(paths.schedule_master_csv("nfl"))
+    assert len(written) == 1
+    assert written["home_score"].iloc[0] == 27
+    assert written["away_score"].iloc[0] == 13
+    assert written["kickoff_iso_utc"].iloc[0] == "2026-09-13T17:00:00+00:00"
+
+
+def test_master_upsert_both_unscored_incoming_wins(sandbox):
+    # Full tie (both unscored, same source priority): the incoming row wins
+    # because concat puts it last and the sort is stable + keep="last".
+    schedule_master.upsert_schedule_rows(NFL, _master_frame("2026-09-13T17:00:00+00:00", source="seed"))
+    schedule_master.upsert_schedule_rows(NFL, _master_frame("2026-09-13T20:15:00+00:00", source="seed"))
+    written = pd.read_csv(paths.schedule_master_csv("nfl"))
+    assert len(written) == 1
+    assert written["kickoff_iso_utc"].iloc[0] == "2026-09-13T20:15:00+00:00"
+
+
 def test_master_upsert_cfb_uses_league_path(sandbox):
     df = schedule.fetch_schedule(
         CFB, 2026, Settings(cfbd_api_key="k"), fetch_raw=lambda season: _cfbd_payload()

@@ -447,6 +447,30 @@ def build_gameview(
             )
         else:
             missing_odds.append(game_key)
+            # F3: NFL schedule-lines fallback. When no odds were promoted for
+            # this game and the schedule row carries a usable spread_line /
+            # total_line, emit them as the line source (legacy NFL builder's
+            # odds_source=="schedule" tier, src/gameview_build.py:483-490 with
+            # src/fetch_games.py:90-124). The nflverse spread_line is already
+            # home-relative (negative = home favored), so it maps straight to
+            # spread_home_relative with NO sign flip; moneylines stay None and
+            # is_closing stays False. derive_rating_fields below then produces
+            # the favored/rating fields from this spread. CFB has no such tier
+            # (legacy CFB home_relative_spread always returned None), so this
+            # is gated to NFL to avoid inventing CFB schedule-source spreads.
+            if league.code == "nfl":
+                sched_spread = _f(game.extra.get("spread_line"))
+                sched_total = _f(game.extra.get("total_line"))
+                if sched_spread is not None or sched_total is not None:
+                    spread_home_relative = _round2(sched_spread)
+                    record.update(
+                        {
+                            "spread_home_relative": spread_home_relative,
+                            "total": _round2(sched_total),
+                            "odds_source": "schedule",
+                            "is_closing": False,
+                        }
+                    )
 
         home_sag = sagarin.get(home_token)
         away_sag = sagarin.get(away_token)
@@ -481,7 +505,14 @@ def build_gameview(
             )
         )
 
-        raw_sources: Dict[str, Any] = {"schedule_row": dict(game.extra)}
+        # F4: printable Team # (web/js/printable.js resolveTeamNumber) reads
+        # raw_sources.schedule_row.home_team / .away_team. The new schedule
+        # extra only carries *_norm/_key variants, so alias the raw names in
+        # when absent (never clobber an existing passthrough key).
+        schedule_row = dict(game.extra)
+        schedule_row.setdefault("home_team", game.home_team_raw)
+        schedule_row.setdefault("away_team", game.away_team_raw)
+        raw_sources: Dict[str, Any] = {"schedule_row": schedule_row}
         raw_sources["odds_row"] = dict(odds_payload) if odds_payload else None
         raw_sources["sagarin_row_home"] = _sagarin_payload(home_sag) if home_sag else None
         raw_sources["sagarin_row_away"] = _sagarin_payload(away_sag) if away_sag else None
