@@ -18,11 +18,12 @@ statfinder refresh --league all              # weekly refresh, both leagues
 statfinder refresh --league nfl --season 2026 --week 3
 statfinder current-week --league nfl
 statfinder seed-schedule --league nfl --season 2026   # bootstrap a new season's master
+statfinder export --league nfl --season 2026 --week 3 # rebuild a week's files from the DB
 
-python -m pytest tests/     # 177 tests (season-1 + season-2)
+python -m pytest tests/     # 203 tests (season-1 + season-2)
 ```
 
-Config precedence in the new package is the reverse of season 1: real environment variables beat `.env`. Each refresh writes a machine-readable run summary to `out/state/run_summary_{league}.json` alongside the legacy NOTIFY line.
+Config precedence in the new package is the reverse of season 1: real environment variables beat `.env`. Each refresh writes a machine-readable run summary to `out/state/run_summary_{league}.json` alongside the legacy NOTIFY line, and dual-writes every stage's results to a SQLite mirror at `data/statfinder.sqlite3` (gitignored; flat files stay canonical — `statfinder export` reproduces them byte-identically from the DB). Output parity with season 1 is proven by the offline replay harness in `tools/parity/` (reports in `docs/parity/`; method and delta whitelist in `docs/PHASE2_SPEC.md`).
 
 ## How it runs in production
 
