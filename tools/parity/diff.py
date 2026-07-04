@@ -70,6 +70,22 @@ FRONTEND_RAW_SOURCES = [
     ("raw_sources", "schedule_row", "gsis"),
 ]
 
+# BUGFIX-4 (approved WP-B triage rule): when a game's legacy row fell back to
+# odds_source="schedule" and the replay promoted real book odds, ALL of these
+# downstream odds-derived fields classify BUGFIX-4 for that game (frozen list,
+# spec triage round 1). raw_sources.odds_row and rating_diff_favored_team's
+# sign-only flip are handled separately (see classify()) because they need
+# extra shape/sign checks the plain equality gate above doesn't do.
+BUGFIX4_ODDS_FIELDS = ODDS_PRIMARY_FIELDS | DERIVED_ODDS_FIELDS
+
+# W9 (sidecar Sagarin enrichment policy): sidecar entry fields whose value
+# deltas trace to the documented season-2 policy change (nearest-week
+# fallback + dense_rank vs legacy exact-week + sequential ranks).
+SIDECAR_W9_FIELDS = {
+    "pr", "pr_rank", "sos", "sos_rank",
+    "opp_pr", "opp_pr_rank", "opp_sos", "opp_sos_rank",
+}
+
 
 # ---------------------------------------------------------------------------
 # normalization
@@ -204,8 +220,9 @@ def classify(field: str, old: Any, new: Any, ctx: Dict[str, Any]) -> Tuple[str, 
     if field == "source_uid":
         if _is_blank(new) and not _is_blank(old):
             return (
-                "UNEXPLAINED",
-                "source_uid dropped: SCHEDULE_COLUMNS has no source_uid, new pipeline emits None",
+                "W10",
+                "source_uid: legacy provider id -> new null (SCHEDULE_COLUMNS carries no "
+                "source_uid column); frontend never reads it (grep-verified: zero refs in web/)",
             )
         return "W5", "source_uid format/provenance"
 
@@ -247,6 +264,13 @@ def classify(field: str, old: Any, new: Any, ctx: Dict[str, Any]) -> Tuple[str, 
             and do is not None and dn is not None
             and _floats_equal(abs(dn), abs(do))
         ):
+            if ctx.get("bugfix4_trigger"):
+                return (
+                    "BUGFIX-4",
+                    "rating_diff_favored_team sign flip: |value| unchanged but favored_side flipped "
+                    "because the replay promoted real book odds where legacy used the dead "
+                    "schedule-fallback tier (odds_source='schedule')",
+                )
             return (
                 "UNEXPLAINED",
                 "rating_diff_favored_team sign flip: |value| unchanged but favored_side flipped "
@@ -255,7 +279,24 @@ def classify(field: str, old: Any, new: Any, ctx: Dict[str, Any]) -> Tuple[str, 
             )
         return "UNEXPLAINED", f"{field} differs (HFA/Sagarin, independent of odds)"
 
-    if field in ODDS_PRIMARY_FIELDS or field in DERIVED_ODDS_FIELDS or field.startswith("raw_sources.odds_row"):
+    if field == "is_closing" and not ctx.get("bugfix4_trigger"):
+        if (old is None and new is False) or (old is False and new is None):
+            return "W11", "is_closing null<->false; frontend never reads it (grep-verified: zero refs in web/)"
+
+    if field in ODDS_PRIMARY_FIELDS or field in DERIVED_ODDS_FIELDS or field == "raw_sources.odds_row":
+        if ctx.get("bugfix4_trigger") and field in BUGFIX4_ODDS_FIELDS:
+            return (
+                "BUGFIX-4",
+                "legacy NFL odds promotion was dead all season (odds_source='schedule': the "
+                "away-first pinned-ledger keys never matched home-first game keys); the replay's "
+                "canonical-key pin promotes real book odds, so this odds-derived field corrects",
+            )
+        if ctx.get("bugfix4_trigger") and field == "raw_sources.odds_row":
+            return (
+                "BUGFIX-4",
+                "legacy never promoted odds for this game (odds_source='schedule'); replay's "
+                "corrected pin attaches raw_sources.odds_row",
+            )
         # CFB rating_vs_odds two-formula fix, only provable when the spread itself
         # matched (otherwise the delta is entangled with odds sourcing).
         if (
@@ -303,6 +344,12 @@ def classify(field: str, old: Any, new: Any, ctx: Dict[str, Any]) -> Tuple[str, 
         return "UNEXPLAINED", f"schedule_row provenance differs ({field})"
 
     if field.startswith("raw_sources.sagarin_row"):
+        if league.code == "cfb" and _is_blank(old) and not _is_blank(new):
+            return (
+                "W8",
+                "CFB sagarin_row enrichment: legacy null -> new populated (added provenance; "
+                "frontend reads .team/.hfa and handles both states)",
+            )
         return "UNEXPLAINED", f"sagarin provenance differs ({field})"
 
     return "UNEXPLAINED", f"value mismatch ({field})"
@@ -316,15 +363,27 @@ def classify(field: str, old: Any, new: Any, ctx: Dict[str, Any]) -> Tuple[str, 
 def _compare_pair(
     league: League, key: Tuple[str, str, str], old: Dict[str, Any], new: Dict[str, Any]
 ) -> List[Dict[str, Any]]:
+    legacy_src = old.get("odds_source")
+    new_src = new.get("odds_source")
     ctx = {
         "league": league,
-        "legacy_odds_source": old.get("odds_source"),
-        "new_odds_source": new.get("odds_source"),
+        "legacy_odds_source": legacy_src,
+        "new_odds_source": new_src,
         "new_hfa": _as_float(new.get("hfa")),
         "spread_matches": _values_equal(
             "spread_home_relative",
             old.get("spread_home_relative"),
             new.get("spread_home_relative"),
+        ),
+        # BUGFIX-4 trigger (spec triage round 1): legacy fell back to the
+        # schedule-odds tier (never promoted real book odds all season — the
+        # legacy away-first pinned-ledger keys never matched home-first game
+        # keys) AND the replay promoted real book odds. When true, every
+        # odds-derived field delta for this game is BUGFIX-4, not UNEXPLAINED.
+        "bugfix4_trigger": (
+            legacy_src == "schedule"
+            and not _is_blank(new_src)
+            and new_src != "schedule"
         ),
     }
     deltas: List[Dict[str, Any]] = []
@@ -389,8 +448,17 @@ def _load_sidecar(directory: Path, game_key: str) -> Optional[Dict[str, Any]]:
         return None
 
 
-def _diff_sidecar(old: Dict[str, Any], new: Dict[str, Any]) -> Counter:
+def _diff_sidecar(old: Dict[str, Any], new: Dict[str, Any]) -> Tuple[Counter, Counter]:
+    """Return (raw per-field delta counts, classified label counts).
+
+    W9 (sidecar Sagarin enrichment policy): pr/pr_rank/sos/sos_rank (and their
+    opp_ variants) value deltas trace to the documented season-2 policy change
+    (nearest-week fallback + dense_rank vs legacy exact-week + sequential
+    ranks) and classify W9. Every other sidecar entry field delta stays
+    UNEXPLAINED (default; this differ never stretches a rule predicate).
+    """
     counts: Counter = Counter()
+    label_counts: Counter = Counter()
     for tkey in SIDECAR_TIMELINE_KEYS:
         old_entries = {(_norm_blank(e.get("date")), e.get("opp")): e for e in (old.get(tkey) or [])}
         new_entries = {(_norm_blank(e.get("date")), e.get("opp")): e for e in (new.get(tkey) or [])}
@@ -401,9 +469,12 @@ def _diff_sidecar(old: Dict[str, Any], new: Dict[str, Any]) -> Counter:
             for field in SIDECAR_ENTRY_FIELDS:
                 if not _values_equal(field, oe.get(field), ne.get(field)):
                     counts[f"field:{field}"] += 1
+                    label = "W9" if field in SIDECAR_W9_FIELDS else "UNEXPLAINED"
+                    label_counts[label] += 1
+                    label_counts[f"{label}::{field}"] += 1
         counts[f"{tkey}.entries_only_old"] += len(set(old_entries) - set(new_entries))
         counts[f"{tkey}.entries_only_new"] += len(set(new_entries) - set(old_entries))
-    return counts
+    return counts, label_counts
 
 
 # ---------------------------------------------------------------------------
@@ -524,6 +595,7 @@ def build_report(
     old_bl_side = bl_dir / "game_schedules"
     new_side = scratch_out / league.code / f"{season}_week{week}" / "game_schedules"
     sidecar_counts: Counter = Counter()
+    sidecar_label_counts: Counter = Counter()
     sidecar_games = 0
 
     for key in matched:
@@ -556,7 +628,9 @@ def build_report(
         new_sc = _load_sidecar(new_side, str(new.get("game_key")))
         if old_sc and new_sc:
             sidecar_games += 1
-            sidecar_counts.update(_diff_sidecar(old_sc, new_sc))
+            entry_counts, entry_label_counts = _diff_sidecar(old_sc, new_sc)
+            sidecar_counts.update(entry_counts)
+            sidecar_label_counts.update(entry_label_counts)
 
     report = {
         "league": league.display,
@@ -594,6 +668,7 @@ def build_report(
         "sidecar": {
             "games_compared": sidecar_games,
             "counts": dict(sidecar_counts),
+            "label_counts": dict(sidecar_label_counts),
         },
         "per_game": per_game,
         "k4_trace": _k4_trace(league, season, week, scratch_out, new_rows),
@@ -607,20 +682,16 @@ def _proposals(league: League, report: Dict[str, Any]) -> List[Dict[str, str]]:
     """Derive proposed whitelist/triage rules from the observed UNEXPLAINED groups.
 
     These are PROPOSALS for WP-B/main-loop approval; the differ never applies or
-    freezes them.
+    freezes them. (source_uid, the NFL dead-odds-promotion reclassification, and
+    CFB sagarin_row enrichment were proposed here in WP-A and approved in the
+    2026-07-03 triage round as W10, BUGFIX-4, and W8 respectively — see
+    ``classify()``/``PHASE2_SPEC.md``; they no longer surface as proposals here
+    because ``classify()`` now labels them directly instead of leaving them
+    UNEXPLAINED.)
     """
     reasons = {s["reason"] for s in report["unexplained_samples"]}
     fields = {s["field"] for s in report["unexplained_samples"]}
     out: List[Dict[str, str]] = []
-    if "source_uid" in fields:
-        out.append({
-            "id": "PROP-source_uid",
-            "kind": "pipeline-gap or whitelist",
-            "text": "new pipeline emits source_uid=None for every game (SCHEDULE_COLUMNS carries "
-                    "no source_uid column, so gameview reads None). Either add source_uid to the "
-                    "schedule schema (populate from nflverse game_id / CFBD id) or whitelist "
-                    "None-vs-legacy-id when the joined game identity matches.",
-        })
     if any(f.startswith("raw_sources.schedule_row.") for f in fields):
         out.append({
             "id": "PROP-schedule_provenance",
@@ -629,27 +700,6 @@ def _proposals(league: League, report: Dict[str, Any]) -> List[Dict[str, str]]:
                     "SCHEDULE_COLUMNS omits them so the new pipeline emits None. Either carry these "
                     "columns through the schedule schema or whitelist their loss (frontend already "
                     "has a fallback).",
-        })
-    if any("odds_sourcing_divergence" in r for r in reasons):
-        out.append({
-            "id": "PROP-BUGFIX-4-odds-promotion",
-            "kind": "BUGFIX candidate (needs WP-B sign-off)",
-            "text": "NFL: legacy week rows fell back to odds_source='schedule' because the legacy "
-                    "pin wrote AWAY-first game_keys ({ts}_{away}_{home}) that never matched the "
-                    "home-first games_week keys (bug 4). The new canonical-key pin promotes real "
-                    "book odds. Evidence: legacy out/staging/odds_pinned/nfl/2025.jsonl keys are "
-                    "away-first; the replayed pinned ledger keys are home-first. Propose classifying "
-                    "the resulting spread/total/moneyline/odds_source/rating_vs_odds deltas as "
-                    "BUGFIX-4 rather than UNEXPLAINED. Also decide K1: whether the new pipeline "
-                    "should keep a schedule-odds fallback for genuinely-unpromoted games.",
-        })
-    if league.code == "cfb" and any("sagarin provenance" in r for r in reasons):
-        out.append({
-            "id": "PROP-cfb-sagarin-row",
-            "kind": "whitelist (enrichment)",
-            "text": "legacy CFB games_week left raw_sources.sagarin_row_home/away = null; the new "
-                    "builder populates them (team + pr/sos/hfa). This is added provenance the "
-                    "frontend can use. Propose whitelisting null-vs-populated sagarin_row for CFB.",
         })
     if league.code == "cfb" and any(f in fields for f in ("home_ats", "away_ats")):
         out.append({
@@ -705,6 +755,9 @@ def _known_checks(
     # K3: sidecar parity
     sc = report["sidecar"]
     field_deltas = {k: v for k, v in sc["counts"].items() if k.startswith("field:")}
+    sidecar_labels = sc.get("label_counts", {})
+    sidecar_unexplained = sidecar_labels.get("UNEXPLAINED", 0)
+    sidecar_w9 = sidecar_labels.get("W9", 0)
     k3_cause = (
         " These concentrate in the Sagarin enrichment fields (pr/sos and their ranks): the new "
         "sidecar builder deliberately uses the CFB nearest-week fallback for BOTH leagues and "
@@ -712,14 +765,15 @@ def _known_checks(
         "season-1 NFL sidecar joined exact (season, week) rows and ranked sequentially. Confirmed "
         "on a sample: a wk1 entry keeps pr=21.4 but pr_rank moved 13->12 (dense vs sequential); "
         "pr/sos value deltas are the nearest-week fallback filling weeks the master lacks exact "
-        "rows for (e.g. 2025 week 3 is absent). WP-B should confirm this is the intended change."
-    ) if field_deltas else ""
+        f"rows for (e.g. 2025 week 3 is absent). Classified W9 ({sidecar_w9} deltas, spec triage "
+        "round 1 — approved whitelist rule)."
+    ) if sidecar_w9 else ""
     k3 = {
         "check": "sidecar parity",
-        "result": "PASS" if not field_deltas else "PARTIAL",
+        "result": "PASS" if not field_deltas or sidecar_unexplained == 0 else "PARTIAL",
         "finding": (
             f"sidecars compared for {sc['games_compared']} joined games; per-field delta counts: "
-            f"{field_deltas}.{k3_cause}"
+            f"{field_deltas}; classified: W9={sidecar_w9} UNEXPLAINED={sidecar_unexplained}.{k3_cause}"
         ),
     }
     # K4: promoted odds sanity (traced separately, see report body)
@@ -871,6 +925,23 @@ def render_markdown(report: Dict[str, Any]) -> str:
     for k in sorted(sc["counts"]):
         A(f"| {k} | {sc['counts'][k]} |")
     A("")
+    A("### Sidecar delta classification")
+    A("")
+    label_counts = sc.get("label_counts", {})
+    top_level = {k: v for k, v in label_counts.items() if "::" not in k}
+    A("| label | count |")
+    A("|---|---|")
+    for label in sorted(top_level):
+        A(f"| {label} | {top_level[label]} |")
+    A("")
+    by_label_field = {k: v for k, v in label_counts.items() if "::" in k}
+    if by_label_field:
+        A("| label | field | count |")
+        A("|---|---|---|")
+        for k, c in sorted(by_label_field.items()):
+            label, field = k.split("::", 1)
+            A(f"| {label} | {field} | {c} |")
+        A("")
     A("## Proposed whitelist rules (require main-loop approval; NOT applied)")
     A("")
     A("_This differ never extends the frozen whitelist. The rules below are proposals for WP-B._")

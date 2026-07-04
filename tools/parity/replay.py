@@ -31,23 +31,26 @@ from __future__ import annotations
 
 import argparse
 import json
+import logging
 import shutil
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
 import pandas as pd
 
 from football_statfinder import paths as paths_mod
 from football_statfinder import refresh as refresh_mod
 from football_statfinder import run_summary as run_summary_mod
-from football_statfinder.common.io_atomic import write_atomic_jsonl
+from football_statfinder.common.io_atomic import write_atomic_csv, write_atomic_jsonl
 from football_statfinder.common.jsonl import read_jsonl
 from football_statfinder.config import BackfillSettings, OddsSettings, Settings, StorageSettings
 from football_statfinder.leagues import get_league
 from football_statfinder.sources import sagarin as sagarin_mod
 from football_statfinder.sources import schedule as schedule_mod
 from football_statfinder.sources import stats as stats_mod
+
+logger = logging.getLogger(__name__)
 
 REPO_ROOT = paths_mod.REPO_ROOT
 DEFAULT_SCRATCH = Path(
@@ -79,6 +82,80 @@ def _read_metrics_rows(csv_path: Path) -> List[Dict[str, Any]]:
 
 def _read_sagarin_rows(jsonl_path: Path) -> List[Dict[str, Any]]:
     return read_jsonl(jsonl_path).rows
+
+
+# ---------------------------------------------------------------------------
+# prior-week staging (F6.1) + master dedupe (F6.3)
+# ---------------------------------------------------------------------------
+
+# Identity for the master dedupe: the legacy schedule-master upsert KEY minus
+# kickoff_iso_utc. Mirrors package fix F1 (bug 22): the legacy master's KEY
+# included kickoff_iso_utc, so a corrected kickoff accumulated a stale row
+# instead of replacing it. The stale row is always the never-scored one.
+_MASTER_DEDUPE_IDENTITY = [
+    "league",
+    "season",
+    "week",
+    "game_type",
+    "home_team_key",
+    "away_team_key",
+]
+
+
+def stage_prior_weeks(
+    baseline_out: Path, scratch_out: Path, league_code: str, season: int, target_week: int
+) -> List[int]:
+    """Copy prior weeks' ``games_week_*`` artifacts into the scratch out root.
+
+    Feeds ``ats.build_team_ats``'s season-to-date scan, which reads
+    ``paths.games_week_jsonl(league.code, season, prior_week, ...)`` for every
+    ``prior_week in range(1, target_week)``. Weeks with no baseline archive
+    dir are skipped (CFB weeks 1-6 don't exist — expected, not an error).
+    Returns the list of weeks actually staged.
+    """
+    staged: List[int] = []
+    for prior_week in range(1, target_week):
+        bl_prior = baseline_week_dir(baseline_out, league_code, season, prior_week)
+        src_jsonl = bl_prior / f"games_week_{season}_{prior_week}.jsonl"
+        if not src_jsonl.exists():
+            continue
+        dst_dir = paths_mod.week_dir(
+            league_code, season, prior_week, out_root=scratch_out, create=True
+        )
+        shutil.copy2(src_jsonl, dst_dir / src_jsonl.name)
+        src_csv = src_jsonl.with_suffix(".csv")
+        if src_csv.exists():
+            shutil.copy2(src_csv, dst_dir / src_csv.name)
+        staged.append(prior_week)
+    return staged
+
+
+def dedupe_schedule_master(df: pd.DataFrame) -> Tuple[pd.DataFrame, int]:
+    """Drop stale kickoff-drift duplicate rows from a copied legacy schedule master.
+
+    Groups on ``_MASTER_DEDUPE_IDENTITY`` (kickoff_iso_utc excluded from the
+    identity on purpose). Keeps, per group: the row with home_score+away_score
+    both present if any row in the group has them; if several rows have scores
+    or none do, keeps the last occurrence in file order. Returns the deduped
+    frame (original row order preserved) and the number of rows dropped.
+    """
+    if df.empty:
+        return df, 0
+    working = df.copy()
+    working["_orig_order"] = range(len(working))
+    home_score = pd.to_numeric(working.get("home_score"), errors="coerce")
+    away_score = pd.to_numeric(working.get("away_score"), errors="coerce")
+    working["_score_present"] = (home_score.notna() & away_score.notna()).astype(int)
+    ordered = working.sort_values(
+        _MASTER_DEDUPE_IDENTITY + ["_score_present", "_orig_order"], kind="mergesort"
+    )
+    deduped = ordered.drop_duplicates(_MASTER_DEDUPE_IDENTITY, keep="last")
+    deduped = (
+        deduped.sort_values("_orig_order")
+        .drop(columns=["_orig_order", "_score_present"])
+        .reset_index(drop=True)
+    )
+    return deduped, len(df) - len(deduped)
 
 
 # ---------------------------------------------------------------------------
@@ -220,8 +297,15 @@ def _replay_settings(select_policy: str) -> Settings:
             staging_enable=True,
             promotion_enable=True,
             select_policy=select_policy,
+            # Defensive: guarantees the ATS/backfill API tier (AtsBackfillApi,
+            # source_ats.py="auto") can never make a network call even if the
+            # free pinned-ledger tier misses, since ats_enable is now True.
+            cache_only=True,
         ),
-        backfill=BackfillSettings(scores_enable=False, ats_enable=False),
+        # ats_enable=True so build_team_ats can scan the staged prior weeks
+        # (F6.1); scores_enable stays False (out of scope for single-week
+        # parity; season-1 baseline sidecars have ats/to_margin=null anyway).
+        backfill=BackfillSettings(scores_enable=False, ats_enable=True),
         # Replay must never dual-write into the real data/statfinder.sqlite3
         # (WP-C storage defaults to enabled and to the repo-anchored DB path).
         storage=StorageSettings(enable=False),
@@ -257,10 +341,9 @@ def run_replay(
     master_src = baseline_out / "master"
     master_dst = scratch_out / "master"
     master_dst.mkdir(parents=True, exist_ok=True)
+    schedule_master_name = paths_mod.schedule_master_csv(league.code, out_root=scratch_out).name
     master_copies = {
-        paths_mod.schedule_master_csv(league.code, out_root=scratch_out).name: (
-            master_src / f"{league.code}_schedule_master.csv"
-        ),
+        schedule_master_name: master_src / f"{league.code}_schedule_master.csv",
         paths_mod.sagarin_master_csv(league.code, out_root=scratch_out).name: (
             master_src / f"sagarin_{league.code}_master.csv"
         ),
@@ -269,6 +352,29 @@ def run_replay(
         if not src.exists():
             raise FileNotFoundError(f"required season-1 master missing: {src}")
         shutil.copy2(src, master_dst / dst_name)
+
+    # --- F6.3 master dedupe: the copied schedule master carries kickoff-drift
+    # stale duplicate rows (legacy upsert KEY includes kickoff_iso_utc, so a
+    # corrected kickoff accumulates a new row instead of replacing the stale
+    # one — e.g. NFL 2025w16 had 20 rows for 16 games, CFB w13 had 190 for 138
+    # games). Dedupe on the F1 identity (sans kickoff) before the new pipeline
+    # reads the master; the never-scored row is always the one dropped.
+    schedule_master_path = master_dst / schedule_master_name
+    raw_master_df = pd.read_csv(
+        schedule_master_path, dtype=str, keep_default_na=False, na_filter=False
+    )
+    deduped_master_df, dropped_rows = dedupe_schedule_master(raw_master_df)
+    if dropped_rows:
+        write_atomic_csv(schedule_master_path, deduped_master_df)
+    logger.info(
+        "%s schedule master dedupe: %d row(s) dropped (kickoff-drift stale duplicates), %d remain",
+        league.display, dropped_rows, len(deduped_master_df),
+    )
+
+    # --- F6.1 stage prior weeks' games_week artifacts (feeds the ATS stage's
+    # build_team_ats scan, weeks 1..week-1). Weeks with no baseline archive dir
+    # are skipped (CFB weeks 1-6 don't exist — expected).
+    staged_prior_weeks = stage_prior_weeks(baseline_out, scratch_out, league.code, season, week)
 
     # --- season-1 stage inputs
     metrics_rows = _read_metrics_rows(bl_week / f"league_metrics_{season}_{week}.csv")
@@ -332,6 +438,8 @@ def run_replay(
         "replay_games_week_jsonl": str(replay_jsonl),
         "schedule_master_week_rows": int(len(week_df)),
         "replay_output_rows": len(replay_rows),
+        "master_dedupe_rows_dropped": int(dropped_rows),
+        "staged_prior_weeks": staged_prior_weeks,
         "odds_window": {
             "first_kickoff": window["first_kickoff"].isoformat(),
             "last_kickoff": window["last_kickoff"].isoformat(),
