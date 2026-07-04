@@ -418,10 +418,13 @@ class TestSidecars:
         path = tmp_path / "game_schedules" / "20260920_1700_buffalo_bills_new_york_jets.json"
         assert path.exists()
         payload = json.loads(path.read_text(encoding="utf-8"))
-        assert tuple(payload.keys()) == SIDECAR_TOP_LEVEL_FIELDS
+        # Sidecar JSON is written with sort_keys=True (WP-D: one canonical
+        # encoding shared with the DB payloads/export path), so parsed key
+        # order is alphabetical, not the frozen field order; compare sets.
+        assert set(payload.keys()) == set(SIDECAR_TOP_LEVEL_FIELDS)
         for section in ("home_ytd", "away_ytd", "home_prev", "away_prev"):
             for entry in payload[section]:
-                assert tuple(entry.keys()) == SIDECAR_ENTRY_FIELDS
+                assert set(entry.keys()) == set(SIDECAR_ENTRY_FIELDS)
 
     def test_ytd_cutoff_excludes_current_game(self, tmp_path):
         self._build(tmp_path)

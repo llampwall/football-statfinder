@@ -42,6 +42,7 @@ Deliberate changes from legacy behavior, all documented:
 
 from __future__ import annotations
 
+import json
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
@@ -348,6 +349,21 @@ def _sagarin_payload(entry: SagarinEntry) -> Dict[str, Any]:
     }
 
 
+def gameview_sort_key(record: Mapping[str, Any]) -> Tuple[str, str]:
+    """The one games_week row ordering: kickoff first, game_key as tiebreak.
+
+    Exposed (not inlined) so :mod:`football_statfinder.storage.export` can
+    reproduce the exact same ordering for DB-sourced rows instead of
+    duplicating the sort — WP-D byte-parity requirement.
+    """
+    return (record.get("kickoff_iso_utc") or "", record.get("game_key") or "")
+
+
+def order_records(records: Iterable[Mapping[str, Any]]) -> List[Dict[str, Any]]:
+    """Sort arbitrary games_week records into the frozen output order."""
+    return sorted((dict(rec) for rec in records), key=gameview_sort_key)
+
+
 def build_gameview(
     league: League,
     season: int,
@@ -478,7 +494,7 @@ def build_gameview(
         records.append(record)
 
     # Deterministic output ordering: kickoff first, game_key as tiebreak.
-    records.sort(key=lambda rec: (rec.get("kickoff_iso_utc") or "", rec.get("game_key") or ""))
+    records.sort(key=gameview_sort_key)
 
     total = len(records)
     receipt: Dict[str, Any] = {
@@ -514,6 +530,66 @@ def build_gameview(
     return GameviewBuild(records=records, receipt=receipt)
 
 
+def games_week_paths(
+    league: League, season: int, week: int, *, out_dir: Optional[Path] = None
+) -> Tuple[Path, Path]:
+    """(jsonl_path, csv_path) for a week, honoring ``out_dir`` test overrides."""
+    if out_dir is None:
+        return (
+            paths.games_week_jsonl(league.code, season, week),
+            paths.games_week_csv(league.code, season, week),
+        )
+    return (
+        out_dir / f"games_week_{int(season)}_{int(week)}.jsonl",
+        out_dir / f"games_week_{int(season)}_{int(week)}.csv",
+    )
+
+
+def _csv_cell_ready(record: Mapping[str, Any]) -> Dict[str, Any]:
+    """A CSV-safe copy: nested values (``raw_sources``) become canonical JSON text.
+
+    A CSV cell can't hold a nested dict/list natively; pandas falls back to
+    ``str(value)`` — Python's ``repr()`` — whose key order mirrors whatever
+    order the dict object happens to carry. A freshly built record's
+    ``raw_sources`` has one (insertion) order; the same record read back from
+    storage (``storage/store.py`` payloads are canonical JSON with
+    ``sort_keys=True``) has another (alphabetical) — same data, different
+    ``repr()`` bytes, which broke the WP-D export byte-parity gate for no
+    functional reason. Encoding nested values with the package's one
+    canonical JSON dump (matching every other JSON writer here) makes the
+    cell text depend only on the data, not on which code path produced the
+    dict.
+    """
+    out = dict(record)
+    for key, value in list(out.items()):
+        if isinstance(value, (dict, list)):
+            out[key] = json.dumps(value, ensure_ascii=False, sort_keys=True)
+    return out
+
+
+def write_games_week_files(
+    league: League,
+    season: int,
+    week: int,
+    records: Sequence[Mapping[str, Any]],
+    *,
+    out_dir: Optional[Path] = None,
+) -> Tuple[Path, Path]:
+    """Atomically write games_week JSONL + CSV for already-built records.
+
+    The one games_week serializer: :func:`write_gameview` calls this for a
+    fresh build, and :mod:`football_statfinder.storage.export` calls it again
+    for DB-sourced payloads (already put in :func:`gameview_sort_key` order)
+    so there is exactly one JSONL/CSV writer to keep byte-identical, never two
+    copies to drift apart.
+    """
+    jsonl_path, csv_path = games_week_paths(league, season, week, out_dir=out_dir)
+    write_atomic_jsonl(jsonl_path, records)
+    frame = pd.DataFrame([_csv_cell_ready(rec) for rec in records], columns=list(FROZEN_RECORD_FIELDS))
+    write_atomic_csv(csv_path, frame)
+    return jsonl_path, csv_path
+
+
 def write_gameview(
     league: League,
     season: int,
@@ -527,16 +603,10 @@ def write_gameview(
     Defaults to the unified ``paths`` layout; ``out_dir`` exists for tests.
     """
     if out_dir is None:
-        jsonl_path = paths.games_week_jsonl(league.code, season, week)
-        csv_path = paths.games_week_csv(league.code, season, week)
         receipt_path = paths.week_dir(league.code, season, week) / RECEIPT_NAME
     else:
-        jsonl_path = out_dir / f"games_week_{int(season)}_{int(week)}.jsonl"
-        csv_path = out_dir / f"games_week_{int(season)}_{int(week)}.csv"
         receipt_path = out_dir / RECEIPT_NAME
-    write_atomic_jsonl(jsonl_path, build.records)
-    frame = pd.DataFrame(build.records, columns=list(FROZEN_RECORD_FIELDS))
-    write_atomic_csv(csv_path, frame)
+    jsonl_path, csv_path = write_games_week_files(league, season, week, build.records, out_dir=out_dir)
     write_atomic_json(receipt_path, build.receipt)
     logger.info("wrote gameview: %s (%d rows)", jsonl_path, len(build.records))
     return jsonl_path, csv_path
@@ -552,7 +622,11 @@ __all__ = [
     "build_gameview",
     "derive_favored_fields",
     "derive_rating_fields",
+    "gameview_sort_key",
+    "games_week_paths",
+    "order_records",
     "sagarin_map_from_rows",
     "sagarin_token",
+    "write_games_week_files",
     "write_gameview",
 ]

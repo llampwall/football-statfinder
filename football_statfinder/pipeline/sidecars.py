@@ -25,6 +25,13 @@ Deliberate changes from legacy behavior:
   bare ``write_text``).
 * ``ats`` and ``to_margin`` entries start ``None`` exactly as in season 1
   (the score/ATS backfill stage fills them later).
+* Sidecar JSON is serialized with ``sort_keys=True`` (Phase 2 WP-D decision):
+  every JSON writer in this package now shares one canonical encoding
+  (``json.dumps(payload, ensure_ascii=False, sort_keys=True)``, matching
+  ``storage/store.py``'s DB payload encoding and ``common/io_atomic.py``'s
+  JSONL writer) so a DB-sourced export can byte-match the flat file. Key
+  order is not a frontend contract (``web/`` parses JSON, never reads raw
+  bytes).
 """
 
 from __future__ import annotations
@@ -79,6 +86,18 @@ RECEIPT_NAME = "sidecars_receipt.json"
 
 class SidecarError(RuntimeError):
     """Raised when a strict sidecar build cannot cover every game."""
+
+
+def write_sidecar_json(path: Path, payload: Mapping[str, Any]) -> None:
+    """Atomically write one ``game_schedules/{game_key}.json`` sidecar.
+
+    The one sidecar-payload writer: ``build_sidecars`` calls this per game and
+    :mod:`football_statfinder.storage.export` calls it again for DB-sourced
+    payloads, so the encoding (``sort_keys=True``, matching every other JSON
+    writer in the package — see module docstring) never has two copies to
+    drift apart.
+    """
+    write_atomic_text(path, json.dumps(payload, ensure_ascii=False, sort_keys=True))
 
 
 def _is_finite(value: Any) -> bool:
@@ -389,7 +408,7 @@ def build_sidecars(
             "away_prev": timeline(away_key, int(season) - 1, ytd=False),
         }
         side_path = side_dir / f"{game_key}.json"
-        write_atomic_text(side_path, json.dumps(payload, ensure_ascii=False))
+        write_sidecar_json(side_path, payload)
         payloads[game_key] = payload
         written += 1
 
@@ -438,4 +457,5 @@ __all__ = [
     "SIDECAR_TOP_LEVEL_FIELDS",
     "SidecarError",
     "build_sidecars",
+    "write_sidecar_json",
 ]

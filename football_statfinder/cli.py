@@ -9,6 +9,9 @@ Subcommands:
 * ``seed-schedule --league nfl|cfb --season S`` — bootstrap/refresh the
   schedule master for a season (needed once before the first refresh of a new
   season, since current-week resolution reads the master).
+* ``export --league nfl|cfb --season S --week W [--out DIR]`` — rebuild one
+  week's flat-file artifacts (games_week jsonl/csv, league_metrics csv,
+  sidecars) from the storage DB (Phase 2 WP-D byte-parity export step).
 """
 
 from __future__ import annotations
@@ -16,6 +19,7 @@ from __future__ import annotations
 import argparse
 import logging
 import sys
+from pathlib import Path
 from typing import List, Optional
 
 from .common.current_week import get_current_week
@@ -48,6 +52,12 @@ def main(argv: Optional[List[str]] = None) -> int:
     p_seed.add_argument("--league", required=True)
     p_seed.add_argument("--season", type=int, required=True)
 
+    p_export = sub.add_parser("export", help="export one week's artifacts from the storage DB")
+    p_export.add_argument("--league", required=True)
+    p_export.add_argument("--season", type=int, required=True)
+    p_export.add_argument("--week", type=int, required=True)
+    p_export.add_argument("--out", default=None, help="output root override (default: repo out/)")
+
     args = parser.parse_args(argv)
     setup_logging()
     settings = get_settings()
@@ -64,6 +74,23 @@ def main(argv: Optional[List[str]] = None) -> int:
         league = get_league(args.league)
         inserted, updated = ensure_seasons_present(league, [args.season], settings)
         print(f"{league.display} schedule master: inserted={inserted} updated={updated}")
+        return 0
+
+    if args.command == "export":
+        from .storage import db as db_mod
+        from .storage import export as export_mod
+
+        league = get_league(args.league)
+        conn = db_mod.connect(settings.storage.db_path)
+        try:
+            out_root = Path(args.out) if args.out else None
+            result = export_mod.export_week(conn, league, args.season, args.week, out_root=out_root)
+        finally:
+            conn.close()
+        print(
+            f"{league.display} export season={args.season} week={args.week} "
+            f"games_jsonl={result['games_jsonl']} sidecars={len(result['sidecars'])}"
+        )
         return 0
 
     # refresh
