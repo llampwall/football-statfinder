@@ -171,7 +171,15 @@ Corrections to Part 1 facts: the sagarin master filename is `{league}_sagarin_ma
   nearest-week fallback + dense_rank vs legacy exact-week + sequential ranks.
 - **W10 source_uid.** Legacy provider id → new null. Frontend never reads it
   (grep-verified: zero references in web/).
-- **W11 is_closing.** null ↔ false in either direction. Frontend never reads it.
+- **W11 is_closing.** Any is_closing value delta (null↔false, and false↔true on
+  legacy-promoted games: legacy's last promotion ran pre-kickoff so it could not
+  mark its own snapshot closing; the replay has ledger hindsight). Frontend never
+  reads the field (grep-verified: zero refs in web/).
+- **W12 schedule provenance drop** (added after round 2). `raw_sources.schedule_row.
+  {gsis,game_no,rotation}` legacy-value → new-null: the frontend reads these only in
+  the last-resort Game# fallback chain (primary path computes week+ordinal locally),
+  so the drop degrades nothing. `home_team`/`away_team` in schedule_row are NOT
+  whitelisted — the printable Team# reads them and F4 carries them.
 - **BUGFIX-4 (approved reclassification).** For games where legacy
   `odds_source == "schedule"` and the replay promoted real book odds, ALL downstream
   odds-derived deltas (spread_home_relative, total, moneylines, odds_source,
@@ -179,6 +187,16 @@ Corrections to Part 1 facts: the sagarin master filename is `{league}_sagarin_ma
   rating_diff_favored_team sign, raw_sources.odds_row) classify BUGFIX-4: legacy NFL
   promotion was dead all season (away-first pinned-ledger keys never matched
   home-first game keys — ledger evidence in the WP-A report).
+  **CFB extension (round 2, hand-traced 2026-07-03):** the same rule applies when the
+  legacy row had NO odds at all (`odds_source` blank) and the replay promoted book
+  odds. Legacy CFB promotion was dead for every game with a multi-word team name:
+  the pinned ledger slugged `newmexico_airforce` while games_week slugged
+  `new_mexico_air_force` — same game, same kickoff, unjoinable keys. Only 5 of 60
+  baseline wk13 games ever carried odds (the all-single-word-name matchups).
+  Evidence: pinned ledger `20251123_0000_newmexico_airforce` (draftkings spreads)
+  vs baseline `games_week` key `20251123_0000_new_mexico_air_force`, odds null.
+  `rating_diff_favored_team` legacy-null → new-populated also classifies BUGFIX-4
+  when this trigger holds (favored_side only exists once a spread does).
 
 **Package fixes ordered (REBUILD.md bugs 22/23 are new entries):**
 

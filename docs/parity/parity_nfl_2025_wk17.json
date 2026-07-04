@@ -1,16 +1,16 @@
 {
   "league": "NFL",
   "season": 2025,
-  "week": 16,
-  "generated_at": "2026-07-04T03:21:23.104981+00:00",
+  "week": 17,
+  "generated_at": "2026-07-04T03:21:38.553399+00:00",
   "manifest": {
     "league": "nfl",
     "season": 2025,
-    "week": 16,
+    "week": 17,
     "select_policy": "closing_pre_kickoff",
-    "scratch_out": "C:\\Users\\Jordan\\AppData\\Local\\Temp\\claude\\C--Users-Jordan-Documents-Football-Project-George-NEW-PROJECT-football-statfinder\\6accb4e8-a09e-41a6-842c-beb095472d52\\scratchpad\\parity\\nfl_2025_wk16\\out",
-    "baseline_week_dir": "C:\\Users\\Jordan\\Documents\\Football Project George\\NEW PROJECT\\football-statfinder\\out\\2025_week16",
-    "replay_games_week_jsonl": "C:\\Users\\Jordan\\AppData\\Local\\Temp\\claude\\C--Users-Jordan-Documents-Football-Project-George-NEW-PROJECT-football-statfinder\\6accb4e8-a09e-41a6-842c-beb095472d52\\scratchpad\\parity\\nfl_2025_wk16\\out\\nfl\\2025_week16\\games_week_2025_16.jsonl",
+    "scratch_out": "C:\\Users\\Jordan\\AppData\\Local\\Temp\\claude\\C--Users-Jordan-Documents-Football-Project-George-NEW-PROJECT-football-statfinder\\6accb4e8-a09e-41a6-842c-beb095472d52\\scratchpad\\parity\\nfl_2025_wk17\\out",
+    "baseline_week_dir": "C:\\Users\\Jordan\\Documents\\Football Project George\\NEW PROJECT\\football-statfinder\\out\\2025_week17",
+    "replay_games_week_jsonl": "C:\\Users\\Jordan\\AppData\\Local\\Temp\\claude\\C--Users-Jordan-Documents-Football-Project-George-NEW-PROJECT-football-statfinder\\6accb4e8-a09e-41a6-842c-beb095472d52\\scratchpad\\parity\\nfl_2025_wk17\\out\\nfl\\2025_week17\\games_week_2025_17.jsonl",
     "schedule_master_week_rows": 16,
     "replay_output_rows": 16,
     "master_dedupe_rows_dropped": 19,
@@ -23,14 +23,15 @@
       12,
       13,
       14,
-      15
+      15,
+      16
     ],
     "odds_window": {
-      "first_kickoff": "2025-12-19T01:15:00+00:00",
-      "last_kickoff": "2025-12-23T01:15:00+00:00",
-      "start": "2025-12-05T01:15:00+00:00",
-      "end": "2025-12-23T01:15:00+00:00",
-      "ledger_files_copied": 21
+      "first_kickoff": "2025-12-25T18:00:00+00:00",
+      "last_kickoff": "2025-12-30T01:15:00+00:00",
+      "start": "2025-12-11T18:00:00+00:00",
+      "end": "2025-12-30T01:15:00+00:00",
+      "ledger_files_copied": 31
     },
     "stages": [
       {
@@ -53,7 +54,7 @@
           "mapped": 32
         },
         "notes": [
-          "page_stamp=NFL 2025 through games of 2025 December 15 Monday - Week 15"
+          "page_stamp=NFL 2025 through games of 2025 December 22 Monday - Week 16"
         ],
         "error": null
       },
@@ -70,9 +71,9 @@
         "name": "odds_staging",
         "ok": true,
         "counts": {
-          "raw": 12529,
-          "pinned": 12529,
-          "appended": 12529,
+          "raw": 16629,
+          "pinned": 16629,
+          "appended": 16629,
           "duplicates_skipped": 0,
           "unmatched": 0,
           "candidate_sets_zero": 0,
@@ -86,7 +87,7 @@
         "ok": true,
         "counts": {
           "season": 2025,
-          "week": 16,
+          "week": 17,
           "schedule_games": 16,
           "output_rows": 16,
           "skipped_non_fbs": 0,
@@ -105,11 +106,11 @@
         "ok": true,
         "counts": {
           "promoted_games": 16,
-          "used_records": 528,
-          "available_records": 6896,
-          "season_records": 12529,
-          "current_week_records": 6896,
-          "other_week_records": 5633,
+          "used_records": 527,
+          "available_records": 8069,
+          "season_records": 16629,
+          "current_week_records": 8069,
+          "other_week_records": 8560,
           "rating_fields_recomputed": 16
         },
         "notes": [],
@@ -120,12 +121,12 @@
         "ok": true,
         "counts": {
           "season": 2025,
-          "week": 16,
+          "week": 17,
           "games_total": 16,
           "sidecars_written": 16,
-          "sagarin_rows_considered": 1018,
-          "sagarin_rows_enriched": 1018,
-          "sagarin_opp_rows_enriched": 1018,
+          "sagarin_rows_considered": 1050,
+          "sagarin_rows_enriched": 1050,
+          "sagarin_opp_rows_enriched": 1050,
           "sagarin_coverage_fraction": 1
         },
         "notes": [],
@@ -162,7 +163,7 @@
   },
   "label_counts": {
     "W2": 64,
-    "BUGFIX-4": 175,
+    "BUGFIX-4": 178,
     "W1": 16,
     "W5": 16,
     "W10": 16,
@@ -178,9 +179,9 @@
     "BUGFIX-4::rating_vs_odds": 16,
     "BUGFIX-4::rating_vs_odds_favored_team": 16,
     "BUGFIX-4::raw_sources.odds_row": 16,
-    "BUGFIX-4::spread_favored_team": 5,
+    "BUGFIX-4::spread_favored_team": 9,
     "BUGFIX-4::spread_home_relative": 16,
-    "BUGFIX-4::total": 10,
+    "BUGFIX-4::total": 9,
     "W1::game_key": 16,
     "W10::source_uid": 16,
     "W12::raw_sources.schedule_row.gsis": 16,
@@ -193,21 +194,21 @@
   "bugfix_samples": {
     "BUGFIX-4": [
       {
-        "old_game_key": "20251219_0115_sea_la",
-        "new_game_key": "20251219_0115_seattle_seahawks_los_angeles_rams",
-        "kickoff": "2025-12-19T01:15:00+00:00",
-        "matchup": "Los Angeles Rams @ Seattle Seahawks",
+        "old_game_key": "20251225_1800_commanders_dal",
+        "new_game_key": "20251225_1800_washington_commanders_dallas_cowboys",
+        "kickoff": "2025-12-25T18:00:00+00:00",
+        "matchup": "Dallas Cowboys @ Washington Commanders",
         "field": "favored_side",
-        "old": "AWAY",
-        "new": "HOME",
+        "old": "HOME",
+        "new": "AWAY",
         "label": "BUGFIX-4",
         "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
       },
       {
-        "old_game_key": "20251219_0115_sea_la",
-        "new_game_key": "20251219_0115_seattle_seahawks_los_angeles_rams",
-        "kickoff": "2025-12-19T01:15:00+00:00",
-        "matchup": "Los Angeles Rams @ Seattle Seahawks",
+        "old_game_key": "20251225_1800_commanders_dal",
+        "new_game_key": "20251225_1800_washington_commanders_dallas_cowboys",
+        "kickoff": "2025-12-25T18:00:00+00:00",
+        "matchup": "Dallas Cowboys @ Washington Commanders",
         "field": "is_closing",
         "old": false,
         "new": true,
@@ -215,68 +216,68 @@
         "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
       },
       {
-        "old_game_key": "20251219_0115_sea_la",
-        "new_game_key": "20251219_0115_seattle_seahawks_los_angeles_rams",
-        "kickoff": "2025-12-19T01:15:00+00:00",
-        "matchup": "Los Angeles Rams @ Seattle Seahawks",
+        "old_game_key": "20251225_1800_commanders_dal",
+        "new_game_key": "20251225_1800_washington_commanders_dallas_cowboys",
+        "kickoff": "2025-12-25T18:00:00+00:00",
+        "matchup": "Dallas Cowboys @ Washington Commanders",
         "field": "moneyline_away",
         "old": null,
-        "new": 100,
+        "new": -542,
         "label": "BUGFIX-4",
         "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
       },
       {
-        "old_game_key": "20251219_0115_sea_la",
-        "new_game_key": "20251219_0115_seattle_seahawks_los_angeles_rams",
-        "kickoff": "2025-12-19T01:15:00+00:00",
-        "matchup": "Los Angeles Rams @ Seattle Seahawks",
+        "old_game_key": "20251225_1800_commanders_dal",
+        "new_game_key": "20251225_1800_washington_commanders_dallas_cowboys",
+        "kickoff": "2025-12-25T18:00:00+00:00",
+        "matchup": "Dallas Cowboys @ Washington Commanders",
         "field": "moneyline_home",
         "old": null,
-        "new": -120,
+        "new": 380,
         "label": "BUGFIX-4",
         "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
       },
       {
-        "old_game_key": "20251219_0115_sea_la",
-        "new_game_key": "20251219_0115_seattle_seahawks_los_angeles_rams",
-        "kickoff": "2025-12-19T01:15:00+00:00",
-        "matchup": "Los Angeles Rams @ Seattle Seahawks",
+        "old_game_key": "20251225_1800_commanders_dal",
+        "new_game_key": "20251225_1800_washington_commanders_dallas_cowboys",
+        "kickoff": "2025-12-25T18:00:00+00:00",
+        "matchup": "Dallas Cowboys @ Washington Commanders",
         "field": "odds_source",
         "old": "schedule",
-        "new": "williamhill_us",
+        "new": "mybookieag",
         "label": "BUGFIX-4",
         "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
       },
       {
-        "old_game_key": "20251219_0115_sea_la",
-        "new_game_key": "20251219_0115_seattle_seahawks_los_angeles_rams",
-        "kickoff": "2025-12-19T01:15:00+00:00",
-        "matchup": "Los Angeles Rams @ Seattle Seahawks",
+        "old_game_key": "20251225_1800_commanders_dal",
+        "new_game_key": "20251225_1800_washington_commanders_dallas_cowboys",
+        "kickoff": "2025-12-25T18:00:00+00:00",
+        "matchup": "Dallas Cowboys @ Washington Commanders",
         "field": "rating_diff_favored_team",
-        "old": -0.77,
-        "new": 0.77,
+        "old": 2.31,
+        "new": -2.31,
         "label": "BUGFIX-4",
         "reason": "rating_diff_favored_team sign flip: |value| unchanged but favored_side flipped because the replay promoted real book odds where legacy used the dead schedule-fallback tier (odds_source='schedule')"
       },
       {
-        "old_game_key": "20251219_0115_sea_la",
-        "new_game_key": "20251219_0115_seattle_seahawks_los_angeles_rams",
-        "kickoff": "2025-12-19T01:15:00+00:00",
-        "matchup": "Los Angeles Rams @ Seattle Seahawks",
+        "old_game_key": "20251225_1800_commanders_dal",
+        "new_game_key": "20251225_1800_washington_commanders_dallas_cowboys",
+        "kickoff": "2025-12-25T18:00:00+00:00",
+        "matchup": "Dallas Cowboys @ Washington Commanders",
         "field": "rating_vs_odds",
-        "old": 2.27,
-        "new": -0.73,
+        "old": -6.19,
+        "new": 11.31,
         "label": "BUGFIX-4",
         "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
       },
       {
-        "old_game_key": "20251219_0115_sea_la",
-        "new_game_key": "20251219_0115_seattle_seahawks_los_angeles_rams",
-        "kickoff": "2025-12-19T01:15:00+00:00",
-        "matchup": "Los Angeles Rams @ Seattle Seahawks",
+        "old_game_key": "20251225_1800_commanders_dal",
+        "new_game_key": "20251225_1800_washington_commanders_dallas_cowboys",
+        "kickoff": "2025-12-25T18:00:00+00:00",
+        "matchup": "Dallas Cowboys @ Washington Commanders",
         "field": "rating_vs_odds_favored_team",
-        "old": -2.27,
-        "new": -0.73,
+        "old": -6.19,
+        "new": -11.31,
         "label": "BUGFIX-4",
         "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
       }
@@ -286,8 +287,8 @@
   "sidecar": {
     "games_compared": 16,
     "counts": {
-      "home_ytd.entries_old": 227,
-      "home_ytd.entries_new": 224,
+      "home_ytd.entries_old": 245,
+      "home_ytd.entries_new": 240,
       "field:pr_rank": 169,
       "field:opp_pr_rank": 169,
       "field:pr": 426,
@@ -296,18 +297,18 @@
       "field:opp_pr": 426,
       "field:opp_sos": 426,
       "field:opp_sos_rank": 426,
-      "home_ytd.entries_only_old": 3,
+      "home_ytd.entries_only_old": 5,
       "home_ytd.entries_only_new": 0,
-      "away_ytd.entries_old": 227,
-      "away_ytd.entries_new": 224,
-      "away_ytd.entries_only_old": 3,
+      "away_ytd.entries_old": 245,
+      "away_ytd.entries_new": 240,
+      "away_ytd.entries_only_old": 5,
       "away_ytd.entries_only_new": 0,
-      "home_prev.entries_old": 281,
-      "home_prev.entries_new": 281,
+      "home_prev.entries_old": 284,
+      "home_prev.entries_new": 284,
       "home_prev.entries_only_old": 0,
       "home_prev.entries_only_new": 0,
-      "away_prev.entries_old": 289,
-      "away_prev.entries_new": 289,
+      "away_prev.entries_old": 286,
+      "away_prev.entries_new": 286,
       "away_prev.entries_only_old": 0,
       "away_prev.entries_only_new": 0,
       "field:pf": 2,
@@ -333,161 +334,24 @@
   "per_game": [
     {
       "join_key": [
-        "2025-12-19T01:15:00+00:00",
-        "seattleseahawks",
-        "losangelesrams"
-      ],
-      "old_game_key": "20251219_0115_sea_la",
-      "new_game_key": "20251219_0115_seattle_seahawks_los_angeles_rams",
-      "deltas": [
-        {
-          "field": "away_team_norm",
-          "old": "la",
-          "new": "Los Angeles Rams",
-          "label": "W2",
-          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
-        },
-        {
-          "field": "away_team_raw",
-          "old": "LA",
-          "new": "Los Angeles Rams",
-          "label": "W2",
-          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
-        },
-        {
-          "field": "favored_side",
-          "old": "AWAY",
-          "new": "HOME",
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "game_key",
-          "old": "20251219_0115_sea_la",
-          "new": "20251219_0115_seattle_seahawks_los_angeles_rams",
-          "label": "W1",
-          "reason": "game_key format (NFL abbreviation->full-name slug); join is instant+merge_key"
-        },
-        {
-          "field": "home_team_norm",
-          "old": "sea",
-          "new": "Seattle Seahawks",
-          "label": "W2",
-          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
-        },
-        {
-          "field": "home_team_raw",
-          "old": "SEA",
-          "new": "Seattle Seahawks",
-          "label": "W2",
-          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
-        },
-        {
-          "field": "is_closing",
-          "old": false,
-          "new": true,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "moneyline_away",
-          "old": null,
-          "new": 100,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "moneyline_home",
-          "old": null,
-          "new": -120,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "odds_source",
-          "old": "schedule",
-          "new": "williamhill_us",
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "rating_diff_favored_team",
-          "old": -0.77,
-          "new": 0.77,
-          "label": "BUGFIX-4",
-          "reason": "rating_diff_favored_team sign flip: |value| unchanged but favored_side flipped because the replay promoted real book odds where legacy used the dead schedule-fallback tier (odds_source='schedule')"
-        },
-        {
-          "field": "rating_vs_odds",
-          "old": 2.27,
-          "new": -0.73,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "rating_vs_odds_favored_team",
-          "old": -2.27,
-          "new": -0.73,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "snapshot_at",
-          "old": null,
-          "new": "2025-12-18T22:30:11Z",
-          "label": "W5",
-          "reason": "volatile provenance timestamp"
-        },
-        {
-          "field": "source_uid",
-          "old": "2025_16_LA_SEA",
-          "new": null,
-          "label": "W10",
-          "reason": "source_uid: legacy provider id -> new null (SCHEDULE_COLUMNS carries no source_uid column); frontend never reads it (grep-verified: zero refs in web/)"
-        },
-        {
-          "field": "spread_home_relative",
-          "old": 1.5,
-          "new": -1.5,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "raw_sources.schedule_row.gsis",
-          "old": 60067.0,
-          "new": null,
-          "label": "W12",
-          "reason": "schedule provenance drop (whitelisted): gsis/game_no/rotation read only in the frontend's last-resort Game# fallback chain; primary path computes locally"
-        },
-        {
-          "field": "raw_sources.odds_row",
-          "old": null,
-          "new": "<present>",
-          "label": "BUGFIX-4",
-          "reason": "legacy never promoted odds for this game (odds_source='schedule'); replay's corrected pin attaches raw_sources.odds_row"
-        }
-      ]
-    },
-    {
-      "join_key": [
-        "2025-12-20T22:00:00+00:00",
+        "2025-12-25T18:00:00+00:00",
         "washingtoncommanders",
-        "philadelphiaeagles"
+        "dallascowboys"
       ],
-      "old_game_key": "20251220_2200_commanders_phi",
-      "new_game_key": "20251220_2200_washington_commanders_philadelphia_eagles",
+      "old_game_key": "20251225_1800_commanders_dal",
+      "new_game_key": "20251225_1800_washington_commanders_dallas_cowboys",
       "deltas": [
         {
           "field": "away_team_norm",
-          "old": "phi",
-          "new": "Philadelphia Eagles",
+          "old": "dal",
+          "new": "Dallas Cowboys",
           "label": "W2",
           "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
         },
         {
           "field": "away_team_raw",
-          "old": "PHI",
-          "new": "Philadelphia Eagles",
+          "old": "DAL",
+          "new": "Dallas Cowboys",
           "label": "W2",
           "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
         },
@@ -500,8 +364,8 @@
         },
         {
           "field": "game_key",
-          "old": "20251220_2200_commanders_phi",
-          "new": "20251220_2200_washington_commanders_philadelphia_eagles",
+          "old": "20251225_1800_commanders_dal",
+          "new": "20251225_1800_washington_commanders_dallas_cowboys",
           "label": "W1",
           "reason": "game_key format (NFL abbreviation->full-name slug); join is instant+merge_key"
         },
@@ -529,76 +393,76 @@
         {
           "field": "moneyline_away",
           "old": null,
-          "new": -335,
+          "new": -542,
           "label": "BUGFIX-4",
           "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
         },
         {
           "field": "moneyline_home",
           "old": null,
-          "new": 270,
+          "new": 380,
           "label": "BUGFIX-4",
           "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
         },
         {
           "field": "odds_source",
           "old": "schedule",
-          "new": "lowvig",
+          "new": "mybookieag",
           "label": "BUGFIX-4",
           "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
         },
         {
           "field": "rating_diff_favored_team",
-          "old": -5.26,
-          "new": 5.26,
+          "old": 2.31,
+          "new": -2.31,
           "label": "BUGFIX-4",
           "reason": "rating_diff_favored_team sign flip: |value| unchanged but favored_side flipped because the replay promoted real book odds where legacy used the dead schedule-fallback tier (odds_source='schedule')"
         },
         {
           "field": "rating_vs_odds",
-          "old": -12.26,
-          "new": 1.74,
+          "old": -6.19,
+          "new": 11.31,
           "label": "BUGFIX-4",
           "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
         },
         {
           "field": "rating_vs_odds_favored_team",
-          "old": -12.26,
-          "new": -1.74,
+          "old": -6.19,
+          "new": -11.31,
           "label": "BUGFIX-4",
           "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
         },
         {
           "field": "snapshot_at",
           "old": null,
-          "new": "2025-12-20T10:30:11Z",
+          "new": "2025-12-25T10:32:48Z",
           "label": "W5",
           "reason": "volatile provenance timestamp"
         },
         {
           "field": "source_uid",
-          "old": "2025_16_PHI_WAS",
+          "old": "2025_17_DAL_WAS",
           "new": null,
           "label": "W10",
           "reason": "source_uid: legacy provider id -> new null (SCHEDULE_COLUMNS carries no source_uid column); frontend never reads it (grep-verified: zero refs in web/)"
         },
         {
-          "field": "spread_home_relative",
-          "old": -7.0,
-          "new": 7.0,
+          "field": "spread_favored_team",
+          "old": -8.5,
+          "new": -9.0,
           "label": "BUGFIX-4",
           "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
         },
         {
-          "field": "total",
-          "old": 43.5,
-          "new": 44.0,
+          "field": "spread_home_relative",
+          "old": -8.5,
+          "new": 9.0,
           "label": "BUGFIX-4",
           "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
         },
         {
           "field": "raw_sources.schedule_row.gsis",
-          "old": 60069.0,
+          "old": 60083.0,
           "new": null,
           "label": "W12",
           "reason": "schedule provenance drop (whitelisted): gsis/game_no/rotation read only in the frontend's last-resort Game# fallback chain; primary path computes locally"
@@ -614,52 +478,52 @@
     },
     {
       "join_key": [
-        "2025-12-21T01:20:00+00:00",
-        "chicagobears",
-        "greenbaypackers"
+        "2025-12-25T21:30:00+00:00",
+        "minnesotavikings",
+        "detroitlions"
       ],
-      "old_game_key": "20251221_0120_chi_gb",
-      "new_game_key": "20251221_0120_chicago_bears_green_bay_packers",
+      "old_game_key": "20251225_2130_min_det",
+      "new_game_key": "20251225_2130_minnesota_vikings_detroit_lions",
       "deltas": [
         {
           "field": "away_team_norm",
-          "old": "gb",
-          "new": "Green Bay Packers",
+          "old": "det",
+          "new": "Detroit Lions",
           "label": "W2",
           "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
         },
         {
           "field": "away_team_raw",
-          "old": "GB",
-          "new": "Green Bay Packers",
+          "old": "DET",
+          "new": "Detroit Lions",
           "label": "W2",
           "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
         },
         {
           "field": "favored_side",
-          "old": "AWAY",
-          "new": "HOME",
+          "old": "HOME",
+          "new": "AWAY",
           "label": "BUGFIX-4",
           "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
         },
         {
           "field": "game_key",
-          "old": "20251221_0120_chi_gb",
-          "new": "20251221_0120_chicago_bears_green_bay_packers",
+          "old": "20251225_2130_min_det",
+          "new": "20251225_2130_minnesota_vikings_detroit_lions",
           "label": "W1",
           "reason": "game_key format (NFL abbreviation->full-name slug); join is instant+merge_key"
         },
         {
           "field": "home_team_norm",
-          "old": "chi",
-          "new": "Chicago Bears",
+          "old": "min",
+          "new": "Minnesota Vikings",
           "label": "W2",
           "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
         },
         {
           "field": "home_team_raw",
-          "old": "CHI",
-          "new": "Chicago Bears",
+          "old": "MIN",
+          "new": "Minnesota Vikings",
           "label": "W2",
           "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
         },
@@ -673,14 +537,165 @@
         {
           "field": "moneyline_away",
           "old": null,
-          "new": -102,
+          "new": -350,
           "label": "BUGFIX-4",
           "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
         },
         {
           "field": "moneyline_home",
           "old": null,
-          "new": -118,
+          "new": 280,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "odds_source",
+          "old": "schedule",
+          "new": "lowvig",
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "rating_diff_favored_team",
+          "old": -2.65,
+          "new": 2.65,
+          "label": "BUGFIX-4",
+          "reason": "rating_diff_favored_team sign flip: |value| unchanged but favored_side flipped because the replay promoted real book odds where legacy used the dead schedule-fallback tier (odds_source='schedule')"
+        },
+        {
+          "field": "rating_vs_odds",
+          "old": -9.65,
+          "new": 4.85,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "rating_vs_odds_favored_team",
+          "old": -9.65,
+          "new": -4.85,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "snapshot_at",
+          "old": null,
+          "new": "2025-12-25T10:32:48Z",
+          "label": "W5",
+          "reason": "volatile provenance timestamp"
+        },
+        {
+          "field": "source_uid",
+          "old": "2025_17_DET_MIN",
+          "new": null,
+          "label": "W10",
+          "reason": "source_uid: legacy provider id -> new null (SCHEDULE_COLUMNS carries no source_uid column); frontend never reads it (grep-verified: zero refs in web/)"
+        },
+        {
+          "field": "spread_favored_team",
+          "old": -7.0,
+          "new": -7.5,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "spread_home_relative",
+          "old": -7.0,
+          "new": 7.5,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "total",
+          "old": 45.5,
+          "new": 43.0,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "raw_sources.schedule_row.gsis",
+          "old": 60084.0,
+          "new": null,
+          "label": "W12",
+          "reason": "schedule provenance drop (whitelisted): gsis/game_no/rotation read only in the frontend's last-resort Game# fallback chain; primary path computes locally"
+        },
+        {
+          "field": "raw_sources.odds_row",
+          "old": null,
+          "new": "<present>",
+          "label": "BUGFIX-4",
+          "reason": "legacy never promoted odds for this game (odds_source='schedule'); replay's corrected pin attaches raw_sources.odds_row"
+        }
+      ]
+    },
+    {
+      "join_key": [
+        "2025-12-26T01:15:00+00:00",
+        "kansascitychiefs",
+        "denverbroncos"
+      ],
+      "old_game_key": "20251226_0115_kc_den",
+      "new_game_key": "20251226_0115_kansas_city_chiefs_denver_broncos",
+      "deltas": [
+        {
+          "field": "away_team_norm",
+          "old": "den",
+          "new": "Denver Broncos",
+          "label": "W2",
+          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
+        },
+        {
+          "field": "away_team_raw",
+          "old": "DEN",
+          "new": "Denver Broncos",
+          "label": "W2",
+          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
+        },
+        {
+          "field": "favored_side",
+          "old": "HOME",
+          "new": "AWAY",
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "game_key",
+          "old": "20251226_0115_kc_den",
+          "new": "20251226_0115_kansas_city_chiefs_denver_broncos",
+          "label": "W1",
+          "reason": "game_key format (NFL abbreviation->full-name slug); join is instant+merge_key"
+        },
+        {
+          "field": "home_team_norm",
+          "old": "kc",
+          "new": "Kansas City Chiefs",
+          "label": "W2",
+          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
+        },
+        {
+          "field": "home_team_raw",
+          "old": "KC",
+          "new": "Kansas City Chiefs",
+          "label": "W2",
+          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
+        },
+        {
+          "field": "is_closing",
+          "old": false,
+          "new": true,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "moneyline_away",
+          "old": null,
+          "new": -1000,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "moneyline_home",
+          "old": null,
+          "new": 650,
           "label": "BUGFIX-4",
           "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
         },
@@ -693,35 +708,179 @@
         },
         {
           "field": "rating_diff_favored_team",
-          "old": 0.59,
-          "new": -0.59,
+          "old": 1.36,
+          "new": -1.36,
           "label": "BUGFIX-4",
           "reason": "rating_diff_favored_team sign flip: |value| unchanged but favored_side flipped because the replay promoted real book odds where legacy used the dead schedule-fallback tier (odds_source='schedule')"
         },
         {
           "field": "rating_vs_odds",
-          "old": 0.91,
-          "new": -1.59,
+          "old": -12.14,
+          "new": 14.86,
           "label": "BUGFIX-4",
           "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
         },
         {
           "field": "rating_vs_odds_favored_team",
-          "old": -0.91,
-          "new": -1.59,
+          "old": -12.14,
+          "new": -14.86,
           "label": "BUGFIX-4",
           "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
         },
         {
           "field": "snapshot_at",
           "old": null,
-          "new": "2025-12-20T22:28:11Z",
+          "new": "2025-12-25T22:29:25Z",
           "label": "W5",
           "reason": "volatile provenance timestamp"
         },
         {
           "field": "source_uid",
-          "old": "2025_16_GB_CHI",
+          "old": "2025_17_DEN_KC",
+          "new": null,
+          "label": "W10",
+          "reason": "source_uid: legacy provider id -> new null (SCHEDULE_COLUMNS carries no source_uid column); frontend never reads it (grep-verified: zero refs in web/)"
+        },
+        {
+          "field": "spread_home_relative",
+          "old": -13.5,
+          "new": 13.5,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "total",
+          "old": 37.5,
+          "new": 38.5,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "raw_sources.schedule_row.gsis",
+          "old": 60085.0,
+          "new": null,
+          "label": "W12",
+          "reason": "schedule provenance drop (whitelisted): gsis/game_no/rotation read only in the frontend's last-resort Game# fallback chain; primary path computes locally"
+        },
+        {
+          "field": "raw_sources.odds_row",
+          "old": null,
+          "new": "<present>",
+          "label": "BUGFIX-4",
+          "reason": "legacy never promoted odds for this game (odds_source='schedule'); replay's corrected pin attaches raw_sources.odds_row"
+        }
+      ]
+    },
+    {
+      "join_key": [
+        "2025-12-27T21:30:00+00:00",
+        "losangeleschargers",
+        "houstontexans"
+      ],
+      "old_game_key": "20251227_2130_lac_hou",
+      "new_game_key": "20251227_2130_los_angeles_chargers_houston_texans",
+      "deltas": [
+        {
+          "field": "away_team_norm",
+          "old": "hou",
+          "new": "Houston Texans",
+          "label": "W2",
+          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
+        },
+        {
+          "field": "away_team_raw",
+          "old": "HOU",
+          "new": "Houston Texans",
+          "label": "W2",
+          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
+        },
+        {
+          "field": "favored_side",
+          "old": "AWAY",
+          "new": "HOME",
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "game_key",
+          "old": "20251227_2130_lac_hou",
+          "new": "20251227_2130_los_angeles_chargers_houston_texans",
+          "label": "W1",
+          "reason": "game_key format (NFL abbreviation->full-name slug); join is instant+merge_key"
+        },
+        {
+          "field": "home_team_norm",
+          "old": "lac",
+          "new": "Los Angeles Chargers",
+          "label": "W2",
+          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
+        },
+        {
+          "field": "home_team_raw",
+          "old": "LAC",
+          "new": "Los Angeles Chargers",
+          "label": "W2",
+          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
+        },
+        {
+          "field": "is_closing",
+          "old": false,
+          "new": true,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "moneyline_away",
+          "old": null,
+          "new": -103,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "moneyline_home",
+          "old": null,
+          "new": -117,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "odds_source",
+          "old": "schedule",
+          "new": "lowvig",
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "rating_diff_favored_team",
+          "old": 0.12,
+          "new": -0.12,
+          "label": "BUGFIX-4",
+          "reason": "rating_diff_favored_team sign flip: |value| unchanged but favored_side flipped because the replay promoted real book odds where legacy used the dead schedule-fallback tier (odds_source='schedule')"
+        },
+        {
+          "field": "rating_vs_odds",
+          "old": 1.38,
+          "new": -1.12,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "rating_vs_odds_favored_team",
+          "old": -1.38,
+          "new": -1.12,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "snapshot_at",
+          "old": null,
+          "new": "2025-12-27T10:30:32Z",
+          "label": "W5",
+          "reason": "volatile provenance timestamp"
+        },
+        {
+          "field": "source_uid",
+          "old": "2025_17_HOU_LAC",
           "new": null,
           "label": "W10",
           "reason": "source_uid: legacy provider id -> new null (SCHEDULE_COLUMNS carries no source_uid column); frontend never reads it (grep-verified: zero refs in web/)"
@@ -742,14 +901,14 @@
         },
         {
           "field": "total",
-          "old": 45.5,
-          "new": 45.0,
+          "old": 40.5,
+          "new": 39.5,
           "label": "BUGFIX-4",
           "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
         },
         {
           "field": "raw_sources.schedule_row.gsis",
-          "old": 60068.0,
+          "old": 60089.0,
           "new": null,
           "label": "W12",
           "reason": "schedule provenance drop (whitelisted): gsis/game_no/rotation read only in the frontend's last-resort Game# fallback chain; primary path computes locally"
@@ -765,24 +924,168 @@
     },
     {
       "join_key": [
-        "2025-12-21T18:00:00+00:00",
-        "carolinapanthers",
-        "tampabaybuccaneers"
+        "2025-12-28T01:00:00+00:00",
+        "greenbaypackers",
+        "baltimoreravens"
       ],
-      "old_game_key": "20251221_1800_car_tb",
-      "new_game_key": "20251221_1800_carolina_panthers_tampa_bay_buccaneers",
+      "old_game_key": "20251228_0100_gb_bal",
+      "new_game_key": "20251228_0100_green_bay_packers_baltimore_ravens",
       "deltas": [
         {
           "field": "away_team_norm",
-          "old": "tb",
-          "new": "Tampa Bay Buccaneers",
+          "old": "bal",
+          "new": "Baltimore Ravens",
           "label": "W2",
           "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
         },
         {
           "field": "away_team_raw",
-          "old": "TB",
-          "new": "Tampa Bay Buccaneers",
+          "old": "BAL",
+          "new": "Baltimore Ravens",
+          "label": "W2",
+          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
+        },
+        {
+          "field": "favored_side",
+          "old": "AWAY",
+          "new": "HOME",
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "game_key",
+          "old": "20251228_0100_gb_bal",
+          "new": "20251228_0100_green_bay_packers_baltimore_ravens",
+          "label": "W1",
+          "reason": "game_key format (NFL abbreviation->full-name slug); join is instant+merge_key"
+        },
+        {
+          "field": "home_team_norm",
+          "old": "gb",
+          "new": "Green Bay Packers",
+          "label": "W2",
+          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
+        },
+        {
+          "field": "home_team_raw",
+          "old": "GB",
+          "new": "Green Bay Packers",
+          "label": "W2",
+          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
+        },
+        {
+          "field": "is_closing",
+          "old": false,
+          "new": true,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "moneyline_away",
+          "old": null,
+          "new": 121,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "moneyline_home",
+          "old": null,
+          "new": -140,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "odds_source",
+          "old": "schedule",
+          "new": "williamhill_us",
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "rating_diff_favored_team",
+          "old": -3.32,
+          "new": 3.32,
+          "label": "BUGFIX-4",
+          "reason": "rating_diff_favored_team sign flip: |value| unchanged but favored_side flipped because the replay promoted real book odds where legacy used the dead schedule-fallback tier (odds_source='schedule')"
+        },
+        {
+          "field": "rating_vs_odds",
+          "old": 5.82,
+          "new": 0.82,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "rating_vs_odds_favored_team",
+          "old": -5.82,
+          "new": 0.82,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "snapshot_at",
+          "old": null,
+          "new": "2025-12-27T22:28:48Z",
+          "label": "W5",
+          "reason": "volatile provenance timestamp"
+        },
+        {
+          "field": "source_uid",
+          "old": "2025_17_BAL_GB",
+          "new": null,
+          "label": "W10",
+          "reason": "source_uid: legacy provider id -> new null (SCHEDULE_COLUMNS carries no source_uid column); frontend never reads it (grep-verified: zero refs in web/)"
+        },
+        {
+          "field": "spread_home_relative",
+          "old": 2.5,
+          "new": -2.5,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "total",
+          "old": 38.5,
+          "new": 38.0,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "raw_sources.schedule_row.gsis",
+          "old": 60088.0,
+          "new": null,
+          "label": "W12",
+          "reason": "schedule provenance drop (whitelisted): gsis/game_no/rotation read only in the frontend's last-resort Game# fallback chain; primary path computes locally"
+        },
+        {
+          "field": "raw_sources.odds_row",
+          "old": null,
+          "new": "<present>",
+          "label": "BUGFIX-4",
+          "reason": "legacy never promoted odds for this game (odds_source='schedule'); replay's corrected pin attaches raw_sources.odds_row"
+        }
+      ]
+    },
+    {
+      "join_key": [
+        "2025-12-28T18:00:00+00:00",
+        "carolinapanthers",
+        "seattleseahawks"
+      ],
+      "old_game_key": "20251228_1800_car_sea",
+      "new_game_key": "20251228_1800_carolina_panthers_seattle_seahawks",
+      "deltas": [
+        {
+          "field": "away_team_norm",
+          "old": "sea",
+          "new": "Seattle Seahawks",
+          "label": "W2",
+          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
+        },
+        {
+          "field": "away_team_raw",
+          "old": "SEA",
+          "new": "Seattle Seahawks",
           "label": "W2",
           "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
         },
@@ -795,8 +1098,8 @@
         },
         {
           "field": "game_key",
-          "old": "20251221_1800_car_tb",
-          "new": "20251221_1800_carolina_panthers_tampa_bay_buccaneers",
+          "old": "20251228_1800_car_sea",
+          "new": "20251228_1800_carolina_panthers_seattle_seahawks",
           "label": "W1",
           "reason": "game_key format (NFL abbreviation->full-name slug); join is instant+merge_key"
         },
@@ -824,14 +1127,14 @@
         {
           "field": "moneyline_away",
           "old": null,
-          "new": -154,
+          "new": -345,
           "label": "BUGFIX-4",
           "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
         },
         {
           "field": "moneyline_home",
           "old": null,
-          "new": 130,
+          "new": 275,
           "label": "BUGFIX-4",
           "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
         },
@@ -844,56 +1147,56 @@
         },
         {
           "field": "rating_diff_favored_team",
-          "old": -0.82,
-          "new": 0.82,
+          "old": -7.83,
+          "new": 7.83,
           "label": "BUGFIX-4",
           "reason": "rating_diff_favored_team sign flip: |value| unchanged but favored_side flipped because the replay promoted real book odds where legacy used the dead schedule-fallback tier (odds_source='schedule')"
         },
         {
           "field": "rating_vs_odds",
-          "old": -3.82,
-          "new": 2.18,
+          "old": -14.33,
+          "new": -0.83,
           "label": "BUGFIX-4",
           "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
         },
         {
           "field": "rating_vs_odds_favored_team",
-          "old": -3.82,
-          "new": -2.18,
+          "old": -14.33,
+          "new": 0.83,
           "label": "BUGFIX-4",
           "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
         },
         {
           "field": "snapshot_at",
           "old": null,
-          "new": "2025-12-21T10:30:36Z",
+          "new": "2025-12-28T10:31:01Z",
           "label": "W5",
           "reason": "volatile provenance timestamp"
         },
         {
           "field": "source_uid",
-          "old": "2025_16_TB_CAR",
+          "old": "2025_17_SEA_CAR",
           "new": null,
           "label": "W10",
           "reason": "source_uid: legacy provider id -> new null (SCHEDULE_COLUMNS carries no source_uid column); frontend never reads it (grep-verified: zero refs in web/)"
         },
         {
-          "field": "spread_home_relative",
-          "old": -3.0,
-          "new": 3.0,
+          "field": "spread_favored_team",
+          "old": -6.5,
+          "new": -7.0,
           "label": "BUGFIX-4",
           "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
         },
         {
-          "field": "total",
-          "old": 44.5,
-          "new": 45.5,
+          "field": "spread_home_relative",
+          "old": -6.5,
+          "new": 7.0,
           "label": "BUGFIX-4",
           "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
         },
         {
           "field": "raw_sources.schedule_row.gsis",
-          "old": 60071.0,
+          "old": 60086.0,
           "new": null,
           "label": "W12",
           "reason": "schedule provenance drop (whitelisted): gsis/game_no/rotation read only in the frontend's last-resort Game# fallback chain; primary path computes locally"
@@ -909,24 +1212,168 @@
     },
     {
       "join_key": [
-        "2025-12-21T18:00:00+00:00",
-        "clevelandbrowns",
-        "buffalobills"
+        "2025-12-28T18:00:00+00:00",
+        "cincinnatibengals",
+        "arizonacardinals"
       ],
-      "old_game_key": "20251221_1800_cle_buf",
-      "new_game_key": "20251221_1800_cleveland_browns_buffalo_bills",
+      "old_game_key": "20251228_1800_cin_ari",
+      "new_game_key": "20251228_1800_cincinnati_bengals_arizona_cardinals",
       "deltas": [
         {
           "field": "away_team_norm",
-          "old": "buf",
-          "new": "Buffalo Bills",
+          "old": "ari",
+          "new": "Arizona Cardinals",
           "label": "W2",
           "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
         },
         {
           "field": "away_team_raw",
-          "old": "BUF",
-          "new": "Buffalo Bills",
+          "old": "ARI",
+          "new": "Arizona Cardinals",
+          "label": "W2",
+          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
+        },
+        {
+          "field": "favored_side",
+          "old": "AWAY",
+          "new": "HOME",
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "game_key",
+          "old": "20251228_1800_cin_ari",
+          "new": "20251228_1800_cincinnati_bengals_arizona_cardinals",
+          "label": "W1",
+          "reason": "game_key format (NFL abbreviation->full-name slug); join is instant+merge_key"
+        },
+        {
+          "field": "home_team_norm",
+          "old": "cin",
+          "new": "Cincinnati Bengals",
+          "label": "W2",
+          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
+        },
+        {
+          "field": "home_team_raw",
+          "old": "CIN",
+          "new": "Cincinnati Bengals",
+          "label": "W2",
+          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
+        },
+        {
+          "field": "is_closing",
+          "old": false,
+          "new": true,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "moneyline_away",
+          "old": null,
+          "new": 275,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "moneyline_home",
+          "old": null,
+          "new": -345,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "odds_source",
+          "old": "schedule",
+          "new": "williamhill_us",
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "rating_diff_favored_team",
+          "old": -4.25,
+          "new": 4.25,
+          "label": "BUGFIX-4",
+          "reason": "rating_diff_favored_team sign flip: |value| unchanged but favored_side flipped because the replay promoted real book odds where legacy used the dead schedule-fallback tier (odds_source='schedule')"
+        },
+        {
+          "field": "rating_vs_odds",
+          "old": 11.25,
+          "new": -2.75,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "rating_vs_odds_favored_team",
+          "old": -11.25,
+          "new": -2.75,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "snapshot_at",
+          "old": null,
+          "new": "2025-12-28T10:31:01Z",
+          "label": "W5",
+          "reason": "volatile provenance timestamp"
+        },
+        {
+          "field": "source_uid",
+          "old": "2025_17_ARI_CIN",
+          "new": null,
+          "label": "W10",
+          "reason": "source_uid: legacy provider id -> new null (SCHEDULE_COLUMNS carries no source_uid column); frontend never reads it (grep-verified: zero refs in web/)"
+        },
+        {
+          "field": "spread_home_relative",
+          "old": 7.0,
+          "new": -7.0,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "total",
+          "old": 52.5,
+          "new": 53.5,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "raw_sources.schedule_row.gsis",
+          "old": 60087.0,
+          "new": null,
+          "label": "W12",
+          "reason": "schedule provenance drop (whitelisted): gsis/game_no/rotation read only in the frontend's last-resort Game# fallback chain; primary path computes locally"
+        },
+        {
+          "field": "raw_sources.odds_row",
+          "old": null,
+          "new": "<present>",
+          "label": "BUGFIX-4",
+          "reason": "legacy never promoted odds for this game (odds_source='schedule'); replay's corrected pin attaches raw_sources.odds_row"
+        }
+      ]
+    },
+    {
+      "join_key": [
+        "2025-12-28T18:00:00+00:00",
+        "clevelandbrowns",
+        "pittsburghsteelers"
+      ],
+      "old_game_key": "20251228_1800_cle_pit",
+      "new_game_key": "20251228_1800_cleveland_browns_pittsburgh_steelers",
+      "deltas": [
+        {
+          "field": "away_team_norm",
+          "old": "pit",
+          "new": "Pittsburgh Steelers",
+          "label": "W2",
+          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
+        },
+        {
+          "field": "away_team_raw",
+          "old": "PIT",
+          "new": "Pittsburgh Steelers",
           "label": "W2",
           "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
         },
@@ -939,8 +1386,8 @@
         },
         {
           "field": "game_key",
-          "old": "20251221_1800_cle_buf",
-          "new": "20251221_1800_cleveland_browns_buffalo_bills",
+          "old": "20251228_1800_cle_pit",
+          "new": "20251228_1800_cleveland_browns_pittsburgh_steelers",
           "label": "W1",
           "reason": "game_key format (NFL abbreviation->full-name slug); join is instant+merge_key"
         },
@@ -968,14 +1415,14 @@
         {
           "field": "moneyline_away",
           "old": null,
-          "new": -590,
+          "new": -193,
           "label": "BUGFIX-4",
           "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
         },
         {
           "field": "moneyline_home",
           "old": null,
-          "new": 425,
+          "new": 160,
           "label": "BUGFIX-4",
           "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
         },
@@ -988,481 +1435,63 @@
         },
         {
           "field": "rating_diff_favored_team",
-          "old": -10.11,
-          "new": 10.11,
+          "old": -6.15,
+          "new": 6.15,
           "label": "BUGFIX-4",
           "reason": "rating_diff_favored_team sign flip: |value| unchanged but favored_side flipped because the replay promoted real book odds where legacy used the dead schedule-fallback tier (odds_source='schedule')"
         },
         {
           "field": "rating_vs_odds",
-          "old": -20.61,
-          "new": 0.39,
+          "old": -10.65,
+          "new": -2.65,
           "label": "BUGFIX-4",
           "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
         },
         {
           "field": "rating_vs_odds_favored_team",
-          "old": -20.61,
-          "new": -0.39,
+          "old": -10.65,
+          "new": 2.65,
           "label": "BUGFIX-4",
           "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
         },
         {
           "field": "snapshot_at",
           "old": null,
-          "new": "2025-12-21T10:30:36Z",
+          "new": "2025-12-28T10:31:01Z",
           "label": "W5",
           "reason": "volatile provenance timestamp"
         },
         {
           "field": "source_uid",
-          "old": "2025_16_BUF_CLE",
-          "new": null,
-          "label": "W10",
-          "reason": "source_uid: legacy provider id -> new null (SCHEDULE_COLUMNS carries no source_uid column); frontend never reads it (grep-verified: zero refs in web/)"
-        },
-        {
-          "field": "spread_home_relative",
-          "old": -10.5,
-          "new": 10.5,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "raw_sources.schedule_row.gsis",
-          "old": 60072.0,
-          "new": null,
-          "label": "W12",
-          "reason": "schedule provenance drop (whitelisted): gsis/game_no/rotation read only in the frontend's last-resort Game# fallback chain; primary path computes locally"
-        },
-        {
-          "field": "raw_sources.odds_row",
-          "old": null,
-          "new": "<present>",
-          "label": "BUGFIX-4",
-          "reason": "legacy never promoted odds for this game (odds_source='schedule'); replay's corrected pin attaches raw_sources.odds_row"
-        }
-      ]
-    },
-    {
-      "join_key": [
-        "2025-12-21T18:00:00+00:00",
-        "dallascowboys",
-        "losangeleschargers"
-      ],
-      "old_game_key": "20251221_1800_dal_lac",
-      "new_game_key": "20251221_1800_dallas_cowboys_los_angeles_chargers",
-      "deltas": [
-        {
-          "field": "away_team_norm",
-          "old": "lac",
-          "new": "Los Angeles Chargers",
-          "label": "W2",
-          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
-        },
-        {
-          "field": "away_team_raw",
-          "old": "LAC",
-          "new": "Los Angeles Chargers",
-          "label": "W2",
-          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
-        },
-        {
-          "field": "favored_side",
-          "old": "AWAY",
-          "new": "HOME",
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "game_key",
-          "old": "20251221_1800_dal_lac",
-          "new": "20251221_1800_dallas_cowboys_los_angeles_chargers",
-          "label": "W1",
-          "reason": "game_key format (NFL abbreviation->full-name slug); join is instant+merge_key"
-        },
-        {
-          "field": "home_team_norm",
-          "old": "dal",
-          "new": "Dallas Cowboys",
-          "label": "W2",
-          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
-        },
-        {
-          "field": "home_team_raw",
-          "old": "DAL",
-          "new": "Dallas Cowboys",
-          "label": "W2",
-          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
-        },
-        {
-          "field": "is_closing",
-          "old": false,
-          "new": true,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "moneyline_away",
-          "old": null,
-          "new": 112,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "moneyline_home",
-          "old": null,
-          "new": -137,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "odds_source",
-          "old": "schedule",
-          "new": "williamhill_us",
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "rating_diff_favored_team",
-          "old": 1.76,
-          "new": -1.76,
-          "label": "BUGFIX-4",
-          "reason": "rating_diff_favored_team sign flip: |value| unchanged but favored_side flipped because the replay promoted real book odds where legacy used the dead schedule-fallback tier (odds_source='schedule')"
-        },
-        {
-          "field": "rating_vs_odds",
-          "old": -0.26,
-          "new": -3.26,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "rating_vs_odds_favored_team",
-          "old": 0.26,
-          "new": -3.26,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "snapshot_at",
-          "old": null,
-          "new": "2025-12-21T10:30:36Z",
-          "label": "W5",
-          "reason": "volatile provenance timestamp"
-        },
-        {
-          "field": "source_uid",
-          "old": "2025_16_LAC_DAL",
-          "new": null,
-          "label": "W10",
-          "reason": "source_uid: legacy provider id -> new null (SCHEDULE_COLUMNS carries no source_uid column); frontend never reads it (grep-verified: zero refs in web/)"
-        },
-        {
-          "field": "spread_home_relative",
-          "old": 1.5,
-          "new": -1.5,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "total",
-          "old": 50.5,
-          "new": 50.0,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "raw_sources.schedule_row.gsis",
-          "old": 60073.0,
-          "new": null,
-          "label": "W12",
-          "reason": "schedule provenance drop (whitelisted): gsis/game_no/rotation read only in the frontend's last-resort Game# fallback chain; primary path computes locally"
-        },
-        {
-          "field": "raw_sources.odds_row",
-          "old": null,
-          "new": "<present>",
-          "label": "BUGFIX-4",
-          "reason": "legacy never promoted odds for this game (odds_source='schedule'); replay's corrected pin attaches raw_sources.odds_row"
-        }
-      ]
-    },
-    {
-      "join_key": [
-        "2025-12-21T18:00:00+00:00",
-        "miamidolphins",
-        "cincinnatibengals"
-      ],
-      "old_game_key": "20251221_1800_mia_cin",
-      "new_game_key": "20251221_1800_miami_dolphins_cincinnati_bengals",
-      "deltas": [
-        {
-          "field": "away_team_norm",
-          "old": "cin",
-          "new": "Cincinnati Bengals",
-          "label": "W2",
-          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
-        },
-        {
-          "field": "away_team_raw",
-          "old": "CIN",
-          "new": "Cincinnati Bengals",
-          "label": "W2",
-          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
-        },
-        {
-          "field": "favored_side",
-          "old": "HOME",
-          "new": "AWAY",
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "game_key",
-          "old": "20251221_1800_mia_cin",
-          "new": "20251221_1800_miami_dolphins_cincinnati_bengals",
-          "label": "W1",
-          "reason": "game_key format (NFL abbreviation->full-name slug); join is instant+merge_key"
-        },
-        {
-          "field": "home_team_norm",
-          "old": "mia",
-          "new": "Miami Dolphins",
-          "label": "W2",
-          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
-        },
-        {
-          "field": "home_team_raw",
-          "old": "MIA",
-          "new": "Miami Dolphins",
-          "label": "W2",
-          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
-        },
-        {
-          "field": "is_closing",
-          "old": false,
-          "new": true,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "moneyline_away",
-          "old": null,
-          "new": -213,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "moneyline_home",
-          "old": null,
-          "new": 175,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "odds_source",
-          "old": "schedule",
-          "new": "williamhill_us",
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "rating_diff_favored_team",
-          "old": 1.94,
-          "new": -1.94,
-          "label": "BUGFIX-4",
-          "reason": "rating_diff_favored_team sign flip: |value| unchanged but favored_side flipped because the replay promoted real book odds where legacy used the dead schedule-fallback tier (odds_source='schedule')"
-        },
-        {
-          "field": "rating_vs_odds",
-          "old": -1.56,
-          "new": 5.94,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "rating_vs_odds_favored_team",
-          "old": -1.56,
-          "new": -5.94,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "snapshot_at",
-          "old": null,
-          "new": "2025-12-21T10:30:36Z",
-          "label": "W5",
-          "reason": "volatile provenance timestamp"
-        },
-        {
-          "field": "source_uid",
-          "old": "2025_16_CIN_MIA",
+          "old": "2025_17_PIT_CLE",
           "new": null,
           "label": "W10",
           "reason": "source_uid: legacy provider id -> new null (SCHEDULE_COLUMNS carries no source_uid column); frontend never reads it (grep-verified: zero refs in web/)"
         },
         {
           "field": "spread_favored_team",
-          "old": -3.5,
-          "new": -4.0,
+          "old": -4.5,
+          "new": -3.5,
           "label": "BUGFIX-4",
           "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
         },
         {
           "field": "spread_home_relative",
-          "old": -3.5,
-          "new": 4.0,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "raw_sources.schedule_row.gsis",
-          "old": 60081.0,
-          "new": null,
-          "label": "W12",
-          "reason": "schedule provenance drop (whitelisted): gsis/game_no/rotation read only in the frontend's last-resort Game# fallback chain; primary path computes locally"
-        },
-        {
-          "field": "raw_sources.odds_row",
-          "old": null,
-          "new": "<present>",
-          "label": "BUGFIX-4",
-          "reason": "legacy never promoted odds for this game (odds_source='schedule'); replay's corrected pin attaches raw_sources.odds_row"
-        }
-      ]
-    },
-    {
-      "join_key": [
-        "2025-12-21T18:00:00+00:00",
-        "neworleanssaints",
-        "newyorkjets"
-      ],
-      "old_game_key": "20251221_1800_no_nyj",
-      "new_game_key": "20251221_1800_new_orleans_saints_new_york_jets",
-      "deltas": [
-        {
-          "field": "away_team_norm",
-          "old": "nyj",
-          "new": "New York Jets",
-          "label": "W2",
-          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
-        },
-        {
-          "field": "away_team_raw",
-          "old": "NYJ",
-          "new": "New York Jets",
-          "label": "W2",
-          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
-        },
-        {
-          "field": "favored_side",
-          "old": "AWAY",
-          "new": "HOME",
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "game_key",
-          "old": "20251221_1800_no_nyj",
-          "new": "20251221_1800_new_orleans_saints_new_york_jets",
-          "label": "W1",
-          "reason": "game_key format (NFL abbreviation->full-name slug); join is instant+merge_key"
-        },
-        {
-          "field": "home_team_norm",
-          "old": "no",
-          "new": "New Orleans Saints",
-          "label": "W2",
-          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
-        },
-        {
-          "field": "home_team_raw",
-          "old": "NO",
-          "new": "New Orleans Saints",
-          "label": "W2",
-          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
-        },
-        {
-          "field": "is_closing",
-          "old": false,
-          "new": true,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "moneyline_away",
-          "old": null,
-          "new": 225,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "moneyline_home",
-          "old": null,
-          "new": -280,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "odds_source",
-          "old": "schedule",
-          "new": "williamhill_us",
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "rating_diff_favored_team",
-          "old": -2.75,
-          "new": 2.75,
-          "label": "BUGFIX-4",
-          "reason": "rating_diff_favored_team sign flip: |value| unchanged but favored_side flipped because the replay promoted real book odds where legacy used the dead schedule-fallback tier (odds_source='schedule')"
-        },
-        {
-          "field": "rating_vs_odds",
-          "old": 9.25,
-          "new": -3.75,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "rating_vs_odds_favored_team",
-          "old": -9.25,
-          "new": -3.75,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "snapshot_at",
-          "old": null,
-          "new": "2025-12-21T10:30:36Z",
-          "label": "W5",
-          "reason": "volatile provenance timestamp"
-        },
-        {
-          "field": "source_uid",
-          "old": "2025_16_NYJ_NO",
-          "new": null,
-          "label": "W10",
-          "reason": "source_uid: legacy provider id -> new null (SCHEDULE_COLUMNS carries no source_uid column); frontend never reads it (grep-verified: zero refs in web/)"
-        },
-        {
-          "field": "spread_home_relative",
-          "old": 6.5,
-          "new": -6.5,
+          "old": -4.5,
+          "new": 3.5,
           "label": "BUGFIX-4",
           "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
         },
         {
           "field": "total",
-          "old": 39.5,
-          "new": 40.5,
+          "old": 35.5,
+          "new": 34.5,
           "label": "BUGFIX-4",
           "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
         },
         {
           "field": "raw_sources.schedule_row.gsis",
-          "old": 60074.0,
+          "old": 60091.0,
           "new": null,
           "label": "W12",
           "reason": "schedule provenance drop (whitelisted): gsis/game_no/rotation read only in the frontend's last-resort Game# fallback chain; primary path computes locally"
@@ -1478,437 +1507,12 @@
     },
     {
       "join_key": [
-        "2025-12-21T18:00:00+00:00",
-        "newyorkgiants",
-        "minnesotavikings"
-      ],
-      "old_game_key": "20251221_1800_nyg_min",
-      "new_game_key": "20251221_1800_new_york_giants_minnesota_vikings",
-      "deltas": [
-        {
-          "field": "away_team_norm",
-          "old": "min",
-          "new": "Minnesota Vikings",
-          "label": "W2",
-          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
-        },
-        {
-          "field": "away_team_raw",
-          "old": "MIN",
-          "new": "Minnesota Vikings",
-          "label": "W2",
-          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
-        },
-        {
-          "field": "favored_side",
-          "old": "HOME",
-          "new": "AWAY",
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "game_key",
-          "old": "20251221_1800_nyg_min",
-          "new": "20251221_1800_new_york_giants_minnesota_vikings",
-          "label": "W1",
-          "reason": "game_key format (NFL abbreviation->full-name slug); join is instant+merge_key"
-        },
-        {
-          "field": "home_team_norm",
-          "old": "nyg",
-          "new": "New York Giants",
-          "label": "W2",
-          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
-        },
-        {
-          "field": "home_team_raw",
-          "old": "NYG",
-          "new": "New York Giants",
-          "label": "W2",
-          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
-        },
-        {
-          "field": "is_closing",
-          "old": false,
-          "new": true,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "moneyline_away",
-          "old": null,
-          "new": -148,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "moneyline_home",
-          "old": null,
-          "new": 124,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "odds_source",
-          "old": "schedule",
-          "new": "williamhill_us",
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "rating_diff_favored_team",
-          "old": -3.01,
-          "new": 3.01,
-          "label": "BUGFIX-4",
-          "reason": "rating_diff_favored_team sign flip: |value| unchanged but favored_side flipped because the replay promoted real book odds where legacy used the dead schedule-fallback tier (odds_source='schedule')"
-        },
-        {
-          "field": "rating_vs_odds",
-          "old": -5.51,
-          "new": -0.51,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "rating_vs_odds_favored_team",
-          "old": -5.51,
-          "new": 0.51,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "snapshot_at",
-          "old": null,
-          "new": "2025-12-21T10:30:36Z",
-          "label": "W5",
-          "reason": "volatile provenance timestamp"
-        },
-        {
-          "field": "source_uid",
-          "old": "2025_16_MIN_NYG",
-          "new": null,
-          "label": "W10",
-          "reason": "source_uid: legacy provider id -> new null (SCHEDULE_COLUMNS carries no source_uid column); frontend never reads it (grep-verified: zero refs in web/)"
-        },
-        {
-          "field": "spread_home_relative",
-          "old": -2.5,
-          "new": 2.5,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "total",
-          "old": 41.5,
-          "new": 43.0,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "raw_sources.schedule_row.gsis",
-          "old": 60075.0,
-          "new": null,
-          "label": "W12",
-          "reason": "schedule provenance drop (whitelisted): gsis/game_no/rotation read only in the frontend's last-resort Game# fallback chain; primary path computes locally"
-        },
-        {
-          "field": "raw_sources.odds_row",
-          "old": null,
-          "new": "<present>",
-          "label": "BUGFIX-4",
-          "reason": "legacy never promoted odds for this game (odds_source='schedule'); replay's corrected pin attaches raw_sources.odds_row"
-        }
-      ]
-    },
-    {
-      "join_key": [
-        "2025-12-21T18:00:00+00:00",
-        "tennesseetitans",
-        "kansascitychiefs"
-      ],
-      "old_game_key": "20251221_1800_ten_kc",
-      "new_game_key": "20251221_1800_tennessee_titans_kansas_city_chiefs",
-      "deltas": [
-        {
-          "field": "away_team_norm",
-          "old": "kc",
-          "new": "Kansas City Chiefs",
-          "label": "W2",
-          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
-        },
-        {
-          "field": "away_team_raw",
-          "old": "KC",
-          "new": "Kansas City Chiefs",
-          "label": "W2",
-          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
-        },
-        {
-          "field": "favored_side",
-          "old": "HOME",
-          "new": "AWAY",
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "game_key",
-          "old": "20251221_1800_ten_kc",
-          "new": "20251221_1800_tennessee_titans_kansas_city_chiefs",
-          "label": "W1",
-          "reason": "game_key format (NFL abbreviation->full-name slug); join is instant+merge_key"
-        },
-        {
-          "field": "home_team_norm",
-          "old": "ten",
-          "new": "Tennessee Titans",
-          "label": "W2",
-          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
-        },
-        {
-          "field": "home_team_raw",
-          "old": "TEN",
-          "new": "Tennessee Titans",
-          "label": "W2",
-          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
-        },
-        {
-          "field": "is_closing",
-          "old": false,
-          "new": true,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "moneyline_away",
-          "old": null,
-          "new": -154,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "moneyline_home",
-          "old": null,
-          "new": 129,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "odds_source",
-          "old": "schedule",
-          "new": "williamhill_us",
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "rating_diff_favored_team",
-          "old": -10.4,
-          "new": 10.4,
-          "label": "BUGFIX-4",
-          "reason": "rating_diff_favored_team sign flip: |value| unchanged but favored_side flipped because the replay promoted real book odds where legacy used the dead schedule-fallback tier (odds_source='schedule')"
-        },
-        {
-          "field": "rating_vs_odds",
-          "old": -13.9,
-          "new": -7.9,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "rating_vs_odds_favored_team",
-          "old": -13.9,
-          "new": 7.9,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "snapshot_at",
-          "old": null,
-          "new": "2025-12-21T10:30:36Z",
-          "label": "W5",
-          "reason": "volatile provenance timestamp"
-        },
-        {
-          "field": "source_uid",
-          "old": "2025_16_KC_TEN",
-          "new": null,
-          "label": "W10",
-          "reason": "source_uid: legacy provider id -> new null (SCHEDULE_COLUMNS carries no source_uid column); frontend never reads it (grep-verified: zero refs in web/)"
-        },
-        {
-          "field": "spread_favored_team",
-          "old": -3.5,
-          "new": -2.5,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "spread_home_relative",
-          "old": -3.5,
-          "new": 2.5,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "raw_sources.schedule_row.gsis",
-          "old": 60076.0,
-          "new": null,
-          "label": "W12",
-          "reason": "schedule provenance drop (whitelisted): gsis/game_no/rotation read only in the frontend's last-resort Game# fallback chain; primary path computes locally"
-        },
-        {
-          "field": "raw_sources.odds_row",
-          "old": null,
-          "new": "<present>",
-          "label": "BUGFIX-4",
-          "reason": "legacy never promoted odds for this game (odds_source='schedule'); replay's corrected pin attaches raw_sources.odds_row"
-        }
-      ]
-    },
-    {
-      "join_key": [
-        "2025-12-21T21:05:00+00:00",
-        "arizonacardinals",
-        "atlantafalcons"
-      ],
-      "old_game_key": "20251221_2105_ari_atl",
-      "new_game_key": "20251221_2105_arizona_cardinals_atlanta_falcons",
-      "deltas": [
-        {
-          "field": "away_team_norm",
-          "old": "atl",
-          "new": "Atlanta Falcons",
-          "label": "W2",
-          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
-        },
-        {
-          "field": "away_team_raw",
-          "old": "ATL",
-          "new": "Atlanta Falcons",
-          "label": "W2",
-          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
-        },
-        {
-          "field": "favored_side",
-          "old": "HOME",
-          "new": "AWAY",
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "game_key",
-          "old": "20251221_2105_ari_atl",
-          "new": "20251221_2105_arizona_cardinals_atlanta_falcons",
-          "label": "W1",
-          "reason": "game_key format (NFL abbreviation->full-name slug); join is instant+merge_key"
-        },
-        {
-          "field": "home_team_norm",
-          "old": "ari",
-          "new": "Arizona Cardinals",
-          "label": "W2",
-          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
-        },
-        {
-          "field": "home_team_raw",
-          "old": "ARI",
-          "new": "Arizona Cardinals",
-          "label": "W2",
-          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
-        },
-        {
-          "field": "is_closing",
-          "old": false,
-          "new": true,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "moneyline_away",
-          "old": null,
-          "new": -157,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "moneyline_home",
-          "old": null,
-          "new": 127,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "odds_source",
-          "old": "schedule",
-          "new": "lowvig",
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "rating_diff_favored_team",
-          "old": 1.26,
-          "new": -1.26,
-          "label": "BUGFIX-4",
-          "reason": "rating_diff_favored_team sign flip: |value| unchanged but favored_side flipped because the replay promoted real book odds where legacy used the dead schedule-fallback tier (odds_source='schedule')"
-        },
-        {
-          "field": "rating_vs_odds",
-          "old": -1.24,
-          "new": 3.76,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "rating_vs_odds_favored_team",
-          "old": -1.24,
-          "new": -3.76,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "snapshot_at",
-          "old": null,
-          "new": "2025-12-21T10:30:36Z",
-          "label": "W5",
-          "reason": "volatile provenance timestamp"
-        },
-        {
-          "field": "source_uid",
-          "old": "2025_16_ATL_ARI",
-          "new": null,
-          "label": "W10",
-          "reason": "source_uid: legacy provider id -> new null (SCHEDULE_COLUMNS carries no source_uid column); frontend never reads it (grep-verified: zero refs in web/)"
-        },
-        {
-          "field": "spread_home_relative",
-          "old": -2.5,
-          "new": 2.5,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "raw_sources.schedule_row.gsis",
-          "old": 60077.0,
-          "new": null,
-          "label": "W12",
-          "reason": "schedule provenance drop (whitelisted): gsis/game_no/rotation read only in the frontend's last-resort Game# fallback chain; primary path computes locally"
-        },
-        {
-          "field": "raw_sources.odds_row",
-          "old": null,
-          "new": "<present>",
-          "label": "BUGFIX-4",
-          "reason": "legacy never promoted odds for this game (odds_source='schedule'); replay's corrected pin attaches raw_sources.odds_row"
-        }
-      ]
-    },
-    {
-      "join_key": [
-        "2025-12-21T21:05:00+00:00",
-        "denverbroncos",
+        "2025-12-28T18:00:00+00:00",
+        "indianapoliscolts",
         "jacksonvillejaguars"
       ],
-      "old_game_key": "20251221_2105_den_jaguars",
-      "new_game_key": "20251221_2105_denver_broncos_jacksonville_jaguars",
+      "old_game_key": "20251228_1800_ind_jaguars",
+      "new_game_key": "20251228_1800_indianapolis_colts_jacksonville_jaguars",
       "deltas": [
         {
           "field": "away_team_norm",
@@ -1926,589 +1530,6 @@
         },
         {
           "field": "favored_side",
-          "old": "AWAY",
-          "new": "HOME",
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "game_key",
-          "old": "20251221_2105_den_jaguars",
-          "new": "20251221_2105_denver_broncos_jacksonville_jaguars",
-          "label": "W1",
-          "reason": "game_key format (NFL abbreviation->full-name slug); join is instant+merge_key"
-        },
-        {
-          "field": "home_team_norm",
-          "old": "den",
-          "new": "Denver Broncos",
-          "label": "W2",
-          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
-        },
-        {
-          "field": "home_team_raw",
-          "old": "DEN",
-          "new": "Denver Broncos",
-          "label": "W2",
-          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
-        },
-        {
-          "field": "is_closing",
-          "old": false,
-          "new": true,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "moneyline_away",
-          "old": null,
-          "new": 161,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "moneyline_home",
-          "old": null,
-          "new": -185,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "odds_source",
-          "old": "schedule",
-          "new": "lowvig",
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "rating_diff_favored_team",
-          "old": -2.87,
-          "new": 2.87,
-          "label": "BUGFIX-4",
-          "reason": "rating_diff_favored_team sign flip: |value| unchanged but favored_side flipped because the replay promoted real book odds where legacy used the dead schedule-fallback tier (odds_source='schedule')"
-        },
-        {
-          "field": "rating_vs_odds",
-          "old": 6.37,
-          "new": -0.63,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "rating_vs_odds_favored_team",
-          "old": -6.37,
-          "new": -0.63,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "snapshot_at",
-          "old": null,
-          "new": "2025-12-21T10:30:36Z",
-          "label": "W5",
-          "reason": "volatile provenance timestamp"
-        },
-        {
-          "field": "source_uid",
-          "old": "2025_16_JAX_DEN",
-          "new": null,
-          "label": "W10",
-          "reason": "source_uid: legacy provider id -> new null (SCHEDULE_COLUMNS carries no source_uid column); frontend never reads it (grep-verified: zero refs in web/)"
-        },
-        {
-          "field": "spread_home_relative",
-          "old": 3.5,
-          "new": -3.5,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "total",
-          "old": 46.5,
-          "new": 47.0,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "raw_sources.schedule_row.gsis",
-          "old": 60078.0,
-          "new": null,
-          "label": "W12",
-          "reason": "schedule provenance drop (whitelisted): gsis/game_no/rotation read only in the frontend's last-resort Game# fallback chain; primary path computes locally"
-        },
-        {
-          "field": "raw_sources.odds_row",
-          "old": null,
-          "new": "<present>",
-          "label": "BUGFIX-4",
-          "reason": "legacy never promoted odds for this game (odds_source='schedule'); replay's corrected pin attaches raw_sources.odds_row"
-        }
-      ]
-    },
-    {
-      "join_key": [
-        "2025-12-21T21:25:00+00:00",
-        "detroitlions",
-        "pittsburghsteelers"
-      ],
-      "old_game_key": "20251221_2125_det_pit",
-      "new_game_key": "20251221_2125_detroit_lions_pittsburgh_steelers",
-      "deltas": [
-        {
-          "field": "away_team_norm",
-          "old": "pit",
-          "new": "Pittsburgh Steelers",
-          "label": "W2",
-          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
-        },
-        {
-          "field": "away_team_raw",
-          "old": "PIT",
-          "new": "Pittsburgh Steelers",
-          "label": "W2",
-          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
-        },
-        {
-          "field": "favored_side",
-          "old": "AWAY",
-          "new": "HOME",
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "game_key",
-          "old": "20251221_2125_det_pit",
-          "new": "20251221_2125_detroit_lions_pittsburgh_steelers",
-          "label": "W1",
-          "reason": "game_key format (NFL abbreviation->full-name slug); join is instant+merge_key"
-        },
-        {
-          "field": "home_team_norm",
-          "old": "det",
-          "new": "Detroit Lions",
-          "label": "W2",
-          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
-        },
-        {
-          "field": "home_team_raw",
-          "old": "DET",
-          "new": "Detroit Lions",
-          "label": "W2",
-          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
-        },
-        {
-          "field": "is_closing",
-          "old": false,
-          "new": true,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "moneyline_away",
-          "old": null,
-          "new": 263,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "moneyline_home",
-          "old": null,
-          "new": -325,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "odds_source",
-          "old": "schedule",
-          "new": "mybookieag",
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "rating_diff_favored_team",
-          "old": -6.52,
-          "new": 6.52,
-          "label": "BUGFIX-4",
-          "reason": "rating_diff_favored_team sign flip: |value| unchanged but favored_side flipped because the replay promoted real book odds where legacy used the dead schedule-fallback tier (odds_source='schedule')"
-        },
-        {
-          "field": "rating_vs_odds",
-          "old": 14.02,
-          "new": -0.48,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "rating_vs_odds_favored_team",
-          "old": -14.02,
-          "new": -0.48,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "snapshot_at",
-          "old": null,
-          "new": "2025-12-21T10:30:36Z",
-          "label": "W5",
-          "reason": "volatile provenance timestamp"
-        },
-        {
-          "field": "source_uid",
-          "old": "2025_16_PIT_DET",
-          "new": null,
-          "label": "W10",
-          "reason": "source_uid: legacy provider id -> new null (SCHEDULE_COLUMNS carries no source_uid column); frontend never reads it (grep-verified: zero refs in web/)"
-        },
-        {
-          "field": "spread_favored_team",
-          "old": -7.5,
-          "new": -7.0,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "spread_home_relative",
-          "old": 7.5,
-          "new": -7.0,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "total",
-          "old": 52.5,
-          "new": 52.0,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "raw_sources.schedule_row.gsis",
-          "old": 60079.0,
-          "new": null,
-          "label": "W12",
-          "reason": "schedule provenance drop (whitelisted): gsis/game_no/rotation read only in the frontend's last-resort Game# fallback chain; primary path computes locally"
-        },
-        {
-          "field": "raw_sources.odds_row",
-          "old": null,
-          "new": "<present>",
-          "label": "BUGFIX-4",
-          "reason": "legacy never promoted odds for this game (odds_source='schedule'); replay's corrected pin attaches raw_sources.odds_row"
-        }
-      ]
-    },
-    {
-      "join_key": [
-        "2025-12-21T21:25:00+00:00",
-        "houstontexans",
-        "lasvegasraiders"
-      ],
-      "old_game_key": "20251221_2125_hou_lv",
-      "new_game_key": "20251221_2125_houston_texans_las_vegas_raiders",
-      "deltas": [
-        {
-          "field": "away_team_norm",
-          "old": "lv",
-          "new": "Las Vegas Raiders",
-          "label": "W2",
-          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
-        },
-        {
-          "field": "away_team_raw",
-          "old": "LV",
-          "new": "Las Vegas Raiders",
-          "label": "W2",
-          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
-        },
-        {
-          "field": "favored_side",
-          "old": "AWAY",
-          "new": "HOME",
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "game_key",
-          "old": "20251221_2125_hou_lv",
-          "new": "20251221_2125_houston_texans_las_vegas_raiders",
-          "label": "W1",
-          "reason": "game_key format (NFL abbreviation->full-name slug); join is instant+merge_key"
-        },
-        {
-          "field": "home_team_norm",
-          "old": "hou",
-          "new": "Houston Texans",
-          "label": "W2",
-          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
-        },
-        {
-          "field": "home_team_raw",
-          "old": "HOU",
-          "new": "Houston Texans",
-          "label": "W2",
-          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
-        },
-        {
-          "field": "is_closing",
-          "old": false,
-          "new": true,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "moneyline_away",
-          "old": null,
-          "new": 661,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "moneyline_home",
-          "old": null,
-          "new": -1000,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "odds_source",
-          "old": "schedule",
-          "new": "lowvig",
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "rating_diff_favored_team",
-          "old": -14.84,
-          "new": 14.84,
-          "label": "BUGFIX-4",
-          "reason": "rating_diff_favored_team sign flip: |value| unchanged but favored_side flipped because the replay promoted real book odds where legacy used the dead schedule-fallback tier (odds_source='schedule')"
-        },
-        {
-          "field": "rating_vs_odds",
-          "old": 29.34,
-          "new": 0.84,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "rating_vs_odds_favored_team",
-          "old": -29.34,
-          "new": 0.84,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "snapshot_at",
-          "old": null,
-          "new": "2025-12-21T10:30:36Z",
-          "label": "W5",
-          "reason": "volatile provenance timestamp"
-        },
-        {
-          "field": "source_uid",
-          "old": "2025_16_LV_HOU",
-          "new": null,
-          "label": "W10",
-          "reason": "source_uid: legacy provider id -> new null (SCHEDULE_COLUMNS carries no source_uid column); frontend never reads it (grep-verified: zero refs in web/)"
-        },
-        {
-          "field": "spread_favored_team",
-          "old": -14.5,
-          "new": -14.0,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "spread_home_relative",
-          "old": 14.5,
-          "new": -14.0,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "total",
-          "old": 39.5,
-          "new": 38.5,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "raw_sources.schedule_row.gsis",
-          "old": 60080.0,
-          "new": null,
-          "label": "W12",
-          "reason": "schedule provenance drop (whitelisted): gsis/game_no/rotation read only in the frontend's last-resort Game# fallback chain; primary path computes locally"
-        },
-        {
-          "field": "raw_sources.odds_row",
-          "old": null,
-          "new": "<present>",
-          "label": "BUGFIX-4",
-          "reason": "legacy never promoted odds for this game (odds_source='schedule'); replay's corrected pin attaches raw_sources.odds_row"
-        }
-      ]
-    },
-    {
-      "join_key": [
-        "2025-12-22T01:20:00+00:00",
-        "baltimoreravens",
-        "newenglandpatriots"
-      ],
-      "old_game_key": "20251222_0120_bal_ne",
-      "new_game_key": "20251222_0120_baltimore_ravens_new_england_patriots",
-      "deltas": [
-        {
-          "field": "away_team_norm",
-          "old": "ne",
-          "new": "New England Patriots",
-          "label": "W2",
-          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
-        },
-        {
-          "field": "away_team_raw",
-          "old": "NE",
-          "new": "New England Patriots",
-          "label": "W2",
-          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
-        },
-        {
-          "field": "favored_side",
-          "old": "AWAY",
-          "new": "HOME",
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "game_key",
-          "old": "20251222_0120_bal_ne",
-          "new": "20251222_0120_baltimore_ravens_new_england_patriots",
-          "label": "W1",
-          "reason": "game_key format (NFL abbreviation->full-name slug); join is instant+merge_key"
-        },
-        {
-          "field": "home_team_norm",
-          "old": "bal",
-          "new": "Baltimore Ravens",
-          "label": "W2",
-          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
-        },
-        {
-          "field": "home_team_raw",
-          "old": "BAL",
-          "new": "Baltimore Ravens",
-          "label": "W2",
-          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
-        },
-        {
-          "field": "is_closing",
-          "old": false,
-          "new": true,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "moneyline_away",
-          "old": null,
-          "new": 150,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "moneyline_home",
-          "old": null,
-          "new": -185,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "odds_source",
-          "old": "schedule",
-          "new": "williamhill_us",
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "rating_diff_favored_team",
-          "old": -2.65,
-          "new": 2.65,
-          "label": "BUGFIX-4",
-          "reason": "rating_diff_favored_team sign flip: |value| unchanged but favored_side flipped because the replay promoted real book odds where legacy used the dead schedule-fallback tier (odds_source='schedule')"
-        },
-        {
-          "field": "rating_vs_odds",
-          "old": 6.15,
-          "new": -0.85,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "rating_vs_odds_favored_team",
-          "old": -6.15,
-          "new": -0.85,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "snapshot_at",
-          "old": null,
-          "new": "2025-12-21T22:29:26Z",
-          "label": "W5",
-          "reason": "volatile provenance timestamp"
-        },
-        {
-          "field": "source_uid",
-          "old": "2025_16_NE_BAL",
-          "new": null,
-          "label": "W10",
-          "reason": "source_uid: legacy provider id -> new null (SCHEDULE_COLUMNS carries no source_uid column); frontend never reads it (grep-verified: zero refs in web/)"
-        },
-        {
-          "field": "spread_home_relative",
-          "old": 3.5,
-          "new": -3.5,
-          "label": "BUGFIX-4",
-          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
-        },
-        {
-          "field": "raw_sources.schedule_row.gsis",
-          "old": 60070.0,
-          "new": null,
-          "label": "W12",
-          "reason": "schedule provenance drop (whitelisted): gsis/game_no/rotation read only in the frontend's last-resort Game# fallback chain; primary path computes locally"
-        },
-        {
-          "field": "raw_sources.odds_row",
-          "old": null,
-          "new": "<present>",
-          "label": "BUGFIX-4",
-          "reason": "legacy never promoted odds for this game (odds_source='schedule'); replay's corrected pin attaches raw_sources.odds_row"
-        }
-      ]
-    },
-    {
-      "join_key": [
-        "2025-12-23T01:15:00+00:00",
-        "indianapoliscolts",
-        "sanfrancisco49ers"
-      ],
-      "old_game_key": "20251223_0115_ind_49ers",
-      "new_game_key": "20251223_0115_indianapolis_colts_san_francisco_49ers",
-      "deltas": [
-        {
-          "field": "away_team_norm",
-          "old": "49ers",
-          "new": "San Francisco 49ers",
-          "label": "W2",
-          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
-        },
-        {
-          "field": "away_team_raw",
-          "old": "SF",
-          "new": "San Francisco 49ers",
-          "label": "W2",
-          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
-        },
-        {
-          "field": "favored_side",
           "old": "HOME",
           "new": "AWAY",
           "label": "BUGFIX-4",
@@ -2516,8 +1537,8 @@
         },
         {
           "field": "game_key",
-          "old": "20251223_0115_ind_49ers",
-          "new": "20251223_0115_indianapolis_colts_san_francisco_49ers",
+          "old": "20251228_1800_ind_jaguars",
+          "new": "20251228_1800_indianapolis_colts_jacksonville_jaguars",
           "label": "W1",
           "reason": "game_key format (NFL abbreviation->full-name slug); join is instant+merge_key"
         },
@@ -2545,14 +1566,14 @@
         {
           "field": "moneyline_away",
           "old": null,
-          "new": -260,
+          "new": -250,
           "label": "BUGFIX-4",
           "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
         },
         {
           "field": "moneyline_home",
           "old": null,
-          "new": 210,
+          "new": 205,
           "label": "BUGFIX-4",
           "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
         },
@@ -2565,35 +1586,179 @@
         },
         {
           "field": "rating_diff_favored_team",
-          "old": 1.62,
-          "new": -1.62,
+          "old": -1.57,
+          "new": 1.57,
           "label": "BUGFIX-4",
           "reason": "rating_diff_favored_team sign flip: |value| unchanged but favored_side flipped because the replay promoted real book odds where legacy used the dead schedule-fallback tier (odds_source='schedule')"
         },
         {
           "field": "rating_vs_odds",
-          "old": -3.88,
-          "new": 7.12,
+          "old": -5.07,
+          "new": 3.93,
           "label": "BUGFIX-4",
           "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
         },
         {
           "field": "rating_vs_odds_favored_team",
-          "old": -3.88,
-          "new": -7.12,
+          "old": -5.07,
+          "new": -3.93,
           "label": "BUGFIX-4",
           "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
         },
         {
           "field": "snapshot_at",
           "old": null,
-          "new": "2025-12-22T10:33:29Z",
+          "new": "2025-12-28T10:31:01Z",
           "label": "W5",
           "reason": "volatile provenance timestamp"
         },
         {
           "field": "source_uid",
-          "old": "2025_16_SF_IND",
+          "old": "2025_17_JAX_IND",
+          "new": null,
+          "label": "W10",
+          "reason": "source_uid: legacy provider id -> new null (SCHEDULE_COLUMNS carries no source_uid column); frontend never reads it (grep-verified: zero refs in web/)"
+        },
+        {
+          "field": "spread_favored_team",
+          "old": -3.5,
+          "new": -5.5,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "spread_home_relative",
+          "old": -3.5,
+          "new": 5.5,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "raw_sources.schedule_row.gsis",
+          "old": 60092.0,
+          "new": null,
+          "label": "W12",
+          "reason": "schedule provenance drop (whitelisted): gsis/game_no/rotation read only in the frontend's last-resort Game# fallback chain; primary path computes locally"
+        },
+        {
+          "field": "raw_sources.odds_row",
+          "old": null,
+          "new": "<present>",
+          "label": "BUGFIX-4",
+          "reason": "legacy never promoted odds for this game (odds_source='schedule'); replay's corrected pin attaches raw_sources.odds_row"
+        }
+      ]
+    },
+    {
+      "join_key": [
+        "2025-12-28T18:00:00+00:00",
+        "miamidolphins",
+        "tampabaybuccaneers"
+      ],
+      "old_game_key": "20251228_1800_mia_tb",
+      "new_game_key": "20251228_1800_miami_dolphins_tampa_bay_buccaneers",
+      "deltas": [
+        {
+          "field": "away_team_norm",
+          "old": "tb",
+          "new": "Tampa Bay Buccaneers",
+          "label": "W2",
+          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
+        },
+        {
+          "field": "away_team_raw",
+          "old": "TB",
+          "new": "Tampa Bay Buccaneers",
+          "label": "W2",
+          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
+        },
+        {
+          "field": "favored_side",
+          "old": "HOME",
+          "new": "AWAY",
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "game_key",
+          "old": "20251228_1800_mia_tb",
+          "new": "20251228_1800_miami_dolphins_tampa_bay_buccaneers",
+          "label": "W1",
+          "reason": "game_key format (NFL abbreviation->full-name slug); join is instant+merge_key"
+        },
+        {
+          "field": "home_team_norm",
+          "old": "mia",
+          "new": "Miami Dolphins",
+          "label": "W2",
+          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
+        },
+        {
+          "field": "home_team_raw",
+          "old": "MIA",
+          "new": "Miami Dolphins",
+          "label": "W2",
+          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
+        },
+        {
+          "field": "is_closing",
+          "old": false,
+          "new": true,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "moneyline_away",
+          "old": null,
+          "new": -265,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "moneyline_home",
+          "old": null,
+          "new": 215,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "odds_source",
+          "old": "schedule",
+          "new": "williamhill_us",
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "rating_diff_favored_team",
+          "old": -1.76,
+          "new": 1.76,
+          "label": "BUGFIX-4",
+          "reason": "rating_diff_favored_team sign flip: |value| unchanged but favored_side flipped because the replay promoted real book odds where legacy used the dead schedule-fallback tier (odds_source='schedule')"
+        },
+        {
+          "field": "rating_vs_odds",
+          "old": -7.26,
+          "new": 3.74,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "rating_vs_odds_favored_team",
+          "old": -7.26,
+          "new": -3.74,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "snapshot_at",
+          "old": null,
+          "new": "2025-12-28T10:31:01Z",
+          "label": "W5",
+          "reason": "volatile provenance timestamp"
+        },
+        {
+          "field": "source_uid",
+          "old": "2025_17_TB_MIA",
           "new": null,
           "label": "W10",
           "reason": "source_uid: legacy provider id -> new null (SCHEDULE_COLUMNS carries no source_uid column); frontend never reads it (grep-verified: zero refs in web/)"
@@ -2606,15 +1771,872 @@
           "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
         },
         {
-          "field": "total",
-          "old": 45.5,
-          "new": 46.0,
+          "field": "raw_sources.schedule_row.gsis",
+          "old": 60093.0,
+          "new": null,
+          "label": "W12",
+          "reason": "schedule provenance drop (whitelisted): gsis/game_no/rotation read only in the frontend's last-resort Game# fallback chain; primary path computes locally"
+        },
+        {
+          "field": "raw_sources.odds_row",
+          "old": null,
+          "new": "<present>",
+          "label": "BUGFIX-4",
+          "reason": "legacy never promoted odds for this game (odds_source='schedule'); replay's corrected pin attaches raw_sources.odds_row"
+        }
+      ]
+    },
+    {
+      "join_key": [
+        "2025-12-28T18:00:00+00:00",
+        "newyorkjets",
+        "newenglandpatriots"
+      ],
+      "old_game_key": "20251228_1800_nyj_ne",
+      "new_game_key": "20251228_1800_new_york_jets_new_england_patriots",
+      "deltas": [
+        {
+          "field": "away_team_norm",
+          "old": "ne",
+          "new": "New England Patriots",
+          "label": "W2",
+          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
+        },
+        {
+          "field": "away_team_raw",
+          "old": "NE",
+          "new": "New England Patriots",
+          "label": "W2",
+          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
+        },
+        {
+          "field": "favored_side",
+          "old": "HOME",
+          "new": "AWAY",
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "game_key",
+          "old": "20251228_1800_nyj_ne",
+          "new": "20251228_1800_new_york_jets_new_england_patriots",
+          "label": "W1",
+          "reason": "game_key format (NFL abbreviation->full-name slug); join is instant+merge_key"
+        },
+        {
+          "field": "home_team_norm",
+          "old": "nyj",
+          "new": "New York Jets",
+          "label": "W2",
+          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
+        },
+        {
+          "field": "home_team_raw",
+          "old": "NYJ",
+          "new": "New York Jets",
+          "label": "W2",
+          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
+        },
+        {
+          "field": "is_closing",
+          "old": false,
+          "new": true,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "moneyline_away",
+          "old": null,
+          "new": -1000,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "moneyline_home",
+          "old": null,
+          "new": 625,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "odds_source",
+          "old": "schedule",
+          "new": "williamhill_us",
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "rating_diff_favored_team",
+          "old": -9.83,
+          "new": 9.83,
+          "label": "BUGFIX-4",
+          "reason": "rating_diff_favored_team sign flip: |value| unchanged but favored_side flipped because the replay promoted real book odds where legacy used the dead schedule-fallback tier (odds_source='schedule')"
+        },
+        {
+          "field": "rating_vs_odds",
+          "old": -22.33,
+          "new": 3.67,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "rating_vs_odds_favored_team",
+          "old": -22.33,
+          "new": -3.67,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "snapshot_at",
+          "old": null,
+          "new": "2025-12-28T10:31:01Z",
+          "label": "W5",
+          "reason": "volatile provenance timestamp"
+        },
+        {
+          "field": "source_uid",
+          "old": "2025_17_NE_NYJ",
+          "new": null,
+          "label": "W10",
+          "reason": "source_uid: legacy provider id -> new null (SCHEDULE_COLUMNS carries no source_uid column); frontend never reads it (grep-verified: zero refs in web/)"
+        },
+        {
+          "field": "spread_favored_team",
+          "old": -12.5,
+          "new": -13.5,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "spread_home_relative",
+          "old": -12.5,
+          "new": 13.5,
           "label": "BUGFIX-4",
           "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
         },
         {
           "field": "raw_sources.schedule_row.gsis",
-          "old": 60082.0,
+          "old": 60094.0,
+          "new": null,
+          "label": "W12",
+          "reason": "schedule provenance drop (whitelisted): gsis/game_no/rotation read only in the frontend's last-resort Game# fallback chain; primary path computes locally"
+        },
+        {
+          "field": "raw_sources.odds_row",
+          "old": null,
+          "new": "<present>",
+          "label": "BUGFIX-4",
+          "reason": "legacy never promoted odds for this game (odds_source='schedule'); replay's corrected pin attaches raw_sources.odds_row"
+        }
+      ]
+    },
+    {
+      "join_key": [
+        "2025-12-28T18:00:00+00:00",
+        "tennesseetitans",
+        "neworleanssaints"
+      ],
+      "old_game_key": "20251228_1800_ten_no",
+      "new_game_key": "20251228_1800_tennessee_titans_new_orleans_saints",
+      "deltas": [
+        {
+          "field": "away_team_norm",
+          "old": "no",
+          "new": "New Orleans Saints",
+          "label": "W2",
+          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
+        },
+        {
+          "field": "away_team_raw",
+          "old": "NO",
+          "new": "New Orleans Saints",
+          "label": "W2",
+          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
+        },
+        {
+          "field": "favored_side",
+          "old": "HOME",
+          "new": "AWAY",
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "game_key",
+          "old": "20251228_1800_ten_no",
+          "new": "20251228_1800_tennessee_titans_new_orleans_saints",
+          "label": "W1",
+          "reason": "game_key format (NFL abbreviation->full-name slug); join is instant+merge_key"
+        },
+        {
+          "field": "home_team_norm",
+          "old": "ten",
+          "new": "Tennessee Titans",
+          "label": "W2",
+          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
+        },
+        {
+          "field": "home_team_raw",
+          "old": "TEN",
+          "new": "Tennessee Titans",
+          "label": "W2",
+          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
+        },
+        {
+          "field": "is_closing",
+          "old": false,
+          "new": true,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "moneyline_away",
+          "old": null,
+          "new": -127,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "moneyline_home",
+          "old": null,
+          "new": 107,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "odds_source",
+          "old": "schedule",
+          "new": "williamhill_us",
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "rating_diff_favored_team",
+          "old": 1.22,
+          "new": -1.22,
+          "label": "BUGFIX-4",
+          "reason": "rating_diff_favored_team sign flip: |value| unchanged but favored_side flipped because the replay promoted real book odds where legacy used the dead schedule-fallback tier (odds_source='schedule')"
+        },
+        {
+          "field": "rating_vs_odds",
+          "old": -0.28,
+          "new": 2.72,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "rating_vs_odds_favored_team",
+          "old": -0.28,
+          "new": -2.72,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "snapshot_at",
+          "old": null,
+          "new": "2025-12-28T10:31:01Z",
+          "label": "W5",
+          "reason": "volatile provenance timestamp"
+        },
+        {
+          "field": "source_uid",
+          "old": "2025_17_NO_TEN",
+          "new": null,
+          "label": "W10",
+          "reason": "source_uid: legacy provider id -> new null (SCHEDULE_COLUMNS carries no source_uid column); frontend never reads it (grep-verified: zero refs in web/)"
+        },
+        {
+          "field": "spread_home_relative",
+          "old": -1.5,
+          "new": 1.5,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "raw_sources.schedule_row.gsis",
+          "old": 60095.0,
+          "new": null,
+          "label": "W12",
+          "reason": "schedule provenance drop (whitelisted): gsis/game_no/rotation read only in the frontend's last-resort Game# fallback chain; primary path computes locally"
+        },
+        {
+          "field": "raw_sources.odds_row",
+          "old": null,
+          "new": "<present>",
+          "label": "BUGFIX-4",
+          "reason": "legacy never promoted odds for this game (odds_source='schedule'); replay's corrected pin attaches raw_sources.odds_row"
+        }
+      ]
+    },
+    {
+      "join_key": [
+        "2025-12-28T21:05:00+00:00",
+        "lasvegasraiders",
+        "newyorkgiants"
+      ],
+      "old_game_key": "20251228_2105_lv_nyg",
+      "new_game_key": "20251228_2105_las_vegas_raiders_new_york_giants",
+      "deltas": [
+        {
+          "field": "away_team_norm",
+          "old": "nyg",
+          "new": "New York Giants",
+          "label": "W2",
+          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
+        },
+        {
+          "field": "away_team_raw",
+          "old": "NYG",
+          "new": "New York Giants",
+          "label": "W2",
+          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
+        },
+        {
+          "field": "favored_side",
+          "old": "HOME",
+          "new": "AWAY",
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "game_key",
+          "old": "20251228_2105_lv_nyg",
+          "new": "20251228_2105_las_vegas_raiders_new_york_giants",
+          "label": "W1",
+          "reason": "game_key format (NFL abbreviation->full-name slug); join is instant+merge_key"
+        },
+        {
+          "field": "home_team_norm",
+          "old": "lv",
+          "new": "Las Vegas Raiders",
+          "label": "W2",
+          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
+        },
+        {
+          "field": "home_team_raw",
+          "old": "LV",
+          "new": "Las Vegas Raiders",
+          "label": "W2",
+          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
+        },
+        {
+          "field": "is_closing",
+          "old": false,
+          "new": true,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "moneyline_away",
+          "old": null,
+          "new": -142,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "moneyline_home",
+          "old": null,
+          "new": 122,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "odds_source",
+          "old": "schedule",
+          "new": "lowvig",
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "rating_diff_favored_team",
+          "old": 0.05,
+          "new": -0.05,
+          "label": "BUGFIX-4",
+          "reason": "rating_diff_favored_team sign flip: |value| unchanged but favored_side flipped because the replay promoted real book odds where legacy used the dead schedule-fallback tier (odds_source='schedule')"
+        },
+        {
+          "field": "rating_vs_odds",
+          "old": -2.95,
+          "new": 2.55,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "rating_vs_odds_favored_team",
+          "old": -2.95,
+          "new": -2.55,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "snapshot_at",
+          "old": null,
+          "new": "2025-12-28T10:31:01Z",
+          "label": "W5",
+          "reason": "volatile provenance timestamp"
+        },
+        {
+          "field": "source_uid",
+          "old": "2025_17_NYG_LV",
+          "new": null,
+          "label": "W10",
+          "reason": "source_uid: legacy provider id -> new null (SCHEDULE_COLUMNS carries no source_uid column); frontend never reads it (grep-verified: zero refs in web/)"
+        },
+        {
+          "field": "spread_favored_team",
+          "old": -3.0,
+          "new": -2.5,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "spread_home_relative",
+          "old": -3.0,
+          "new": 2.5,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "total",
+          "old": 40.5,
+          "new": 41.5,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "raw_sources.schedule_row.gsis",
+          "old": 60090.0,
+          "new": null,
+          "label": "W12",
+          "reason": "schedule provenance drop (whitelisted): gsis/game_no/rotation read only in the frontend's last-resort Game# fallback chain; primary path computes locally"
+        },
+        {
+          "field": "raw_sources.odds_row",
+          "old": null,
+          "new": "<present>",
+          "label": "BUGFIX-4",
+          "reason": "legacy never promoted odds for this game (odds_source='schedule'); replay's corrected pin attaches raw_sources.odds_row"
+        }
+      ]
+    },
+    {
+      "join_key": [
+        "2025-12-28T21:25:00+00:00",
+        "buffalobills",
+        "philadelphiaeagles"
+      ],
+      "old_game_key": "20251228_2125_buf_phi",
+      "new_game_key": "20251228_2125_buffalo_bills_philadelphia_eagles",
+      "deltas": [
+        {
+          "field": "away_team_norm",
+          "old": "phi",
+          "new": "Philadelphia Eagles",
+          "label": "W2",
+          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
+        },
+        {
+          "field": "away_team_raw",
+          "old": "PHI",
+          "new": "Philadelphia Eagles",
+          "label": "W2",
+          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
+        },
+        {
+          "field": "favored_side",
+          "old": "AWAY",
+          "new": "HOME",
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "game_key",
+          "old": "20251228_2125_buf_phi",
+          "new": "20251228_2125_buffalo_bills_philadelphia_eagles",
+          "label": "W1",
+          "reason": "game_key format (NFL abbreviation->full-name slug); join is instant+merge_key"
+        },
+        {
+          "field": "home_team_norm",
+          "old": "buf",
+          "new": "Buffalo Bills",
+          "label": "W2",
+          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
+        },
+        {
+          "field": "home_team_raw",
+          "old": "BUF",
+          "new": "Buffalo Bills",
+          "label": "W2",
+          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
+        },
+        {
+          "field": "is_closing",
+          "old": false,
+          "new": true,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "moneyline_away",
+          "old": null,
+          "new": 110,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "moneyline_home",
+          "old": null,
+          "new": -130,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "odds_source",
+          "old": "schedule",
+          "new": "lowvig",
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "rating_diff_favored_team",
+          "old": -1.19,
+          "new": 1.19,
+          "label": "BUGFIX-4",
+          "reason": "rating_diff_favored_team sign flip: |value| unchanged but favored_side flipped because the replay promoted real book odds where legacy used the dead schedule-fallback tier (odds_source='schedule')"
+        },
+        {
+          "field": "rating_vs_odds",
+          "old": 4.19,
+          "new": -0.31,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "rating_vs_odds_favored_team",
+          "old": -4.19,
+          "new": -0.31,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "snapshot_at",
+          "old": null,
+          "new": "2025-12-28T10:31:01Z",
+          "label": "W5",
+          "reason": "volatile provenance timestamp"
+        },
+        {
+          "field": "source_uid",
+          "old": "2025_17_PHI_BUF",
+          "new": null,
+          "label": "W10",
+          "reason": "source_uid: legacy provider id -> new null (SCHEDULE_COLUMNS carries no source_uid column); frontend never reads it (grep-verified: zero refs in web/)"
+        },
+        {
+          "field": "spread_favored_team",
+          "old": -3.0,
+          "new": -1.5,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "spread_home_relative",
+          "old": 3.0,
+          "new": -1.5,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "total",
+          "old": 45.5,
+          "new": 44.0,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "raw_sources.schedule_row.gsis",
+          "old": 60096.0,
+          "new": null,
+          "label": "W12",
+          "reason": "schedule provenance drop (whitelisted): gsis/game_no/rotation read only in the frontend's last-resort Game# fallback chain; primary path computes locally"
+        },
+        {
+          "field": "raw_sources.odds_row",
+          "old": null,
+          "new": "<present>",
+          "label": "BUGFIX-4",
+          "reason": "legacy never promoted odds for this game (odds_source='schedule'); replay's corrected pin attaches raw_sources.odds_row"
+        }
+      ]
+    },
+    {
+      "join_key": [
+        "2025-12-29T01:20:00+00:00",
+        "sanfrancisco49ers",
+        "chicagobears"
+      ],
+      "old_game_key": "20251229_0120_49ers_chi",
+      "new_game_key": "20251229_0120_san_francisco_49ers_chicago_bears",
+      "deltas": [
+        {
+          "field": "away_team_norm",
+          "old": "chi",
+          "new": "Chicago Bears",
+          "label": "W2",
+          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
+        },
+        {
+          "field": "away_team_raw",
+          "old": "CHI",
+          "new": "Chicago Bears",
+          "label": "W2",
+          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
+        },
+        {
+          "field": "favored_side",
+          "old": "AWAY",
+          "new": "HOME",
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "game_key",
+          "old": "20251229_0120_49ers_chi",
+          "new": "20251229_0120_san_francisco_49ers_chicago_bears",
+          "label": "W1",
+          "reason": "game_key format (NFL abbreviation->full-name slug); join is instant+merge_key"
+        },
+        {
+          "field": "home_team_norm",
+          "old": "49ers",
+          "new": "San Francisco 49ers",
+          "label": "W2",
+          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
+        },
+        {
+          "field": "home_team_raw",
+          "old": "SF",
+          "new": "San Francisco 49ers",
+          "label": "W2",
+          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
+        },
+        {
+          "field": "is_closing",
+          "old": false,
+          "new": true,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "moneyline_away",
+          "old": null,
+          "new": 160,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "moneyline_home",
+          "old": null,
+          "new": -193,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "odds_source",
+          "old": "schedule",
+          "new": "williamhill_us",
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "rating_diff_favored_team",
+          "old": -3.1,
+          "new": 3.1,
+          "label": "BUGFIX-4",
+          "reason": "rating_diff_favored_team sign flip: |value| unchanged but favored_side flipped because the replay promoted real book odds where legacy used the dead schedule-fallback tier (odds_source='schedule')"
+        },
+        {
+          "field": "rating_vs_odds",
+          "old": 6.6,
+          "new": -0.4,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "rating_vs_odds_favored_team",
+          "old": -6.6,
+          "new": -0.4,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "snapshot_at",
+          "old": null,
+          "new": "2025-12-28T22:29:43Z",
+          "label": "W5",
+          "reason": "volatile provenance timestamp"
+        },
+        {
+          "field": "source_uid",
+          "old": "2025_17_CHI_SF",
+          "new": null,
+          "label": "W10",
+          "reason": "source_uid: legacy provider id -> new null (SCHEDULE_COLUMNS carries no source_uid column); frontend never reads it (grep-verified: zero refs in web/)"
+        },
+        {
+          "field": "spread_home_relative",
+          "old": 3.5,
+          "new": -3.5,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "raw_sources.schedule_row.gsis",
+          "old": 60097.0,
+          "new": null,
+          "label": "W12",
+          "reason": "schedule provenance drop (whitelisted): gsis/game_no/rotation read only in the frontend's last-resort Game# fallback chain; primary path computes locally"
+        },
+        {
+          "field": "raw_sources.odds_row",
+          "old": null,
+          "new": "<present>",
+          "label": "BUGFIX-4",
+          "reason": "legacy never promoted odds for this game (odds_source='schedule'); replay's corrected pin attaches raw_sources.odds_row"
+        }
+      ]
+    },
+    {
+      "join_key": [
+        "2025-12-30T01:15:00+00:00",
+        "atlantafalcons",
+        "losangelesrams"
+      ],
+      "old_game_key": "20251230_0115_atl_la",
+      "new_game_key": "20251230_0115_atlanta_falcons_los_angeles_rams",
+      "deltas": [
+        {
+          "field": "away_team_norm",
+          "old": "la",
+          "new": "Los Angeles Rams",
+          "label": "W2",
+          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
+        },
+        {
+          "field": "away_team_raw",
+          "old": "LA",
+          "new": "Los Angeles Rams",
+          "label": "W2",
+          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
+        },
+        {
+          "field": "favored_side",
+          "old": "HOME",
+          "new": "AWAY",
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "game_key",
+          "old": "20251230_0115_atl_la",
+          "new": "20251230_0115_atlanta_falcons_los_angeles_rams",
+          "label": "W1",
+          "reason": "game_key format (NFL abbreviation->full-name slug); join is instant+merge_key"
+        },
+        {
+          "field": "home_team_norm",
+          "old": "atl",
+          "new": "Atlanta Falcons",
+          "label": "W2",
+          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
+        },
+        {
+          "field": "home_team_raw",
+          "old": "ATL",
+          "new": "Atlanta Falcons",
+          "label": "W2",
+          "reason": "team representation (legacy NFL abbreviation vs full name); merge_key identical"
+        },
+        {
+          "field": "is_closing",
+          "old": false,
+          "new": true,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "moneyline_away",
+          "old": null,
+          "new": -380,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "moneyline_home",
+          "old": null,
+          "new": 290,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "odds_source",
+          "old": "schedule",
+          "new": "williamhill_us",
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "rating_diff_favored_team",
+          "old": -8.41,
+          "new": 8.41,
+          "label": "BUGFIX-4",
+          "reason": "rating_diff_favored_team sign flip: |value| unchanged but favored_side flipped because the replay promoted real book odds where legacy used the dead schedule-fallback tier (odds_source='schedule')"
+        },
+        {
+          "field": "rating_vs_odds",
+          "old": -15.41,
+          "new": -1.41,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "rating_vs_odds_favored_team",
+          "old": -15.41,
+          "new": 1.41,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "snapshot_at",
+          "old": null,
+          "new": "2025-12-29T22:29:58Z",
+          "label": "W5",
+          "reason": "volatile provenance timestamp"
+        },
+        {
+          "field": "source_uid",
+          "old": "2025_17_LA_ATL",
+          "new": null,
+          "label": "W10",
+          "reason": "source_uid: legacy provider id -> new null (SCHEDULE_COLUMNS carries no source_uid column); frontend never reads it (grep-verified: zero refs in web/)"
+        },
+        {
+          "field": "spread_home_relative",
+          "old": -7.0,
+          "new": 7.0,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "total",
+          "old": 48.5,
+          "new": 49.0,
+          "label": "BUGFIX-4",
+          "reason": "legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects"
+        },
+        {
+          "field": "raw_sources.schedule_row.gsis",
+          "old": 60098.0,
           "new": null,
           "label": "W12",
           "reason": "schedule provenance drop (whitelisted): gsis/game_no/rotation read only in the frontend's last-resort Game# fallback chain; primary path computes locally"
@@ -2631,45 +2653,45 @@
   ],
   "k4_trace": [
     {
-      "game_key": "20251219_0115_seattle_seahawks_los_angeles_rams",
-      "matchup": "Los Angeles Rams @ Seattle Seahawks",
-      "kickoff": "2025-12-19T01:15:00+00:00",
-      "chosen_book": "williamhill_us",
-      "chosen_fetch_ts": "2025-12-18T22:30:11Z",
-      "pinned_records_for_spreads": 96,
+      "game_key": "20251225_1800_washington_commanders_dallas_cowboys",
+      "matchup": "Dallas Cowboys @ Washington Commanders",
+      "kickoff": "2025-12-25T18:00:00+00:00",
+      "chosen_book": "mybookieag",
+      "chosen_fetch_ts": "2025-12-25T10:32:48Z",
+      "pinned_records_for_spreads": 121,
       "freshest_per_book_candidates": 11,
       "candidates_pre_kickoff": 11,
-      "latest_pre_kickoff_fetch_ts": "2025-12-18T22:30:11Z",
+      "latest_pre_kickoff_fetch_ts": "2025-12-25T10:32:48Z",
       "chosen_is_latest_pre_kickoff": true,
       "chosen_before_kickoff": true,
       "policy_branch": "closing_pre_kickoff",
       "policy_correct": true
     },
     {
-      "game_key": "20251220_2200_washington_commanders_philadelphia_eagles",
-      "matchup": "Philadelphia Eagles @ Washington Commanders",
-      "kickoff": "2025-12-20T22:00:00+00:00",
+      "game_key": "20251225_2130_minnesota_vikings_detroit_lions",
+      "matchup": "Detroit Lions @ Minnesota Vikings",
+      "kickoff": "2025-12-25T21:30:00+00:00",
       "chosen_book": "lowvig",
-      "chosen_fetch_ts": "2025-12-20T10:30:11Z",
-      "pinned_records_for_spreads": 137,
+      "chosen_fetch_ts": "2025-12-25T10:32:48Z",
+      "pinned_records_for_spreads": 145,
       "freshest_per_book_candidates": 11,
       "candidates_pre_kickoff": 3,
-      "latest_pre_kickoff_fetch_ts": "2025-12-20T10:30:11Z",
+      "latest_pre_kickoff_fetch_ts": "2025-12-25T10:32:48Z",
       "chosen_is_latest_pre_kickoff": true,
       "chosen_before_kickoff": true,
       "policy_branch": "closing_pre_kickoff",
       "policy_correct": true
     },
     {
-      "game_key": "20251221_0120_chicago_bears_green_bay_packers",
-      "matchup": "Green Bay Packers @ Chicago Bears",
-      "kickoff": "2025-12-21T01:20:00+00:00",
+      "game_key": "20251226_0115_kansas_city_chiefs_denver_broncos",
+      "matchup": "Denver Broncos @ Kansas City Chiefs",
+      "kickoff": "2025-12-26T01:15:00+00:00",
       "chosen_book": "williamhill_us",
-      "chosen_fetch_ts": "2025-12-20T22:28:11Z",
-      "pinned_records_for_spreads": 140,
+      "chosen_fetch_ts": "2025-12-25T22:29:25Z",
+      "pinned_records_for_spreads": 148,
       "freshest_per_book_candidates": 11,
       "candidates_pre_kickoff": 11,
-      "latest_pre_kickoff_fetch_ts": "2025-12-20T22:28:11Z",
+      "latest_pre_kickoff_fetch_ts": "2025-12-25T22:29:25Z",
       "chosen_is_latest_pre_kickoff": true,
       "chosen_before_kickoff": true,
       "policy_branch": "closing_pre_kickoff",

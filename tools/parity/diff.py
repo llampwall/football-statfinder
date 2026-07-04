@@ -261,6 +261,28 @@ def classify(field: str, old: Any, new: Any, ctx: Dict[str, Any]) -> Tuple[str, 
             )
         if (
             field == "rating_diff_favored_team"
+            and do is None and dn is not None
+            and ctx.get("bugfix4_trigger")
+        ):
+            return (
+                "BUGFIX-4",
+                "rating_diff_favored_team legacy-null -> new-populated: favored_side only exists "
+                "once a spread does, and the replay promoted book odds where legacy promotion "
+                "was dead (spec BUGFIX-4 CFB extension)",
+            )
+        if (
+            field == "rating_diff_favored_team"
+            and league.code == "cfb"
+            and do is None and dn is not None
+        ):
+            return (
+                "BUGFIX-7",
+                "legacy CFB never derived rating_diff_favored_team at all (0 populated rows across "
+                "checked weeks 10/13/14); the single-formula build derives it whenever a favorite "
+                "exists (spec BUGFIX-7 family)",
+            )
+        if (
+            field == "rating_diff_favored_team"
             and do is not None and dn is not None
             and _floats_equal(abs(dn), abs(do))
         ):
@@ -280,8 +302,12 @@ def classify(field: str, old: Any, new: Any, ctx: Dict[str, Any]) -> Tuple[str, 
         return "UNEXPLAINED", f"{field} differs (HFA/Sagarin, independent of odds)"
 
     if field == "is_closing" and not ctx.get("bugfix4_trigger"):
-        if (old is None and new is False) or (old is False and new is None):
-            return "W11", "is_closing null<->false; frontend never reads it (grep-verified: zero refs in web/)"
+        return (
+            "W11",
+            "is_closing delta (any value); frontend never reads it (grep-verified: zero refs in "
+            "web/). false->true on legacy-promoted games is replay hindsight: legacy's last "
+            "promotion ran pre-kickoff and could not mark its own snapshot closing",
+        )
 
     if field in ODDS_PRIMARY_FIELDS or field in DERIVED_ODDS_FIELDS or field == "raw_sources.odds_row":
         if ctx.get("bugfix4_trigger") and field in BUGFIX4_ODDS_FIELDS:
@@ -335,11 +361,11 @@ def classify(field: str, old: Any, new: Any, ctx: Dict[str, Any]) -> Tuple[str, 
         return "UNEXPLAINED", "rating_diff differs (HFA/Sagarin-independent of odds)"
 
     if field.startswith("raw_sources.schedule_row."):
-        if _is_blank(new):
+        if field.rsplit(".", 1)[-1] in {"gsis", "game_no", "rotation"} and _is_blank(new):
             return (
-                "UNEXPLAINED",
-                "schedule provenance dropped: frontend reads schedule_row.game_no/rotation/gsis; "
-                "SCHEDULE_COLUMNS omits them so new pipeline emits None",
+                "W12",
+                "schedule provenance drop (whitelisted): gsis/game_no/rotation read only in the "
+                "frontend's last-resort Game# fallback chain; primary path computes locally",
             )
         return "UNEXPLAINED", f"schedule_row provenance differs ({field})"
 
@@ -380,8 +406,13 @@ def _compare_pair(
         # legacy away-first pinned-ledger keys never matched home-first game
         # keys) AND the replay promoted real book odds. When true, every
         # odds-derived field delta for this game is BUGFIX-4, not UNEXPLAINED.
+        # CFB extension (spec triage round 2, hand-traced): legacy CFB promotion
+        # was ALSO dead for any multi-word team name — the pinned ledger slugged
+        # "newmexico_airforce" while games_week slugged "new_mexico_air_force",
+        # so the legacy row has NO odds at all (odds_source blank) while the
+        # replay's canonical-key pin promotes book odds. Same bug class.
         "bugfix4_trigger": (
-            legacy_src == "schedule"
+            (legacy_src == "schedule" or _is_blank(legacy_src))
             and not _is_blank(new_src)
             and new_src != "schedule"
         ),

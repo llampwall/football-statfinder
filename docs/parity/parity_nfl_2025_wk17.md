@@ -1,6 +1,6 @@
-# Parity report — NFL 2025 week 16
+# Parity report — NFL 2025 week 17
 
-Generated 2026-07-04T03:21:23.104981+00:00 by `tools/parity` (WP-A). Replay is 100% offline.
+Generated 2026-07-04T03:21:38.553399+00:00 by `tools/parity` (WP-A). Replay is 100% offline.
 
 ## Join coverage
 
@@ -16,7 +16,7 @@ Generated 2026-07-04T03:21:23.104981+00:00 by `tools/parity` (WP-A). Replay is 1
 
 | label | count |
 |---|---|
-| BUGFIX-4 | 175 |
+| BUGFIX-4 | 178 |
 | W1 | 16 |
 | W10 | 16 |
 | W12 | 16 |
@@ -36,9 +36,9 @@ Generated 2026-07-04T03:21:23.104981+00:00 by `tools/parity` (WP-A). Replay is 1
 | BUGFIX-4 | rating_vs_odds | 16 |
 | BUGFIX-4 | rating_vs_odds_favored_team | 16 |
 | BUGFIX-4 | raw_sources.odds_row | 16 |
-| BUGFIX-4 | spread_favored_team | 5 |
+| BUGFIX-4 | spread_favored_team | 9 |
 | BUGFIX-4 | spread_home_relative | 16 |
-| BUGFIX-4 | total | 10 |
+| BUGFIX-4 | total | 9 |
 | W10 | source_uid | 16 |
 | W12 | raw_sources.schedule_row.gsis | 16 |
 | W1 | game_key | 16 |
@@ -74,21 +74,21 @@ NFL run.
 
 | matchup | kickoff | chosen book | chosen fetch_ts | pre-kickoff? | policy branch | policy-correct? |
 |---|---|---|---|---|---|---|
-| Los Angeles Rams @ Seattle Seahawks | 2025-12-19T01:15:00+00:00 | williamhill_us | 2025-12-18T22:30:11Z | True | closing_pre_kickoff | True |
-| Philadelphia Eagles @ Washington Commanders | 2025-12-20T22:00:00+00:00 | lowvig | 2025-12-20T10:30:11Z | True | closing_pre_kickoff | True |
-| Green Bay Packers @ Chicago Bears | 2025-12-21T01:20:00+00:00 | williamhill_us | 2025-12-20T22:28:11Z | True | closing_pre_kickoff | True |
+| Dallas Cowboys @ Washington Commanders | 2025-12-25T18:00:00+00:00 | mybookieag | 2025-12-25T10:32:48Z | True | closing_pre_kickoff | True |
+| Detroit Lions @ Minnesota Vikings | 2025-12-25T21:30:00+00:00 | lowvig | 2025-12-25T10:32:48Z | True | closing_pre_kickoff | True |
+| Denver Broncos @ Kansas City Chiefs | 2025-12-26T01:15:00+00:00 | williamhill_us | 2025-12-25T22:29:25Z | True | closing_pre_kickoff | True |
 
 ## BUGFIX evidence
 
 ### BUGFIX-4
-- Los Angeles Rams @ Seattle Seahawks (`20251219_0115_seattle_seahawks_los_angeles_rams`): favored_side legacy=AWAY new=HOME — legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects
-- Los Angeles Rams @ Seattle Seahawks (`20251219_0115_seattle_seahawks_los_angeles_rams`): is_closing legacy=false new=true — legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects
-- Los Angeles Rams @ Seattle Seahawks (`20251219_0115_seattle_seahawks_los_angeles_rams`): moneyline_away legacy=null new=100 — legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects
-- Los Angeles Rams @ Seattle Seahawks (`20251219_0115_seattle_seahawks_los_angeles_rams`): moneyline_home legacy=null new=-120 — legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects
-- Los Angeles Rams @ Seattle Seahawks (`20251219_0115_seattle_seahawks_los_angeles_rams`): odds_source legacy=schedule new=williamhill_us — legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects
-- Los Angeles Rams @ Seattle Seahawks (`20251219_0115_seattle_seahawks_los_angeles_rams`): rating_diff_favored_team legacy=-0.77 new=0.77 — rating_diff_favored_team sign flip: |value| unchanged but favored_side flipped because the replay promoted real book odds where legacy used the dead schedule-fallback tier (odds_source='schedule')
-- Los Angeles Rams @ Seattle Seahawks (`20251219_0115_seattle_seahawks_los_angeles_rams`): rating_vs_odds legacy=2.27 new=-0.73 — legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects
-- Los Angeles Rams @ Seattle Seahawks (`20251219_0115_seattle_seahawks_los_angeles_rams`): rating_vs_odds_favored_team legacy=-2.27 new=-0.73 — legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects
+- Dallas Cowboys @ Washington Commanders (`20251225_1800_washington_commanders_dallas_cowboys`): favored_side legacy=HOME new=AWAY — legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects
+- Dallas Cowboys @ Washington Commanders (`20251225_1800_washington_commanders_dallas_cowboys`): is_closing legacy=false new=true — legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects
+- Dallas Cowboys @ Washington Commanders (`20251225_1800_washington_commanders_dallas_cowboys`): moneyline_away legacy=null new=-542 — legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects
+- Dallas Cowboys @ Washington Commanders (`20251225_1800_washington_commanders_dallas_cowboys`): moneyline_home legacy=null new=380 — legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects
+- Dallas Cowboys @ Washington Commanders (`20251225_1800_washington_commanders_dallas_cowboys`): odds_source legacy=schedule new=mybookieag — legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects
+- Dallas Cowboys @ Washington Commanders (`20251225_1800_washington_commanders_dallas_cowboys`): rating_diff_favored_team legacy=2.31 new=-2.31 — rating_diff_favored_team sign flip: |value| unchanged but favored_side flipped because the replay promoted real book odds where legacy used the dead schedule-fallback tier (odds_source='schedule')
+- Dallas Cowboys @ Washington Commanders (`20251225_1800_washington_commanders_dallas_cowboys`): rating_vs_odds legacy=-6.19 new=11.31 — legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects
+- Dallas Cowboys @ Washington Commanders (`20251225_1800_washington_commanders_dallas_cowboys`): rating_vs_odds_favored_team legacy=-6.19 new=-11.31 — legacy NFL odds promotion was dead all season (odds_source='schedule': the away-first pinned-ledger keys never matched home-first game keys); the replay's canonical-key pin promotes real book odds, so this odds-derived field corrects
 
 ## UNEXPLAINED deltas (full list)
 
@@ -100,14 +100,14 @@ Sidecars compared for 16 joined games.
 
 | metric | value |
 |---|---|
-| away_prev.entries_new | 289 |
-| away_prev.entries_old | 289 |
+| away_prev.entries_new | 286 |
+| away_prev.entries_old | 286 |
 | away_prev.entries_only_new | 0 |
 | away_prev.entries_only_old | 0 |
-| away_ytd.entries_new | 224 |
-| away_ytd.entries_old | 227 |
+| away_ytd.entries_new | 240 |
+| away_ytd.entries_old | 245 |
 | away_ytd.entries_only_new | 0 |
-| away_ytd.entries_only_old | 3 |
+| away_ytd.entries_only_old | 5 |
 | field:opp_pr | 426 |
 | field:opp_pr_rank | 169 |
 | field:opp_sos | 426 |
@@ -119,14 +119,14 @@ Sidecars compared for 16 joined games.
 | field:result | 2 |
 | field:sos | 426 |
 | field:sos_rank | 426 |
-| home_prev.entries_new | 281 |
-| home_prev.entries_old | 281 |
+| home_prev.entries_new | 284 |
+| home_prev.entries_old | 284 |
 | home_prev.entries_only_new | 0 |
 | home_prev.entries_only_old | 0 |
-| home_ytd.entries_new | 224 |
-| home_ytd.entries_old | 227 |
+| home_ytd.entries_new | 240 |
+| home_ytd.entries_old | 245 |
 | home_ytd.entries_only_new | 0 |
-| home_ytd.entries_only_old | 3 |
+| home_ytd.entries_only_old | 5 |
 
 ### Sidecar delta classification
 
