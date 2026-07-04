@@ -11,7 +11,7 @@ from football_statfinder import paths
 from football_statfinder.common.game_key import build_game_key
 from football_statfinder.config import OddsSettings, Settings
 from football_statfinder.leagues import NFL, League
-from football_statfinder.pipeline.odds_promote import promote_week
+from football_statfinder.pipeline.odds_promote import pick_latest_before, promote_week
 
 SEASON = 2026
 WEEK = 2
@@ -288,3 +288,17 @@ def test_other_week_records_are_ignored(tmp_path: Path):
     assert result["current_week_records"] == 1
     assert result["other_week_records"] == 1
     assert result["promoted_games"] == 1
+
+
+def test_pick_latest_before_breaks_fetch_ts_ties_by_book():
+    # Same fetch captured several books: the greatest book label wins (legacy
+    # promoters used max(..., key=(fetch_ts, book)); order-independence matters
+    # because the ledger scan order is arbitrary).
+    cutoff = datetime(2026, 9, 13, 17, 0, tzinfo=timezone.utc)
+    fanduel = {"fetch_ts": "2026-09-13T16:00:00Z", "book": "fanduel"}
+    williamhill = {"fetch_ts": "2026-09-13T16:00:00Z", "book": "williamhill_us"}
+    assert pick_latest_before([fanduel, williamhill], cutoff) is williamhill
+    assert pick_latest_before([williamhill, fanduel], cutoff) is williamhill
+    # A strictly newer fetch still beats any book label.
+    newer = {"fetch_ts": "2026-09-13T16:30:00Z", "book": "aaa_book"}
+    assert pick_latest_before([williamhill, newer], cutoff) is newer

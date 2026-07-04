@@ -82,14 +82,20 @@ def _parse_utc(value: Any) -> Optional[datetime]:
 def pick_latest_before(
     records: Iterable[Mapping[str, Any]], cutoff: datetime
 ) -> Optional[Mapping[str, Any]]:
-    """Record with the greatest ``fetch_ts`` <= cutoff (missing/invalid skipped)."""
-    best: Optional[Tuple[datetime, Mapping[str, Any]]] = None
+    """Record with the greatest ``fetch_ts`` <= cutoff (missing/invalid skipped).
+
+    Equal timestamps break by book label (greatest wins), matching the legacy
+    promoters' ``max(..., key=(fetch_ts, book))`` — without this the choice is
+    ledger-order-dependent when one fetch captured several books.
+    """
+    best: Optional[Tuple[Tuple[datetime, str], Mapping[str, Any]]] = None
     for record in records or []:
         when = _parse_utc(record.get("fetch_ts"))
         if when is None:
             continue
-        if when <= cutoff and (best is None or when > best[0]):
-            best = (when, record)
+        rank = (when, str(record.get("book") or ""))
+        if when <= cutoff and (best is None or rank > best[0]):
+            best = (rank, record)
     return best[1] if best else None
 
 

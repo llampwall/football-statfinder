@@ -197,6 +197,28 @@ def test_apply_ats_to_week_no_rows_is_noop(tmp_path):
     assert applied == ats.AtsApplyResult()
 
 
+def test_apply_ats_preserves_metrics_sourced_record_when_no_counted_games(tmp_path):
+    # Zero counted prior games (week 1, or prior weeks unlined/unscored) must
+    # NOT clobber a real metrics-sourced ATS record with None; only blank
+    # placeholders normalize to the None sentinel (bug 19).
+    write_week(tmp_path, 1, [
+        game_row("g1", "Alpha", "Beta", week=1, home_ats="6-10-0", away_ats="9-7-0"),
+        game_row("g2", "Gamma", "Delta", week=1, home_ats="—", away_ats=None),
+    ])
+
+    build = ats.build_team_ats(NFL, SEASON, 1, out_root=tmp_path)
+    assert build.stats == {}
+    applied = ats.apply_ats_to_week(NFL, SEASON, 1, build, out_root=tmp_path)
+
+    rows = read_jsonl(paths.games_week_jsonl(NFL.code, SEASON, 1, out_root=tmp_path)).rows
+    by_key = {row["game_key"]: row for row in rows}
+    assert by_key["g1"]["home_ats"] == "6-10-0"  # preserved, not nulled
+    assert by_key["g1"]["away_ats"] == "9-7-0"
+    assert by_key["g2"]["home_ats"] is None  # em-dash still normalizes (bug 19)
+    assert by_key["g2"]["away_ats"] is None
+    assert applied.rows_updated == 1  # only the em-dash row changed
+
+
 # ---------------------------------------------------------------------------
 # Closing-spread resolution order (bug 4)
 # ---------------------------------------------------------------------------

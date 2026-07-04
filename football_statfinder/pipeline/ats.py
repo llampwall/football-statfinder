@@ -435,9 +435,11 @@ def apply_ats_to_week(
     """Write season ATS records onto the week's rows (JSONL + CSV, atomic).
 
     Field semantics written: ``{home,away}_ats`` = season-to-date ``W-L-P``
-    string or ``None`` (never a dash placeholder — bug 19); the split-count
-    fields ``{side}_ats_{w,l,p}`` are updated only when the row already
-    carries them (frozen frontend contract).
+    string (never a dash placeholder — bug 19); the split-count fields
+    ``{side}_ats_{w,l,p}`` are updated only when the row already carries them
+    (frozen frontend contract). A team with zero counted games keeps whatever
+    ATS value the row already has (typically the metrics-sourced record) —
+    the computed tally never overwrites with ``None``.
     """
     json_path = paths.games_week_jsonl(league.code, season, week, out_root=out_root)
     csv_path = paths.games_week_csv(league.code, season, week, out_root=out_root)
@@ -471,14 +473,23 @@ def apply_ats_to_week(
                                 row[field_name] = value
                                 changed = True
             else:
-                if row.get(ats_field) is not None:
+                # No counted games for this team (week 1, or prior weeks not
+                # lined/scored yet). Preserve a real record the stats join
+                # already put on the row — the metrics-sourced season ATS is a
+                # legitimate value, and clobbering it with None here nulled
+                # every NFL ATS record in the parity replay (and would do the
+                # same in production early weeks). Blank placeholders (legacy
+                # em-dash, empty string) still normalize to the None sentinel
+                # (bug 19).
+                existing = row.get(ats_field)
+                if existing is not None and is_blank(existing):
                     row[ats_field] = BLANK_ATS
                     changed = True
-                for suffix in ("w", "l", "p"):
-                    field_name = f"{side}_ats_{suffix}"
-                    if field_name in row and row.get(field_name) is not None:
-                        row[field_name] = None
-                        changed = True
+                    for suffix in ("w", "l", "p"):
+                        field_name = f"{side}_ats_{suffix}"
+                        if field_name in row and row.get(field_name) is not None:
+                            row[field_name] = None
+                            changed = True
         if changed:
             rows_updated += 1
 
