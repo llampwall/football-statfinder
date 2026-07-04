@@ -156,6 +156,61 @@ bug (fix + test in `football_statfinder/`, rerun harness) or a proposed whitelis
 (main loop decides). Iterate until zero UNEXPLAINED, then run the secondary weeks.
 The final reports land in `docs/parity/` and REBUILD.md gets a Phase 2 parity note.
 
+### Triage round 1 decisions (main loop, 2026-07-03 — after WP-A report + 4 investigations)
+
+Corrections to Part 1 facts: the sagarin master filename is `{league}_sagarin_master.csv`
+(the spec's step 5 had it reversed); the pytest baseline moved 177→192 as WP-C/D landed.
+
+**Whitelist additions (now part of the frozen list; same citation discipline):**
+
+- **W8 CFB sagarin_row enrichment.** `raw_sources.sagarin_row_{home,away}.{team,hfa}`
+  legacy-null → new-populated (added provenance; frontend reads `.team`/`.hfa` and
+  handles both states).
+- **W9 sidecar Sagarin enrichment policy.** Sidecar entry `pr/pr_rank/sos/sos_rank`
+  (and opp_ variants) value deltas from the documented season-2 policy change:
+  nearest-week fallback + dense_rank vs legacy exact-week + sequential ranks.
+- **W10 source_uid.** Legacy provider id → new null. Frontend never reads it
+  (grep-verified: zero references in web/).
+- **W11 is_closing.** null ↔ false in either direction. Frontend never reads it.
+- **BUGFIX-4 (approved reclassification).** For games where legacy
+  `odds_source == "schedule"` and the replay promoted real book odds, ALL downstream
+  odds-derived deltas (spread_home_relative, total, moneylines, odds_source,
+  is_closing, favored_side, spread_favored_team, rating_vs_odds*,
+  rating_diff_favored_team sign, raw_sources.odds_row) classify BUGFIX-4: legacy NFL
+  promotion was dead all season (away-first pinned-ledger keys never matched
+  home-first game keys — ledger evidence in the WP-A report).
+
+**Package fixes ordered (REBUILD.md bugs 22/23 are new entries):**
+
+- **F1 (bug 22)**: `sources/schedule_master.py` upsert KEY must drop `kickoff_iso_utc`
+  (kickoff drift currently accumulates stale rows exactly like legacy; stale row =
+  the never-scored one, and the existing score-present/source-priority/incoming-last
+  sort already picks the right survivor once the key is fixed).
+- **F2**: CFB gameview FBS filter must require BOTH teams present in the FBS
+  metrics/team-stats roster (legacy `fbs_mask` semantics; 2025 wk13 truth = 60 games,
+  the replay's 104 was wrong).
+- **F3**: NFL gameview schedule-lines fallback tier — when a game has no promoted
+  odds and its schedule row carries spread_line/total_line, emit them with
+  `odds_source="schedule"`, `is_closing=False`, and derive favored fields; mirror the
+  legacy NFL builder's sign convention EXACTLY (verify in src/ before implementing).
+- **F4**: emitted `raw_sources.schedule_row` must include `home_team`/`away_team` keys
+  (printable Team # reads them; new schema only had `_raw`/`_norm` variants).
+- **F5 (bug 23)**: `refresh.py` backfill stage must construct and pass the
+  `AtsBackfillApi` spread_api (honoring `cache_only`); today it passes nothing, so the
+  harvested API ATS tier is unreachable — a dead tier again.
+
+**Harness/differ changes ordered:**
+
+- **F6**: replay stages prior-week `games_week_*.jsonl` (weeks 1..W-1 that exist in the
+  baseline archive) into the scratch root, flips `ats_enable=True`, and sets
+  `odds.cache_only=True` defensively; and dedupes the copied legacy master on the
+  F1 identity (sans kickoff), preferring scored rows, so K2 goes 1:1.
+- **F7**: differ implements W8-W11 + the BUGFIX-4 rule above.
+- **Known replay limit (documented, not a defect)**: CFB weeks 1-8 have zero odds
+  coverage anywhere in the archive and weeks 1-6 have no games_week dirs at all; ATS
+  parity is still expected because legacy skipped the same unlined games. Residual ATS
+  deltas require per-team tracing before any new whitelist rule.
+
 ---
 
 ## Part 2 — SQLite storage + export (WP-C, WP-D)
