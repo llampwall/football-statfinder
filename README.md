@@ -51,7 +51,7 @@ python -m src.refresh_week_data_cfb
 python -m src.refresh_week_data_nfl --season 2025 --week 7
 python -m src.refresh_week_data_cfb --season 2025 --week 7
 
-# Tests (12 tests, pure logic only; CI does not run them)
+# Tests (203 tests, pure logic only; CI does not run them)
 python -m pytest tests/
 ```
 
