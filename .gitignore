@@ -9,3 +9,6 @@ tmp/
 run_refresh_log*.txt
 data/statfinder.sqlite3
 data/statfinder.sqlite3-*
+docs/sys/lookup.json
+.chinvex-status.json
+football_statfinder.egg-info/
